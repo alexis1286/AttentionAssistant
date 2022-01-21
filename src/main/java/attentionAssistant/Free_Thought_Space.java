@@ -1,4 +1,4 @@
-package main.java.attentionAssistant;
+package attentionAssistant;
 
 public class Free_Thought_Space {
 	
