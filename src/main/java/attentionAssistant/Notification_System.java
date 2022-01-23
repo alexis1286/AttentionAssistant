@@ -1,4 +1,4 @@
-package AttentionAssistant;
+package attentionAssistant;
 
 public class Notification_System {
 	
