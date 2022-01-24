@@ -20,10 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
-	<variableList>
-		<variable>
-			<name>JAR_LOC</name>
-			<value>file:/C:/Users/ehols/.gradle/caches/modules-2/files-2.1</value>
-		</variable>
-	</variableList>
 </projectDescription>
