@@ -2,7 +2,7 @@
  * Class that contains information on task created by 
  * the user through the priority manager
  */
-package AttentionAssistant;
+package attentionAssistant;
 
 public class Task {
 	/** Variables */
