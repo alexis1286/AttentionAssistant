@@ -1,4 +1,4 @@
-package attentionAssistant;
+package AttentionAssistant;
 
 public enum Status {
 	OPEN, CLOSED
