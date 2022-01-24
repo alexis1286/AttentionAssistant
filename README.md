@@ -9,4 +9,3 @@ Team Copper - Spring 2022
 - alexis1286 - Alexis Lovitz - alovi004@odu.edu
 - jmitchel2 - Justus Mitchell - jmitc001@odu.edu
 - DarthIxel - Lexi Veri - averi002@odu.edu
-
