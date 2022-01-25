@@ -117,8 +117,8 @@ public class Task {
 	 * Get Status
 	 * @return String?
 	 */
-	public String getStatus() {
-		return this.status.toString();
+	public Status getStatus() {
+		return this.status;
 	}
 	
 	/**
