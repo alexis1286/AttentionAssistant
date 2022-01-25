@@ -2,7 +2,8 @@ package AttentionAssistant;
 
 import java.util.ArrayList;
 
-//To be implemented by Justus and Evan
+//To be implemented by Paul
+
 public class KeyBoardTracker {
 	
 int keyBoardScore = 100;
