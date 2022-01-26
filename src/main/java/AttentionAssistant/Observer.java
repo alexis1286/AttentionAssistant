@@ -31,7 +31,7 @@ public class Observer{
 	 */
 	public Observer(){
 		Component mt_Component = mouseTracker.MouseTrackerSetup();
-		MouseTracker mouseTracker = new MouseTracker(mt_Component);
+		mouseTracker = new MouseTracker(mt_Component);
 		eyeTracker.startTracking();
 		keyboardTracker.startTracking(keywords);
 	}
@@ -57,8 +57,8 @@ public class Observer{
 	 * @return keywordsList - ArrayList of keywords
 	 */
 	private ArrayList<String> keywordsGenerator(Task activeTask){
-		ArrayList<String> keywordsList = new ArrayList<String>();
-		return keywordsList;
+		//CODE TO IMPLEMENT
+		return keywords;
 	}
 	
 	
