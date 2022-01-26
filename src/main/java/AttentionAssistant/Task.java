@@ -14,10 +14,15 @@ enum Status {
 	OPEN, CLOSED
 }
 
+
 public class Task {
 	/** Variables */
 	private int taskID;
+	//private boolean priority;
+	//private String name;
 	private String description;
+	//private Date dueDate;
+	
 	
 	/**
 	 * False if not observable, True if observable
@@ -36,7 +41,10 @@ public class Task {
 		this.description = "";
 		this.observable = false;
 		this.status = Status.CLOSED;
-	}
+		this.name = null; 
+		this.dueDate = null;
+		this.priority = false;
+	
 	
 	/**
 	 * Create a class Task with a specified
@@ -48,6 +56,9 @@ public class Task {
 		this.description = description;
 		this.observable = observable;
 		this.status = status;
+		this.name = name; 
+		this.dueDate = dueDate;
+		this.priority = priority;
 	}
 	
 	/**
@@ -58,7 +69,21 @@ public class Task {
 		this.description = task.description;
 		this.observable = task.observable;
 		this.status = task.status;
+		this.name = task.name; 
+		this.dueDate = task.dueDate;
+		this.priority = task.priority;
 	}
+	
+	/*
+	 * Getter/Setters
+	 */
+	//getdueDate
+	//setdueDate
+	//getname
+	//setname
+	//getpriority
+	//setpriority
+	
 	
 	/**
 	 * Start of Encapsulation
@@ -127,5 +152,14 @@ public class Task {
 	 */
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	@Override
+	/**
+	 * Display Task
+	 * @return Shit
+	 */
+	public String toString() {
+		return getTaskID() + 
 	}
 }
