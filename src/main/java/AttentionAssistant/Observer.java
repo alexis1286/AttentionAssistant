@@ -1,5 +1,5 @@
 package AttentionAssistant;
-
+import java.awt.Component;
 import java.util.ArrayList;
 
 public class Observer{
@@ -18,7 +18,7 @@ public class Observer{
 	/**
 	 * Creating instances of the tracking classes
 	 */
-	MouseTracker mouseTracker = new MouseTracker();
+	MouseTracker mouseTracker;
 	EyeMovementTracker eyeTracker = new EyeMovementTracker();
 	KeyBoardTracker keyboardTracker = new KeyBoardTracker();
 	
@@ -30,7 +30,8 @@ public class Observer{
 	 * by initiating the tracking functions
 	 */
 	public Observer(){
-		mouseTracker.startTracking();
+		Component mt_Component = mouseTracker.MouseTrackerSetup();
+		MouseTracker mouseTracker = new MouseTracker(mt_Component);
 		eyeTracker.startTracking();
 		keyboardTracker.startTracking(keywords);
 	}
