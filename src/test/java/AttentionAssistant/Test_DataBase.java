@@ -1,8 +1,6 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +63,7 @@ public class Test_DataBase {
     
     @Test
     @DisplayName("<DataBase> DatabaseSelectTask")
-    void DatabaseSelectTask() throws ParseException {
+    void DatabaseSelectTask() {
     	Task SelectedTask= new Task(nonDefaultTask);
     	SelectedTask.setTaskID(2);
     	SelectedTask.setDescription("I am a Selected description1");

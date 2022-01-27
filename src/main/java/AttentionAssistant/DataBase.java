@@ -120,7 +120,7 @@ public class DataBase {
         	
         }    	
         
-        public Task SelectTask(int taskid) throws ParseException {
+        public Task SelectTask(int taskid) {
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
@@ -136,8 +136,12 @@ public class DataBase {
         		    task1.setPriority(Boolean.valueOf(rs.getString("priority")));
         		    System.out.println( "1st executeUpdate() returned " + rs );
         		} catch ( SQLException e ) {
-        		    e.printStackTrace();
+        			e.printStackTrace();
         		    System.exit( 0 );
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        			System.exit( 0 );
         		}
         	return task1;
         }
