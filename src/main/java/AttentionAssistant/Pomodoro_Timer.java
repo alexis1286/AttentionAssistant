@@ -26,7 +26,7 @@ class PomodoroTimer extends JFrame
 	private static final int ORIGINAL_SHORTBREAK_SECONDS = 0;
 	private static final int ORIGINAL_LONGBREAK_MINUTES = 15;
 	private static final int ORIGINAL_LONGBREAK_SECONDS = 0;
-	private static final int TOTAL_DELAY_TIME = 5;
+	private static final int TOTAL_DELAY_TIME = 30;
 	private static final int INTERVAL = 1000; // Iteration interval for the Timers.
 	private static final int ONE_POMODORO_CYCLE = 8; // No of rounds in a single Pomodoro cycle.
 
@@ -107,8 +107,8 @@ class PomodoroTimer extends JFrame
 		secondLabel.setFont(timerStyle);
 		timerPane.add(secondLabel, "alignx center, height 145!, wrap");
 
-		startIcon = new ImageIcon("src/Play.png");
-		pauseIcon = new ImageIcon("src/Pause.png");
+		startIcon = new ImageIcon("images/Play.png");
+		pauseIcon = new ImageIcon("images/Pause.png");
 		startPauseBT = new JButton(pauseIcon);
 		startPauseBT.setContentAreaFilled(false);
 		startPauseBT.setBackground(indiaGreen);
@@ -117,7 +117,7 @@ class PomodoroTimer extends JFrame
 		startPauseBT.setFont(formBTStyles);
 		timerPane.add(startPauseBT, "gaptop 10, alignx center, split 3, spanx, pushx");
 
-		skipIcon = new ImageIcon("src/Skip.png");
+		skipIcon = new ImageIcon("images/Skip.png");
 		continueBT = new JButton(skipIcon);
 		continueBT.setBackground(cardinalRed);
 		continueBT.setContentAreaFilled(false);
@@ -126,7 +126,7 @@ class PomodoroTimer extends JFrame
 		continueBT.setVisible(false);
 		timerPane.add(continueBT, "alignx center, hidemode 0, gapleft 30, gapright 30");
 
-		stopIcon = new ImageIcon("src/Stop.png");
+		stopIcon = new ImageIcon("images/Stop.png");
 		stopBT = new JButton(stopIcon);
 		stopBT.setContentAreaFilled(false);
 		stopBT.setBackground(cardinalRed);
@@ -353,10 +353,10 @@ class PomodoroTimer extends JFrame
 
 	private void countDownPaused()
 	{
-		//delayRemaining = TOTAL_DELAY_TIME;
-		//delayRemainingLabel.setVisible(false);
-		startPauseBT.setVisible(true);
-		stopBT.setVisible(true);
+		delayRemaining = TOTAL_DELAY_TIME;
+		delayRemainingLabel.setVisible(true);
+		startPauseBT.setVisible(false);
+		stopBT.setVisible(false);
 		countDown.stop();
 
 //		delayTimer = new Timer(INTERVAL, (ActionEvent event) -> {
