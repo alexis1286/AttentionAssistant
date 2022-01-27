@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import org.sqlite.SQLiteDataSource;
 
@@ -51,7 +52,10 @@ public class DataBase {
     			 "taskID INTEGER PRIMARY KEY, " +
     			 "description TEXT, " +
     			 "observable BOOLEAN, " +
-    			 "status TEXT )";
+    			 "status TEXT, " + 
+    			 "name TEXT, " +
+    			 "dueDate DATE, " +
+    			 "priority BOOLEAN)";
     	try (Connection conn = this.ds.getConnection();
     			Statement stmt = conn.createStatement(); ){
     		int rv = stmt.executeUpdate(query);
@@ -60,12 +64,15 @@ public class DataBase {
             e.printStackTrace();
             System.exit( 0 );
         }
-    	
+    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
-    			"( description, observable, status ) Values ( '" +
+    			"( description, observable, status, name, dueDate, priority ) Values ( '" +
     			task.getDescription() + "', '" +
     			task.getObservable() + "', '" +
-    			task.getStatus().toString() + "')";
+    			task.getStatus().toString() + "', '" +
+    			task.getName() + "', '" +
+    			DateTime + "', '" +
+    			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );

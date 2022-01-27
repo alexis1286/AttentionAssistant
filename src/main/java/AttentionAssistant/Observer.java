@@ -44,7 +44,7 @@ public class Observer{
 	 */
 	protected void monitor(Task activeTask) {
 		
-		while(activeTask.getStatus() == Status.OPEN) {
+		while(activeTask.getStatus() == TaskStatus.OPEN) {
 			mouseMovementsScore = mouseTracker.getMouseMovementScore();
 			eyeMovementScore = eyeTracker.getEyeMovementScore();
 			keyBoardScore = keyboardTracker.getKeyBoardScore();
