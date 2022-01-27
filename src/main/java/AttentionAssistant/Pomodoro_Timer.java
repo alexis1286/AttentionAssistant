@@ -26,7 +26,7 @@ class PomodoroTimer extends JFrame
 	private static final int ORIGINAL_SHORTBREAK_SECONDS = 0;
 	private static final int ORIGINAL_LONGBREAK_MINUTES = 15;
 	private static final int ORIGINAL_LONGBREAK_SECONDS = 0;
-	private static final int TOTAL_DELAY_TIME = 30;
+	private static final int TOTAL_DELAY_TIME = 5;
 	private static final int INTERVAL = 1000; // Iteration interval for the Timers.
 	private static final int ONE_POMODORO_CYCLE = 8; // No of rounds in a single Pomodoro cycle.
 
