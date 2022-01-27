@@ -4,13 +4,15 @@
  */
 package AttentionAssistant;
 
+import java.util.Date;
+
 /**
  * Options are 'OPEN' and 'CLOSED'
  * OPEN tasks were not yet completed by the User
  * CLOSED tasks were completed by the User
  */
 
-enum Status {
+enum TaskStatus {
 	OPEN, CLOSED
 }
 
@@ -18,10 +20,10 @@ enum Status {
 public class Task {
 	/** Variables */
 	private int taskID;
-	//private boolean priority;
-	//private String name;
+	private boolean priority;
+	private String name;
 	private String description;
-	//private Date dueDate;
+	private Date dueDate;
 	
 	
 	/**
@@ -31,7 +33,7 @@ public class Task {
 	 */
 	private boolean observable;
 	
-	private Status status;
+	private TaskStatus status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -40,18 +42,18 @@ public class Task {
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = Status.CLOSED;
+		this.status = TaskStatus.CLOSED;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
-	
+	}
 	
 	/**
 	 * Create a class Task with a specified
 	 * taskID, description, whether observable, status
-	 * @param int, String, boolean, Status
+	 * @param int, String, boolean, TaskStatus
 	 */
-	public Task(int taskID, String description, boolean observable, Status status) {
+	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, Boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -73,16 +75,6 @@ public class Task {
 		this.dueDate = task.dueDate;
 		this.priority = task.priority;
 	}
-	
-	/*
-	 * Getter/Setters
-	 */
-	//getdueDate
-	//setdueDate
-	//getname
-	//setname
-	//getpriority
-	//setpriority
 	
 	
 	/**
@@ -140,26 +132,85 @@ public class Task {
 	
 	/**
 	 * Get Status
-	 * @return String?
+	 * @return TaskStatus
 	 */
-	public Status getStatus() {
+	public TaskStatus getStatus() {
 		return this.status;
 	}
 	
 	/**
 	 * Set Status
-	 * @param Status?
+	 * @param TaskStatus
 	 */
-	public void setStatus(Status status) {
+	public void setStatus(TaskStatus status) {
 		this.status = status;
 	}
 	
+	/**
+	 * Get DueDate
+	 * @return Date
+	 */
+	public Date getDueDate() {
+		return this.dueDate;
+	}
+	
+	/**
+	 * Set DueDate
+	 * @param Date
+	 */
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+	
+	/**
+	 * Get Name
+	 * @return String
+	 */
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
+	 * Set Status
+	 * @param String
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Get Priority
+	 * @return Boolean
+	 */
+	public Boolean getPriority() {
+		return this.getPriority();
+	}
+	
+	/**
+	 * Set Priority
+	 * @param Boolean
+	 */
+	public void setPriority(Boolean priority) {
+		this.priority = priority;
+	}
+
+
 	@Override
 	/**
 	 * Display Task
-	 * @return Shit
+	 * @return String
 	 */
 	public String toString() {
-		return getTaskID() + 
+		String taskString= new String();
+		taskString = "Task ID= " + this.taskID +
+				" Priority= " + Boolean.toString(this.priority) +
+				" Name= " + this.name +
+				" Description= " + this.description +
+				" Due Date= " + this.dueDate.toString() +
+				" Observable= " + Boolean.toString(this.observable) +
+				" Status= " + this.status.toString();
+				
+		return taskString;
+		
 	}
 }

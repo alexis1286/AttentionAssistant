@@ -1,6 +1,8 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,11 +20,14 @@ public class Test_Task {
 	int testTaskID = 999;
 	String testDescription = "This is a test description";
 	boolean testObservable = true;
-	Status testStatus = Status.OPEN;
+	TaskStatus testStatus = TaskStatus.OPEN;
+	String testName = "This is a test Name";
+	Date testDate = new Date(1220227200L * 1000);
+	boolean testPriority = true;
 	
 	defaultTask= new Task();
 	
-	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus);
+	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
 	
 	copyTask = new Task(nonDefaultTask);
 	
@@ -53,7 +58,7 @@ public class Test_Task {
         /**
          *  Make sure the Task status is set to CLOSED for the default constructor
          */
-        assertEquals("CLOSED" , defaultTask.getStatus(), 
+        assertEquals(TaskStatus.CLOSED , defaultTask.getStatus(), 
         "Default constructor task.status should be CLOSED. Returned: " + defaultTask.getStatus());
  
     }
@@ -85,7 +90,7 @@ public class Test_Task {
         /**
          *  Make sure the Task status is set to OPEN for the Parameter constructor
          */
-        assertEquals("OPEN" , nonDefaultTask.getStatus(), 
+        assertEquals(TaskStatus.OPEN , nonDefaultTask.getStatus(), 
         "Parameter constructor task.status should be OPEN. Returned: " + nonDefaultTask.getStatus());
  
     }
@@ -117,7 +122,7 @@ public class Test_Task {
         /**
          *  Make sure the Task status is set to OPEN for the Copy constructor
          */
-        assertEquals("OPEN" , copyTask.getStatus(), 
+        assertEquals(TaskStatus.OPEN , copyTask.getStatus(), 
         "Copy constructor task.status should be OPEN. Returned: " + copyTask.getStatus());
  
     }
@@ -159,8 +164,8 @@ public class Test_Task {
     @DisplayName("<Task> SetStatus")
     void taskSetStatus() {
         	
-        copyTask.setStatus(Status.CLOSED);
-        assertEquals("CLOSED", copyTask.getStatus(), "copyTask status should be set to CLOSED but instead returned: " + copyTask.getStatus());
+        copyTask.setStatus(TaskStatus.CLOSED);
+        assertEquals(TaskStatus.CLOSED, copyTask.getStatus(), "copyTask status should be set to CLOSED but instead returned: " + copyTask.getStatus());
     }    	
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
