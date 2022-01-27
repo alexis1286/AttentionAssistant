@@ -58,11 +58,11 @@ public class Test_DataBase {
     
     @Test
     @DisplayName("<DataBase> DatabaseSelectTask")
-    void DatabaseSelectTask() {
+    void DatabaseSelectTask() throws Exception {
     	Task PleaseWork = new Task();
     	PleaseWork = db.SelectTask(1);
         String String1 = "Task ID= 1 Priority= true Name= This is an updated Name1 Description= I am a updated description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN";
-        assertEquals(String1, PleaseWork.toString(), "String1 should be set to Task ID= 1 Priority= true Name= This is an updated Name1 Description= I am a updated description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN but instead returned: " + PleaseWork.toString());
+        assertEquals(String1, PleaseWork.toString(), "String1 should be set to \nTask ID= 1 \nPriority= true \nName= This is an updated Name1 \nDescription= I am a updated description1 \nDue Date= Sun Aug 31 20:00:00 EDT 2008 \nObservable= false \nStatus= OPEN \n\nbut instead returned: \n" + PleaseWork.toString());
  
     }
     

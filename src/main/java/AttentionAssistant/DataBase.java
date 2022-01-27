@@ -66,7 +66,7 @@ public class DataBase {
             e.printStackTrace();
             System.exit( 0 );
         }
-    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
     			"( description, observable, status, name, dueDate, priority ) Values ( '" +
     			task.getDescription() + "', '" +
@@ -74,7 +74,7 @@ public class DataBase {
     			task.getStatus().toString() + "', '" +
     			task.getName() + "', '" +
     			DateTime + "', '" +
-    			task.getPriority().toString() +"')";
+    			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );
@@ -86,14 +86,14 @@ public class DataBase {
     }
     
         public void UpdateTask(Task task) {
-        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(task.getDueDate());
         	String query1 = "UPDATE task " +
         			"SET description = '" + task.getDescription() + 
         			"', observable = '" + task.getObservable() + 
         			"', status = '" + task.getStatus().toString() +
         			"', name = '" + task.getName() +
         			"', dueDate = '" + DateTime +
-        			"', priority = '" + task.getPriority().toString() +
+        			"', priority = '" + task.getPriority() +
         			"' WHERE taskID = '" + task.getTaskID() + "'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
@@ -119,7 +119,7 @@ public class DataBase {
         	
         }    	
         
-        public Task SelectTask(int taskid) {
+        public Task SelectTask(int taskid) throws Exception {
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
@@ -130,9 +130,12 @@ public class DataBase {
         		    task1.setObservable(rs.getBoolean("observable"));
         		    task1.setStatus(TaskStatus.valueOf(rs.getString("status")));
         		    task1.setName(rs.getString("name"));
-        		    task1.setDueDate(new Date(1220227200L * 1000));
-        		    //task1.setDueDate(rs.getInt(taskid));
-        		    task1.setPriority(rs.getBoolean("priority"));
+        		    
+        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+        		    task1.setDueDate(date1);
+        		    
+        		    //task1.setPriority(rs.getBoolean("priority"));
+        		    
         		    System.out.println( "1st executeUpdate() returned " + rs );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
