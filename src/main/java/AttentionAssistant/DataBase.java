@@ -29,7 +29,7 @@ public class DataBase {
       * @return Connection
       */
     public void DatabaseSetUp() {
-        String url = "jdbc:sqlite:C:/sqlite/db/Attention_Assistant.db" ;
+        String url = "jdbc:sqlite:bin/Attention_Assistant.db" ;
         ds.setUrl(url);
         try (Connection conn1 = ds.getConnection()) {
             if (conn1 != null) {
