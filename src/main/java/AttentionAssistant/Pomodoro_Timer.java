@@ -388,7 +388,7 @@ class Pomodoro_Timer extends JFrame
     	mainFrame.setLocationRelativeTo(null);
     	mainFrame.setVisible(true);
     	mainFrame.setResizable(false);
-    	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
 	public static void run_pomo()

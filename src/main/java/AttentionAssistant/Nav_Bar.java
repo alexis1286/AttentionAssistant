@@ -96,7 +96,7 @@ public class Nav_Bar{
 	        		//open settings
 	        		JFrame settings = new JFrame("Attention Assistant Settings");
 	        		settings.setVisible(true);
-	        		settings.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        		settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        }});
 	        Image si = settings_icon.getImage();
 	        si = si.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
@@ -107,11 +107,10 @@ public class Nav_Bar{
 	        
 	        
 	        JButton pm_button = new JButton();
-	        settings_button.addActionListener(new ActionListener() {
+	        pm_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
-	        		Priority_Manager pm = new Priority_Manager();
-	        		pm.open_pm();
+	        		Priority_Manager.open_pm();
 	        }});
 	        Image pmi = pm_icon.getImage();
 	        pmi = pmi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);

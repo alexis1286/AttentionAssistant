@@ -1,10 +1,15 @@
 package AttentionAssistant;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 
 public class Priority_Manager {
@@ -13,11 +18,31 @@ public class Priority_Manager {
 
 	private int id = 100;
 	
-	public void open_pm() {
-		JFrame pm_frame = new JFrame("AttentionAssistant Priotity Manager");
-		pm_frame.setAlwaysOnTop(true);
-        pm_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pm_frame.setVisible(true);
+	public static void open_pm() {
+		EventQueue.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				JFrame pm_frame = new JFrame("AttentionAssistant Priotity Manager");
+				pm_frame.setLocationRelativeTo(null);
+				pm_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				JPanel panel = new JPanel();
+				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+				panel.setOpaque(true);
+				
+				
+				
+				pm_frame.getContentPane().add(panel, BorderLayout.CENTER);
+				pm_frame.pack();
+				pm_frame.setAlwaysOnTop(true);
+				pm_frame.setVisible(true);
+				pm_frame.setResizable(true);
+			}
+		});
 	}
 	
 	/**
