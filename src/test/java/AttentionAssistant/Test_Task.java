@@ -93,6 +93,24 @@ public class Test_Task {
         assertEquals(TaskStatus.OPEN , nonDefaultTask.getStatus(), 
         "Parameter constructor task.status should be OPEN. Returned: " + nonDefaultTask.getStatus());
  
+        /**
+         *  Make sure the Task name is set to "this is a test name" for the Parameter constructor
+         */
+        assertEquals("This is a test Name" , copyTask.getName(), 
+        "Parameter constructor task.name should be This is a test Name. Returned: " + nonDefaultTask.getName());
+
+        /**
+         *  Make sure the Task dueDate is set to Date(1220227200L * 1000) for the Parameter constructor
+         */
+        assertEquals(new Date(1220227200L * 1000) , copyTask.getDueDate(), 
+        "Parameter constructor task.date should be Sun Aug 31 20:00:00 EDT 2008 Returned: " + nonDefaultTask.getDueDate());
+
+        /**
+         *  Make sure the Task Priority is set to true for the Parameter constructor
+         */
+        assertEquals(true , copyTask.getPriority(), 
+        "Parameter constructor task.priority should be true Returned: " + nonDefaultTask.getPriority());
+
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -125,6 +143,24 @@ public class Test_Task {
         assertEquals(TaskStatus.OPEN , copyTask.getStatus(), 
         "Copy constructor task.status should be OPEN. Returned: " + copyTask.getStatus());
  
+        /**
+         *  Make sure the Task name is set to "this is a test name" for the Copy constructor
+         */
+        assertEquals("This is a test Name" , copyTask.getName(), 
+        "Copy constructor task.name should be This is a test Name. Returned: " + copyTask.getName());
+
+        /**
+         *  Make sure the Task dueDate is set to Date(1220227200L * 1000) for the Copy constructor
+         */
+        assertEquals(new Date(1220227200L * 1000) , copyTask.getDueDate(), 
+        "Copy constructor task.date should be Sun Aug 31 20:00:00 EDT 2008 Returned: " + copyTask.getDueDate());
+
+        /**
+         *  Make sure the Task Priority is set to true for the Copy constructor
+         */
+        assertEquals(true , copyTask.getPriority(), 
+        "Copy constructor task.priority should be true Returned: " + copyTask.getPriority());
+
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -143,8 +179,8 @@ public class Test_Task {
     @DisplayName("<Task> SetDescription")
     void taskSetDescription() {
     	
-    	copyTask.setDescription("I am still a test");
-    	assertEquals("I am still a test", copyTask.getDescription(), "copyTask description should be set to \"I am still a test\" but instead returned: " + copyTask.getDescription());
+    	copyTask.setDescription("I am still a test Description");
+    	assertEquals("I am still a test Description", copyTask.getDescription(), "copyTask description should be set to \"I am still a test\" but instead returned: " + copyTask.getDescription());
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -159,7 +195,6 @@ public class Test_Task {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-
     @Test
     @DisplayName("<Task> SetStatus")
     void taskSetStatus() {
@@ -169,5 +204,45 @@ public class Test_Task {
     }    	
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    
+
+    @Test
+    @DisplayName("<Task> SetName")
+    void taskSetName() {
+        	
+        copyTask.setName("I am still a test Name");
+        assertEquals("I am still a test Name", copyTask.getName(), "copyTask name should be set to I am still a test Name but instead returned: " + copyTask.getName());
+    }    	
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Task> SetDueDate")
+    void taskSetDueDate() {
+        	
+        copyTask.setDueDate(new Date(1220227202L * 1000));
+        assertEquals(new Date(1220227202L * 1000), copyTask.getDueDate(), "copyTask dueDate should be set to Sun Aug 31 20:00:02 EDT 2008 but instead returned: " + copyTask.getDueDate());
+    }    	
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Task> SetPriority")
+    void taskSetPriority() {
+        	
+        copyTask.setPriority(false);
+        assertEquals(false, copyTask.getPriority(), "copyTask dueDate should be set to false but instead returned: " + copyTask.getPriority());
+    }    	
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Task> toString")
+    void taskToString() {
+        String String1 = "Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN";
+        
+        assertEquals(String1, nonDefaultTask.toString(), "String1 should be set to Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN but instead returned: " + nonDefaultTask.toString());
+    }    	
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 }

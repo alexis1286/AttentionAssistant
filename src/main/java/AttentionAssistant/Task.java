@@ -183,7 +183,7 @@ public class Task {
 	 * @return Boolean
 	 */
 	public Boolean getPriority() {
-		return this.getPriority();
+		return this.priority;
 	}
 	
 	/**
@@ -213,4 +213,5 @@ public class Task {
 		return taskString;
 		
 	}
+
 }
