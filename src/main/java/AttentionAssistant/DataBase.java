@@ -5,6 +5,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -119,7 +120,7 @@ public class DataBase {
         	
         }    	
         
-        public Task SelectTask(int taskid) throws Exception {
+        public Task SelectTask(int taskid) {
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
@@ -140,6 +141,10 @@ public class DataBase {
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
         		    System.exit( 0 );
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        			System.exit( 0 );
         		}
         	return task1;
         }

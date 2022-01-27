@@ -58,7 +58,7 @@ public class Test_DataBase {
     
     @Test
     @DisplayName("<DataBase> DatabaseSelectTask")
-    void DatabaseSelectTask() throws Exception {
+    void DatabaseSelectTask() {
     	Task PleaseWork = new Task();
     	PleaseWork = db.SelectTask(1);
         String String1 = "Task ID= 1 Priority= true Name= This is an updated Name1 Description= I am a updated description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN";
