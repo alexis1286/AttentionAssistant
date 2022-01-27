@@ -38,10 +38,32 @@ public class Test_DataBase {
     @DisplayName("<DataBase> DatabaseUpdateTask")
     void DatabaseUpdateTask() {
     	nonDefaultTask.setTaskID(1);
-    	nonDefaultTask.setDescription("I am a updated description2 ");
+    	nonDefaultTask.setDescription("I am a updated description1 ");
     	nonDefaultTask.setObservable(false);
-    	nonDefaultTask.setName("I am an updated name2 ");
+    	nonDefaultTask.setName("I am an updated name1 ");
     	db.UpdateTask(nonDefaultTask);
     }
-	
+    
+    @Test
+    @DisplayName("<DataBase> DatabaseDeleteTask")
+    void DatabaseDeleteTask() {
+    	
+    	nonDefaultTask.setTaskID(2);
+    	nonDefaultTask.setDescription("I am supposed to be deleted ");
+    	nonDefaultTask.setObservable(false);
+    	nonDefaultTask.setName("I am supposed to be deleted ");
+    	db.UpdateTask(nonDefaultTask);
+    	db.DeleteTask(nonDefaultTask);    
+    }
+    
+    @Test
+    @DisplayName("<DataBase> DatabaseSelectTask")
+    void DatabaseSelectTask() {
+    	Task PleaseWork = new Task();
+    	PleaseWork = db.SelectTask(1);
+       String String1 = "Task ID= 1 Priority= true Name= This is an updated Name1 Description= I am a updated description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN";
+        assertEquals(String1, PleaseWork.toString(), "String1 should be set to Task ID= 1 Priority= true Name= This is an updated Name1 Description= I am a updated description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN but instead returned: " + PleaseWork.toString());
+ 
+    }
+    
 }
