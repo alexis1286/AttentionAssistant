@@ -2,9 +2,11 @@ package AttentionAssistant;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.sqlite.SQLiteDataSource;
 
@@ -72,7 +74,7 @@ public class DataBase {
     			task.getStatus().toString() + "', '" +
     			task.getName() + "', '" +
     			DateTime + "', '" +
-    			task.getPriority() +"')";
+    			task.getPriority().toString() +"')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );
@@ -91,7 +93,7 @@ public class DataBase {
         			"', status = '" + task.getStatus().toString() +
         			"', name = '" + task.getName() +
         			"', dueDate = '" + DateTime +
-        			"', priority = '" + task.getPriority() +
+        			"', priority = '" + task.getPriority().toString() +
         			"' WHERE taskID = '" + task.getTaskID() + "'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
@@ -102,5 +104,40 @@ public class DataBase {
         		    System.exit( 0 );
         		}
         	
-        }    			
+        }   
+        
+        public void DeleteTask(int taskid) {
+        	String query1 = "DELETE FROM task WHERE taskID = '" + taskid + "'";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    int rv = stmt.executeUpdate( query1 );
+        		    System.out.println( "1st executeUpdate() returned " + rv );
+        		} catch ( SQLException e ) {
+        		    e.printStackTrace();
+        		    System.exit( 0 );
+        		}
+        	
+        }    	
+        
+        public Task SelectTask(int taskid) {
+        	Task task1 = new Task();
+        	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    task1.setTaskID(rs.getInt(taskid));
+        		    task1.setDescription(rs.getString("description"));
+        		    task1.setObservable(rs.getBoolean("observable"));
+        		    task1.setStatus(TaskStatus.valueOf(rs.getString("status")));
+        		    task1.setName(rs.getString("name"));
+        		    task1.setDueDate(new Date(1220227200L * 1000));
+        		    //task1.setDueDate(rs.getInt(taskid));
+        		    task1.setPriority(rs.getBoolean("priority"));
+        		    System.out.println( "1st executeUpdate() returned " + rs );
+        		} catch ( SQLException e ) {
+        		    e.printStackTrace();
+        		    System.exit( 0 );
+        		}
+        	return task1;
+        }
 }
