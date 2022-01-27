@@ -67,7 +67,7 @@ public class DataBase {
             e.printStackTrace();
             System.exit( 0 );
         }
-    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(task.getDueDate());
+    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
     			"( description, observable, status, name, dueDate, priority ) Values ( '" +
     			task.getDescription() + "', '" +
@@ -87,7 +87,7 @@ public class DataBase {
     }
     
         public void UpdateTask(Task task) {
-        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(task.getDueDate());
+        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
         	String query1 = "UPDATE task " +
         			"SET description = '" + task.getDescription() + 
         			"', observable = '" + task.getObservable() + 
@@ -120,31 +120,24 @@ public class DataBase {
         	
         }    	
         
-        public Task SelectTask(int taskid) {
+        public Task SelectTask(int taskid) throws ParseException {
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    ResultSet rs = stmt.executeQuery( query1 );
-        		    task1.setTaskID(rs.getInt(taskid));
+        		    task1.setTaskID(rs.getInt("taskID"));
         		    task1.setDescription(rs.getString("description"));
-        		    task1.setObservable(rs.getBoolean("observable"));
+        		    task1.setObservable(Boolean.valueOf(rs.getString("observable")));
         		    task1.setStatus(TaskStatus.valueOf(rs.getString("status")));
         		    task1.setName(rs.getString("name"));
-        		    
         		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
         		    task1.setDueDate(date1);
-        		    
-        		    //task1.setPriority(rs.getBoolean("priority"));
-        		    
+        		    task1.setPriority(Boolean.valueOf(rs.getString("priority")));
         		    System.out.println( "1st executeUpdate() returned " + rs );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
         		    System.exit( 0 );
-        		}
-        		  catch ( ParseException p ) {
-        			p.printStackTrace();
-        			System.exit( 0 );
         		}
         	return task1;
         }
