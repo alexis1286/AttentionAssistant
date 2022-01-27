@@ -81,9 +81,26 @@ public class DataBase {
     		    e.printStackTrace();
     		    System.exit( 0 );
     		}
-
-
-
     }
-    			
+    
+        public void UpdateTask(Task task) {
+        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+        	String query1 = "UPDATE task " +
+        			"SET description = '" + task.getDescription() + 
+        			"', observable = '" + task.getObservable() + 
+        			"', status = '" + task.getStatus().toString() +
+        			"', name = '" + task.getName() +
+        			"', dueDate = '" + DateTime +
+        			"', priority = '" + task.getPriority() +
+        			"' WHERE taskID = '" + task.getTaskID() + "'";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    int rv = stmt.executeUpdate( query1 );
+        		    System.out.println( "1st executeUpdate() returned " + rv );
+        		} catch ( SQLException e ) {
+        		    e.printStackTrace();
+        		    System.exit( 0 );
+        		}
+        	
+        }    			
 }

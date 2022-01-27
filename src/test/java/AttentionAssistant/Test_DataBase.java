@@ -33,5 +33,15 @@ public class Test_DataBase {
     void DatabaseAddNewTask() {
     	db.AddTask(nonDefaultTask);
     	}
+
+    @Test
+    @DisplayName("<DataBase> DatabaseUpdateTask")
+    void DatabaseUpdateTask() {
+    	nonDefaultTask.setTaskID(1);
+    	nonDefaultTask.setDescription("I am a updated description2 ");
+    	nonDefaultTask.setObservable(false);
+    	nonDefaultTask.setName("I am an updated name2 ");
+    	db.UpdateTask(nonDefaultTask);
+    }
 	
 }
