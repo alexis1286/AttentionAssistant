@@ -4,6 +4,8 @@
  */
 package AttentionAssistant;
 
+import java.util.Date;
+
 /**
  * Options are 'OPEN' and 'CLOSED'
  * OPEN tasks were not yet completed by the User
@@ -18,10 +20,10 @@ enum Status {
 public class Task {
 	/** Variables */
 	private int taskID;
-	//private boolean priority;
-	//private String name;
+	private boolean priority;
+	private String name;
 	private String description;
-	//private Date dueDate;
+	private Date dueDate;
 	
 	
 	/**
@@ -44,7 +46,7 @@ public class Task {
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
-	
+	}
 	
 	/**
 	 * Create a class Task with a specified
@@ -154,12 +156,12 @@ public class Task {
 		this.status = status;
 	}
 	
-	@Override
+	//@Override
 	/**
 	 * Display Task
 	 * @return Shit
 	 */
-	public String toString() {
-		return getTaskID() + 
-	}
+	//public String toString() {
+		//return getTaskID() +
+	//}
 }

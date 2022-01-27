@@ -4,19 +4,28 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JFrame;
+
 
 public class Priority_Manager {
 
-private ArrayList<Task> Task_list = new ArrayList<Task> ();
+	private ArrayList<Task> Task_list = new ArrayList<Task> ();
 
-private int id = 100;
-
+	private int id = 100;
+	
+	public void open_pm() {
+		JFrame pm_frame = new JFrame("AttentionAssistant Priotity Manager");
+		pm_frame.setAlwaysOnTop(true);
+        pm_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pm_frame.setVisible(true);
+	}
+	
 	/**
 	 * Add Task
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void addTask {
+	private void addTask() {
 		id++;
 		
 		Task new_task = new Task();
@@ -36,7 +45,7 @@ private int id = 100;
 	 * Display task list
 	 * @param
 	 */
-	public printList{
+	public void printList(){
 		String list = Task_list.toString();
 		System.out.println(list);
 		}
@@ -58,7 +67,7 @@ private int id = 100;
 	 * Export Task List to Parent Portal
 	 * @param
 	 */
-	public void export{
+	public void export(){
 		//Code to Implement
 	}
 }

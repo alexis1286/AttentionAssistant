@@ -10,7 +10,7 @@ import javax.swing.*;
 
 
 public class Nav_Bar{
-	private int x_coord = 0,y_coord = 400;
+	private int x_coord = 0,y_coord = 0;
 	private int size = 70;
 	//deal with color changes
 	
@@ -24,6 +24,7 @@ public class Nav_Bar{
 	private boolean fts_active = true;
 	private boolean progress_active = true;
 	
+	JFrame frame = new JFrame();
 	public void set_coords(int x, int y) {
 		x_coord = x;
 		y_coord = y;
@@ -43,7 +44,7 @@ public class Nav_Bar{
 	  public Nav_Bar() throws Exception {
 	    SwingUtilities.invokeLater(new Runnable() {
 	      public void run() {
-	        JFrame frame = new JFrame();
+	        
 	        frame.setUndecorated(true);
 	        frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
 	        frame.setAlwaysOnTop(true);
