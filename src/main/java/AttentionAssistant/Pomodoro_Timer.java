@@ -7,7 +7,7 @@ import javax.swing.UIManager.*;
 import net.miginfocom.swing.*; // For MigLayout
 
 @SuppressWarnings("serial")
-class PomodoroTimer extends JFrame
+class Pomodoro_Timer extends JFrame
 {
 	// Instance variables
 	private final JPanel topPanel;
@@ -51,7 +51,7 @@ class PomodoroTimer extends JFrame
 	private int delayRemaining;
 	private int roundsCompleted; // No. of Pomodoro rounds completed.
 
-	public PomodoroTimer()
+	public Pomodoro_Timer()
 	{
 		setTitle("Pomodoro Timer");
 
@@ -383,7 +383,7 @@ class PomodoroTimer extends JFrame
 
     private static void runGUI()
     {
-    	PomodoroTimer mainFrame = new PomodoroTimer();
+    	Pomodoro_Timer mainFrame = new Pomodoro_Timer();
     	mainFrame.pack();
     	mainFrame.setLocationRelativeTo(null);
     	mainFrame.setVisible(true);
@@ -391,7 +391,7 @@ class PomodoroTimer extends JFrame
     	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public static void main(String args[])
+	public static void run_pomo()
 	{
 		SwingUtilities.invokeLater(() -> {
                     runGUI();

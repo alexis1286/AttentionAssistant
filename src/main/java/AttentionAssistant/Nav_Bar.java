@@ -121,6 +121,11 @@ public class Nav_Bar{
 	        pm_button.setBorderPainted(false);
 	        
 	        JButton pomo_button = new JButton();
+	        pomo_button.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open pm
+	        		Pomodoro_Timer.run_pomo();
+	        }});
 	        Image pomoi = pomo_icon.getImage();
 	        pomoi = pomoi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
 	        pomo_icon = new ImageIcon(pomoi);
