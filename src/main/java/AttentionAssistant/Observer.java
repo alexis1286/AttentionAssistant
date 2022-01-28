@@ -71,7 +71,7 @@ public class Observer{
 			 * Check if user is focused on task when they should be working or
 			 * hyperfocusing when they should be off task
 			 */
-			if(observerScore > threashold) {}
+			if(observerScore > threashold) {} // need to implement
 			
 		}
 	}

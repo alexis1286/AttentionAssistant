@@ -16,7 +16,7 @@ private int id = 100;
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void addTask {
+	private void addTask() {
 		id++;
 		
 		Task new_task = new Task();
@@ -36,7 +36,7 @@ private int id = 100;
 	 * Display task list
 	 * @param
 	 */
-	public printList{
+	public void printList(){
 		String list = Task_list.toString();
 		System.out.println(list);
 		}
@@ -58,6 +58,7 @@ private int id = 100;
 	 * Export Task List to Parent Portal
 	 * @param
 	 */
-	public void export{
+	public void export(){
 		//Code to Implement
 	}
+}
