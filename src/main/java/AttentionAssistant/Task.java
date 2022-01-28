@@ -207,3 +207,4 @@ public class Task implements Comparable<Task>{
 	public int compareTo(Task t1) {
 		return getDueDate().compareTo(t1.getDueDate());
 	}
+}

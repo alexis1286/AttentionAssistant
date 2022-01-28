@@ -50,7 +50,7 @@ public class Observer{
 	 */
 	protected void monitor(Task activeTask) {
 		
-		while(activeTask.getStatus() == TaskStatus.OPEN) {
+		while(activeTask.getStatus() == Status.OPEN) {
 			
 			/**
 			 * Obtain all scores from the 5 monitoring services
