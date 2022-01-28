@@ -12,12 +12,14 @@ import java.util.Date;
  * CLOSED tasks were completed by the User
  */
 
-enum TaskStatus {
+enum Status {
 	OPEN, CLOSED
 }
 
 
-public class Task {
+//public class Task {
+
+public class Task implements Comparable<Task>{
 	/** Variables */
 	private int taskID;
 	private boolean priority;
@@ -33,7 +35,7 @@ public class Task {
 	 */
 	private boolean observable;
 	
-	private TaskStatus status;
+	private Status status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -42,7 +44,7 @@ public class Task {
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = TaskStatus.CLOSED;
+		this.status = Status.CLOSED;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -50,10 +52,10 @@ public class Task {
 	
 	/**
 	 * Create a class Task with a specified
-	 * taskID, description, whether observable, status
-	 * @param int, String, boolean, TaskStatus
+	 * taskID, description, whether observable, status 
+	 * @param int, String, boolean, Status, priority, dueDate, name
 	 */
-	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, Boolean priority) {
+	public Task(int taskID, String description, boolean observable, Status status, Date dueDate, boolean priority, String name) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -76,7 +78,14 @@ public class Task {
 		this.priority = task.priority;
 	}
 	
+	/*
+	 * Getter/Setters
+	 */
 	
+	/*
+	 * Getter/Setters
+	 */
+		
 	/**
 	 * Start of Encapsulation
 	 * 
@@ -132,23 +141,23 @@ public class Task {
 	
 	/**
 	 * Get Status
-	 * @return TaskStatus
+	 * @return String?
 	 */
-	public TaskStatus getStatus() {
+	public Status getStatus() {
 		return this.status;
 	}
 	
 	/**
 	 * Set Status
-	 * @param TaskStatus
+	 * @param Status?
 	 */
-	public void setStatus(TaskStatus status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 	
 	/**
 	 * Get DueDate
-	 * @return Date
+	 * @return dueDate
 	 */
 	public Date getDueDate() {
 		return this.dueDate;
@@ -164,14 +173,14 @@ public class Task {
 	
 	/**
 	 * Get Name
-	 * @return String
+	 * @return name
 	 */
 	public String getName() {
 		return this.name;
 	}
 	
 	/**
-	 * Set Status
+	 * Set Name
 	 * @param String
 	 */
 	public void setName(String name) {
@@ -179,39 +188,22 @@ public class Task {
 	}
 	
 	/**
-	 * Get Priority
-	 * @return Boolean
+	 * Get Priority Status
+	 * @return priority
 	 */
-	public Boolean getPriority() {
+	public boolean getPriority () {
 		return this.priority;
 	}
 	
 	/**
-	 * Set Priority
+	 * Set DueDate
 	 * @param Boolean
 	 */
-	public void setPriority(Boolean priority) {
+	public void setdueDate(boolean priority) {
 		this.priority = priority;
 	}
 
-
 	@Override
-	/**
-	 * Display Task
-	 * @return String
-	 */
-	public String toString() {
-		String taskString= new String();
-		taskString = "Task ID= " + this.taskID +
-				" Priority= " + Boolean.toString(this.priority) +
-				" Name= " + this.name +
-				" Description= " + this.description +
-				" Due Date= " + this.dueDate.toString() +
-				" Observable= " + Boolean.toString(this.observable) +
-				" Status= " + this.status.toString();
-				
-		return taskString;
-		
+	public int compareTo(Task t1) {
+		return getDueDate().compareTo(t1.getDueDate());
 	}
-
-}
