@@ -13,7 +13,9 @@ public class Observer{
 	 */
 	private int mouseMovementsScore, eyeMovementScore, keyBoardScore, osEventsScore, internetScore, observerScore;
 	
-	private Task activeTask = null;
+	private int threashold;// used to determine if user is on task
+	
+	private Task activeTask = null; //task passed to the observer through the priority manager
 	
 	/**
 	 * Creating instances of the tracking classes
@@ -21,8 +23,10 @@ public class Observer{
 	MouseTracker mouseTracker;
 	EyeMovementTracker eyeTracker = new EyeMovementTracker();
 	KeyBoardTracker keyboardTracker = new KeyBoardTracker();
+	OSEventsTracker oSTracker = new OSEventsTracker();
+	InternetTracker internetTracker = new InternetTracker();
 	
-	ArrayList<String> keywords = keywordsGenerator(activeTask);
+	ArrayList<String> keywords = keywordsGenerator(activeTask); //generate keywords from description of task
 	
 	/**
 	 * Constructor for Observer
@@ -34,6 +38,8 @@ public class Observer{
 		mouseTracker = new MouseTracker(mt_Component);
 		eyeTracker.startTracking();
 		keyboardTracker.startTracking(keywords);
+		oSTracker.startTracking();
+		internetTracker.startTracking(keywords);
 	}
 	
 	
@@ -45,9 +51,28 @@ public class Observer{
 	protected void monitor(Task activeTask) {
 		
 		while(activeTask.getStatus() == TaskStatus.OPEN) {
+			
+			/**
+			 * Obtain all scores from the 5 monitoring services
+			 */
 			mouseMovementsScore = mouseTracker.getMouseMovementScore();
 			eyeMovementScore = eyeTracker.getEyeMovementScore();
 			keyBoardScore = keyboardTracker.getKeyBoardScore();
+			osEventsScore = oSTracker.getOSEventsScore();
+			internetScore = internetTracker.getEyeMovementScore();
+			
+			/**
+			 * Calculate the overall observerScore
+			 */
+			observerScore = calculateObserverScore(mouseMovementsScore, eyeMovementScore, 
+					keyBoardScore, osEventsScore, internetScore);
+			
+			/**
+			 * Check if user is focused on task when they should be working or
+			 * hyperfocusing when they should be off task
+			 */
+			if(observerScore > threashold) {}
+			
 		}
 	}
 	
@@ -59,6 +84,24 @@ public class Observer{
 	private ArrayList<String> keywordsGenerator(Task activeTask){
 		//CODE TO IMPLEMENT
 		return keywords;
+	}
+	
+	/**
+	 * Calculates the overall observerScore that is to determine if user is on task.
+	 * @param mouseMovementsScore
+	 * @param eyeMovementScore
+	 * @param keyBoardScore
+	 * @param osEventsScore
+	 * @param internetScore
+	 * @return observerScore
+	 */
+	private int calculateObserverScore(int mouseMovementsScore, int eyeMovementScore, 
+			int keyBoardScore, int osEventsScore, int internetScore){
+		
+		int observerScore = (int) (0.2 * mouseMovementsScore + 0.2 * eyeMovementScore + 
+				0.2 * keyBoardScore + 0.2 * osEventsScore +  0.2 * internetScore);
+		
+		return observerScore;
 	}
 	
 	
