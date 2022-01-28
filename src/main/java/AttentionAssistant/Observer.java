@@ -38,7 +38,7 @@ public class Observer{
 		mouseTracker = new MouseTracker(mt_Component);
 		eyeTracker.startTracking();
 		keyboardTracker.startTracking(keywords);
-		oSTracker.startTracking();
+		oSTracker.startTracking(activeTask.getTaskID()); //taskID is temporary placeholder
 		internetTracker.startTracking(keywords);
 	}
 	
