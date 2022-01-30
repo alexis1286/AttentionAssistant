@@ -12,9 +12,9 @@ import java.util.Date;
  * CLOSED tasks were completed by the User
  */
 
-enum Status {
-	OPEN, CLOSED
-}
+//enum Status {
+//	OPEN, CLOSED
+//}
 
 
 public class Task {
@@ -24,6 +24,7 @@ public class Task {
 	private String name;
 	private String description;
 	private Date dueDate;
+	private boolean status;
 	
 	
 	/**
@@ -33,7 +34,7 @@ public class Task {
 	 */
 	private boolean observable;
 	
-	private Status status;
+	//private Status status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -42,7 +43,7 @@ public class Task {
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = Status.CLOSED;
+		this.status = false;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -53,7 +54,7 @@ public class Task {
 	 * taskID, description, whether observable, status
 	 * @param int, String, boolean, Status
 	 */
-	public Task(int taskID, String description, boolean observable, Status status) {
+	public Task(int taskID, String description, boolean observable, Boolean status, String name, Date dueDate, Boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -86,6 +87,9 @@ public class Task {
 	//getpriority
 	//setpriority
 	
+	public String getName() {
+		return name;
+	}
 	
 	/**
 	 * Start of Encapsulation
@@ -97,6 +101,21 @@ public class Task {
 		return this.taskID;
 	}
 	
+	public void setTaskName(String n) {
+		this.name = n;
+	}
+	
+	public void setPriority(Boolean isPriority) {
+		priority = isPriority;
+	}
+	
+	public boolean getPriority() {
+		return priority;
+	}
+	
+	public String getDate() {
+		return "mm/dd/yy";
+	}
 	/**
 	 * User should not be able to set the taskID this should be done automatically through the database
 	 * comment out once database is working.
@@ -144,7 +163,7 @@ public class Task {
 	 * Get Status
 	 * @return String?
 	 */
-	public Status getStatus() {
+	public boolean getStatus() {
 		return this.status;
 	}
 	
@@ -152,8 +171,8 @@ public class Task {
 	 * Set Status
 	 * @param Status?
 	 */
-	public void setStatus(Status status) {
-		this.status = status;
+	public void setStatus(Boolean s) {
+		this.status = s;
 	}
 	
 	//@Override

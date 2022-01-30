@@ -203,6 +203,7 @@ public class Nav_Bar{
 	        settings_button.setIcon(settings_icon);
 	        settings_button.setContentAreaFilled(false);
 	        settings_button.setBorderPainted(false);
+	        settings_button.setFocusPainted(false);
 	        
 	        
 	        JButton pm_button = new JButton();
@@ -218,6 +219,7 @@ public class Nav_Bar{
 	        pm_button.setIcon(pm_icon);
 	        pm_button.setContentAreaFilled(false);
 	        pm_button.setBorderPainted(false);
+	        pm_button.setFocusPainted(false);
 	        
 	        JButton pomo_button = new JButton();
 	        pomo_button.addActionListener(new ActionListener() {
@@ -231,6 +233,7 @@ public class Nav_Bar{
 	        pomo_button.setIcon(pomo_icon);
 	        pomo_button.setContentAreaFilled(false);
 	        pomo_button.setBorderPainted(false);
+	        pomo_button.setFocusPainted(false);
 	        
 	        JButton ntb_button = new JButton();
 	        Image ntbi = ntb_icon.getImage();
@@ -239,6 +242,7 @@ public class Nav_Bar{
 	        ntb_button.setIcon(ntb_icon);
 	        ntb_button.setContentAreaFilled(false);
 	        ntb_button.setBorderPainted(false);
+	        ntb_button.setFocusPainted(false);
 	        
 	        JButton htb_button = new JButton();
 	        Image htbi = htb_icon.getImage();
@@ -247,6 +251,7 @@ public class Nav_Bar{
 	        htb_button.setIcon(htb_icon);
 	        htb_button.setContentAreaFilled(false);
 	        htb_button.setBorderPainted(false);
+	        htb_button.setFocusPainted(false);
 	        
 	        JButton fts_button = new JButton();
 	        Image ftsi = fts_icon.getImage();
@@ -255,6 +260,7 @@ public class Nav_Bar{
 	        fts_button.setIcon(fts_icon);
 	        fts_button.setContentAreaFilled(false);
 	        fts_button.setBorderPainted(false);
+	        fts_button.setFocusPainted(false);
 	        
 	        
 	        JButton progress_button = new JButton();
@@ -264,6 +270,7 @@ public class Nav_Bar{
 	        progress_button.setIcon(progress_icon);
 	        progress_button.setContentAreaFilled(false);
 	        progress_button.setBorderPainted(false);
+	        progress_button.setFocusPainted(false);
 	        
 	        JButton menu_button = new JButton();
 	        Image menui = menu_icon.getImage();
@@ -272,6 +279,7 @@ public class Nav_Bar{
 	        menu_button.setIcon(menu_icon);
 	        menu_button.setContentAreaFilled(false);
 	        menu_button.setBorderPainted(false);
+	        menu_button.setFocusPainted(false);
 	        
 	        JPanel panel = new JPanel();
 	        if(isVert == true) {
