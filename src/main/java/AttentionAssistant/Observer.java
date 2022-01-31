@@ -2,6 +2,8 @@ package AttentionAssistant;
 import java.awt.Component;
 import java.util.ArrayList;
 
+import AttentionAssistant.Pomodoro_Timer.Work_Break;
+
 public class Observer{
 	
 	/**
@@ -13,9 +15,11 @@ public class Observer{
 	 */
 	private int mouseMovementsScore, eyeMovementScore, keyBoardScore, osEventsScore, internetScore, observerScore;
 	
-	private int threashold;// used to determine if user is on task
+	private int threashold; //used to determine if user is on task
 	
 	private Task activeTask = null; //task passed to the observer through the priority manager
+	
+	private Pomodoro_Timer pTimer = null; //reference to the Pomodoro Timer
 	
 	/**
 	 * Creating instances of the tracking classes
@@ -33,7 +37,8 @@ public class Observer{
 	 * Will start the monitoring of user's activity
 	 * by initiating the tracking functions
 	 */
-	public Observer(){
+	public Observer(Pomodoro_Timer pTimer){
+		this.pTimer = pTimer;
 		Component mt_Component = mouseTracker.MouseTrackerSetup();
 		mouseTracker = new MouseTracker(mt_Component);
 		eyeTracker.startTracking();
@@ -71,7 +76,29 @@ public class Observer{
 			 * Check if user is focused on task when they should be working or
 			 * hyperfocusing when they should be off task
 			 */
-			if(observerScore > threashold) {} // need to implement
+			if(observerScore >= threashold && pTimer.getWorkBreakStatus() == Work_Break.WORK ) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			} else if (observerScore < threashold && pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			} else if (observerScore < threashold && pTimer.getWorkBreakStatus() == Work_Break.WORK) {
+				/**
+				 * TAKE ACTION
+				 * User should be working but is not
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			} else {
+				/**
+				 * TAKE ACTION
+				 * User is hyperforcusing
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			}
 			
 		}
 	}
