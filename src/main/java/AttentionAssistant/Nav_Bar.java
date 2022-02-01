@@ -193,9 +193,11 @@ public class Nav_Bar{
 	        settings_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		JFrame settings = new JFrame("Attention Assistant Settings");
-	        		settings.setVisible(true);
-	        		settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        		//JFrame settings = new JFrame("Attention Assistant Settings");
+	        		//settings.setVisible(true);
+	        		//settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        		Settings stgs = new Settings();
+	        		stgs.open_settings();
 	        }});
 	        Image si = settings_icon.getImage();
 	        si = si.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
