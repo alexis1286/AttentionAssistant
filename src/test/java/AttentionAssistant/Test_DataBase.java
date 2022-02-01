@@ -34,7 +34,7 @@ public class Test_DataBase {
 	}
 
     @Test
-    @Order(1)
+    @Order(2)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
     	db.AddTask(nonDefaultTask);
@@ -44,7 +44,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @DisplayName("<DataBase> DatabaseUpdateTask")
     void DatabaseUpdateTask() {
     	Task UpdatedTask= new Task(nonDefaultTask);
@@ -57,7 +57,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("<DataBase> DatabaseDeleteTask")
     void DatabaseDeleteTask() {
     	Task DeletedTask= new Task(nonDefaultTask);
@@ -71,7 +71,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("<DataBase> DatabaseSelectTask")
     void DatabaseSelectTask() {
     	Task SelectedTask1= new Task(nonDefaultTask);
@@ -98,14 +98,14 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(6)
+    @Order(1)
     @DisplayName("<DataBase> DatabaseDeleteAllTasks")
     void DatabaseDeleteAllTasks() {
     db.DeleteAllTasks();
     }
  
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("<DataBase> DatabaseSelectAllTasks")
     void DatabaseSelectAllTasks() {
     	ArrayList<Task> test_task_List = new ArrayList<Task>();
