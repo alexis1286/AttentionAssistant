@@ -10,9 +10,11 @@ import java.util.Date;
  * Options are 'OPEN' and 'CLOSED'
  * OPEN tasks were not yet completed by the User
  * CLOSED tasks were completed by the User
+ * 
+ * Keep this as TaskStatus, Status breaks the database
  */
 
-enum Status {
+enum TaskStatus {
 	OPEN, CLOSED
 }
 
@@ -35,7 +37,8 @@ public class Task implements Comparable<Task>{
 	 */
 	private boolean observable;
 	
-	private Status status;
+	
+	private TaskStatus status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -44,7 +47,7 @@ public class Task implements Comparable<Task>{
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = Status.CLOSED;
+		this.status = TaskStatus.CLOSED;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -55,7 +58,7 @@ public class Task implements Comparable<Task>{
 	 * taskID, description, whether observable, status 
 	 * @param int, String, boolean, Status, priority, dueDate, name
 	 */
-	public Task(int taskID, String description, boolean observable, Status status, Date dueDate, boolean priority, String name) {
+	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -77,14 +80,6 @@ public class Task implements Comparable<Task>{
 		this.dueDate = task.dueDate;
 		this.priority = task.priority;
 	}
-	
-	/*
-	 * Getter/Setters
-	 */
-	
-	/*
-	 * Getter/Setters
-	 */
 		
 	/**
 	 * Start of Encapsulation
@@ -143,7 +138,7 @@ public class Task implements Comparable<Task>{
 	 * Get Status
 	 * @return String?
 	 */
-	public Status getStatus() {
+	public TaskStatus getStatus() {
 		return this.status;
 	}
 	
@@ -151,7 +146,7 @@ public class Task implements Comparable<Task>{
 	 * Set Status
 	 * @param Status?
 	 */
-	public void setStatus(Status status) {
+	public void setStatus(TaskStatus status) {
 		this.status = status;
 	}
 	
@@ -196,15 +191,53 @@ public class Task implements Comparable<Task>{
 	}
 	
 	/**
-	 * Set DueDate
-	 * @param Boolean
+	 * Set DueDate???? Shouldn't this be setPriorty? if this is different I'm leaving it here to not delete others work.
+	 * 
+	 * @param boolean
 	 */
 	public void setdueDate(boolean priority) {
 		this.priority = priority;
 	}
+	
+	/**
+	 * Set Priority
+	 * 
+	 * @param boolean
+	 */
+	public void setPriority(boolean priority) {
+		this.priority = priority;
+	}
 
+	/**
+	 * What is this doing???
+	 * @param Task
+	 * 
+	 * If wanting to use the compareTo for dates, call it using: task0.getDueDate().compareTo(t1.getDueDate());
+	 * 
+	 * @return int
+	 */
 	@Override
 	public int compareTo(Task t1) {
 		return getDueDate().compareTo(t1.getDueDate());
 	}
+	
+	/**
+	 * Where did toString function go?
+	 * 	@Override
+	 * Display Task
+	 * @return String
+	 * public String toString() {
+	 *	String taskString= new String();
+	 *	taskString = "Task ID= " + this.taskID +
+	 *			" Priority= " + Boolean.toString(this.priority) +
+	 *			" Name= " + this.name +
+	 *			" Description= " + this.description +
+	 *			" Due Date= " + this.dueDate.toString() +
+	 *			" Observable= " + Boolean.toString(this.observable) +
+	 *			" Status= " + this.status.toString();
+	 *			
+	 *	return taskString;
+	 *	
+	 *}
+	 */
 }
