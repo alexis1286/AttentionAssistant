@@ -3,6 +3,7 @@ package AttentionAssistant;
 /**
  * Class that contains information whenever Happy_Thought_Button
  * is called.
+ * @author jmitchel2
  */
 public class Happy_Thought_Button {
 
@@ -23,6 +24,7 @@ public class Happy_Thought_Button {
 	
 	/**
 	 * Instantiating empty Happy_Thought_Button object
+	 * @author jmitchel2
 	 */
 	public Happy_Thought_Button() {
 		this.hTB_ID= 0;
@@ -33,6 +35,7 @@ public class Happy_Thought_Button {
 	/**
 	 * Create a class Happy_Thought_Button with a specified
 	 * hTB_ID, media_ID_Tage, flagged
+	 * @author jmitchel2
 	 * @param int, String, boolean
 	 */
 	public Happy_Thought_Button(int hTB_ID, String media_ID_Tag, boolean flagged) {
@@ -54,6 +57,7 @@ public class Happy_Thought_Button {
 	 * Start of Encapsulation
 	 * 
 	 * Get hTB_ID
+	 * @author jmitchel2
 	 * @return int
 	 */
 	public int getHTBID() {
@@ -73,6 +77,7 @@ public class Happy_Thought_Button {
 
 	/**
 	 * Get media_ID_Tag
+	 * 
 	 * @return String
 	 */
 	public String getMedia_ID_Tag() {
@@ -81,6 +86,7 @@ public class Happy_Thought_Button {
 	
 	/**
 	 * Set media_ID_Tag
+	 * 
 	 * @param String
 	 */
 	public void setMedia_ID_Tag(String media_ID_Tag) {

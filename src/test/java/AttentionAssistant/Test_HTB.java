@@ -5,7 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test File for the Happy_Thought_Button functions.
+ * @author jmitchel2
+ */
+
 public class Test_HTB {
+
+	/**
+	 * Objects used in test
+	 */
+
 	Happy_Thought_Button defaultHTB;
 	Happy_Thought_Button nonDefaultHTB;
 	Happy_Thought_Button copyHTB;

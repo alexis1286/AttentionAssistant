@@ -10,7 +10,10 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-
+/**
+ * Test File for the database functions.
+ * @author jmitchel2
+ */
 @TestMethodOrder(OrderAnnotation.class)
 public class Test_DataBase {
 	/**
@@ -18,10 +21,14 @@ public class Test_DataBase {
 	 */
 
 	Task nonDefaultTask;
+	Happy_Thought_Button nonDefaultHTB;
 	DataBase db = new DataBase();
 	
 	@BeforeEach
 	void setup() {
+	/**
+	 * Set up for nonDefault Task	
+	 */
 	int testTaskID = 999;
 	String testDescription = "This is a test description";
 	boolean testObservable = true;
@@ -30,6 +37,16 @@ public class Test_DataBase {
 	Date testDate = new Date(1220227200L * 1000);
 	boolean testPriority = true;
 	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
+	
+	/**
+	 * Set up for nonDefault HTB
+	 */
+	int testHTBID = 999;
+	String testMediaIDTag = "This is a test Media ID Tag";
+	boolean testHTBFlagged = true;
+
+	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged);
+
 	db.DatabaseSetUp();	
 	}
 
@@ -137,4 +154,26 @@ public class Test_DataBase {
     		assertEquals(test_task_List.get(i).toString(), test_database_task_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_task_List.get(i).toString() + " but instead returned: " + test_database_task_List.get(i).toString());
         }
     }
+    
+    @Test
+    @Order(7)
+    @DisplayName("<DataBase> DatabaseAddNewHTB")
+    void DatabaseAddHTB() {
+    db.AddHTB(nonDefaultHTB);
+    }
+    
+    @Test
+    @Order(8)
+    @DisplayName("<DataBase> DatabaseUpdateHTB")
+    void DatabaseUpdateHTB() {
+    	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	UpdatedHTB.setHTBID(1);
+    	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
+    	UpdatedHTB.setFlagged(false);
+    	db.UpdateHTB(UpdatedHTB);
+    
+    }
+
+    
+
 }
