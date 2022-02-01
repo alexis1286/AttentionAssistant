@@ -221,23 +221,25 @@ public class Task implements Comparable<Task>{
 		return getDueDate().compareTo(t1.getDueDate());
 	}
 	
-	/**
-	 * Where did toString function go?
-	 * 	@Override
-	 * Display Task
-	 * @return String
-	 * public String toString() {
-	 *	String taskString= new String();
-	 *	taskString = "Task ID= " + this.taskID +
-	 *			" Priority= " + Boolean.toString(this.priority) +
-	 *			" Name= " + this.name +
-	 *			" Description= " + this.description +
-	 *			" Due Date= " + this.dueDate.toString() +
-	 *			" Observable= " + Boolean.toString(this.observable) +
-	 *			" Status= " + this.status.toString();
-	 *			
-	 *	return taskString;
-	 *	
-	 *}
-	 */
+	
+	  	
+	  /** 
+	   * Display Task
+	   * @return String
+	   */
+	@Override
+	public String toString() {
+	 	String taskString= new String();
+	 	taskString = "Task ID= " + this.taskID +
+	 			" Priority= " + Boolean.toString(this.priority) +
+	 			" Name= " + this.name +
+	 			" Description= " + this.description +
+	 			" Due Date= " + this.dueDate.toString() +
+	 			" Observable= " + Boolean.toString(this.observable) +
+	 			" Status= " + this.status.toString();
+	 			
+	 	return taskString;
+	 	
+	 }
+	 
 }

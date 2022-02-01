@@ -10,8 +10,14 @@ import javax.swing.JFrame;
 
 public class Priority_Manager {
 
-	private ArrayList<Task> Task_list = new ArrayList<Task>();
+	/**
+	 * A list of tasks that are to be displayed in the Priority_Manager
+	 */
+	private ArrayList<Task> Task_list;
 
+	/**
+	 * What is this?
+	 */
 	private int id = 100;
 
 	public void open_pm() {
@@ -20,7 +26,35 @@ public class Priority_Manager {
 		pm_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pm_frame.setVisible(true);
 	}
+	
+	/**
+	 * Instantiating empty Priority_Manager object
+	 */
+	public Priority_Manager() {
+		this.Task_list = new ArrayList<Task>();
+	}
 
+	/**
+	 * Create a class Priority Manager with a specified
+	 * Task_list
+	 * @param ArrayList<Task>();
+	 */
+	public Priority_Manager(ArrayList<Task> task_List) {
+		this.Task_list = task_List;
+	}
+	
+	
+	/**
+	 * Grabs all Tasks from the DataBase and stores into this.Task_list
+	 * Once we get User class up and running param will be an int
+	 * so that it is only grabbing from a certain user
+	 */
+	public void Get_To_List_DB_Setup() {
+	DataBase db = new DataBase();
+	db.DatabaseSetUp();
+	this.Task_list = db.SelectAllTasks();
+	}
+	
 	/**
 	 * Add Task
 	 * @param Description, Observable, Status
@@ -52,8 +86,10 @@ public class Priority_Manager {
 	}
 
 	/**
+	 * Sorting tasks by? What is this doing?
+	 * 
 	 * Sort Tasks
-	 * @param
+	 * @param 
 	 */
 	private void sortTasks(ArrayList<Task> Task_list) {
 
@@ -73,3 +109,6 @@ public class Priority_Manager {
 			Task_list.addAll(NonPriorList);
 		}
 	}
+	
+	
+}

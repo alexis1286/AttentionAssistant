@@ -1,12 +1,17 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
+@TestMethodOrder(OrderAnnotation.class)
 public class Test_DataBase {
 	/**
 	 * Objects used in test
@@ -14,7 +19,7 @@ public class Test_DataBase {
 
 	Task nonDefaultTask;
 	DataBase db = new DataBase();
-
+	
 	@BeforeEach
 	void setup() {
 	int testTaskID = 999;
@@ -26,17 +31,20 @@ public class Test_DataBase {
 	boolean testPriority = true;
 	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
 	db.DatabaseSetUp();	
-	db.AddTask(nonDefaultTask);
 	}
 
     @Test
+    @Order(1)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
     	db.AddTask(nonDefaultTask);
-    	
+    	db.AddTask(nonDefaultTask);
+    	db.AddTask(nonDefaultTask);
+    	db.AddTask(nonDefaultTask);
     }
 
     @Test
+    @Order(2)
     @DisplayName("<DataBase> DatabaseUpdateTask")
     void DatabaseUpdateTask() {
     	Task UpdatedTask= new Task(nonDefaultTask);
@@ -49,6 +57,7 @@ public class Test_DataBase {
     }
     
     @Test
+    @Order(4)
     @DisplayName("<DataBase> DatabaseDeleteTask")
     void DatabaseDeleteTask() {
     	Task DeletedTask= new Task(nonDefaultTask);
@@ -62,6 +71,7 @@ public class Test_DataBase {
     }
     
     @Test
+    @Order(3)
     @DisplayName("<DataBase> DatabaseSelectTask")
     void DatabaseSelectTask() {
     	Task SelectedTask1= new Task(nonDefaultTask);
@@ -75,16 +85,56 @@ public class Test_DataBase {
     	Task selectedTask2 = new Task();
     	selectedTask2 = db.SelectTask(2);
         
-    	//String String1 = "Task ID= 2 Priority= true Name= I am an Selected name1 Description= I am a Selected description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN";
-        //assertEquals(String1, selectedTask2.toString(), "selectedTask2 should be set to Task ID= 1 Priority= false Name= This is an Selected name1 Description= I am a Selected description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN but instead returned: " + selectedTask2.toString());
-        assertEquals(true, selectedTask2.getPriority(), "PleaseWork priority should be set to true but instead returned: " + selectedTask2.getPriority());
-        assertEquals(2, selectedTask2.getTaskID(), "PleaseWork taskid should be set to 1 but instead returned: " + selectedTask2.getTaskID());
-        assertEquals("I am a Selected description1", selectedTask2.getDescription(), "PleaseWork description should be set to I am a Selected description1 but instead returned: " + selectedTask2.getDescription());
-        assertEquals("I am an Selected name1", selectedTask2.getName(), "PleaseWork name should be set to I am an Selected name1 but instead returned: " + selectedTask2.getName());
-        assertEquals(new Date(1220227200L * 1000), selectedTask2.getDueDate(), "PleaseWork duedate should be set to Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedTask2.getDueDate());
-        assertEquals(true, selectedTask2.getObservable(), "PleaseWork observable should be set to false but instead returned: " + selectedTask2.getObservable());
-        assertEquals(TaskStatus.OPEN , selectedTask2.getStatus(), "PleaseWork status should be set to OPEN but instead returned: " + selectedTask2.getStatus().toString());
+    	String String1 = "Task ID= 2 Priority= true Name= I am an Selected name1 Description= I am a Selected description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN";
+        assertEquals(String1, selectedTask2.toString(), "selectedTask2 should be set to Task ID= 1 Priority= false Name= This is an Selected name1 Description= I am a Selected description1 Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= false Status= OPEN but instead returned: " + selectedTask2.toString());
+        assertEquals(true, selectedTask2.getPriority(), "selectedTask2 priority should be set to true but instead returned: " + selectedTask2.getPriority());
+        assertEquals(2, selectedTask2.getTaskID(), "selectedTask2 taskid should be set to 1 but instead returned: " + selectedTask2.getTaskID());
+        assertEquals("I am a Selected description1", selectedTask2.getDescription(), "selectedTask2 description should be set to I am a Selected description1 but instead returned: " + selectedTask2.getDescription());
+        assertEquals("I am an Selected name1", selectedTask2.getName(), "selectedTask2 name should be set to I am an Selected name1 but instead returned: " + selectedTask2.getName());
+        assertEquals(new Date(1220227200L * 1000), selectedTask2.getDueDate(), "selectedTask2 duedate should be set to Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedTask2.getDueDate());
+        assertEquals(true, selectedTask2.getObservable(), "selectedTask2 observable should be set to false but instead returned: " + selectedTask2.getObservable());
+        assertEquals(TaskStatus.OPEN , selectedTask2.getStatus(), "selectedTask2 status should be set to OPEN but instead returned: " + selectedTask2.getStatus().toString());
         
     }
-    
+
+    @Test
+    @Order(6)
+    @DisplayName("<DataBase> DatabaseDeleteAllTasks")
+    void DatabaseDeleteAllTasks() {
+    db.DeleteAllTasks();
+    }
+ 
+    @Test
+    @Order(5)
+    @DisplayName("<DataBase> DatabaseSelectAllTasks")
+    void DatabaseSelectAllTasks() {
+    	ArrayList<Task> test_task_List = new ArrayList<Task>();
+    	ArrayList<Task> test_database_task_List = new ArrayList<Task>();
+    	
+    	Task SelectedTask1= new Task(nonDefaultTask);
+    	SelectedTask1.setTaskID(2);
+    	SelectedTask1.setDescription("I am a Selected description1");
+    	SelectedTask1.setName("I am an Selected name1");
+       	SelectedTask1.setObservable(true);
+       	SelectedTask1.setPriority(true);
+       	
+    	Task UpdatedTask= new Task(nonDefaultTask);
+    	UpdatedTask.setTaskID(1);
+    	UpdatedTask.setDescription("I am a updated description1");
+    	UpdatedTask.setObservable(false);
+    	UpdatedTask.setName("I am an updated name1");
+    	
+    	Task nonDefaultAddedTask = new Task(nonDefaultTask); 
+    	nonDefaultAddedTask.setTaskID(4);
+    	
+    	test_task_List.add(UpdatedTask);
+    	test_task_List.add(SelectedTask1);
+    	test_task_List.add(nonDefaultAddedTask);
+    	
+    	test_database_task_List= db.SelectAllTasks();
+    	
+    	for (int i =0; i< test_database_task_List.size(); i++) {        
+    		assertEquals(test_task_List.get(i).toString(), test_database_task_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_task_List.get(i).toString() + " but instead returned: " + test_database_task_List.get(i).toString());
+        }
+    }
 }

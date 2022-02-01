@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.sqlite.SQLiteDataSource;
@@ -22,9 +23,7 @@ public class DataBase {
 
 	public DataBase() {
 		this.ds= new SQLiteDataSource();
-	}
-
-	
+	}	
 	
 	/**
 	  * Initial Database Setup
@@ -46,6 +45,12 @@ public class DataBase {
             }
     
     }
+    
+    /**
+     ******* START OF TASK CRUD *******
+     */
+    
+    
     /**
      * Add a new task to the database.
      * @param task
@@ -79,13 +84,17 @@ public class DataBase {
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );
-    		    System.out.println( "1st executeUpdate() returned " + rv );
+    		    System.out.println( "AddTask() returned " + rv );
     		} catch ( SQLException e ) {
     		    e.printStackTrace();
     		    System.exit( 0 );
     		}
     }
     
+    /**
+     * Update a task within the Database
+     * @param task
+     */
         public void UpdateTask(Task task) {
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
         	String query1 = "UPDATE task " +
@@ -99,27 +108,34 @@ public class DataBase {
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
-        		    System.out.println( "1st executeUpdate() returned " + rv );
+        		    System.out.println( "UpdateTask() returned " + rv );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
         	
         }   
-        
+        /**
+         * Delete a task within the Database
+         * @param taskid
+         */
         public void DeleteTask(int taskid) {
         	String query1 = "DELETE FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
-        		    System.out.println( "1st executeUpdate() returned " + rv );
+        		    System.out.println( "DeleteTask() returned " + rv );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
         	
         }    	
-        
+        /**
+         * Select a task within the database using the taskid
+         * @param taskid
+         * @return Task
+         */
         public Task SelectTask(int taskid) {
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
@@ -134,7 +150,7 @@ public class DataBase {
         		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
         		    task1.setDueDate(date1);
         		    task1.setPriority(Boolean.valueOf(rs.getString("priority")));
-        		    System.out.println( "1st executeUpdate() returned " + rs );
+        		    System.out.println( "SelectTask() returned " + rs );
         		} catch ( SQLException e ) {
         			e.printStackTrace();
         		    System.exit( 0 );
@@ -145,4 +161,63 @@ public class DataBase {
         		}
         	return task1;
         }
+        
+        /**
+         * Grab all tasks within the Database
+         * 
+         * This will eventually have a parameter int to grab by user id
+         * 
+         * @return ArrayList<Task>
+         */
+        public ArrayList<Task> SelectAllTasks(){
+        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+        	Task blankTask = new Task();
+        	String query1 = "SELECT * FROM task";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    while (rs.next()){
+        		    blankTask = new Task();
+        		    blankTask.setTaskID(rs.getInt("taskID"));
+        		    blankTask.setDescription(rs.getString("description"));
+        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
+        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
+        		    blankTask.setName(rs.getString("name"));
+        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+        		    blankTask.setDueDate(date1);
+        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+        		    tasksOnList.add(blankTask);
+        		    }
+        		    System.out.println( "SelectAllTasks() returned " + rs );
+        		} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		    System.exit( 0 );
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        			System.exit( 0 );
+        		}
+        	return tasksOnList;
+        }
+        
+        /**
+         * Mainly used for JUNIT testing, deletes the task table at the end of testing to remove all test data.
+         * 
+         * 
+         */
+        public void DeleteAllTasks(){
+        	String query1 = "DROP TABLE IF EXISTS 'task'";
+        	try ( Connection conn = this.ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+    		    int rv = stmt.executeUpdate( query1 );
+    		    System.out.println( "DeleteAllTasks() returned " + rv );
+        	} catch ( SQLException e ) {
+    			e.printStackTrace();
+    		    System.exit( 0 );
+        }
+
+        }
+        /**
+        ******* END OF TASK CRUD *******
+        */
 }
