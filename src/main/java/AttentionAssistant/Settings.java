@@ -489,7 +489,7 @@ public class Settings {
 			public void actionPerformed(ActionEvent e) {
 				//call to open PM 
 				Priority_Manager pm = new Priority_Manager();
-        		pm.open_pm();
+        		//pm.open_pm();
 			}
 		});
 		
@@ -696,7 +696,7 @@ public class Settings {
 	/**
 	 * creates/displays UI
 	 */
-	public void open_settings() {
+	public void open_settings(DataBase db) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -767,6 +767,8 @@ public class Settings {
 				createPriorityManagerPanel();
 				createPomodoroTimerPanel();
 				createThoughtPanel();								
+				
+				
 		
 				/*
 				 * create buttons for sideMenu

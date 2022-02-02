@@ -12,9 +12,9 @@ import java.util.Date;
  * CLOSED tasks were completed by the User
  */
 
-//enum Status {
-//	OPEN, CLOSED
-//}
+enum TaskStatus {
+	OPEN, CLOSED, OVERDUE;
+}
 
 
 public class Task {
@@ -24,13 +24,13 @@ public class Task {
 	private String name;
 	private String description;
 	private Date dueDate;
-	private boolean status;
+	private TaskStatus status;
 	
 	
 	/**
 	 * False if not observable, True if observable
 	 * Observable tasks will be monitored by the Observer
-	 * Non-observerable tasks will not be monitored by the Observer
+	 * Non-observable tasks will not be monitored by the Observer
 	 */
 	private boolean observable;
 	
@@ -43,7 +43,7 @@ public class Task {
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = false;
+		this.status = TaskStatus.OPEN;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -54,7 +54,7 @@ public class Task {
 	 * taskID, description, whether observable, status
 	 * @param int, String, boolean, Status
 	 */
-	public Task(int taskID, String description, boolean observable, Boolean status, String name, Date dueDate, Boolean priority) {
+	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, Boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -77,15 +77,6 @@ public class Task {
 		this.priority = task.priority;
 	}
 	
-	/*
-	 * Getter/Setters
-	 */
-	//getdueDate
-	//setdueDate
-	//getname
-	//setname
-	//getpriority
-	//setpriority
 	
 	public String getName() {
 		return name;
@@ -113,8 +104,12 @@ public class Task {
 		return priority;
 	}
 	
-	public String getDate() {
-		return "mm/dd/yy";
+	public void setDueDate(Date due) {
+		dueDate = due;
+	}
+	
+	public Date getDueDate() {
+		return dueDate;
 	}
 	/**
 	 * User should not be able to set the taskID this should be done automatically through the database
@@ -163,7 +158,7 @@ public class Task {
 	 * Get Status
 	 * @return String?
 	 */
-	public boolean getStatus() {
+	public TaskStatus getStatus() {
 		return this.status;
 	}
 	
@@ -171,7 +166,7 @@ public class Task {
 	 * Set Status
 	 * @param Status?
 	 */
-	public void setStatus(Boolean s) {
+	public void setStatus(TaskStatus s) {
 		this.status = s;
 	}
 	
