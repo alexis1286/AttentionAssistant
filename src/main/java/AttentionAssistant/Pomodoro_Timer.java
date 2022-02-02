@@ -369,5 +369,3 @@ class Pomodoro_Timer extends JFrame
                 });
 	}
 }
-
-//cited from https://github.com/SuyashD95/Pomodoro-Timer#readme
