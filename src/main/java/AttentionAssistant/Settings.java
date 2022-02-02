@@ -762,6 +762,7 @@ public class Settings {
 				 * creates layout for sub-menus and panels for each sub-menu
 				 */
 				card_panel.setLayout(card_layout);
+				//move these calls to their respective action listeners 
 				createGeneralPanel(); 
 				createNotificationsPanel();
 				createPriorityManagerPanel();

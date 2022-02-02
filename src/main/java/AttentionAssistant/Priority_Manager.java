@@ -351,7 +351,7 @@ public class Priority_Manager {
 				//creates border and sets to purple
 				title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 				//creates label 
-				JLabel title = new JLabel("Priority Manager                                                                                         ");
+				JLabel title = new JLabel("Priority Manager");
 				//makes font color white
 				title.setForeground(Color.white);
 				//sets font, size, and bold
