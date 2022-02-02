@@ -10,24 +10,21 @@ import java.util.Date;
  * Options are 'OPEN' and 'CLOSED'
  * OPEN tasks were not yet completed by the User
  * CLOSED tasks were completed by the User
- * 
- * Keep this as TaskStatus, Status breaks the database
  */
 
-enum TaskStatus {
-	OPEN, CLOSED
-}
+//enum Status {
+//	OPEN, CLOSED
+//}
 
 
-//public class Task {
-
-public class Task implements Comparable<Task>{
+public class Task {
 	/** Variables */
 	private int taskID;
 	private boolean priority;
 	private String name;
 	private String description;
 	private Date dueDate;
+	private boolean status;
 	
 	
 	/**
@@ -37,8 +34,7 @@ public class Task implements Comparable<Task>{
 	 */
 	private boolean observable;
 	
-	
-	private TaskStatus status;
+	//private Status status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -47,7 +43,7 @@ public class Task implements Comparable<Task>{
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = TaskStatus.CLOSED;
+		this.status = false;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -55,10 +51,10 @@ public class Task implements Comparable<Task>{
 	
 	/**
 	 * Create a class Task with a specified
-	 * taskID, description, whether observable, status 
-	 * @param int, String, boolean, Status, priority, dueDate, name
+	 * taskID, description, whether observable, status
+	 * @param int, String, boolean, Status
 	 */
-	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, boolean priority) {
+	public Task(int taskID, String description, boolean observable, Boolean status, String name, Date dueDate, Boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -80,7 +76,21 @@ public class Task implements Comparable<Task>{
 		this.dueDate = task.dueDate;
 		this.priority = task.priority;
 	}
-		
+	
+	/*
+	 * Getter/Setters
+	 */
+	//getdueDate
+	//setdueDate
+	//getname
+	//setname
+	//getpriority
+	//setpriority
+	
+	public String getName() {
+		return name;
+	}
+	
 	/**
 	 * Start of Encapsulation
 	 * 
@@ -91,6 +101,21 @@ public class Task implements Comparable<Task>{
 		return this.taskID;
 	}
 	
+	public void setTaskName(String n) {
+		this.name = n;
+	}
+	
+	public void setPriority(Boolean isPriority) {
+		priority = isPriority;
+	}
+	
+	public boolean getPriority() {
+		return priority;
+	}
+	
+	public String getDate() {
+		return "mm/dd/yy";
+	}
 	/**
 	 * User should not be able to set the taskID this should be done automatically through the database
 	 * comment out once database is working.
@@ -138,7 +163,7 @@ public class Task implements Comparable<Task>{
 	 * Get Status
 	 * @return String?
 	 */
-	public TaskStatus getStatus() {
+	public boolean getStatus() {
 		return this.status;
 	}
 	
@@ -146,98 +171,16 @@ public class Task implements Comparable<Task>{
 	 * Set Status
 	 * @param Status?
 	 */
-	public void setStatus(TaskStatus status) {
-		this.status = status;
+	public void setStatus(Boolean s) {
+		this.status = s;
 	}
 	
+	//@Override
 	/**
-	 * Get DueDate
-	 * @return dueDate
-	 */
-	public Date getDueDate() {
-		return this.dueDate;
-	}
-	
-	/**
-	 * Set DueDate
-	 * @param Date
-	 */
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
-	
-	/**
-	 * Get Name
-	 * @return name
-	 */
-	public String getName() {
-		return this.name;
-	}
-	
-	/**
-	 * Set Name
-	 * @param String
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * Get Priority Status
-	 * @return priority
-	 */
-	public boolean getPriority () {
-		return this.priority;
-	}
-	
-	/**
-	 * Set DueDate???? Shouldn't this be setPriorty? if this is different I'm leaving it here to not delete others work.
-	 * 
-	 * @param boolean
-	 */
-	public void setdueDate(boolean priority) {
-		this.priority = priority;
-	}
-	
-	/**
-	 * Set Priority
-	 * 
-	 * @param boolean
-	 */
-	public void setPriority(boolean priority) {
-		this.priority = priority;
-	}
-
-	/**
-	 * What is this doing???
-	 * @param Task
-	 * 
-	 * If wanting to use the compareTo for dates, call it using: task0.getDueDate().compareTo(t1.getDueDate());
-	 * 
-	 * @return int
-	 */
-	@Override
-	public int compareTo(Task t1) {
-		return getDueDate().compareTo(t1.getDueDate());
-	}
-	
-	/**
-	 * Where did toString function go?
-	 * 	@Override
 	 * Display Task
-	 * @return String
-	 * public String toString() {
-	 *	String taskString= new String();
-	 *	taskString = "Task ID= " + this.taskID +
-	 *			" Priority= " + Boolean.toString(this.priority) +
-	 *			" Name= " + this.name +
-	 *			" Description= " + this.description +
-	 *			" Due Date= " + this.dueDate.toString() +
-	 *			" Observable= " + Boolean.toString(this.observable) +
-	 *			" Status= " + this.status.toString();
-	 *			
-	 *	return taskString;
-	 *	
-	 *}
+	 * @return Shit
 	 */
+	//public String toString() {
+		//return getTaskID() +
+	//}
 }
