@@ -47,6 +47,26 @@ public class DataBase {
             }
     
     }
+    
+    /**
+     * Generate a new unique Task ID
+     * @return current largest Task ID stored + 1
+     */
+    public int generateTaskID() {
+    	Task task = new Task();
+    	String query = "SELECT taskID FROM task ORDER BY taskID DESC";
+    	try ( Connection conn = ds.getConnection();
+    		Statement stmt = conn.createStatement(); ) {
+    		ResultSet rs = stmt.executeQuery( query );
+		    task.setTaskID(rs.getInt("taskID")); 
+            System.out.println( "1st executeUpdate() returned " + rs );
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+            System.exit( 0 );
+        }
+    	return task.getTaskID() + 1;
+    }
+    
     /**
      * Add a new task to the database.
      * @param task
@@ -74,7 +94,7 @@ public class DataBase {
     			task.getDescription() + "', '" +
     			task.getObservable() + "', '" +
     			task.getStatus().toString() + "', '" +
-    			task.getName() + "', '" +
+    			task.getTaskName() + "', '" +
     			DateTime + "', '" +
     			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
@@ -93,7 +113,7 @@ public class DataBase {
         			"SET description = '" + task.getDescription() + 
         			"', observable = '" + task.getObservable() + 
         			"', status = '" + task.getStatus().toString() +
-        			"', name = '" + task.getName() +
+        			"', name = '" + task.getTaskName() +
         			"', dueDate = '" + DateTime +
         			"', priority = '" + task.getPriority() +
         			"' WHERE taskID = '" + task.getTaskID() + "'";
