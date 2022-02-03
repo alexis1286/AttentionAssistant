@@ -78,8 +78,8 @@ public class Task {
 	}
 	
 	
-	public String getName() {
-		return name;
+	public String getTaskName() {
+		return this.name;
 	}
 	
 	/**
@@ -97,19 +97,19 @@ public class Task {
 	}
 	
 	public void setPriority(Boolean isPriority) {
-		priority = isPriority;
+		this.priority = isPriority;
 	}
 	
 	public boolean getPriority() {
-		return priority;
+		return this.priority;
 	}
 	
 	public void setDueDate(Date due) {
-		dueDate = due;
+		this.dueDate = due;
 	}
 	
 	public Date getDueDate() {
-		return dueDate;
+		return this.dueDate;
 	}
 	/**
 	 * User should not be able to set the taskID this should be done automatically through the database
@@ -170,12 +170,22 @@ public class Task {
 		this.status = s;
 	}
 	
-	//@Override
-	/**
-	 * Display Task
-	 * @return Shit
-	 */
-	//public String toString() {
-		//return getTaskID() +
-	//}
+	 /** 
+	   * Display Task
+	   * @return String
+	   */
+	@Override
+	public String toString() {
+	 	String taskString= new String();
+	 	taskString = "Task ID= " + this.taskID +
+	 			" Priority= " + Boolean.toString(this.priority) +
+	 			" Name= " + this.name +
+	 			" Description= " + this.description +
+	 			" Due Date= " + this.dueDate.toString() +
+	 			" Observable= " + Boolean.toString(this.observable) +
+	 			" Status= " + this.status.toString();
+	 			
+	 	return taskString;
+	 	
+	 }
 }
