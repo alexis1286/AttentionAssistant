@@ -244,7 +244,7 @@ public class Test_DataBase {
     ******* START OF TEST OBSERVER CRUD *******
      */
     @Test
-    @Order(10)
+    @Order(11)
     @DisplayName("<DataBase> DatabaseAddNewObserver")
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);

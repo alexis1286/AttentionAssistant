@@ -75,7 +75,7 @@ public class DataBase {
    			 "observerScore INTEGER, " +
    			 "threshold INTEGER, " +
    			 "dT_Gathered DATE, " +
-   			 "FOREIGN KEY (fk_taskID) REFERENCES task (taskID))";
+   			 "FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\"))";
 
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
