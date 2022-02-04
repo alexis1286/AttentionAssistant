@@ -296,19 +296,17 @@ public class Priority_Manager {
         
         for(int i=0;i<Task_list.size();i++) {
         	for(int j=0;j<model.getColumnCount();j++) {
-        		Object[] objs = null;
         		if(j==0) {
-        			objs = new Object[] {Task_list.get(i).getName()};
+        			table.setValueAt(Task_list.get(i).getTaskName(),i,j);
         		}else if(j==1){
-        			objs = new Object[] {Task_list.get(i).getDescription()};
+        			table.setValueAt(Task_list.get(i).getDescription(),i,j);
         		}else if(j==2){
-        			objs = new Object[] {Task_list.get(i).getPriority()};
+        			table.setValueAt(Task_list.get(i).getPriority(),i,j);
         		}else if(j==3) {
-        			objs = new Object[] {Task_list.get(i).getDueDate()};
+        			table.setValueAt(Task_list.get(i).getDueDate(),i,j);
         		}else if(j==4) {
-        			objs = new Object[] {Task_list.get(i).getObservable()};
+        			table.setValueAt(Task_list.get(i).getObservable(),i,j);
         		}
-        		table.setValueAt(objs, i, j);
         	}
         }
  
@@ -332,8 +330,7 @@ public class Priority_Manager {
 	public void open_pm(DataBase db) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
-			public void run() {
-				
+			public void run() {				
 				for(int i=0; i<db.SelectAllTasks().size();i++) {
 					System.out.println(db.SelectAllTasks().get(i));
 					Task_list.add(db.SelectAllTasks().get(i));
