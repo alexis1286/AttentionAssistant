@@ -22,6 +22,7 @@ public class Test_DataBase {
 
 	Task nonDefaultTask;
 	Happy_Thought_Button nonDefaultHTB;
+	Observer nonDefaultObserver;
 	DataBase db = new DataBase();
 	
 	@BeforeEach
@@ -47,6 +48,16 @@ public class Test_DataBase {
 
 	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged);
 
+	/**
+	 * Set up for nonDefault Observer
+	 */
+	int testObserver_ID= 999;
+	int testObserverScore= 100;
+	int testThreshold= 100;
+	Date testDT_Gathered= new Date(1220227200L * 1000);
+
+	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
+	
 	db.DatabaseSetUp();	
 	}
 
@@ -186,6 +197,26 @@ public class Test_DataBase {
     
     }
 
+    /**
+     * HTB Delete and Select
+     */
     
+    /**
+    ******* END OF TEST HTB CRUD *******
+    */
+
+    /**
+    ******* START OF TEST OBSERVER CRUD *******
+     */
+    @Test
+    @Order(9)
+    @DisplayName("<DataBase> DatabaseAddNewObserver")
+    void DatabaseAddNewObserver() {
+    	Task ForObserver= new Task(nonDefaultTask);
+    	ForObserver.setTaskID(4);
+    	db.AddObserver(nonDefaultObserver, ForObserver);
+    }
+
+
 
 }

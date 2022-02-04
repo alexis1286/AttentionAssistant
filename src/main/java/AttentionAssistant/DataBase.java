@@ -44,6 +44,51 @@ public class DataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
           }
+        
+        /**
+         * Set up for Table Task
+         */
+    	String queryTable = "CREATE TABLE IF NOT EXISTS task ( " +
+   			 "taskID INTEGER PRIMARY KEY, " +
+   			 "description TEXT, " +
+   			 "observable BOOLEAN, " +
+   			 "status TEXT, " + 
+   			 "name TEXT, " +
+   			 "dueDate DATE, " +
+   			 "priority BOOLEAN)";
+    	
+    	/**
+    	 * Set up for Table HappyThoughtButton
+    	 */
+    	String queryHappyThoughtButton = "CREATE TABLE IF NOT EXISTS happy_thought_button ( " +
+   			 "hTBID INTEGER PRIMARY KEY, " +
+   			 "media_ID_Tag TEXT, " +
+   			 "flagged BOOLEAN)"; 
+    	
+    	/**
+    	 * Set up for Table Observer
+    	 */
+    	String queryObserver = "CREATE TABLE IF NOT EXISTS observer ( " +
+   			 "observerID INTEGER PRIMARY KEY, " +
+   			 "fk_taskID INTEGER, " +
+   			 "observerScore INTEGER, " +
+   			 "threshold INTEGER, " +
+   			 "dT_Gathered DATE, " +
+   			 "FOREIGN KEY (fk_taskID) REFERENCES task (taskID))";
+
+	try (Connection conn = this.ds.getConnection();
+   			Statement stmt = conn.createStatement(); ){
+   		int rv1 = stmt.executeUpdate(queryTable);
+   		System.out.println( "CreateTaskTable() returned " + rv1 );
+   		int rv2 = stmt.executeUpdate(queryHappyThoughtButton);
+   		System.out.println( "CreateHTBTable() returned " + rv2 );
+   		int rv3 = stmt.executeUpdate(queryObserver);
+   		System.out.println( "CreateObserverTable() returned " + rv3 );
+   		
+       } catch ( SQLException e ) {
+           e.printStackTrace();
+           System.exit( 0 );
+       }
     
     }
 
@@ -53,22 +98,7 @@ public class DataBase {
      * @param task
      */
     public void AddTask(Task task) {
-    	String query = "CREATE TABLE IF NOT EXISTS task ( " +
-    			 "taskID INTEGER PRIMARY KEY, " +
-    			 "description TEXT, " +
-    			 "observable BOOLEAN, " +
-    			 "status TEXT, " + 
-    			 "name TEXT, " +
-    			 "dueDate DATE, " +
-    			 "priority BOOLEAN)";
-    	try (Connection conn = this.ds.getConnection();
-    			Statement stmt = conn.createStatement(); ){
-    		int rv = stmt.executeUpdate(query);
-    		System.out.println( "CreateTaskTable() returned " + rv );
-        } catch ( SQLException e ) {
-            e.printStackTrace();
-            System.exit( 0 );
-        }
+
     	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
     			"( description, observable, status, name, dueDate, priority ) Values ( '" +
@@ -228,18 +258,6 @@ public class DataBase {
          * @param Happy_Thought_Button
          */
         public void AddHTB(Happy_Thought_Button hTB) {
-        	String query = "CREATE TABLE IF NOT EXISTS happy_thought_button ( " +
-        			 "hTBID INTEGER PRIMARY KEY, " +
-        			 "media_ID_Tag TEXT, " +
-        			 "flagged BOOLEAN)"; 
-        	try (Connection conn = this.ds.getConnection();
-        			Statement stmt = conn.createStatement(); ){
-        		int rv = stmt.executeUpdate(query);
-        		System.out.println( "CreateHTBTable() returned " + rv );
-            } catch ( SQLException e ) {
-                e.printStackTrace();
-                System.exit( 0 );
-            }
         	String query1 = "INSERT INTO happy_thought_button " +
         			"( media_ID_Tag, flagged) Values ( '" +
         			hTB.getMedia_ID_Tag() + "', '" +
@@ -316,4 +334,39 @@ public class DataBase {
             		}
             	return hTB1;
             }
+            
+            /**
+             ******* END OF HTB CRUD *******
+             */
+
+             /**
+             ******* START OF Observer CRUD *******
+             * @author jmitchel2, eholes
+             */
+ 
+            
+            /**
+             * Add a new task to the database.
+             * @param task
+             */
+            public void AddObserver(Observer observer, Task task) {
+
+            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
+            	String query1 = "INSERT INTO observer " +
+            			"( fk_taskID, observerScore, threshold, dT_Gathered) Values ( '" +
+            			task.getTaskID() + "', '" +
+            			observer.getObserverScore() + "', '" +
+            			observer.getThreshold() + "', '" +
+            			DateTime + "')"; 
+            	try ( Connection conn = ds.getConnection();
+            		    Statement stmt = conn.createStatement(); ) {
+            		    int rv = stmt.executeUpdate( query1 );
+            		    System.out.println( "AddObserver() returned " + rv );
+            		} catch ( SQLException e ) {
+            		    e.printStackTrace();
+            		    System.exit( 0 );
+            		}
+            }
+
+            	
 }
