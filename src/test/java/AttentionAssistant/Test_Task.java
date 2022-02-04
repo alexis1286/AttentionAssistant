@@ -96,8 +96,8 @@ public class Test_Task {
         /**
          *  Make sure the Task name is set to "this is a test name" for the Parameter constructor
          */
-        assertEquals("This is a test Name" , copyTask.getName(), 
-        "Parameter constructor task.name should be This is a test Name. Returned: " + nonDefaultTask.getName());
+        assertEquals("This is a test Name" , copyTask.getTaskName(), 
+        "Parameter constructor task.name should be This is a test Name. Returned: " + nonDefaultTask.getTaskName());
 
         /**
          *  Make sure the Task dueDate is set to Date(1220227200L * 1000) for the Parameter constructor
@@ -146,8 +146,8 @@ public class Test_Task {
         /**
          *  Make sure the Task name is set to "this is a test name" for the Copy constructor
          */
-        assertEquals("This is a test Name" , copyTask.getName(), 
-        "Copy constructor task.name should be This is a test Name. Returned: " + copyTask.getName());
+        assertEquals("This is a test Name" , copyTask.getTaskName(), 
+        "Copy constructor task.name should be This is a test Name. Returned: " + copyTask.getTaskName());
 
         /**
          *  Make sure the Task dueDate is set to Date(1220227200L * 1000) for the Copy constructor
@@ -209,8 +209,8 @@ public class Test_Task {
     @DisplayName("<Task> SetName")
     void taskSetName() {
         	
-        copyTask.setName("I am still a test Name");
-        assertEquals("I am still a test Name", copyTask.getName(), "copyTask name should be set to I am still a test Name but instead returned: " + copyTask.getName());
+        copyTask.setTaskName("I am still a test Name");
+        assertEquals("I am still a test Name", copyTask.getTaskName(), "copyTask name should be set to I am still a test Name but instead returned: " + copyTask.getTaskName());
     }    	
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -234,15 +234,15 @@ public class Test_Task {
     }    	
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/**
-*    @Test
-*    @DisplayName("<Task> toString")
-*    void taskToString() {
-*        String String1 = "Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN";
-*        
-*        assertEquals(String1, nonDefaultTask.toString(), "String1 should be set to Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN but instead returned: " + nonDefaultTask.toString());
-*    }    	
-*
+
+     @Test
+     @DisplayName("<Task> toString")
+     void taskToString() {
+         String String1 = "Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN";
+         
+         assertEquals(String1, nonDefaultTask.toString(), "String1 should be set to Task ID= 999 Priority= true Name= This is a test Name Description= This is a test description Due Date= Sun Aug 31 20:00:00 EDT 2008 Observable= true Status= OPEN but instead returned: " + nonDefaultTask.toString());
+     }    	
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 }

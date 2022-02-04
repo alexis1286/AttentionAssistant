@@ -36,7 +36,7 @@ public class Settings {
 	/*
 	 * RHS display for General Settings 
 	 */
-	private void createGeneralPanel() {
+	private void createGeneralPanel(DataBase db, BufferedImage guideIcon) {
 		
 		JPanel general_panel = new JPanel();
 		general_panel.setLayout(new BoxLayout(general_panel, BoxLayout.Y_AXIS));
@@ -73,6 +73,20 @@ public class Settings {
 			public void actionPerformed(ActionEvent e) {
 				//open color chooser dialog
 				//needs to be able to change icons on navbar, right? 
+				//temporary setup -- needs modification with a refresh to show color change. and correct buffered image for nav bar instead of guideIcon.
+				//going to pass color instead of ints 
+				Color initialcolor = Color.ORANGE;
+				Color color = JColorChooser.showDialog(null,"Select a color", initialcolor);
+				
+				// won't be creating a nav bar object here in the long run, it will be passed in 
+				Nav_Bar navBar;
+				try {
+					navBar = new Nav_Bar(db);
+					navBar.colorIcon(guideIcon, color.getRed(), color.getBlue(), color.getGreen());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -328,8 +342,10 @@ public class Settings {
 		optionsBoxes.add(audioBox);
 				
 		// displaying sample avatar selection as a placeholder 
+		// long term this will be linked directly to the choose button ... as the action listener
 		BufferedImage avatar = null;
 		try {
+			//will pass string for file path 
 			avatar = ImageIO.read(new File("images/avatar.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -488,8 +504,9 @@ public class Settings {
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open PM 
-				Priority_Manager pm = new Priority_Manager();
-        		pm.open_pm();
+				//needs to be passed through nav_bar with database when open settings is called from nav bar   
+				//Priority_Manager pm = new Priority_Manager();
+        		//pm.open_pm();
 			}
 		});
 		
@@ -588,7 +605,7 @@ public class Settings {
 		breakInterval.setFont(new Font("TimesRoman", Font.BOLD, 16));
 		breakInterval.setBorder(new LineBorder(Color.black,5,false));
 		
-		JLabel breakMinutes = new JLabel("minute work periods");
+		JLabel breakMinutes = new JLabel("minute break periods");
 		breakMinutes.setFont(new Font("Serif", Font.BOLD, 16));
 		breakMinutes.setForeground(Color.white);
 		
@@ -667,6 +684,7 @@ public class Settings {
 		ntbBox.setContentAreaFilled(false);
 		ntbBox.setFocusPainted(false);
 		
+		
 		JCheckBox autoLinkBox = new JCheckBox("Auto-link NTB to Happy Thought Button", true);
 		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 14));
 		autoLinkBox.setForeground(Color.white);
@@ -696,7 +714,7 @@ public class Settings {
 	/**
 	 * creates/displays UI
 	 */
-	public void open_settings() {
+	public void open_settings(DataBase db) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -762,11 +780,14 @@ public class Settings {
 				 * creates layout for sub-menus and panels for each sub-menu
 				 */
 				card_panel.setLayout(card_layout);
-				createGeneralPanel(); 
+				//move these calls to their respective action listeners 
+				createGeneralPanel(db, gi); 
 				createNotificationsPanel();
 				createPriorityManagerPanel();
 				createPomodoroTimerPanel();
 				createThoughtPanel();								
+				
+				
 		
 				/*
 				 * create buttons for sideMenu
@@ -981,7 +1002,9 @@ public class Settings {
 				settings_frame.setAlwaysOnTop(true);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
-				settings_frame.setLocationRelativeTo(null);
+				//settings_frame.setLocationRelativeTo(null);
+				//changed to this to move on my screen
+				settings_frame.setLocation(75, 100);
 			}
 		});
 	}

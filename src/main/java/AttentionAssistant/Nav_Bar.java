@@ -37,11 +37,10 @@ public class Nav_Bar{
 		
 	}
 	
-	public static void main(String[] args) throws Exception {
-	    new Nav_Bar();
-	  }
-	
-	private static BufferedImage colorIcon(BufferedImage image) {
+	//changed to public and added parameters to test colorChooser in settings
+	//we will want to pass a color instead of ints and then use color.getRed(), color.getBlue(), color.getGreen() within this function 
+	//get rid of buffered image for this function?
+	public BufferedImage colorIcon(BufferedImage image, int red, int blue, int green) {
 	    int width = image.getWidth();
 	    int height = image.getHeight();
 	    WritableRaster raster = image.getRaster();
@@ -49,9 +48,9 @@ public class Nav_Bar{
 	    for (int xx = 0; xx < width; xx++) {
 	      for (int yy = 0; yy < height; yy++) {
 	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
-	        pixels[0] = 255;
-	        pixels[1] = 255;
-	        pixels[2] = 255;
+	        pixels[0] = red;
+	        pixels[1] = green;
+	        pixels[2] = blue;
 	        raster.setPixel(xx, yy, pixels);
 	      }
 	    }
@@ -66,6 +65,7 @@ public class Nav_Bar{
 	    for (int xx = 0; xx < width; xx++) {
 	      for (int yy = 0; yy < height; yy++) {
 	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
+	        //rgb
 	        pixels[0] = 56;
 	        pixels[1] = 56;
 	        pixels[2] = 54;
@@ -75,7 +75,7 @@ public class Nav_Bar{
 	    return image;
 	  }
 	
-	  public Nav_Bar() throws Exception {
+	  public Nav_Bar(DataBase db) throws Exception {
 	    SwingUtilities.invokeLater(new Runnable() {
 	      public void run() {
 	        
@@ -112,6 +112,10 @@ public class Nav_Bar{
 	          e.printStackTrace();
 	          System.exit(1);
 	        }
+	        
+	        /* 
+	         * commented out at the moment because new parameters have been added to colorIcon()
+	         * 
 	        colorIcon(settings_img);
 	        colorIcon(pm_img);
 	        colorIcon(pomo_img);
@@ -121,7 +125,7 @@ public class Nav_Bar{
 	        colorIcon(progress_img);
 	        colorIcon(menu_img);
 	        colorCircle(circle);
-	        
+	        */
 	        BufferedImage sbi = new BufferedImage(
 	        		70, 70,BufferedImage.TYPE_INT_ARGB);
 	        Graphics2D sg = sbi.createGraphics();
@@ -197,7 +201,7 @@ public class Nav_Bar{
 	        		//settings.setVisible(true);
 	        		//settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        		Settings stgs = new Settings();
-	        		stgs.open_settings();
+	        		stgs.open_settings(db);
 	        }});
 	        Image si = settings_icon.getImage();
 	        si = si.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
@@ -213,7 +217,7 @@ public class Nav_Bar{
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
 	        		Priority_Manager pm = new Priority_Manager();
-	        		pm.open_pm();
+	        		pm.open_pm(db);
 	        }});
 	        Image pmi = pm_icon.getImage();
 	        pmi = pmi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);

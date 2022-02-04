@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,7 +24,6 @@ import javax.swing.table.TableColumn;
 
 
 public class Priority_Manager {
-	
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
@@ -34,8 +35,6 @@ public class Priority_Manager {
 	int width = 550;
 
 	private ArrayList<Task> Task_list = new ArrayList<Task> ();
-
-	private int id = 100;
 	
 	final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
@@ -46,7 +45,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void addTask() {
+	private void addTask(DataBase database) {
 		JDialog task_window = new JDialog(pm_frame, "Add Task");
 		
 		task_window.setAlwaysOnTop(true);
@@ -63,7 +62,7 @@ public class Priority_Manager {
 		//creates border and sets to purple
 		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 		//creates label 
-		JLabel title = new JLabel("Add Task                                                                                   ");
+		JLabel title = new JLabel("Add Task");
 		//makes font color white
 		title.setForeground(Color.white);
 		//sets font, size, and bold
@@ -101,6 +100,7 @@ public class Priority_Manager {
 		
 		
 		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(200, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
@@ -136,7 +136,7 @@ public class Priority_Manager {
 		JLabel dd = new JLabel("   Due Date: ");
 		dd.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		dd.setForeground(aa_purple);
-		JTextArea date = new JTextArea("mm/dd/yy");
+		JTextArea date = new JTextArea("mm/dd/yyyy");
 		date.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		date.setBorder(new LineBorder(Color.black,5,false));
 		
@@ -168,12 +168,18 @@ public class Priority_Manager {
 		save.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//create task from entered info
-        		new_task.setTaskID(id);
         		String n = name.getText();
         		new_task.setTaskName(n);
         		String d = descrpt.getText();
         		new_task.setDescription(d);
-        		//set up date 
+        		String dd = date.getText();
+        		try {
+					Date due = new SimpleDateFormat("dd/MM/yyyy").parse(dd);
+					new_task.setDueDate(due);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
         		if(observe.getSelectedObjects() != null) {
         			new_task.setObservable(true);
         		}else {new_task.setObservable(false);}
@@ -181,8 +187,10 @@ public class Priority_Manager {
         			new_task.setPriority(true);
         		}else {new_task.setPriority(false);}
         		if(status.getSelectedObjects()!=null) {
-        			new_task.setStatus(true);
-        		}else {new_task.setStatus(false);}
+        			new_task.setStatus(TaskStatus.CLOSED);
+        		}else {new_task.setStatus(TaskStatus.OPEN);}
+        		database.AddTask(new_task);
+        		task_window.dispose();
         }});
 		
 		JButton cancel = new JButton("cancel");
@@ -227,10 +235,6 @@ public class Priority_Manager {
 		task_window.add(tpane, BorderLayout.CENTER);
 		task_window.add(buttons, BorderLayout.PAGE_END);
 		task_window.pack();
-		
-		Task_list.add(new_task);
-		System.out.println(Task_list);
-		id++;
 	}
 	
 	/**
@@ -275,7 +279,7 @@ public class Priority_Manager {
 	 * create JTable to display tasks
 	 */
 	private JScrollPane  display_tasks() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel(Task_list.size(),0);
 				
 		JTable table = new JTable(model);
 		model.addColumn("Task");
@@ -292,22 +296,18 @@ public class Priority_Manager {
         
         for(int i=0;i<Task_list.size();i++) {
         	for(int j=0;j<model.getColumnCount();j++) {
-        		Object[] objs = null;
         		if(j==0) {
-        			objs = new Object[] {Task_list.get(i).getName()};
+        			table.setValueAt(Task_list.get(i).getTaskName(),i,j);
         		}else if(j==1){
-        			objs = new Object[] {Task_list.get(i).getDescription()};
+        			table.setValueAt(Task_list.get(i).getDescription(),i,j);
         		}else if(j==2){
-        			objs = new Object[] {Task_list.get(i).getPriority()};
+        			table.setValueAt(Task_list.get(i).getPriority(),i,j);
         		}else if(j==3) {
-        			objs = new Object[] {Task_list.get(i).getDate()};
+        			table.setValueAt(Task_list.get(i).getDueDate(),i,j);
         		}else if(j==4) {
-        			objs = new Object[] {Task_list.get(i).getObservable()};
+        			table.setValueAt(Task_list.get(i).getObservable(),i,j);
         		}
-        		table.setValueAt(objs, i, j);
         	}
-        	Object[] objs = new Object[] {Task_list.get(i).getName(), Task_list.get(i).getDescription(), Task_list.get(i).getPriority(), Task_list.get(i).getDate(), Task_list.get(i).getObservable()};
-        	table.setValueAt(objs, i, 0);
         }
  
         //Create the scroll pane and add the table to it.
@@ -327,10 +327,15 @@ public class Priority_Manager {
 	/**
 	 * creates/displays UI
 	 */
-	public void open_pm() {
+	public void open_pm(DataBase db) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
-			public void run() {
+			public void run() {				
+				for(int i=0; i<db.SelectAllTasks().size();i++) {
+					System.out.println(db.SelectAllTasks().get(i));
+					Task_list.add(db.SelectAllTasks().get(i));
+				}
+				
 				//gets rid of normal title bar
 				pm_frame.setUndecorated(true);
 				//sets window width and height
@@ -351,7 +356,7 @@ public class Priority_Manager {
 				//creates border and sets to purple
 				title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 				//creates label 
-				JLabel title = new JLabel("Priority Manager                                                                                         ");
+				JLabel title = new JLabel("Priority Manager");
 				//makes font color white
 				title.setForeground(Color.white);
 				//sets font, size, and bold
@@ -389,6 +394,7 @@ public class Priority_Manager {
 				
 				
 				title_panel.add(title);
+				title_panel.add(Box.createRigidArea(new Dimension(315, 0)));
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
@@ -435,22 +441,14 @@ public class Priority_Manager {
 				add_button.setFocusPainted(false);
 				add_button.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		addTask();
+		        		addTask(db);
 		        }});
 				
 				/**
 				 * creates button and call function to import calendar
 				 */
 				
-				/**
-				 * creates button to close pm
-				 */
-				
-				
-				/**
-				 * create custom title bar with close & guide link
-				 */
-				
+
 				
 				/**
 				 * adds task list and buttons to frame

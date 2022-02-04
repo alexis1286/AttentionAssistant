@@ -7,34 +7,34 @@ package AttentionAssistant;
 import java.util.Date;
 
 /**
- * Options are 'OPEN' and 'CLOSED'
+ * Options are 'OPEN', 'CLOSED' and 'OVERDUE'
  * OPEN tasks were not yet completed by the User
  * CLOSED tasks were completed by the User
+ * OVERDUE tasks are past the dueDate
  */
 
-//enum Status {
-//	OPEN, CLOSED
-//}
+enum TaskStatus {
+	OPEN, CLOSED, OVERDUE;
+}
 
 
-public class Task {
+public class Task{
 	/** Variables */
 	private int taskID;
 	private boolean priority;
 	private String name;
 	private String description;
 	private Date dueDate;
-	private boolean status;
+	private TaskStatus status;
 	
 	
 	/**
 	 * False if not observable, True if observable
 	 * Observable tasks will be monitored by the Observer
-	 * Non-observerable tasks will not be monitored by the Observer
+	 * Non-observable tasks will not be monitored by the Observer
 	 */
 	private boolean observable;
 	
-	//private Status status;
 	
 	/**
 	 * Instantiating empty Task object
@@ -43,7 +43,7 @@ public class Task {
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = false;
+		this.status = TaskStatus.CLOSED;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
@@ -54,7 +54,7 @@ public class Task {
 	 * taskID, description, whether observable, status
 	 * @param int, String, boolean, Status
 	 */
-	public Task(int taskID, String description, boolean observable, Boolean status, String name, Date dueDate, Boolean priority) {
+	public Task(int taskID, String description, boolean observable, TaskStatus status, String name, Date dueDate, boolean priority) {
 		this.taskID = taskID;
 		this.description = description;
 		this.observable = observable;
@@ -77,19 +77,6 @@ public class Task {
 		this.priority = task.priority;
 	}
 	
-	/*
-	 * Getter/Setters
-	 */
-	//getdueDate
-	//setdueDate
-	//getname
-	//setname
-	//getpriority
-	//setpriority
-	
-	public String getName() {
-		return name;
-	}
 	
 	/**
 	 * Start of Encapsulation
@@ -101,21 +88,6 @@ public class Task {
 		return this.taskID;
 	}
 	
-	public void setTaskName(String n) {
-		this.name = n;
-	}
-	
-	public void setPriority(Boolean isPriority) {
-		priority = isPriority;
-	}
-	
-	public boolean getPriority() {
-		return priority;
-	}
-	
-	public String getDate() {
-		return "mm/dd/yy";
-	}
 	/**
 	 * User should not be able to set the taskID this should be done automatically through the database
 	 * comment out once database is working.
@@ -125,6 +97,55 @@ public class Task {
 	 */
 	public void setTaskID(int taskID) {
 		this.taskID = taskID;
+	}
+	
+	/**
+	 * Get Name
+	 * @return name
+	 */
+	public String getTaskName() {
+		return this.name;
+	}
+	
+	/**
+	 * Set Name
+	 * @param String
+	 */
+	public void setTaskName(String n) {
+		this.name = n;
+	}
+	
+	/**
+	 * Get Priority
+	 * @return priority
+	 */
+	public boolean getPriority() {
+		return this.priority;
+	}
+	
+	/**
+	 * Set Priority
+	 * 
+	 * @param boolean
+	 */
+	public void setPriority(boolean isPriority) {
+		this.priority = isPriority;
+	}
+	
+	/**
+	 * Get DueDate
+	 * @return dueDate
+	 */
+	public Date getDueDate() {
+		return this.dueDate;
+	}
+	
+	/**
+	 * Set DueDate
+	 * @param Date
+	 */
+	public void setDueDate(Date due) {
+		this.dueDate = due;
 	}
 	
 	/**
@@ -161,26 +182,36 @@ public class Task {
 	
 	/**
 	 * Get Status
-	 * @return String?
+	 * @return TaskStatus
 	 */
-	public boolean getStatus() {
+	public TaskStatus getStatus() {
 		return this.status;
 	}
 	
 	/**
 	 * Set Status
-	 * @param Status?
+	 * @param TaskStatus
 	 */
-	public void setStatus(Boolean s) {
+	public void setStatus(TaskStatus s) {
 		this.status = s;
 	}
 	
-	//@Override
-	/**
-	 * Display Task
-	 * @return Shit
-	 */
-	//public String toString() {
-		//return getTaskID() +
-	//}
+	 /** 
+	   * Display Task
+	   * @return String
+	   */
+	@Override
+	public String toString() {
+	 	String taskString= new String();
+	 	taskString = "Task ID= " + this.taskID +
+	 			" Priority= " + Boolean.toString(this.priority) +
+	 			" Name= " + this.name +
+	 			" Description= " + this.description +
+	 			" Due Date= " + this.dueDate.toString() +
+	 			" Observable= " + Boolean.toString(this.observable) +
+	 			" Status= " + this.status.toString();
+	 			
+	 	return taskString;
+	 	
+	 }
 }
