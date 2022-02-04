@@ -7,16 +7,45 @@
 package AttentionAssistant;
 
 import java.util.*;
+import java.lang.Process;
 
 public class OSEventsTracker {
 	
 	int osEventsScore;
 	
 	/**
-	 * Constructor
+	 * Instantiating empty OSEventsTracker object
 	 */
 	public OSEventsTracker(){
-		osEventsScore = 100;
+		this.osEventsScore = 100;
+	}
+
+	/**
+	 * Create a class OSEventsTracker with a specified
+	 * osEventsScore
+	 * @param int 
+	 */
+	public OSEventsTracker(int osEventsScore)
+	{
+		this.osEventsScore = osEventsScore;
+	}
+
+	/**
+	 * Start of Encapsulation
+	 * 
+	 * Get OSEventsScore
+	 * @return int
+	 */
+	public int getOSEventsScore(){
+		return this.osEventsScore;
+	}
+	
+	/**
+	 * Set osEventsScore
+	 * @param int
+	 */
+	public void setOSEventsScore(int osEventsScore) {
+		this.osEventsScore = osEventsScore;
 	}
 	
 	/**
@@ -52,11 +81,8 @@ public class OSEventsTracker {
 	 * @return current process ID
 	 */
 	public static long getCurrentProcessID() {
+		Process.class
 		return ProcessHandle.current().pid();
 	}
 	
-	protected int getOSEventsScore(){
-		return osEventsScore;
-	}
-
 }
