@@ -43,7 +43,7 @@ public class Task{
 		this.taskID= 0;
 		this.description = "";
 		this.observable = false;
-		this.status = TaskStatus.OPEN;
+		this.status = TaskStatus.CLOSED;
 		this.name = null; 
 		this.dueDate = null;
 		this.priority = false;
