@@ -61,6 +61,15 @@ public class Test_DataBase {
 	db.DatabaseSetUp();	
 	}
 
+    @Test
+    @Order(1)
+    @DisplayName("<DataBase> DatabaseDeleteAllTables")
+    void DatabaseDeleteAllTables() {
+    db.DeleteAllTasks();
+    db.DeleteAllHTBs();
+    }
+
+	
 	/**
      ******* START OF TEST TASK CRUD *******
 	 */
@@ -129,12 +138,6 @@ public class Test_DataBase {
         
     }
 
-    @Test
-    @Order(1)
-    @DisplayName("<DataBase> DatabaseDeleteAllTasks")
-    void DatabaseDeleteAllTasks() {
-    db.DeleteAllTasks();
-    }
  
     @Test
     @Order(6)
@@ -183,6 +186,9 @@ public class Test_DataBase {
     @DisplayName("<DataBase> DatabaseAddNewHTB")
     void DatabaseAddHTB() {
     db.AddHTB(nonDefaultHTB);
+    db.AddHTB(nonDefaultHTB);
+    db.AddHTB(nonDefaultHTB);
+    db.AddHTB(nonDefaultHTB);
     }
     
     @Test
@@ -197,9 +203,37 @@ public class Test_DataBase {
     
     }
 
-    /**
-     * HTB Delete and Select
-     */
+    @Test
+    @Order(9)
+    @DisplayName("<DataBase> DatabaseSelectHTB")
+    void DatabaseSelectHTB() {
+    	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
+    	SelectedHTB1.setHTBID(2);
+    	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
+    	SelectedHTB1.setFlagged(true);
+    	db.UpdateHTB(SelectedHTB1);
+    	
+    	Happy_Thought_Button selectedHTB2 = new Happy_Thought_Button();
+    	selectedHTB2 = db.SelectHTB(2);
+        
+    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true";
+        assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true but instead returned: " + selectedHTB2.toString());
+        
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("<DataBase> DatabaseDeleteHTB")
+    void DatabaseDeleteHTB() {
+    	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	DeletedHTB.setHTBID(3);
+    	DeletedHTB.setMedia_ID_Tag("I am supposed to be deleted");
+    	DeletedHTB.setFlagged(false);
+    	db.UpdateHTB(DeletedHTB);
+    	
+    	db.DeleteHTB(3);
+    }
+
     
     /**
     ******* END OF TEST HTB CRUD *******
@@ -209,7 +243,7 @@ public class Test_DataBase {
     ******* START OF TEST OBSERVER CRUD *******
      */
     @Test
-    @Order(9)
+    @Order(10)
     @DisplayName("<DataBase> DatabaseAddNewObserver")
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);

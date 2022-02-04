@@ -229,7 +229,7 @@ public class DataBase {
         }
         
         /**
-         * Mainly used for JUNIT testing, deletes the task table at the end of testing to remove all test data.
+         * Mainly used for JUNIT testing, deletes the task table at the beginning of testing to remove all test data.
          * 
          */
         public void DeleteAllTasks(){
@@ -333,6 +333,23 @@ public class DataBase {
             		    System.exit( 0 );
             		}
             	return hTB1;
+            }
+            
+            /**
+             * Mainly used for JUNIT testing, deletes the happy_thought_button table at the beginning of testing to remove all test data.
+             * 
+             */
+            public void DeleteAllHTBs(){
+            	String query1 = "DROP TABLE IF EXISTS 'happy_thought_button'";
+            	try ( Connection conn = this.ds.getConnection();
+            		    Statement stmt = conn.createStatement(); ) {
+        		    int rv = stmt.executeUpdate( query1 );
+        		    System.out.println( "DeleteAllHTBs() returned " + rv );
+            	} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		    System.exit( 0 );
+            }
+            	
             }
             
             /**
