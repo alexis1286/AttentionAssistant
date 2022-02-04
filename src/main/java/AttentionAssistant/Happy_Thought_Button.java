@@ -1,5 +1,7 @@
 package AttentionAssistant;
 
+import java.util.Date;
+
 /**
  * Class that contains information whenever Happy_Thought_Button
  * is called.
@@ -23,6 +25,12 @@ public class Happy_Thought_Button {
 	private boolean flagged;
 	
 	/**
+	 * The Date and Time the Happy_Thought_Button was executed 
+	 */
+	
+	private Date dT_Executed;
+	
+	/**
 	 * Instantiating empty Happy_Thought_Button object
 	 * @author jmitchel2
 	 */
@@ -30,6 +38,7 @@ public class Happy_Thought_Button {
 		this.hTB_ID= 0;
 		this.media_ID_Tag = "";
 		this.flagged = false;
+		this.dT_Executed= null;
 	}
 
 	/**
@@ -38,10 +47,11 @@ public class Happy_Thought_Button {
 	 * @author jmitchel2
 	 * @param int, String, boolean
 	 */
-	public Happy_Thought_Button(int hTB_ID, String media_ID_Tag, boolean flagged) {
+	public Happy_Thought_Button(int hTB_ID, String media_ID_Tag, boolean flagged, Date dT_Executed) {
 		this.hTB_ID= hTB_ID;
 		this.media_ID_Tag= media_ID_Tag;
 		this.flagged = flagged;
+		this.dT_Executed= dT_Executed;
 	}
 	
 	/**
@@ -51,6 +61,7 @@ public class Happy_Thought_Button {
 		this.hTB_ID= hTB.hTB_ID;
 		this.media_ID_Tag = hTB.media_ID_Tag;
 		this.flagged = hTB.flagged;
+		this.dT_Executed= hTB.dT_Executed;
 	}
 	
 	/**
@@ -109,6 +120,24 @@ public class Happy_Thought_Button {
 		this.flagged= flagged;
 	}
 
+	/**
+	 * Get dT_Executed
+	 * 
+	 * @return Date
+	 */
+	public Date getDT_Executed() {
+		return this.dT_Executed;
+	}
+	
+	/**
+	 * Set dT_Executed
+	 * 
+	 * @param Date
+	 */
+	public void setDT_Executed(Date dT_Executed) {
+		this.dT_Executed= dT_Executed;
+	}
+
 	  /** 
 	   * Display HTB
 	   * @return String
@@ -118,7 +147,8 @@ public class Happy_Thought_Button {
 	 	String hTBString= new String();
 	 	hTBString = "Happy_Thought_Button ID= " + this.hTB_ID +
 	 			" Media_ID_Tag= " + this.media_ID_Tag +
-	 			" Flagged= " + Boolean.toString(this.flagged);
+	 			" Flagged= " + Boolean.toString(this.flagged) +
+	 			" Date Time Executed= " + this.dT_Executed;
 	 			
 	 	return hTBString;
 	 	

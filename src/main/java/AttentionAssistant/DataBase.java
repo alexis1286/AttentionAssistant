@@ -63,7 +63,8 @@ public class DataBase {
     	String queryHappyThoughtButton = "CREATE TABLE IF NOT EXISTS happy_thought_button ( " +
    			 "hTBID INTEGER PRIMARY KEY, " +
    			 "media_ID_Tag TEXT, " +
-   			 "flagged BOOLEAN)"; 
+   			 "flagged BOOLEAN, " +
+   			 "dT_Executed DATE)";
     	
     	/**
     	 * Set up for Table Observer
@@ -258,10 +259,12 @@ public class DataBase {
          * @param Happy_Thought_Button
          */
         public void AddHTB(Happy_Thought_Button hTB) {
+        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
-        			"( media_ID_Tag, flagged) Values ( '" +
+        			"( media_ID_Tag, flagged, dT_Executed) Values ( '" +
         			hTB.getMedia_ID_Tag() + "', '" +
-        			hTB.getFlagged() + "')";
+        			hTB.getFlagged() + "', '" +
+        			DateTime + "')";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
@@ -277,9 +280,11 @@ public class DataBase {
          * @param Happy_Thought_Button
          */
             public void UpdateHTB(Happy_Thought_Button hTB) {
+            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
             	String query1 = "UPDATE happy_thought_button " +
             			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag() + 
             			"', flagged = '" + hTB.getFlagged() + 
+            			"', dT_Executed = '" + DateTime + 
             			"' WHERE hTBID = '" + hTB.getHTBID() + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
@@ -293,9 +298,7 @@ public class DataBase {
             }   
             /**
              * Delete a Happy_Thought_Button within the Database
-             * 
-             * TESTING IS NOT IMPLEMENTED YET!!! 
-             * 
+             *              * 
              * @param int
              */
             public void DeleteHTB(int hTBID) {
@@ -312,9 +315,7 @@ public class DataBase {
             }    	
             /**
              * Select a Happy_Thought_Button within the database using the hTBID
-             * 
-             * TESTING IS NOT IMPLEMENTED YET!!!
-             * 
+             *              * 
              * @param int
              * @return Happy_Thought_Button
              */
@@ -327,11 +328,18 @@ public class DataBase {
             		    hTB1.setHTBID(rs.getInt("hTBID"));
             		    hTB1.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
             		    hTB1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
+            		    hTB1.setDT_Executed(date1);
             		    System.out.println( "SelectTask() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		    System.exit( 0 );
             		}
+      			 catch ( ParseException p ) {
+      				 p.printStackTrace();
+      				 System.exit( 0 );
+      			 }
+
             	return hTB1;
             }
             

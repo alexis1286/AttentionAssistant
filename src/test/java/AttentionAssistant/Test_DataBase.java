@@ -35,9 +35,9 @@ public class Test_DataBase {
 	boolean testObservable = true;
 	TaskStatus testStatus = TaskStatus.OPEN;
 	String testName = "This is a test Name";
-	Date testDate = new Date(1220227200L * 1000);
+	Date testDateTask = new Date(1220227200L * 1000);
 	boolean testPriority = true;
-	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
+	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDateTask, testPriority);
 	
 	/**
 	 * Set up for nonDefault HTB
@@ -45,8 +45,9 @@ public class Test_DataBase {
 	int testHTBID = 999;
 	String testMediaIDTag = "This is a test Media ID Tag";
 	boolean testHTBFlagged = true;
+	Date testDateHTB= new Date(1220227200L * 1000);
 
-	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged);
+	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged, testDateHTB);
 
 	/**
 	 * Set up for nonDefault Observer
@@ -216,8 +217,8 @@ public class Test_DataBase {
     	Happy_Thought_Button selectedHTB2 = new Happy_Thought_Button();
     	selectedHTB2 = db.SelectHTB(2);
         
-    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true";
-        assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true but instead returned: " + selectedHTB2.toString());
+    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008";
+        assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedHTB2.toString());
         
     }
 
