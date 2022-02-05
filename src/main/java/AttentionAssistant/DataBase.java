@@ -366,13 +366,13 @@ public class DataBase {
 
              /**
              ******* START OF Observer CRUD *******
-             * @author jmitchel2, eholes
+             * @author jmitchel2, ehols001
              */
  
             
             /**
-             * Add a new task to the database.
-             * @param task
+             * Add a new Observer to the database.
+             * @param Observer, Task
              */
             public void AddObserver(Observer observer, Task task) {
 
@@ -414,6 +414,67 @@ public class DataBase {
                 		    System.exit( 0 );
                 		}
                 	
-                }   
+                }
+                
+                /**
+                 * Delete a Observer within the Database
+                 * @param int
+                 */
+                public void DeleteObserver(int observerID) {
+                	String query1 = "DELETE FROM observer WHERE observerID = '" + observerID + "'";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    int rv = stmt.executeUpdate( query1 );
+                		    System.out.println( "DeleteObserver() returned " + rv );
+                		} catch ( SQLException e ) {
+                		    e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                	
+                }    	
+                
+                /**
+                 * Select a Observer within the database using the observerID
+                 * @param int
+                 * @return Observer
+                 */
+                public Observer SelectObserver(int observerID) {
+                	Observer observer1 = new Observer();
+                	String query1 = "SELECT * FROM observer WHERE observerID = '" + observerID + "'";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    ResultSet rs = stmt.executeQuery( query1 );
+                		    observer1.setObserverID(rs.getInt("observerID"));
+                		    observer1.setObserverScore(rs.getInt("observerScore"));
+                		    observer1.setThreshold(rs.getInt("threshold"));
+                		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(rs.getString("dT_Gathered"));
+                		    observer1.setDTGathered(date1);
+                		    System.out.println( "SelectObserver() returned " + rs );
+                		} catch ( SQLException e ) {
+                			e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                		  catch ( ParseException p ) {
+                			p.printStackTrace();
+                			System.exit( 0 );
+                		}
+                	return observer1;
+                }
             	
+                /**
+                 * Mainly used for JUNIT testing, deletes the Observer table at the beginning of testing to remove all test data.
+                 * 
+                 */
+                public void DeleteAllObservers(){
+                	String query1 = "DROP TABLE IF EXISTS 'observer'";
+                	try ( Connection conn = this.ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+            		    int rv = stmt.executeUpdate( query1 );
+            		    System.out.println( "DeleteAllObservers() returned " + rv );
+                	} catch ( SQLException e ) {
+            			e.printStackTrace();
+            		    System.exit( 0 );
+                	}
+                	
+                }
 }

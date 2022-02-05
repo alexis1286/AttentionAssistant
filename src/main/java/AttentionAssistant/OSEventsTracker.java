@@ -7,7 +7,6 @@
 package AttentionAssistant;
 
 import java.util.*;
-import java.lang.Process;
 
 public class OSEventsTracker {
 	
@@ -81,7 +80,6 @@ public class OSEventsTracker {
 	 * @return current process ID
 	 */
 	public static long getCurrentProcessID() {
-		Process.class
 		return ProcessHandle.current().pid();
 	}
 	

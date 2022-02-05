@@ -68,6 +68,7 @@ public class Test_DataBase {
     void DatabaseDeleteAllTables() {
     db.DeleteAllTasks();
     db.DeleteAllHTBs();
+    db.DeleteAllObservers();
     }
 
 	
@@ -203,9 +204,22 @@ public class Test_DataBase {
     	db.UpdateHTB(UpdatedHTB);
     
     }
-
+    
     @Test
     @Order(9)
+    @DisplayName("<DataBase> DatabaseDeleteHTB")
+    void DatabaseDeleteHTB() {
+    	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	DeletedHTB.setHTBID(3);
+    	DeletedHTB.setMedia_ID_Tag("I am supposed to be deleted");
+    	DeletedHTB.setFlagged(false);
+    	db.UpdateHTB(DeletedHTB);
+    	
+    	db.DeleteHTB(3);
+    }
+
+    @Test
+    @Order(10)
     @DisplayName("<DataBase> DatabaseSelectHTB")
     void DatabaseSelectHTB() {
     	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
@@ -220,19 +234,6 @@ public class Test_DataBase {
     	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008";
         assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedHTB2.toString());
         
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("<DataBase> DatabaseDeleteHTB")
-    void DatabaseDeleteHTB() {
-    	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
-    	DeletedHTB.setHTBID(3);
-    	DeletedHTB.setMedia_ID_Tag("I am supposed to be deleted");
-    	DeletedHTB.setFlagged(false);
-    	db.UpdateHTB(DeletedHTB);
-    	
-    	db.DeleteHTB(3);
     }
 
     
@@ -250,6 +251,9 @@ public class Test_DataBase {
     	Task ForObserver= new Task(nonDefaultTask);
     	ForObserver.setTaskID(4);
     	db.AddObserver(nonDefaultObserver, ForObserver);
+    	db.AddObserver(nonDefaultObserver, ForObserver);
+    	db.AddObserver(nonDefaultObserver, ForObserver);
+    	db.AddObserver(nonDefaultObserver, ForObserver);
     }
 
     @Test
@@ -263,6 +267,37 @@ public class Test_DataBase {
     	db.UpdateObserver(UpdatedObserver);
     
     }
-
+    
+    @Test
+    @Order(13)
+    @DisplayName("<DataBase> DatabaseDeleteObserver")
+    void DatabaseDeleteObserver() {
+    	Observer DeletedObserver = new Observer(nonDefaultObserver);
+    	DeletedObserver.setObserverID(3);
+    	DeletedObserver.setObserverScore(0);
+    	DeletedObserver.setThreshold(0);
+    	db.UpdateObserver(DeletedObserver);
+    	
+    	db.DeleteObserver(3);
+    }
+    
+    @Test
+    @Order(14)
+    @DisplayName("<DataBase> DatabaseSelectObserver")
+    void DatabaseSelectObserver() {
+    	Observer selectedObserver = new Observer(nonDefaultObserver);
+    	selectedObserver.setObserverID(2);
+    	selectedObserver.setObserverScore(0);
+    	selectedObserver.setThreshold(0);
+    	db.UpdateObserver(selectedObserver);
+    	
+    	Observer selectedObserver2 = new Observer();
+    	selectedObserver2 = db.SelectObserver(2);
+        
+    	String String1 = "Observer ID= 2 Observer Score= 0 Threshold= 0 Date Time Gathered= Sun Aug 31 20:00:00 EDT 2008";
+        assertEquals(String1, selectedObserver2.toString(), "selectedObserver2 should be set to Observer ID= 2 Observer Score= 0 Threshold= 0 Date Time Gathered= Sun Aug 31 20:00:00 EDT 2008" 
+        			+ selectedObserver2.toString());
+        
+    }
 
 }
