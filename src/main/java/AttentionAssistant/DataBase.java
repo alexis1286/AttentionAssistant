@@ -393,5 +393,27 @@ public class DataBase {
             		}
             }
 
+            /**
+             * Update a Observer within the Database
+             * 
+             * @param Observer
+             */
+                public void UpdateObserver(Observer observer) {
+                	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
+                	String query1 = "UPDATE observer " +
+                			"SET observerScore = '" + observer.getObserverScore() + 
+                			"', threshold = '" + observer.getThreshold() + 
+                			"', dT_Gathered = '" + DateTime + 
+                			"' WHERE observerID = '" + observer.getObserverID() + "'";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    int rv = stmt.executeUpdate( query1 );
+                		    System.out.println( "UpdateObserver() returned " + rv );
+                		} catch ( SQLException e ) {
+                		    e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                	
+                }   
             	
 }

@@ -252,6 +252,17 @@ public class Test_DataBase {
     	db.AddObserver(nonDefaultObserver, ForObserver);
     }
 
+    @Test
+    @Order(12)
+    @DisplayName("<DataBase> DatabaseUpdateObserver")
+    void DatabaseUpdateObserver() {
+    	Observer UpdatedObserver= new Observer(nonDefaultObserver);
+    	UpdatedObserver.setObserverID(1);
+    	UpdatedObserver.setObserverScore(98);
+    	UpdatedObserver.setThreshold(98);
+    	db.UpdateObserver(UpdatedObserver);
+    
+    }
 
 
 }
