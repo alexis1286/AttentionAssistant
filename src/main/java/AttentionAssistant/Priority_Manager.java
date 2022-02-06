@@ -255,6 +255,21 @@ public class Priority_Manager {
         }});
 		
 		
+		/*
+		 * Edit task
+		 */
+		Icon calendar_icon;
+		calendar_icon = new ImageIcon("images/calendar.png");
+		JButton calendar_button = new JButton(calendar_icon);
+		calendar_button.setContentAreaFilled(false);
+		calendar_button.setBorderPainted(false);
+		calendar_button.setFocusPainted(false);
+		calendar_button.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		editTask(db,model,table);
+        }});
+		
+		
 		//puts table in scrollable panel
 		JScrollPane tpane = new JScrollPane(table);
 		tpane.setBackground(Color.black);
@@ -268,6 +283,9 @@ public class Priority_Manager {
 		bpane.setBackground(Color.black);
 		//set layout so buttons display across x-axis
 		bpane.setLayout(new BoxLayout(bpane,BoxLayout.X_AXIS));
+		
+		//add calendar button to bpane
+		bpane.add(calendar_button);
 		//add delete button to bpane
 		bpane.add(delete_button);
 		//add check button to bpane
@@ -276,6 +294,7 @@ public class Priority_Manager {
 		bpane.add(add_button);
 		//add edit button to bpane
 		bpane.add(edit_button);
+		
 		//set layout of panel so components display vertically
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		//add task table panel to panel
@@ -295,6 +314,7 @@ public class Priority_Manager {
 		db.DeleteTask(Task_List.get(table.getSelectedRow()).getTaskID());
 		//deletes task from table
 		model.removeRow(table.getSelectedRow());
+		Task_List.remove(table.getSelectedRow());
 		//gets table to display changes
 		table.revalidate();
 	}
@@ -310,6 +330,7 @@ public class Priority_Manager {
 		boolean isAnEdit = true;
 		taskWindow(task,isAnEdit,db,model,table);
 		db.DeleteTask(task.getTaskID());
+		Task_List.remove(task.getTaskID());
 		model.removeRow(table.getSelectedRow());
 		table.revalidate();
 	}
@@ -384,7 +405,10 @@ public class Priority_Manager {
 		
 		//creates text area for date input
 		Format f = new SimpleDateFormat("MM/dd/yyyy");
-		String stringDate = f.format(task.getDueDate());
+		String stringDate;
+		if(isAnEdit == true) {
+			stringDate = f.format(task.getDueDate());
+		}else {stringDate = "";}
 		JTextArea date = new JTextArea(stringDate);
 		date.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		date.setBorder(new LineBorder(Color.black,5,false));
