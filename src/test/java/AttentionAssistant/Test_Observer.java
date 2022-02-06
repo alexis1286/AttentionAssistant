@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import net.didion.jwnl.dictionary.Dictionary;
+
 public class Test_Observer {
 	/**
 	 * Objects used in test
@@ -159,7 +161,7 @@ public class Test_Observer {
 
     @Test
     @DisplayName("<Observer> toString")
-    void taskToString() {
+    void observerToString() {
         String String1 = "Observer ID= 999 Observer Score= 100 Threshold= 100 Date Time Gathered= Sun Aug 31 20:00:00 EDT 2008";
         
         assertEquals(String1, nonDefaultObserver.toString(), "String1 should be set to Observer ID= 999 Observer Score= 100 Threshold= 100 Date Time Gathered= Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + nonDefaultObserver.toString());
@@ -167,4 +169,22 @@ public class Test_Observer {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    /**
+     * This is not how I want to fully implement this test, but for the time being this will be testing:
+     * setUpDict,
+     * setDictionary,
+     * getDictionary. -jmitchel2
+     */
+    @Test
+    @DisplayName("<Observer> setUpDict")
+    void observerSetUpDict() {
+    	Dictionary tempDict = defaultObserver.setUpDict();
+
+    	defaultObserver.setDictionary(tempDict);
+
+    	assertEquals(tempDict, defaultObserver.getDictionary(), "tempDict should be = to defaultObserver dict");
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
 }
