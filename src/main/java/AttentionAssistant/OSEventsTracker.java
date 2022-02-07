@@ -15,6 +15,8 @@ public class OSEventsTracker {
 	
 	//Set used to store process names without duplicates
 	Set<String> names;
+	//ArrayList used to store each line from the blacklist text file
+	ArrayList<String> blacklist;
 	private int osEventsScore;
 		
 	/**
@@ -23,6 +25,7 @@ public class OSEventsTracker {
 	public OSEventsTracker() {
 		this.osEventsScore = 100;
 		this.names = new HashSet<>();
+		this.blacklist = new ArrayList<String>();
 	}
 		
 	/**
@@ -34,28 +37,39 @@ public class OSEventsTracker {
 		Stream<ProcessHandle> processes = ProcessHandle.allProcesses();
 					
 		//For each of the processes, add only the process name to the Set
-		processes.forEach(process -> names.add(processDetails(process)));
+		processes.forEach(process -> names.add(processDetails(text(process.info().command()))));
 					
-		//Iterate over Set names until a process name is found on the blacklist
-		for(String name : names) {
-			osEventsScore = compareCurrentProcesses(name);
-			//System.out.println(osEventsScore + "\n");
-			//Stops traversing the Set names once a match is found (User is determined off task)
-			if(osEventsScore == 0)
-				break;
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
+			String line = reader.readLine();
+			while(line != null) {
+				String lcLine = line.toLowerCase();
+				blacklist.add(lcLine);
+				line = reader.readLine();
+			}
+			//Iterate over Set names until a process name is found on the blacklist
+			for(String name : names) {
+				osEventsScore = compareCurrentProcesses(name, blacklist);
+				//Stops traversing the Set names once a match is found (User is determined off task)
+				if(osEventsScore == 0)
+					break;
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Retrieving the file path for each process and trimming the path
-	 * down to only the application name 
+	 * Trims and normalizes the file path for each process down to be only the application name 
 	 * @param process Process at current index of Set
 	 * @return String application name
 	 */
-	private static String processDetails(ProcessHandle process) {
+	public String processDetails(String process) {
 		String trimmedName = "";
 		String appName = "";
-		appName = text(process.info().command()).substring(text(process.info().command()).lastIndexOf("\\") + 1).toLowerCase();
+		appName = process.substring(process.lastIndexOf("\\") + 1).toLowerCase();
 		if(appName.contains(".")) {
 			trimmedName = appName.substring(0, appName.lastIndexOf('.'));
 			return trimmedName;
@@ -67,28 +81,17 @@ public class OSEventsTracker {
 	/**
 	 * Compares a process name to a list of blacklisted names read in from a file
 	 * @param processName Process name at current index of the Set
+	 * @param blacklist array list of the blacklist file
 	 * @return int osEventsScore
 	 */
-	private static int compareCurrentProcesses(String processName) {
+	public int compareCurrentProcesses(String processName, ArrayList<String> blacklist) {
 		int score = 100;
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
-			String line = reader.readLine();
-			while(line != null) {
-				String lcLine = line.toLowerCase();
-				//System.out.println(lcLine);
-				//System.out.println(processName);
-				//Stops traversing the blacklist once a match is found (User is determined off task)
-				if(lcLine.equals(processName)) {
-					score = 0;
-					break;
-				}
-				line = reader.readLine();
+		for(String line : blacklist) {
+			//Stops traversing the blacklist once a match is found (User is determined off task)
+			if(line.equals(processName)) {
+				score = 0;
+				break;
 			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return score;
 	}
