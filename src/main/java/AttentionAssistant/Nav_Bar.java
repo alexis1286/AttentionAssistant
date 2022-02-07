@@ -10,41 +10,104 @@ import javax.swing.*;
 
 
 public class Nav_Bar{
-	private int x_coord = 0,y_coord = 0;
-	private int size = 50;
-	//deal with color changes
+	/*
+	 * creates specific great and purple as color objects
+	 */
+	Color aa_grey = new Color(51,51,51);
+	Color aa_purple = new Color(137,31,191);
 	
-	private boolean isVert = true;
+	/*
+	 * variables
+	 */
+	private int x_coord;
+	private int y_coord;
+	private int size;
+	private Color iconColor;
+	private int iconOpacity;
+	private Color circleColor;
+	private int circleOpacity;
+	private boolean isVert;
+	private boolean isCollapsed;
+	private boolean pomo_visible;
+	private boolean ntb_visible;
+	private boolean htb_visible;
+	private boolean fts_visible;
+	private boolean progress_visible;
+	private boolean pomodoro_active;
+	private boolean ntb_active;
+	private boolean htb_active;
+	private boolean fts_active;
+	private boolean progress_active;
 	
-	private boolean isCollapsed = false;
-	private boolean pm_active = true;
-	private boolean pomodoro_active = true;
-	private boolean ntb_active = true;
-	private boolean htb_active = true;
-	private boolean fts_active = true;
-	private boolean progress_active = true;
+	static JFrame frame = new JFrame();
 	
-	JFrame frame = new JFrame();
-	public void set_coords(int x, int y) {
-		x_coord = x;
-		y_coord = y;
-	}
-	
-	public void make_main_button() {
+	/*
+	 * instantiating empty Nav_Bar object
+	 */
+	public Nav_Bar() {
+		this.x_coord = 0;
+		this.y_coord = 0;
+		this.size = 0;
+		this.iconColor = Color.white;
+		this.iconOpacity = 100;
+		this.circleColor = aa_grey;
+		this.circleOpacity = 0;
+		this.isVert = false;
+		this.isCollapsed = false;
 		
+		this.pomo_visible = false;
+		this.ntb_visible = false;
+		this.htb_visible = false;
+		this.fts_visible = false;
+		this.progress_visible = false;
+		this.pomodoro_active = false;
+		this.ntb_active = false;
+		this.htb_active = false;
+		this.fts_active = false;
+		this.progress_active = false;
 	}
-	public void make_settings_button() {
+
+	/*
+	 * create Nav_Bar with variables set by settings
+	 */
+	public Nav_Bar(Settings set) {
+		this.x_coord = 0;//set.getXCoord();
+		this.y_coord = 0;//set.getYCoord();
+		this.size = 50;//set.getIconSize();
+		this.iconColor = Color.white;//set.getIconColor();
+		this.iconOpacity = 100;//set.getIconOpacity();
+		this.circleColor = aa_grey;//set.getCircleColor();
+		this.circleOpacity = 100;//set.getCircleOpacity();
+		this.isVert = true;//set.getIsVert();
+		this.isCollapsed = false;//set.getIsCollapsed();
 		
+		this.pomo_visible = true;//set.getTimerIsVisible();
+		this.ntb_visible = true;//set.getNtbIsVisible();
+		this.htb_visible = true;//set.getHtbIsVisible();
+		this.fts_visible = true;//set.getFtsIsVisible();
+		this.progress_visible = true;//set.getProgressIsVisible();
+		
+		this.pomodoro_active = true;//set.getTimerIsActive();
+		this.ntb_active = true;//set.getNtbIsActive();
+		this.htb_active = true;//set.getHtbIsActive();
+		this.fts_active = true;//set.getFtsIsActive();
+		this.progress_active = true;//set.getProgressIsActive();
 	}
 	
-	//changed to public and added parameters to test colorChooser in settings
-	//we will want to pass a color instead of ints and then use color.getRed(), color.getBlue(), color.getGreen() within this function 
-	//get rid of buffered image for this function?
-	public BufferedImage colorIcon(BufferedImage image, int red, int blue, int green) {
+	/*
+	 * adjusts color and/or opacity of specified icon image to specified color/opacity
+	 */
+	public static BufferedImage colorIcon(BufferedImage image, Color color, int opacity) {
+		//get new red, green, blue values from color
+		int red = color.getRed();
+		int green = color.getGreen();
+		int blue = color.getBlue();
+		//get height and width of image to be altered
 	    int width = image.getWidth();
 	    int height = image.getHeight();
 	    WritableRaster raster = image.getRaster();
 
+	    //recolors image to new rgb values
 	    for (int xx = 0; xx < width; xx++) {
 	      for (int yy = 0; yy < height; yy++) {
 	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
@@ -54,38 +117,71 @@ public class Nav_Bar{
 	        raster.setPixel(xx, yy, pixels);
 	      }
 	    }
+	    
+	  //alters opacity of image 
+	    float o = (float)opacity / 100;
+	    Graphics2D g2d = image.createGraphics();
+	    AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, o);
+		g2d.setComposite(composite);
 	    return image;
 	  }
 	
-	private static BufferedImage colorCircle(BufferedImage image) {
+	/*
+	 * adjusts color and/or opacity of circle image to specified color/opacity
+	 */
+	private static BufferedImage colorCircle(BufferedImage image, Color color, int opacity) {
+		//get new red, green, blue values from color
+		int red = color.getRed();
+		int green = color.getGreen();
+		int blue = color.getBlue();
+		//get height and width of image to be altered
 	    int width = image.getWidth();
 	    int height = image.getHeight();
 	    WritableRaster raster = image.getRaster();
 
+	    //recolors image to new rgb values
 	    for (int xx = 0; xx < width; xx++) {
 	      for (int yy = 0; yy < height; yy++) {
 	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
 	        //rgb
-	        pixels[0] = 56;
-	        pixels[1] = 56;
-	        pixels[2] = 54;
+	        pixels[0] = red;
+	        pixels[1] = green;
+	        pixels[2] = blue;
 	        raster.setPixel(xx, yy, pixels);
 	      }
 	    }
+	    
+	    //alters opacity of image 
+	    float o = (float)opacity / 100;
+	    Graphics2D g2d = image.createGraphics();
+	    AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, o);
+		g2d.setComposite(composite);
 	    return image;
 	  }
 	
-	  public Nav_Bar(DataBase db) throws Exception {
-	    SwingUtilities.invokeLater(new Runnable() {
-	      public void run() {
-	        
+	public void refresh() {
+		frame.revalidate();
+	}
+	
+	/*
+	 * creates navbar 
+	 */
+	public static void run_nav_bar(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+	        //removes default title bar from frame 
 	        frame.setUndecorated(true);
+	        //sets background of frame to transparent
 	        frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+	        //forces frame to stay on top of screen
 	        frame.setAlwaysOnTop(true);
-	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        frame.setLocation(x_coord, y_coord);
+	        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        //sets top-left corner coordinate, pulled from settings
+	        frame.setLocation(navbar.getX_coord(), navbar.getY_coord());
+	        //makes frame and contents visible
 	        frame.setVisible(true);
 	        
+	        //gets circle and each icon image
 	        BufferedImage settings_img = null;
 	        BufferedImage pm_img = null;
 	        BufferedImage pomo_img = null;
@@ -113,19 +209,18 @@ public class Nav_Bar{
 	          System.exit(1);
 	        }
 	        
-	        /* 
-	         * commented out at the moment because new parameters have been added to colorIcon()
-	         * 
-	        colorIcon(settings_img);
-	        colorIcon(pm_img);
-	        colorIcon(pomo_img);
-	        colorIcon(ntb_img);
-	        colorIcon(htb_img);
-	        colorIcon(fts_img);
-	        colorIcon(progress_img);
-	        colorIcon(menu_img);
-	        colorCircle(circle);
-	        */
+	        //recolors/sets opacity based on settings
+	        colorIcon(settings_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(pm_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(pomo_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(ntb_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(htb_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(fts_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(progress_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorIcon(menu_img, navbar.getIconColor(), navbar.getIconOpacity());
+	        colorCircle(circle, navbar.getCircleColor(), navbar.getCircleOpacity());
+	        
+	        // create new image of icon image on top of circle image for each icon
 	        BufferedImage sbi = new BufferedImage(
 	        		70, 70,BufferedImage.TYPE_INT_ARGB);
 	        Graphics2D sg = sbi.createGraphics();
@@ -182,6 +277,7 @@ public class Nav_Bar{
 	        mg.drawImage(menu_img,10,10,60,60,0,0,menu_img.getWidth(),menu_img.getHeight(),null);
 	    	mg.dispose();
 	    	
+	    	//creates an ImageIcon for each
 	        ImageIcon settings_icon = new ImageIcon(sbi);
 	        ImageIcon pm_icon = new ImageIcon(pmbi);
 	        ImageIcon pomo_icon = new ImageIcon(pomobi);
@@ -192,40 +288,40 @@ public class Nav_Bar{
 	        ImageIcon menu_icon = new ImageIcon(mbi);
 	        
 	        
-	        
+	        //create button (does for each button)***
 	        JButton settings_button = new JButton();
+	        //adds on-click function
 	        settings_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		//JFrame settings = new JFrame("Attention Assistant Settings");
-	        		//settings.setVisible(true);
-	        		//settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	        		Settings stgs = new Settings();
-	        		stgs.open_settings(db);
+	        		settings.open_settings(db);
 	        }});
+	        //scale and assign icon to button
 	        Image si = settings_icon.getImage();
-	        si = si.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        si = si.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        settings_icon = new ImageIcon(si);
 	        settings_button.setIcon(settings_icon);
+	        //make non-icon area of button invisible
 	        settings_button.setContentAreaFilled(false);
+	        //remove button border
 	        settings_button.setBorderPainted(false);
-	        settings_button.setFocusPainted(false);
+	        settings_button.setFocusPainted(false);//***
 	        
 	        
 	        JButton pm_button = new JButton();
 	        pm_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
-	        		Priority_Manager pm = new Priority_Manager();
-	        		pm.open_pm(db);
+	        		pm.open_pm(db,observer);
 	        }});
 	        Image pmi = pm_icon.getImage();
-	        pmi = pmi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        pmi = pmi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        pm_icon = new ImageIcon(pmi);
 	        pm_button.setIcon(pm_icon);
 	        pm_button.setContentAreaFilled(false);
 	        pm_button.setBorderPainted(false);
 	        pm_button.setFocusPainted(false);
+	        
 	        
 	        JButton pomo_button = new JButton();
 	        pomo_button.addActionListener(new ActionListener() {
@@ -234,34 +330,42 @@ public class Nav_Bar{
 	        		Pomodoro_Timer.run_pomo();
 	        }});
 	        Image pomoi = pomo_icon.getImage();
-	        pomoi = pomoi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        pomoi = pomoi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        pomo_icon = new ImageIcon(pomoi);
 	        pomo_button.setIcon(pomo_icon);
 	        pomo_button.setContentAreaFilled(false);
 	        pomo_button.setBorderPainted(false);
 	        pomo_button.setFocusPainted(false);
 	        
+	        
 	        JButton ntb_button = new JButton();
 	        Image ntbi = ntb_icon.getImage();
-	        ntbi = ntbi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        ntbi = ntbi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        ntb_icon = new ImageIcon(ntbi);
 	        ntb_button.setIcon(ntb_icon);
 	        ntb_button.setContentAreaFilled(false);
 	        ntb_button.setBorderPainted(false);
 	        ntb_button.setFocusPainted(false);
 	        
+	        
 	        JButton htb_button = new JButton();
 	        Image htbi = htb_icon.getImage();
-	        htbi = htbi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        htbi = htbi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        htb_icon = new ImageIcon(htbi);
 	        htb_button.setIcon(htb_icon);
 	        htb_button.setContentAreaFilled(false);
 	        htb_button.setBorderPainted(false);
 	        htb_button.setFocusPainted(false);
 	        
+	        
 	        JButton fts_button = new JButton();
+	        fts_button.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open fts
+	        		fts.runFts(fts);
+	        }});
 	        Image ftsi = fts_icon.getImage();
-	        ftsi = ftsi.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        ftsi = ftsi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        fts_icon = new ImageIcon(ftsi);
 	        fts_button.setIcon(fts_icon);
 	        fts_button.setContentAreaFilled(false);
@@ -269,57 +373,179 @@ public class Nav_Bar{
 	        fts_button.setFocusPainted(false);
 	        
 	        
+	        
 	        JButton progress_button = new JButton();
 	        Image pri = progress_icon.getImage();
-	        pri = pri.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        pri = pri.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        progress_icon = new ImageIcon(pri);
 	        progress_button.setIcon(progress_icon);
 	        progress_button.setContentAreaFilled(false);
 	        progress_button.setBorderPainted(false);
 	        progress_button.setFocusPainted(false);
 	        
+	        
 	        JButton menu_button = new JButton();
 	        Image menui = menu_icon.getImage();
-	        menui = menui.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+	        menui = menui.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        menu_icon = new ImageIcon(menui);
 	        menu_button.setIcon(menu_icon);
 	        menu_button.setContentAreaFilled(false);
 	        menu_button.setBorderPainted(false);
 	        menu_button.setFocusPainted(false);
 	        
+	        
+	        //create new panel
 	        JPanel panel = new JPanel();
-	        if(isVert == true) {
+	        //displays buttons vertically if true, horizontally is false
+	        if(navbar.getIsVert() == true) {
 	        	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	        }else {panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));}
 	        
-	        if(isCollapsed == false) {
+	        //displays only menu button until clicked if false
+	        if(navbar.getIsCollapsed() == false) {
+	        	//displays all visible and active buttons
 	        	panel.add(settings_button);
-	        	if(pm_active == true) {
-	        		panel.add(pm_button);
-	        	}
-	        	if(pomodoro_active == true) {
+        		panel.add(pm_button);
+	        	if(navbar.getPomo_visible() == true) {
 	        		panel.add(pomo_button);
 	        	}
-				if(ntb_active == true) {
+				if(navbar.getNtb_visible() == true) {
 					panel.add(ntb_button);
 				}
-				if(htb_active == true) {
+				if(navbar.getHtb_visible() == true) {
 					panel.add(htb_button);
 				}
-	        	if(fts_active == true) {
+	        	if(navbar.getFts_visible() == true) {
 	        		panel.add(fts_button);
 	        	}
-	        	if(progress_active == true) {
+	        	if(navbar.getProgress_visible() == true) {
 	        		panel.add(progress_button);
 	        	}
 	        }else {
 	        	panel.add(menu_button);
 	        }
 
+	        //sets background of panel to transparent
 	        panel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+	        //add panel to frame
 	        frame.add(panel);
 	        frame.pack();
 	      }
 	    });
 	  }
+	
+	//**********************************************************************************************************
+	//getters and setters for variables
+  	private int getX_coord() {
+		return x_coord;
+	}
+	public void setX_coord(int x) {
+		x_coord = x;
+	}
+	private int getY_coord() {
+		return y_coord;
+	}
+	public void setY_coord(int y) {
+		y_coord = y;
+	}
+	private int getSize() {
+		return size;
+	}
+	public void setSize(int s) {
+		size =s;
+	}
+	private Color getIconColor() {
+		return iconColor;
+	}
+	public void setIconColor(Color color) {
+		iconColor = color;
+		System.out.println(color);
+	}
+	private int getIconOpacity() {
+		return iconOpacity;
+	}
+	public void setIconOpacity(int io) {
+		iconOpacity = io;
+	}
+	private Color getCircleColor() {
+		return circleColor;
+	}
+	public void setCircleColor(Color color) {
+		circleColor = color;
+	}
+	private int getCircleOpacity() {
+		return circleOpacity;
+	}
+	public void setCircleOpacity(int co) {
+		circleOpacity = co;
+	}
+	private boolean getIsVert() {
+		return isVert;
+	}
+	public void setIsVert(boolean vert) {
+		isVert = vert;
+	}
+	private boolean getIsCollapsed() {
+		return isCollapsed;
+	}
+	public void setIsCollapsed(boolean collapsed) {
+		isCollapsed = collapsed;
+	}
+	private boolean getPomo_visible() {
+		return pomo_visible;
+	}
+	public void setPomo_visible(boolean visible) {
+		pomo_visible = visible;
+	}
+	private boolean getNtb_visible() {
+		return ntb_visible;
+	}
+	public void setNtb_visible(boolean visible) {
+		ntb_visible = visible;
+	}
+	private boolean getHtb_visible() {
+		return htb_visible;
+	}
+	public void setHtb_visible(boolean visible) {
+		htb_visible = visible;
+	}
+	private boolean getFts_visible() {
+		return fts_visible;
+	}
+	public void setFts_visible(boolean visible) {
+		fts_visible = visible;
+	}
+	private boolean getProgress_visible() {
+		return progress_visible;
+	}
+	public void setProgress_visible(boolean visible) {
+		progress_visible = visible;
+	}
+	private boolean getPomodoro_active() {
+		return pomodoro_active;
+	}
+	public void setPomodoro_active(boolean active) {
+		pomodoro_active = active;
+	}
+	private boolean getNtb_active() {
+		return ntb_active;
+	}
+	public void setNtb_active(boolean active) {
+		ntb_active = active;
+	}
+	private boolean getHtb_active() {
+		return htb_active;
+	}
+	public void setHtb_active(boolean active) {
+		htb_active = active;
+	}
+	private boolean getFts_active() {
+		return fts_active;
+	}
+	public void setFts_active(boolean active) {
+		fts_active = active;
+	}
+	private boolean getProgress_active() {
+		return progress_active;
+	}
 }
