@@ -9,24 +9,57 @@ package AttentionAssistant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
 
 
 public class Free_Thought_Space extends JFrame{
 	/**************************************************************************************************************
      *****************************************************VARIABLES************************************************
      **************************************************************************************************************/
-    public DrawingPanel drawingPanel;
+    public int fTSID; // Primary Key for Free_Thought_Space
+	public DrawingPanel drawingPanel;
     protected MenuBar menuBar;
     protected ColorPalette colorPalette;
     public PaintToolPanel paintToolPanel;
+    public Date dT_Executed; //Date and Time Free_Thought_Space is executed
 
     /**************************************************************************************************************
      ***************************************************CONSTRUCTOR************************************************
      **************************************************************************************************************/
+	/**
+	 * Instantiating empty Free_Thought_Space object
+	 */
     public Free_Thought_Space()
     {
         super("Free Thought Space");  //overriding JFrame's title
+    	this.fTSID=0;
+        this.dT_Executed= null;
     }
+	
+	/**
+	 * Create a class Free_Thought_Space with a specified
+	 * fTSID, dT_Executed
+	 * @param int, Date
+	 */
+    public Free_Thought_Space(int fTSID, Date dT_Executed) 
+    {
+    	super("Free Thought Space");
+    	this.fTSID= fTSID;
+    	this.dT_Executed= dT_Executed;
+    }
+    
+    /**
+     * Copy Constructor
+     */
+    public Free_Thought_Space(Free_Thought_Space fts) {
+    	super("Free Thought Space");
+    	this.fTSID= fts.fTSID;
+    	this.dT_Executed= fts.dT_Executed;
+    }
+        
+    /**
+     * Start of encapsulation
+     */
     
     public void runFts(Free_Thought_Space paint) {
     	
@@ -83,5 +116,50 @@ public class Free_Thought_Space extends JFrame{
             return null;
         }
     }
+
+    /** 
+     * Get fTSID
+     * @return int
+     */
+    public int getFTSID() {
+    	return this.fTSID;
+    }
+    
+    /**
+     * Set fTSID
+     * @param int
+     */
+    public void setFTSID(int fTSID) {
+    	this.fTSID = fTSID;
+    }
+    
+    /**
+     * Get dT_Executed
+     * @return Date
+     */
+    public Date getDT_Executed(){
+    	return this.dT_Executed;
+    }
+    
+    /**
+     * Set dT_Executed
+     * @param Date
+     */
+    public void setDT_Executed(Date dT_Executed) {
+    	this.dT_Executed = dT_Executed;
+    }
+    
+	 /** 
+	   * Display FTS
+	   * @return String
+	   */
+	@Override
+	public String toString() {
+	 	String fTSString= new String();
+	 	fTSString = "Free Thought Space ID= " + this.fTSID +
+	 			" Date Time Executed= " + this.dT_Executed.toString();	 			
+	 	return fTSString;
+	 }
+
 
 }
