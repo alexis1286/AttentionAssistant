@@ -3,11 +3,8 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,15 +16,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.metal.DefaultMetalTheme;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 
 public class Priority_Manager {
@@ -86,19 +76,6 @@ public class Priority_Manager {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		
-		//make calendar button, opens calendar-style view of tasks
-		JButton calendar = new JButton("  calendar  ");
-		calendar.setBackground(aa_grey);
-		calendar.setForeground(Color.white);
-		calendar.setFocusPainted(false);
-		calendar.setBorder(new LineBorder(Color.black,10,false));
-		calendar.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
-		calendar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//open calendar view of tasks in new window
-        		
-        }});
 
 		//calendar integration button
 		//make cancel button, closes task window without adding
@@ -129,7 +106,6 @@ public class Priority_Manager {
         }});
 		
 		panel.setBackground(Color.black);
-		panel.add(calendar);
 		panel.add(integration);
 		panel.add(close);
 		return panel;

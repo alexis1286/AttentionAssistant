@@ -359,6 +359,11 @@ public class Nav_Bar{
 	        
 	        
 	        JButton fts_button = new JButton();
+	        fts_button.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open fts
+	        		fts.runFts(fts);
+	        }});
 	        Image ftsi = fts_icon.getImage();
 	        ftsi = ftsi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
 	        fts_icon = new ImageIcon(ftsi);
@@ -366,6 +371,7 @@ public class Nav_Bar{
 	        fts_button.setContentAreaFilled(false);
 	        fts_button.setBorderPainted(false);
 	        fts_button.setFocusPainted(false);
+	        
 	        
 	        
 	        JButton progress_button = new JButton();
