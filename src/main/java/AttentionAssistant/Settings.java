@@ -202,8 +202,7 @@ public class Settings {
 	 * Creates a Settings object loaded with settings from database
 	 * @param db
 	 *
-	 *
-	 * this is just a placeholder constructor to get an idea of how the
+	 * Placeholder constructor to get an idea of how the
 	 * settings could be loaded from the database
 	 * 
 	 *  assuming DataBase class will have a method called something along
@@ -244,6 +243,92 @@ public class Settings {
 		this.htbIsActive = db.SelectUserSettings().get(29);
 	}
 	*/
+	
+	 /**
+	 * Creates a Settings object loaded with all data types specified
+	 * 
+	 * Written as a placeholder for testing, once database is set up this
+	 * constructor should be deleted
+	 * 
+	 * @param Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
+	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
+	 * 		  boolean, int, boolean, int, int, boolean, boolean, boolean, boolean, boolean
+	 */
+	public Settings(Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
+					int xCoord, int yCoord, boolean isVertical, int iconSize, boolean timerIsVisible, boolean pmIsVisible, 
+					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, 
+					boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, String avatarFilePath, String audioFilePath, 
+					boolean alwaysOnScreen, int avatarSize, boolean pomodoroIsActive, int workPeriod, int breakPeriod, boolean timeShowing, 
+					boolean ftsIsActive, boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive) {
+		
+		this.iconCircles = iconCircles;
+		this.icons = icons;
+		this.opacityCircles = opacityCircles; 
+		this.opacityIcons = opacityIcons; 
+		this.isCollapsed = isCollapsed; 
+		this.xCoord = xCoord;
+		this.yCoord = yCoord; 
+		this.isVertical = isVertical;
+		this.iconSize = iconSize;
+		this.timerIsVisible = timerIsVisible; 
+		this.pmIsVisible = pmIsVisible; 
+		this.ftsIsVisible = ftsIsVisible; 
+		this.htbIsVisible = htbIsVisible;
+		this.ntbIsVisible = ntbIsVisible; 
+		this.progReportIsVisible = progReportIsVisible; 
+		this.avatarIsActive = avatarIsActive; 
+		this.textIsActive = textIsActive; 
+		this.audioIsActive = audioIsActive;
+		this.avatarFilePath = avatarFilePath; 
+		this.audioFilePath = audioFilePath;
+		this.alwaysOnScreen = alwaysOnScreen; 
+		this.avatarSize = avatarSize; 
+		this.pomodoroIsActive = pomodoroIsActive; 
+		this.workPeriod = workPeriod; 
+		this.breakPeriod = breakPeriod; 
+		this.timeShowing = timeShowing; 
+		this.ftsIsActive = ftsIsActive; 
+		this.ntbIsActive = ntbIsActive; 
+		this.isAutoLinked = isAutoLinked; 
+		this.htbIsActive = htbIsActive;
+	}
+	
+	/**
+	 * Instantiating copy constructor for Settings object
+	 * @param Settings object
+	 */
+	public Settings(Settings stgs) {
+		this.iconCircles = stgs.iconCircles;
+		this.icons = stgs.icons;
+		this.opacityCircles = stgs.opacityCircles; 
+		this.opacityIcons = stgs.opacityIcons; 
+		this.isCollapsed = stgs.isCollapsed; 
+		this.xCoord = stgs.xCoord;
+		this.yCoord = stgs.yCoord; 
+		this.isVertical = stgs.isVertical;
+		this.iconSize = stgs.iconSize;
+		this.timerIsVisible = stgs.timerIsVisible; 
+		this.pmIsVisible = stgs.pmIsVisible; 
+		this.ftsIsVisible = stgs.ftsIsVisible; 
+		this.htbIsVisible = stgs.htbIsVisible;
+		this.ntbIsVisible = stgs.ntbIsVisible; 
+		this.progReportIsVisible = stgs.progReportIsVisible; 
+		this.avatarIsActive = stgs.avatarIsActive; 
+		this.textIsActive = stgs.textIsActive; 
+		this.audioIsActive = stgs.audioIsActive;
+		this.avatarFilePath = stgs.avatarFilePath; 
+		this.audioFilePath = stgs.audioFilePath;
+		this.alwaysOnScreen = stgs.alwaysOnScreen; 
+		this.avatarSize = stgs.avatarSize; 
+		this.pomodoroIsActive = stgs.pomodoroIsActive; 
+		this.workPeriod = stgs.workPeriod; 
+		this.breakPeriod = stgs.breakPeriod; 
+		this.timeShowing = stgs.timeShowing; 
+		this.ftsIsActive = stgs.ftsIsActive; 
+		this.ntbIsActive = stgs.ntbIsActive; 
+		this.isAutoLinked = stgs.isAutoLinked; 
+		this.htbIsActive = stgs.htbIsActive;
+	}
 	
 	/**
 	 * Start of Encapsulation
