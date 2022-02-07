@@ -1,86 +1,120 @@
-/**
- * Tracks the OS Events to determine if user is using programs that are distracting 
- */
-
-//To be implemented by Evan
-
 package AttentionAssistant;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Stream;
+
+/**
+ * Tracks the currently running OS processes to determine if the user is using programs that are distracting 
+ * @author ehols001
+ */
 
 public class OSEventsTracker {
 	
-	int osEventsScore;
-	
+	//Set used to store process names without duplicates
+	Set<String> names;
+	private int osEventsScore;
+		
 	/**
-	 * Instantiating empty OSEventsTracker object
+	 * ProcessHandling default Constructor
 	 */
-	public OSEventsTracker(){
+	public OSEventsTracker() {
 		this.osEventsScore = 100;
+		this.names = new HashSet<>();
 	}
-
+		
 	/**
-	 * Create a class OSEventsTracker with a specified
-	 * osEventsScore
-	 * @param int 
+	 * Collects and stores all currently running processes into a Set
+	 * with no duplicates
 	 */
-	public OSEventsTracker(int osEventsScore)
-	{
-		this.osEventsScore = osEventsScore;
+	public void startTracking() {
+		//Retrieving all currently running processes
+		Stream<ProcessHandle> processes = ProcessHandle.allProcesses();
+					
+		//For each of the processes, add only the process name to the Set
+		processes.forEach(process -> names.add(processDetails(process)));
+					
+		//Iterate over Set names until a process name is found on the blacklist
+		for(String name : names) {
+			osEventsScore = compareCurrentProcesses(name);
+			//System.out.println(osEventsScore + "\n");
+			//Stops traversing the Set names once a match is found (User is determined off task)
+			if(osEventsScore == 0)
+				break;
+		}
 	}
 
 	/**
-	 * Start of Encapsulation
-	 * 
-	 * Get OSEventsScore
+	 * Retrieving the file path for each process and trimming the path
+	 * down to only the application name 
+	 * @param process Process at current index of Set
+	 * @return String application name
+	 */
+	private static String processDetails(ProcessHandle process) {
+		String trimmedName = "";
+		String appName = "";
+		appName = text(process.info().command()).substring(text(process.info().command()).lastIndexOf("\\") + 1).toLowerCase();
+		if(appName.contains(".")) {
+			trimmedName = appName.substring(0, appName.lastIndexOf('.'));
+			return trimmedName;
+		}
+		else
+			return appName;
+	}
+		
+	/**
+	 * Compares a process name to a list of blacklisted names read in from a file
+	 * @param processName Process name at current index of the Set
+	 * @return int osEventsScore
+	 */
+	private static int compareCurrentProcesses(String processName) {
+		int score = 100;
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
+			String line = reader.readLine();
+			while(line != null) {
+				String lcLine = line.toLowerCase();
+				//System.out.println(lcLine);
+				//System.out.println(processName);
+				//Stops traversing the blacklist once a match is found (User is determined off task)
+				if(lcLine.equals(processName)) {
+					score = 0;
+					break;
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return score;
+	}
+		
+	/**
+	 * get osEventsScore
 	 * @return int
 	 */
-	public int getOSEventsScore(){
+	public int getOSEventsScore() {
 		return this.osEventsScore;
 	}
-	
+		
 	/**
-	 * Set osEventsScore
+	 * set osEventsScore
 	 * @param int
 	 */
-	public void setOSEventsScore(int osEventsScore) {
-		this.osEventsScore = osEventsScore;
+	public void setOSEventsScore(int score) {
+		this.osEventsScore = score;
 	}
-	
-	/**
-	 * Compares the current processID to the taskID every x seconds
-	 * @param comparableID a comparable task id
+		
+	 /**
+	 * Converts ProcessHandle info to Strings
+	 * @param ProcessHandle info
+	 * @return String 
 	 */
-	public void startTracking(int comparableID) {
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				compareCurrentProcess(comparableID);
-			}
-		}, 0, 5000); //0 ms before taking action, repeat the action every 5000 ms
-		timer.cancel(); //not sure if this is needed or not yet
-	}
-	
-	/**
-	 * ~~~NEED TO FIGURE OUT INFO FROM TASK~~~
-	 * Compares the current process ID to the 
-	 * designated Task process ID 
-	 */
-	public void compareCurrentProcess(int comparableID) {
-		int pid = (int)getCurrentProcessID();
-		if(comparableID != pid) //currently comparableID will always != pid 
-			osEventsScore = 0;
-		else
-			osEventsScore = 100;
-	}
-	
-	/**
-	 * Retrieve the current process ID
-	 * @return current process ID
-	 */
-	public static long getCurrentProcessID() {
-		return ProcessHandle.current().pid();
-	}
-	
+	private static String text(Optional<?> optional) {
+		return optional.map(Object::toString).orElse("-");
+	}		
 }
