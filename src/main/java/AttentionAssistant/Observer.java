@@ -1,6 +1,6 @@
 package AttentionAssistant;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -168,31 +168,18 @@ public class Observer{
 	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException{
 		ArrayList<String> keywords = new ArrayList<String>();
 		
-		// construct the URL to the Wordnet dictionary directory
-		// String wnhome = System.getenv("WNHOME"); //did not work on my end
-			
-		// System.out.println(wnhome); //TEST CODE
-				
-		// String path = wnhome + File.separator + "dict";
-				
-		// System.out.println(path); //TEST CODE
-		
-		URL url = null;		
-		InputStream location =  this.getClass().getClassLoader().getResourceAsStream("resources/dict");
+		//create a instance of the IDictionary Object from the WordNet datasets
+		@SuppressWarnings("deprecation")
+		URL location =  new File("src/main/resources/dict").toURL();
 		System.out.println("URL of resource " + location);
-		try{ url = new URL("file", null, "T:\\School\\ODU\\Spring 2022\\CS 411W\\WordNet\\2.1\\dict");}
-		catch(MalformedURLException e){ e.printStackTrace(); }
-		if(url == null) return null;
-		System.out.println(url);		
-		// construct the dictionary object and open it
-		IDictionary dict = new Dictionary(url);
+		IDictionary dict = new Dictionary(location);
 		dict.open();
 				
 		// look up first sense of the word "dog"
 		IIndexWord idxWord = dict.getIndexWord("wish", POS.NOUN);
 				
 		/**
-		 * Add can have multiple definitions, 
+		 * A word can have multiple definitions, 
 		 * therefore each will have its own related words
 		 */
 		IWordID wordID = idxWord.getWordIDs().get(0); 
