@@ -477,4 +477,39 @@ public class DataBase {
                 	}
                 	
                 }
+
+                /**
+                 * Grab all observers within the Database
+                 * 
+                 * @return ArrayList<Observers>
+                 */
+                public ArrayList<Observer> SelectAllObservers(int task_ID){
+                	ArrayList<Observer> ObserversOnList = new ArrayList<Observer>();
+                	Observer blankObserver = new Observer();
+                	String query1 = "SELECT * FROM observer WHERE fk_taskID='" + task_ID + "' ORDER BY dT_Gathered DESC";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    ResultSet rs = stmt.executeQuery( query1 );
+                		    while (rs.next()){
+                		    blankObserver = new Observer();
+                		    blankObserver.setObserverID(rs.getInt("observerID"));
+                		    blankObserver.setObserverScore(rs.getInt("observerScore"));
+                		    blankObserver.setThreshold(rs.getInt("threshold"));
+                		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Gathered"));
+                		    blankObserver.setDTGathered(date1);
+                		    ObserversOnList.add(blankObserver);
+                		    }
+                		    System.out.println( "SelectAllTasks() returned " + rs );
+                		} catch ( SQLException e ) {
+                			e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                		  catch ( ParseException p ) {
+                			p.printStackTrace();
+                			System.exit( 0 );
+                		}
+                	return ObserversOnList;
+                }
+
+
 }

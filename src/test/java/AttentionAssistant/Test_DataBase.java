@@ -300,4 +300,38 @@ public class Test_DataBase {
         
     }
 
+    @Test
+    @Order(15)
+    @DisplayName("<DataBase> DatabaseSelectAllObservers")
+    void DatabaseSelectAllObservers() {
+    	ArrayList<Observer> test_Observer_List = new ArrayList<Observer>();
+    	ArrayList<Observer> test_database_Observer_List = new ArrayList<Observer>();
+    	
+    	Observer UpdatedObserver= new Observer(nonDefaultObserver);
+    	UpdatedObserver.setObserverID(1);
+    	UpdatedObserver.setObserverScore(98);
+    	UpdatedObserver.setThreshold(98);
+       	
+    	Observer selectedObserver = new Observer(nonDefaultObserver);
+    	selectedObserver.setObserverID(2);
+    	selectedObserver.setObserverScore(0);
+    	selectedObserver.setThreshold(0);
+
+    	
+    	Observer nonDefaultAddedObserver = new Observer(nonDefaultObserver); 
+    	nonDefaultAddedObserver.setObserverID(4);
+
+    	test_Observer_List.add(UpdatedObserver);
+    	test_Observer_List.add(selectedObserver);
+    	test_Observer_List.add(nonDefaultAddedObserver);
+
+    	test_database_Observer_List= db.SelectAllObservers(4);
+    	
+    	for (int i =0; i< test_database_Observer_List.size(); i++) {        
+    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
+        }
+
+    	
+    }
+
 }
