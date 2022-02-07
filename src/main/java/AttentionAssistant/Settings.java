@@ -11,30 +11,812 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * Class that contains GUI and information whenever Settings 
+ * is called.
+ * @author krchr
+ */
 
-//borders and padding and margins
 
 public class Settings {
 	
+	/*
+	 * global variables for the Settings GUI
+	 */
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
-	
 	JFrame settings_frame = new JFrame("Attention Assistant Settings");
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	
 	//creates card layout and panel for RHS settings that display with each button option 
 	CardLayout card_layout = new CardLayout();
 	JPanel card_panel = new JPanel();
-	
 	int height = 700; 
 	int width = 550; 
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
 	
+	
+	 //variables for the Settings object
+	
 	/*
-	 * RHS display for General Settings 
+	 * color of the circles below the icons of the navigation bar
+	 */
+	Color iconCircles;
+	
+	/*
+	 * color of the icons of the navigation bar
+	 */
+	Color icons;
+	
+	/*
+	 * opacity of the circles in the navigation bar
+	 */
+	int opacityCircles; 
+	
+	/*
+	 * opacity of the icons in the navigation bar
+	 */
+	int opacityIcons; 
+	
+	/*
+	 * determines if the nav bar is collapsed or expanded 
+	 */
+	boolean isCollapsed; 
+	
+	/*
+	 * x coordinate for location of navigation bar
+	 */
+	int xCoord;
+	
+	/*
+	 * y coordinate for location of navigation bar 
+	 */
+	int yCoord; 
+	
+	/*
+	 * sets nav bar to vertical instead of horizontal 
+	 */
+	boolean isVertical; 
+	
+	/*
+	 * size option for icon sizes in navigation bar 
+	 */
+	int iconSize; 
+	
+	/*
+	 * sets features visible in the navigation bar 
+	 */
+	boolean timerIsVisible; 
+	boolean pmIsVisible; 
+	boolean ftsIsVisible; 
+	boolean htbIsVisible; 
+	boolean ntbIsVisible; 
+	boolean progReportIsVisible; 
+	
+	/*
+	 * determines if avatar is used for notifications
+	 */
+	boolean avatarIsActive; 
+	
+	/*
+	 * determines if text is used for notifications
+	 */
+	boolean textIsActive; 
+	
+	/*
+	 * determines if audio is used for notifications
+	 */
+	boolean audioIsActive;
+	
+	/*
+	 * file path for selected avatar 
+	 */
+	String avatarFilePath; 
+	
+	/*
+	 * file path for audio file
+	 */
+	String audioFilePath;
+	
+	/*
+	 * determines if avatar is always on screen
+	 */
+	boolean alwaysOnScreen; 
+	
+	/*
+	 * size option of avatar 
+	 */
+	int avatarSize; 
+	
+	/*
+	 * determines if pomodoro timer is active
+	 */
+	boolean pomodoroIsActive; 
+	
+	/*
+	 * work period for pomodoro timer
+	 */
+	int workPeriod; 
+	
+	/*
+	 * break period for the Pomodoro Timer
+	 */
+	int breakPeriod; 
+	
+	/*
+	 * determines if times remaining on timer shows
+	 */
+	boolean timeShowing; 
+	
+	/*
+	 * determines if thought management features are active 
+	 */
+	boolean ftsIsActive; 
+	boolean ntbIsActive; 
+	boolean htbIsActive; 
+	
+	/*
+	 * determines if HTB is linked to NTB
+	 */
+	boolean isAutoLinked; 
+	
+	/**
+	 * Instantiating empty Settings object
+	 */
+	public Settings() {
+		this.iconCircles = aa_purple; 
+		this.icons = Color.white;
+		this.opacityCircles = 100; 
+		this.opacityIcons = 100; 
+		this.isCollapsed = false; 
+		this.xCoord = 0;
+		this.yCoord = 0; 
+		this.isVertical = true; 
+		this.iconSize = 50; 
+		this.timerIsVisible = true; 
+		this.pmIsVisible = true; 
+		this.ftsIsVisible = true; 
+		this.htbIsVisible = true; 
+		this.ntbIsVisible = true; 
+		this.progReportIsVisible = true; 
+		this.avatarIsActive = false; 
+		this.textIsActive = true; 
+		this.audioIsActive = false;
+		this.avatarFilePath = "images/avatar_dino.png"; 
+		this.audioFilePath = "";
+		this.alwaysOnScreen = false; 
+		this.avatarSize = 100; 
+		this.pomodoroIsActive = true; 
+		this.workPeriod = 45; 
+		this.breakPeriod = 15; 
+		this.timeShowing = true; 
+		this.ftsIsActive = true; 
+		this.ntbIsActive = true; 
+		this.isAutoLinked = true; 
+		this.htbIsActive = true; 
+	}
+	
+	/**
+	 * Creates a Settings object loaded with settings from database
+	 * @param db
+	 *
+	 * Placeholder constructor to get an idea of how the
+	 * settings could be loaded from the database
+	 * 
+	 *  assuming DataBase class will have a method called something along
+	 *  the lines of SelectUserSettings() that returns an arraylist of all the settings
+	 *  in the same order as the constructor -- just an idea to coordinate with
+	 *  database team once the table is set up 
+	 *
+	public Settings(DataBase db) {
+		this.iconCircles = db.SelectUserSettings().get(0); 
+		this.icons = db.SelectUserSettings().get(1);
+		this.opacityCircles = db.SelectUserSettings().get(2); 
+		this.opacityIcons = db.SelectUserSettings().get(3); 
+		this.isCollapsed = db.SelectUserSettings().get(4); 
+		this.xCoord = db.SelectUserSettings().get(5);
+		this.yCoord = db.SelectUserSettings().get(6); 
+		this.isVertical = db.SelectUserSettings().get(7);
+		this.iconSize = db.SelectUserSettings().get(8);
+		this.timerIsVisible = db.SelectUserSettings().get(9); 
+		this.pmIsVisible = db.SelectUserSettings().get(10); 
+		this.ftsIsVisible = db.SelectUserSettings().get(11); 
+		this.htbIsVisible = db.SelectUserSettings().get(12);
+		this.ntbIsVisible = db.SelectUserSettings().get(13); 
+		this.progReportIsVisible = db.SelectUserSettings().get(14); 
+		this.avatarIsActive = db.SelectUserSettings().get(15); 
+		this.textIsActive = db.SelectUserSettings().get(16); 
+		this.audioIsActive = db.SelectUserSettings().get(17);
+		this.avatarFilePath = db.SelectUserSettings().get(18); 
+		this.audioFilePath = db.SelectUserSettings().get(19);
+		this.alwaysOnScreen = db.SelectUserSettings().get(20); 
+		this.avatarSize = db.SelectUserSettings().get(21); 
+		this.pomodoroIsActive = db.SelectUserSettings().get(22); 
+		this.workPeriod = db.SelectUserSettings().get(23); 
+		this.breakPeriod = db.SelectUserSettings().get(24); 
+		this.timeShowing = db.SelectUserSettings().get(25); 
+		this.ftsIsActive = db.SelectUserSettings().get(26); 
+		this.ntbIsActive = db.SelectUserSettings().get(27); 
+		this.isAutoLinked = db.SelectUserSettings().get(28); 
+		this.htbIsActive = db.SelectUserSettings().get(29);
+	}
+	*/
+	
+	 /**
+	 * Creates a Settings object loaded with all data types specified
+	 * 
+	 * Written as a placeholder for testing, once database is set up this
+	 * constructor should be deleted
+	 * 
+	 * @param Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
+	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
+	 * 		  boolean, int, boolean, int, int, boolean, boolean, boolean, boolean, boolean
+	 */
+	public Settings(Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
+					int xCoord, int yCoord, boolean isVertical, int iconSize, boolean timerIsVisible, boolean pmIsVisible, 
+					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, 
+					boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, String avatarFilePath, String audioFilePath, 
+					boolean alwaysOnScreen, int avatarSize, boolean pomodoroIsActive, int workPeriod, int breakPeriod, boolean timeShowing, 
+					boolean ftsIsActive, boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive) {
+		
+		this.iconCircles = iconCircles;
+		this.icons = icons;
+		this.opacityCircles = opacityCircles; 
+		this.opacityIcons = opacityIcons; 
+		this.isCollapsed = isCollapsed; 
+		this.xCoord = xCoord;
+		this.yCoord = yCoord; 
+		this.isVertical = isVertical;
+		this.iconSize = iconSize;
+		this.timerIsVisible = timerIsVisible; 
+		this.pmIsVisible = pmIsVisible; 
+		this.ftsIsVisible = ftsIsVisible; 
+		this.htbIsVisible = htbIsVisible;
+		this.ntbIsVisible = ntbIsVisible; 
+		this.progReportIsVisible = progReportIsVisible; 
+		this.avatarIsActive = avatarIsActive; 
+		this.textIsActive = textIsActive; 
+		this.audioIsActive = audioIsActive;
+		this.avatarFilePath = avatarFilePath; 
+		this.audioFilePath = audioFilePath;
+		this.alwaysOnScreen = alwaysOnScreen; 
+		this.avatarSize = avatarSize; 
+		this.pomodoroIsActive = pomodoroIsActive; 
+		this.workPeriod = workPeriod; 
+		this.breakPeriod = breakPeriod; 
+		this.timeShowing = timeShowing; 
+		this.ftsIsActive = ftsIsActive; 
+		this.ntbIsActive = ntbIsActive; 
+		this.isAutoLinked = isAutoLinked; 
+		this.htbIsActive = htbIsActive;
+	}
+	
+	/**
+	 * Instantiating copy constructor for Settings object
+	 * @param Settings object
+	 */
+	public Settings(Settings stgs) {
+		this.iconCircles = stgs.iconCircles;
+		this.icons = stgs.icons;
+		this.opacityCircles = stgs.opacityCircles; 
+		this.opacityIcons = stgs.opacityIcons; 
+		this.isCollapsed = stgs.isCollapsed; 
+		this.xCoord = stgs.xCoord;
+		this.yCoord = stgs.yCoord; 
+		this.isVertical = stgs.isVertical;
+		this.iconSize = stgs.iconSize;
+		this.timerIsVisible = stgs.timerIsVisible; 
+		this.pmIsVisible = stgs.pmIsVisible; 
+		this.ftsIsVisible = stgs.ftsIsVisible; 
+		this.htbIsVisible = stgs.htbIsVisible;
+		this.ntbIsVisible = stgs.ntbIsVisible; 
+		this.progReportIsVisible = stgs.progReportIsVisible; 
+		this.avatarIsActive = stgs.avatarIsActive; 
+		this.textIsActive = stgs.textIsActive; 
+		this.audioIsActive = stgs.audioIsActive;
+		this.avatarFilePath = stgs.avatarFilePath; 
+		this.audioFilePath = stgs.audioFilePath;
+		this.alwaysOnScreen = stgs.alwaysOnScreen; 
+		this.avatarSize = stgs.avatarSize; 
+		this.pomodoroIsActive = stgs.pomodoroIsActive; 
+		this.workPeriod = stgs.workPeriod; 
+		this.breakPeriod = stgs.breakPeriod; 
+		this.timeShowing = stgs.timeShowing; 
+		this.ftsIsActive = stgs.ftsIsActive; 
+		this.ntbIsActive = stgs.ntbIsActive; 
+		this.isAutoLinked = stgs.isAutoLinked; 
+		this.htbIsActive = stgs.htbIsActive;
+	}
+	
+	/**
+	 * Start of Encapsulation
+	 * 
+	 * get iconCircles
+	 * @return Color 
+	 */
+	public Color getIconCircles() {
+		return this.iconCircles;
+	}
+	
+	/**
+	 * set iconCircles 
+	 * @param Color
+	 */
+	public void setIconCircles(Color iconCircles) {
+		this.iconCircles = iconCircles;
+	}
+	
+	/**
+	 * get icons
+	 * @return Color
+	 */
+	public Color getIcons() {
+		return this.icons;
+	}
+	
+	/**
+	 * set icons
+	 * @param Color
+	 */
+	public void setIcons(Color icons) {
+		this.icons = icons; 
+	}
+	
+	/**
+	 * get opacityCircles
+	 * @return int
+	 */
+	public int getOpacityCircles() {
+		return this.opacityCircles;
+	}
+	
+	/**
+	 * set opacityCircles
+	 * @param int
+	 */
+	public void setOpacityCircles(int opacityCircles) {
+		this.opacityCircles = opacityCircles; 
+	}
+	
+	/**
+	 * get opacityIcons
+	 * @return int
+	 */
+	public int getOpacityIcons() {
+		return this.opacityIcons;
+	}
+	
+	/**
+	 * set opacityIcons
+	 * @param int
+	 */
+	public void setOpacityIcons(int opacityIcons) {
+		this.opacityIcons = opacityIcons; 
+	}
+	
+	/**
+	 * get isCollapsed
+	 * @return boolean
+	 */
+	public boolean getIsCollapsed() {
+		return this.isCollapsed; 
+	}
+	
+	/**
+	 * set isCollapsed
+	 * @param boolean
+	 */
+	public void setIsCollapsed(boolean isCollapsed) {
+		this.isCollapsed = isCollapsed;
+	}
+	
+	/**
+	 * get xCoord
+	 * @return int
+	 */
+	public int getXCoord() {
+		return this.xCoord; 
+	}
+	
+	/**
+	 * set xCoord
+	 * @param int
+	 */
+	public void setXCoord(int xCoord) {
+		this.xCoord = xCoord;
+	}
+	
+	/**
+	 * get yCoord
+	 * @return int
+	 */
+	public int getYCoord() {
+		return this.yCoord;
+	}
+	
+	/**
+	 * set yCoord
+	 * @param int
+	 */
+	public void setYCoord(int yCoord) {
+		this.yCoord = yCoord;
+	}
+	
+	/**
+	 * get isVertical
+	 * @return boolean
+	 */
+	public boolean getIsVertical() {
+		return this.isVertical;
+	}
+	
+	/**
+	 * set isVertical
+	 * @param boolean
+	 */
+	public void setIsVertical(boolean isVertical) {
+		this.isVertical = isVertical;
+	}
+	
+	/**
+	 * get iconSize
+	 * @return int
+	 */
+	public int getIconSize() {
+		return this.iconSize;
+	}
+	
+	/**
+	 * set iconSize
+	 * @param int
+	 */
+	public void setIconSize(int iconSize) {
+		this.iconSize = iconSize; 
+	}
+	
+	/**
+	 * get timerIsVisible
+	 * @return boolean
+	 */
+	public boolean getTimerIsVisible() {
+		return this.timerIsVisible;
+	}
+	
+	/**
+	 * set timerIsVisible
+	 * @param boolean
+	 */
+	public void setTimerIsVisible(boolean timerIsVisible) {
+		this.timerIsVisible = timerIsVisible;
+	}
+	
+	/**
+	 * get pmIsVisible
+	 * @return boolean
+	 */
+	public boolean getPmIsVisible() {
+		return this.pmIsVisible;
+	}
+	
+	/**
+	 * set pmIsVisible
+	 * @param boolean
+	 */
+	public void setPmIsVisible(boolean pmIsVisible) {
+		this.pmIsVisible = pmIsVisible;
+	}
+	
+	/**
+	 * get ftsIsVisible
+	 * @return boolean
+	 */
+	public boolean getFtsIsVisible() {
+		return this.ftsIsVisible;
+	}
+	
+	/**
+	 * set ftsIsVisible
+	 * @param boolean
+	 */
+	public void setFtsIsVisible(boolean ftsIsVisible) {
+		this.ftsIsVisible = ftsIsVisible;
+	}
+	
+	/**
+	 * get htbIsVisible
+	 * @return boolean
+	 */
+	public boolean getHtbIsVisible() {
+		return this.htbIsVisible;
+	}
+	
+	/**
+	 * set htbIsVisible
+	 * @param boolean
+	 */
+	public void setHtbIsVisible(boolean htbIsVisible) {
+		this.htbIsVisible = htbIsVisible;
+	}
+	
+	/**
+	 * get ntbIsVisible
+	 * @return boolean
+	 */
+	public boolean getNtbIsVisible() {
+		return this.ntbIsVisible;
+	}
+	
+	/**
+	 * set ntbIsVisible
+	 * @param boolean
+	 */
+	public void setNtbIsVisible(boolean ntbIsVisible) {
+		this.ntbIsVisible = ntbIsVisible;
+	}
+	
+	/**
+	 * get progReportIsVisible
+	 * @return boolean
+	 */
+	public boolean getProgReportIsVisible() {
+		return this.progReportIsVisible;
+	}
+	
+	/**
+	 * set progReportIsVisible
+	 * @param boolean
+	 */
+	public void setProgReportIsVisible(boolean progReportIsVisible) {
+		this.progReportIsVisible = progReportIsVisible;
+	}
+	
+	/**
+	 * get avatarIsActive
+	 * @return boolean
+	 */
+	public boolean getAvatarIsActive() {
+		return this.avatarIsActive;
+	}
+	
+	/**
+	 * set avatarIsActive
+	 * @param boolean
+	 */
+	public void setAvatarIsActive(boolean avatarIsActive) {
+		this.avatarIsActive = avatarIsActive;
+	}
+	
+	/**
+	 * get textIsActive
+	 * @return boolean
+	 */
+	public boolean getTextIsActive() {
+		return this.textIsActive;
+	}
+	
+	/**
+	 * set textIsACtive
+	 * @param boolean
+	 */
+	public void setTextIsActive(boolean textIsActive) {
+		this.textIsActive = textIsActive;
+	}
+	
+	/**
+	 * get audioIsActive
+	 * @return boolean
+	 */
+	public boolean getAudioIsActive() {
+		return this.audioIsActive;
+	}
+	
+	/**
+	 * set audioIsActive
+	 * @param boolean
+	 */
+	public void setAudioIsActive(boolean audioIsActive) {
+		this.audioIsActive = audioIsActive;
+	}
+	
+	/**
+	 * get avatarFilePath
+	 * @return String
+	 */
+	public String getAvatarFilePath() {
+		return this.avatarFilePath;
+	}
+	
+	/**
+	 * set avatarFilePath
+	 * @param String
+	 */
+	public void setAvatarFilePath(String avatarFilePath) {
+		this.avatarFilePath = avatarFilePath;
+	}
+	
+	/**
+	 * get adudioFilePath
+	 * @return String
+	 */
+	public String getAudioFilePath() {
+		return this.audioFilePath;
+	}
+	
+	/**
+	 * set audioFilePath
+	 * @param String
+	 */
+	public void setAudioFilePath(String audioFilePath) {
+		this.audioFilePath = audioFilePath;
+	}
+	
+	/**
+	 * get alwaysOnScreen
+	 * @return boolean
+	 */
+	public boolean getAlwaysOnScreen() {
+		return this.alwaysOnScreen;
+	}
+	
+	/**
+	 * set alwaysOnScreen
+	 * @param boolean
+	 */
+	public void setAlwaysOnScreen(boolean alwaysOnScreen) {
+		this.alwaysOnScreen = alwaysOnScreen;
+	}
+	
+	/**
+	 * get avatarSize
+	 * @return int
+	 */
+	public int getAvatarSize() {
+		return this.avatarSize;
+	}
+	
+	/**
+	 * set avatarSize
+	 * @param int
+	 */
+	public void setAvatarSize(int avatarSize)
+	{
+		this.avatarSize = avatarSize;
+	}
+	
+	/**
+	 * get pomodoroIsActive
+	 * @return boolean
+	 */
+	public boolean getPomodoroIsActive() {
+		return this.pomodoroIsActive;
+	}
+	
+	/**
+	 * set pomodoroIsActive
+	 * @param boolean
+	 */
+	public void setPomodoroIsActive(boolean pomodoroIsActive) {
+		this.pomodoroIsActive = pomodoroIsActive;
+	}
+	
+	/**
+	 * get workPeriod
+	 * @return int 
+	 */
+	public int getWorkPeriod() {
+		return this.workPeriod;
+	}
+	
+	/**
+	 * set workPeriod
+	 * @param int
+	 */
+	public void setWorkPeriod(int workPeriod) {
+		this.workPeriod = workPeriod;
+	}
+	
+	/**
+	 * get breakPeriod
+	 * @return int
+	 */
+	public int getBreakPeriod() {
+		return this.breakPeriod;
+	}
+	
+	/**
+	 * set breakPeriod
+	 * @param int
+	 */
+	public void setBreakPeriod(int breakPeriod) {
+		this.breakPeriod = breakPeriod;
+	}
+	
+	/**
+	 * get timeShowing
+	 * @return boolean
+	 */
+	public boolean getTimeShowing() {
+		return this.timeShowing;
+	}
+	
+	/**
+	 * set timeShowing
+	 * @param boolean
+	 */
+	public void setTimeShowing(boolean timeShowing) {
+		this.timeShowing = timeShowing;
+	}
+	
+	/**
+	 * get ftsIsActive
+	 * @return boolean
+	 */
+	public boolean getFtsIsActive() {
+		return this.ftsIsActive;
+	}
+	
+	/**
+	 * set ftsIsActive
+	 * @param boolean
+	 */
+	public void setFtsIsActive(boolean ftsIsActive) {
+		this.ftsIsActive = ftsIsActive;
+	}
+	
+	/**
+	 * get ntbIsActive
+	 * @return boolean
+	 */
+	public boolean getNtbIsActive() {
+		return this.ntbIsActive;
+	}
+	
+	/**
+	 * set ntbIsActive
+	 * @param boolean
+	 */
+	public void setNtbIsActive(boolean ntbIsActive) {
+		this.ntbIsActive = ntbIsActive;
+	}
+	
+	/**
+	 * get isAutoLinked
+	 * @return boolean
+	 */
+	public boolean getIsAutoLinked() {
+		return this.isAutoLinked;
+	}
+	
+	/**
+	 * set isAutoLinked
+	 * @param isAutoLinked
+	 */
+	public void setIsAutoLinked(boolean isAutoLinked) {
+		this.isAutoLinked = isAutoLinked;
+	}
+	
+	/**
+	 * get htbIsActive
+	 * @return boolean
+	 */
+	public boolean getHtbIsActive() {
+		return this.htbIsActive;
+	}
+	
+	/**
+	 * set htbIsActive
+	 * @param boolean
+	 */
+	public void setHtbIsActive(boolean htbIsActive) {
+		this.htbIsActive = htbIsActive;
+	}
+	
+	/**
+	 * RHS display for General Settings sub menu
+	 * @param DataBase
+	 * @param BufferedImage
 	 */
 	private void createGeneralPanel(DataBase db, BufferedImage guideIcon) {
 		
@@ -79,14 +861,14 @@ public class Settings {
 				Color color = JColorChooser.showDialog(null,"Select a color", initialcolor);
 				
 				// won't be creating a nav bar object here in the long run, it will be passed in 
-				Nav_Bar navBar;
+				/*Nav_Bar navBar;
 				try {
 					navBar = new Nav_Bar(db);
 					navBar.colorIcon(guideIcon, color.getRed(), color.getBlue(), color.getGreen());
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 			}
 		});
 		
@@ -288,8 +1070,9 @@ public class Settings {
 		card_panel.add("general", general_panel);
 	}
 	
-	/*
-	 * RHS display for Notification System
+	
+	/**
+	 * RHS display for Notifications System
 	 */
 	private void createNotificationsPanel() {
 		
@@ -346,7 +1129,7 @@ public class Settings {
 		BufferedImage avatar = null;
 		try {
 			//will pass string for file path 
-			avatar = ImageIO.read(new File("images/avatar.png"));
+			avatar = ImageIO.read(new File("images/avatar_dino.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -484,7 +1267,7 @@ public class Settings {
 		card_panel.add("notifications", notifications_panel);
 	}
 	
-	/*
+	/**
 	 * RHS display for Priority Manager
 	 */
 	private void createPriorityManagerPanel() {
@@ -542,7 +1325,7 @@ public class Settings {
 		card_panel.add("priority manager", pm_panel);
 	}
 	
-	/*
+	/**
 	 * RHS display for Pomodoro Timer
 	 */
 	private void createPomodoroTimerPanel() {
@@ -659,7 +1442,7 @@ public class Settings {
 		card_panel.add("pomodoro timer", pomodoro_panel);
 	}
 	
-	/*
+	/**
 	 * RHS display for Thought Management
 	 */
 	private void createThoughtPanel() {
@@ -711,8 +1494,9 @@ public class Settings {
 		card_panel.add("thought management", thought_panel);
 	}
 	
-	/**
-	 * creates/displays UI
+		/**
+	 * creates/display Settings GUI
+	 * @param db
 	 */
 	public void open_settings(DataBase db) {
 		EventQueue.invokeLater(new Runnable() {
