@@ -3,10 +3,4 @@
 #
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf
-data.adj	text eol=crlf
-data.adv	text eol=crlf
-data.noun	text eol=crlf
-data.verb	text eol=crlf
-
-
 
