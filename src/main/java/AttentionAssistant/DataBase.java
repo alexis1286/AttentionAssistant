@@ -486,7 +486,7 @@ public class DataBase {
                 public ArrayList<Observer> SelectAllObservers(int task_ID){
                 	ArrayList<Observer> ObserversOnList = new ArrayList<Observer>();
                 	Observer blankObserver = new Observer();
-                	String query1 = "SELECT * FROM observer WHERE fk_taskID='" + task_ID + "' ORDER BY dT_Gathered DESC";
+                	String query1 = "SELECT * FROM observer WHERE fk_taskID='" + task_ID + "' ORDER BY dT_Gathered ASC";
                 	try ( Connection conn = ds.getConnection();
                 		    Statement stmt = conn.createStatement(); ) {
                 		    ResultSet rs = stmt.executeQuery( query1 );
