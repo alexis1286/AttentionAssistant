@@ -25,7 +25,7 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
     
     //Library used for keyword generator in the observer
-    implementation 'net.sf.jwordnet:jwnl:1.4_rc3'
+    implementation 'edu.mit:jwi:2.2.3'
 }
 //end of dependencies
 

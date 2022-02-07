@@ -8,6 +8,16 @@ public class AttentionAssistantDriver {
 		
 		db.DatabaseSetUp();
 		//get settings
-	    new Nav_Bar(db);
+	    //new Nav_Bar(db);
+		
+		/**
+		 * TEST CODE
+		 * DELETE BEFORE PRODUCTION
+		 */
+		Observer testObserver = new Observer();
+		Task testTask = new Task();
+		
+		testObserver.keywordsGenerator(testTask);
+		
 	  }
 }

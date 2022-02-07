@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import net.didion.jwnl.dictionary.Dictionary;
+//import net.didion.jwnl.dictionary.Dictionary;
 
 public class Test_Observer {
 	/**
@@ -174,7 +174,7 @@ public class Test_Observer {
      * setUpDict,
      * setDictionary,
      * getDictionary. -jmitchel2
-     */
+     
     @Test
     @DisplayName("<Observer> setUpDict")
     void observerSetUpDict() {
@@ -186,5 +186,4 @@ public class Test_Observer {
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    
 }
