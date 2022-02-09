@@ -175,7 +175,7 @@ public class Nav_Bar{
 	        frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
 	        //forces frame to stay on top of screen
 	        frame.setAlwaysOnTop(true);
-	        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        //sets top-left corner coordinate, pulled from settings
 	        frame.setLocation(navbar.getX_coord(), navbar.getY_coord());
 	        //makes frame and contents visible
@@ -327,7 +327,7 @@ public class Nav_Bar{
 	        pomo_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		Pomodoro_Timer.run_pomo();
+	        		//Pomodoro_Timer.run_pomo();
 	        }});
 	        Image pomoi = pomo_icon.getImage();
 	        pomoi = pomoi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);
