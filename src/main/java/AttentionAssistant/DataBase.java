@@ -1,5 +1,6 @@
 package AttentionAssistant;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -555,12 +556,12 @@ public class DataBase {
 
                  /**
                  ******* START OF SETTINGS CRUD *******
-                 * @author jmitchel2, ehols001
+                 * @author jmitchel2
                  */
 
                 /**
-                 * Add a new task to the database.
-                 * @param task
+                 * Add a new Settings to the database.
+                 * @param Settings
                  */
                 public void AddSettings(Settings settings) {
 
@@ -609,7 +610,7 @@ public class DataBase {
                 /**
                  * Update a Settings within the Database
                  * 
-                 * @param Observer
+                 * @param Settings
                  */
                     public void UpdateSettings(Settings settings) {
                     	String query1 = "UPDATE settings " +
@@ -654,8 +655,75 @@ public class DataBase {
                     		}
                     	
                     }
+                    
+                    /**
+                     * Delete a Settings within the Database
+                     * @param int
+                     */
+                    public void DeleteSettings(int settingsID) {
+                    	String query1 = "DELETE FROM settings WHERE settingsID = '" + settingsID + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    int rv = stmt.executeUpdate( query1 );
+                    		    System.out.println( "DeleteSettings() returned " + rv );
+                    		} catch ( SQLException e ) {
+                    		    e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	
+                    }    	
+
                 
-                
+                    /**
+                     * Select a Settings within the database using the settingsID
+                     * @param int
+                     * @return Settings
+                     */
+                    public Settings SelectSettings(int settingsID) {
+                    	Settings settings1 = new Settings();
+                    	String query1 = "SELECT * FROM settings WHERE settingsID = '" + settingsID + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    ResultSet rs = stmt.executeQuery( query1 );
+                    		    settings1.setSettingsID(rs.getInt("settingsID"));
+                    		    settings1.setIconCircles(new Color(rs.getInt("iconCircles")));
+                    		    settings1.setIcons(new Color(rs.getInt("icons")));
+                    		    settings1.setOpacityCircles(rs.getInt("opacityCircles"));
+                    		    settings1.setOpacityIcons(rs.getInt("opacityIcons"));
+                    		    settings1.setIsCollapsed(Boolean.valueOf(rs.getString("isCollapsed")));
+                    		    settings1.setXCoord(rs.getInt("xCoord"));
+                    		    settings1.setYCoord(rs.getInt("yCoord"));
+                    		    settings1.setIsVertical(Boolean.valueOf(rs.getString("isVertical")));
+                    		    settings1.setIconSize(rs.getInt("iconSize"));
+                    		    settings1.setTimerIsVisible(Boolean.valueOf(rs.getString("timerIsVisible")));
+                    		    settings1.setPmIsVisible(Boolean.valueOf(rs.getString("pmIsVisible")));
+                    		    settings1.setFtsIsVisible(Boolean.valueOf(rs.getString("ftsIsVisible")));
+                    		    settings1.setHtbIsVisible(Boolean.valueOf(rs.getString("htbIsVisible")));
+                    		    settings1.setNtbIsVisible(Boolean.valueOf(rs.getString("ntbIsVisible")));
+                    		    settings1.setProgReportIsVisible(Boolean.valueOf(rs.getString("progReportIsVisible")));
+                    		    settings1.setAvatarIsActive(Boolean.valueOf(rs.getString("avatarIsActive")));
+                    		    settings1.setTextIsActive(Boolean.valueOf(rs.getString("textIsActive")));
+                    		    settings1.setAudioIsActive(Boolean.valueOf(rs.getString("audioIsActive")));
+                    		    settings1.setAvatarFilePath(rs.getString("avatarFilePath"));
+                    		    settings1.setAudioFilePath(rs.getString("audioFilePath"));
+                    		    settings1.setAlwaysOnScreen(Boolean.valueOf(rs.getString("alwaysOnScreen")));
+                    		    settings1.setAvatarSize(rs.getInt("avatarSize"));
+                    		    settings1.setPomodoroIsActive(Boolean.valueOf(rs.getString("pomodoroIsActive")));
+                    		    settings1.setWorkPeriod(rs.getInt("workPeriod"));
+                    		    settings1.setBreakPeriod(rs.getInt("breakPeriod"));
+                    		    settings1.setTimeShowing(Boolean.valueOf(rs.getString("timeShowing")));
+                    		    settings1.setFtsIsActive(Boolean.valueOf(rs.getString("ftsIsActive")));
+                    		    settings1.setNtbIsActive(Boolean.valueOf(rs.getString("ntbIsActive")));
+                    		    settings1.setIsAutoLinked(Boolean.valueOf(rs.getString("isAutoLinked")));
+                    		    settings1.setHtbIsActive(Boolean.valueOf(rs.getString("htbIsActive")));                   		    
+                    		    System.out.println( "SelectSettings() returned " + rs );
+                    		} catch ( SQLException e ) {
+                    			e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	return settings1;
+                    }
+
                 
                 /**
                  * Mainly used for JUNIT testing, deletes the Settings table at the beginning of testing to remove all test data.

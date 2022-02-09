@@ -408,5 +408,45 @@ public class Test_DataBase {
     	UpdatedSettings.setIconCircles(new Color(51,204,255));
     	db.UpdateSettings(UpdatedSettings);
     }
+    
+    @Test
+    @Order(18)
+    @DisplayName("<DataBase> DatabaseDeleteSettings")
+    void DatabaseDeleteSettings() {
+    	Settings deletedSettings = new Settings(nonDefaultSettings);
+    	deletedSettings.setSettingsID(3);
+    	deletedSettings.setAvatarFilePath("I AM A DELETED AVATAR FILE PATH");
+    	db.UpdateSettings(deletedSettings);
+    	db.DeleteSettings(3);
+    }
+
+    
+    @Test
+    @Order(19)
+    @DisplayName("<DataBase> DatabaseSelectSettings")
+    void DatabaseSelectSettings() {
+    	Settings selectedSettings = new Settings(nonDefaultSettings);
+    	selectedSettings.setSettingsID(2);
+    	selectedSettings.setIcons(new Color(255,51,51));
+    	selectedSettings.setOpacityIcons(25);
+    	selectedSettings.setIsCollapsed(false);
+    	selectedSettings.setAvatarFilePath("I am a selected Avatar File Path");
+    	db.UpdateSettings(selectedSettings);
+    	
+    	Settings selectedSettings2 = new Settings();
+    	selectedSettings2 = db.SelectSettings(2);
+        
+        assertEquals(2, selectedSettings2.getSettingsID(), "selectedSettings2 SettingsID should be set to 2 instead returned: " 
+        			+ selectedSettings2.getSettingsID());
+        assertEquals(new Color(255,51,51), selectedSettings2.getIcons(), "selectedSettings2 icons should be set to Color(255,51,51) instead returned: " 
+    			+ selectedSettings2.getIcons());
+        assertEquals(25, selectedSettings2.getOpacityIcons(), "selectedSettings2 OpacityIcons should be set to 75 instead returned: " 
+    			+ selectedSettings2.getOpacityIcons());
+        assertEquals(false, selectedSettings2.getIsCollapsed(), "selectedSettings2 isCollapsed should be set to false instead returned: " 
+    			+ selectedSettings2.getIsCollapsed());
+        assertEquals("I am a selected Avatar File Path", selectedSettings2.getAvatarFilePath(), "selectedSettings2 Avatar File Path should be set to \"I am a selected Avatar File Path\" instead returned: " 
+    			+ selectedSettings2.getAvatarFilePath());       
+    }
+
 
 }
