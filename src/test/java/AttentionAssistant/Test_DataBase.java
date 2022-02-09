@@ -1,6 +1,7 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class Test_DataBase {
 	Task nonDefaultTask;
 	Happy_Thought_Button nonDefaultHTB;
 	Observer nonDefaultObserver;
+	Settings nonDefaultSettings;
 	DataBase db = new DataBase();
 	
 	@BeforeEach
@@ -58,6 +60,48 @@ public class Test_DataBase {
 	Date testDT_Gathered= new Date(1220227200L * 1000);
 
 	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
+	
+	/**
+	 * Set up for nonDefault Settings 
+	 */
+	int testSettingsID = 999;
+	Color testIconCircles = Color.RED; 
+	Color testIcons = Color.YELLOW;
+	int testOpacityCircles = 75; 
+	int testOpacityIcons = 75; 
+	boolean testIsCollapsed = true; 
+	int testXCoord = 15;
+	int testYCoord = 15; 
+	boolean testIsVertical = false; 
+	int testIconSize = 30; 
+	boolean testTimerIsVisible = false; 
+	boolean testPmIsVisible = false; 
+	boolean testFtsIsVisible = false; 
+	boolean testHtbIsVisible = false; 
+	boolean testNtbIsVisible = false; 
+	boolean testProgReportIsVisible = false; 
+	boolean testAvatarIsActive = true; 
+	boolean testTextIsActive = false; 
+	boolean testAudioIsActive = true;
+	String testAvatarFilePath = "images/avatar_cat1.png"; 
+	String testAudioFilePath = "test";
+	boolean testAlwaysOnScreen = true; 
+	int testAvatarSize = 75; 
+	boolean testPomodoroIsActive = false; 
+	int testWorkPeriod = 33; 
+	int testBreakPeriod = 23; 
+	boolean testTimeShowing = false; 
+	boolean testFtsIsActive = false; 
+	boolean testNtbIsActive = false; 
+	boolean testIsAutoLinked = false; 
+	boolean testHtbIsActive = false; 
+
+	nonDefaultSettings = new Settings(testSettingsID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+			  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
+			  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
+			  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
+			  testPomodoroIsActive, testWorkPeriod, testBreakPeriod, testTimeShowing, testFtsIsActive, 
+			  testNtbIsActive, testIsAutoLinked, testHtbIsActive);
 	
 	db.DatabaseSetUp();	
 	}
@@ -334,4 +378,22 @@ public class Test_DataBase {
     	
     }
 
+    /**
+    ******* END OF TEST OBSERVER CRUD *******
+    */
+
+    /**
+    ******* START OF TEST SETTINGS CRUD *******
+     */
+
+    
+    @Test
+    @Order(16)
+    @DisplayName("<DataBase> DatabaseAddNewSettings")
+    void DatabaseAddNewSettings() {
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+    }
 }

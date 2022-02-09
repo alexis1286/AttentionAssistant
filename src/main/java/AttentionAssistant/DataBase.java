@@ -48,7 +48,7 @@ public class DataBase {
         /**
          * Set up for Table Task
          */
-    	String queryTable = "CREATE TABLE IF NOT EXISTS task ( " +
+    	String queryTask = "CREATE TABLE IF NOT EXISTS task ( " +
    			 "taskID INTEGER PRIMARY KEY, " +
    			 "description TEXT, " +
    			 "observable BOOLEAN, " +
@@ -77,15 +77,53 @@ public class DataBase {
    			 "dT_Gathered DATE, " +
    			 "FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\"))";
 
+        /**
+         * Set up for Table Settings
+         */
+    	String querySettings = "CREATE TABLE IF NOT EXISTS settings ( " +
+   			 "settingsID INTEGER PRIMARY KEY, " +
+   			 "iconCircles INTEGER, " +
+   			 "icons INTEGER, " +
+   			 "opacityCircles INTEGER, " + 
+   			 "opacityIcons INTEGER, " +
+   			 "isCollapsed BOOLEAN, " +
+   			 "xCoord INTEGER, " +
+   			 "yCoord INTEGER, " +
+   			 "isVertical BOOLEAN, " +
+   			 "iconSize INTEGER, " +
+   			 "timerIsVisible BOOLEAN, " +
+   			 "pmIsVisible BOOLEAN, " +
+   			 "ftsIsVisible BOOLEAN, " +
+   			 "htbIsVisible BOOLEAN, " +
+   			 "ntbIsVisible BOOLEAN, " +
+   			 "progReportIsVisible BOOLEAN, " +
+   			 "avatarIsActive BOOLEAN, " +
+   			 "textIsActive BOOLEAN, " +
+   			 "audioIsActive BOOLEAN, " +
+   			 "avatarFilePath TEXT, " +
+   			 "audioFilePath TEXT, " +
+   			 "alwaysOnScreen BOOLEAN, " +
+   			 "avatarSize INTEGER, " +
+   			 "pomodoroIsActive BOOLEAN, " +
+   			 "workPeriod INTEGER, " +
+   			 "breakPeriod INTEGER, " +
+   			 "timeShowing BOOLEAN, " +
+   			 "ftsIsActive BOOLEAN, " +
+   			 "ntbIsActive BOOLEAN, " +
+   			 "isAutoLinked BOOLEAN, " +
+   			 "htbIsActive BOOLEAN)";
+
+    	
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
-   		int rv1 = stmt.executeUpdate(queryTable);
+   		int rv1 = stmt.executeUpdate(queryTask);
    		System.out.println( "CreateTaskTable() returned " + rv1 );
    		int rv2 = stmt.executeUpdate(queryHappyThoughtButton);
    		System.out.println( "CreateHTBTable() returned " + rv2 );
    		int rv3 = stmt.executeUpdate(queryObserver);
    		System.out.println( "CreateObserverTable() returned " + rv3 );
-   		
+   		int rv4 = stmt.executeUpdate(querySettings);
+   		System.out.println( "CreateSettingsTable() returned " + rv4 );
        } catch ( SQLException e ) {
            e.printStackTrace();
            System.exit( 0 );
@@ -365,7 +403,7 @@ public class DataBase {
              */
 
              /**
-             ******* START OF Observer CRUD *******
+             ******* START OF OBSERVER CRUD *******
              * @author jmitchel2, ehols001
              */
  
@@ -511,5 +549,61 @@ public class DataBase {
                 	return ObserversOnList;
                 }
 
+                /**
+                 ******* END OF OBSERVER CRUD *******
+                 */
+
+                 /**
+                 ******* START OF SETTINGS CRUD *******
+                 * @author jmitchel2, ehols001
+                 */
+
+                /**
+                 * Add a new task to the database.
+                 * @param task
+                 */
+                public void AddSettings(Settings settings) {
+
+                	String query1 = "INSERT INTO settings " +
+                			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+                			settings.getIconCircles().getRGB() + "', '" +
+                			settings.getIcons().getRGB() + "', '" +
+                			settings.getOpacityCircles() + "', '" +
+                			settings.getOpacityIcons() + "', '" +
+                			settings.getIsCollapsed() + "', '" +
+                			settings.getXCoord() + "', '" +
+                			settings.getYCoord() + "', '" +
+                			settings.getIsVertical() + "', '" +
+                			settings.getIconSize() + "', '" +
+                			settings.getTimerIsVisible() + "', '" +
+                			settings.getPmIsVisible() + "', '" +
+                			settings.getFtsIsVisible() + "', '" +
+                			settings.getHtbIsVisible() + "', '" +
+                			settings.getNtbIsVisible() + "', '" +
+                			settings.getProgReportIsVisible() + "', '" +
+                			settings.getAvatarIsActive() + "', '" +
+                			settings.getTextIsActive() + "', '" +
+                			settings.getAudioIsActive() + "', '" +
+                			settings.getAvatarFilePath() + "', '" +
+                			settings.getAudioFilePath() + "', '" +
+                			settings.getAlwaysOnScreen() + "', '" +
+                			settings.getAvatarSize() + "', '" +
+                			settings.getPomodoroIsActive() + "', '" +
+                			settings.getWorkPeriod() + "', '" +
+                			settings.getBreakPeriod() + "', '" +
+                			settings.getTimeShowing() + "', '" +
+                			settings.getFtsIsActive() + "', '" +
+                			settings.getNtbIsActive() + "', '" +
+                			settings.getIsAutoLinked() + "', '" +
+                			settings.getHtbIsActive() +"')";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    int rv = stmt.executeUpdate( query1 );
+                		    System.out.println( "AddSettings() returned " + rv );
+                		} catch ( SQLException e ) {
+                		    e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                }
 
 }
