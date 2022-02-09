@@ -31,10 +31,25 @@ public class Priority_Manager {
 	int width = 550;
 	
 	private ArrayList<Task> Task_List;
+	private Task working_task;
 	
 	
-	public Priority_Manager() {
+	public Priority_Manager(Observer observe) {
 		this.Task_List = new ArrayList<Task>();
+		this.working_task = taskToObserve();
+		
+		if(this.working_task != null) {
+			observe.monitor(working_task);
+		}
+	}
+	
+	private Task taskToObserve() {
+		Task task = new Task();
+		//if active task is stored
+		//set task = to active task
+		
+		
+		return task;
 	}
 	
 	
