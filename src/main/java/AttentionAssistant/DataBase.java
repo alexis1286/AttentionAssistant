@@ -201,7 +201,7 @@ public class DataBase {
         public ArrayList<Task> SelectAllTasks(){
         	ArrayList<Task> tasksOnList = new ArrayList<Task>();
         	Task blankTask = new Task();
-        	String query1 = "SELECT * FROM task";
+        	String query1 = "SELECT * FROM task ORDER BY observable ASC, priority ASC, dueDate ASC";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    ResultSet rs = stmt.executeQuery( query1 );
