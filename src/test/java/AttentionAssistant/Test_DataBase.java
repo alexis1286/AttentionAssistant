@@ -113,6 +113,7 @@ public class Test_DataBase {
     db.DeleteAllTasks();
     db.DeleteAllHTBs();
     db.DeleteAllObservers();
+    db.DeleteAllSettings();
     }
 
 	
@@ -396,4 +397,16 @@ public class Test_DataBase {
         db.AddSettings(nonDefaultSettings);
         db.AddSettings(nonDefaultSettings);
     }
+    
+    @Test
+    @Order(17)
+    @DisplayName("<DataBase> DatabaseUpdateSettings")
+    void DatabaseUpdateSettings() {
+    	Settings UpdatedSettings= new Settings(nonDefaultSettings);
+    	UpdatedSettings.setSettingsID(1);
+    	UpdatedSettings.setAvatarFilePath("I am an Updated Avatar File Path");
+    	UpdatedSettings.setIconCircles(new Color(51,204,255));
+    	db.UpdateSettings(UpdatedSettings);
+    }
+
 }

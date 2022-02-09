@@ -606,4 +606,71 @@ public class DataBase {
                 		}
                 }
 
+                /**
+                 * Update a Settings within the Database
+                 * 
+                 * @param Observer
+                 */
+                    public void UpdateSettings(Settings settings) {
+                    	String query1 = "UPDATE settings " +
+                    			"SET iconCircles = '" + settings.getIconCircles().getRGB() + 
+                    			"', icons = '" + settings.getIcons().getRGB() + 
+                    			"', opacityCircles = '" + settings.getOpacityCircles() + 
+                    			"', opacityIcons = '" + settings.getOpacityIcons() + 
+                    			"', isCollapsed = '" + settings.getIsCollapsed() + 
+                    			"', xCoord = '" + settings.getXCoord() + 
+                    			"', yCoord = '" + settings.getYCoord() + 
+                    			"', isVertical = '" + settings.getIsVertical() + 
+                    			"', iconSize = '" + settings.getIconSize() + 
+                    			"', timerIsVisible = '" + settings.getTimerIsVisible() + 
+                    			"', pmIsVisible = '" + settings.getPmIsVisible() + 
+                    			"', ftsIsVisible = '" + settings.getFtsIsVisible() + 
+                    			"', htbIsVisible = '" + settings.getHtbIsVisible() + 
+                    			"', ntbIsVisible = '" + settings.getNtbIsVisible() + 
+                    			"', progReportIsVisible = '" + settings.getProgReportIsVisible() + 
+                    			"', avatarIsActive = '" + settings.getAvatarIsActive() + 
+                    			"', textIsActive = '" + settings.getTextIsActive() + 
+                    			"', audioIsActive = '" + settings.getAudioIsActive() + 
+                    			"', avatarFilePath = '" + settings.getAvatarFilePath() + 
+                    			"', audioFilePath = '" + settings.getAudioFilePath() + 
+                    			"', alwaysOnScreen = '" + settings.getAlwaysOnScreen() + 
+                    			"', avatarSize = '" + settings.getAvatarSize() + 
+                    			"', pomodoroIsActive = '" + settings.getPomodoroIsActive() + 
+                    			"', workPeriod = '" + settings.getWorkPeriod() + 
+                    			"', breakPeriod = '" + settings.getBreakPeriod() + 
+                    			"', timeShowing = '" + settings.getTimeShowing() + 
+                    			"', ftsIsActive = '" + settings.getFtsIsActive() + 
+                    			"', ntbIsActive = '" + settings.getNtbIsActive() + 
+                    			"', isAutoLinked = '" + settings.getIsAutoLinked() + 
+                    			"', htbIsActive = '" + settings.getHtbIsActive() + 
+                    			"' WHERE settingsID = '" + settings.getSettingsID() + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    int rv = stmt.executeUpdate( query1 );
+                    		    System.out.println( "UpdateSettings() returned " + rv );
+                    		} catch ( SQLException e ) {
+                    		    e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	
+                    }
+                
+                
+                
+                /**
+                 * Mainly used for JUNIT testing, deletes the Settings table at the beginning of testing to remove all test data.
+                 */
+                public void DeleteAllSettings(){
+                	String query1 = "DROP TABLE IF EXISTS 'settings'";
+                	try ( Connection conn = this.ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+            		    int rv = stmt.executeUpdate( query1 );
+            		    System.out.println( "DeleteAllSettings() returned " + rv );
+                	} catch ( SQLException e ) {
+            			e.printStackTrace();
+            		    System.exit( 0 );
+                	}
+                	
+                }
+
 }
