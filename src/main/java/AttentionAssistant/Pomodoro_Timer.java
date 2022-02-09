@@ -8,13 +8,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import javax.swing.UIManager.*;
 import javax.swing.border.LineBorder;
+
+
+
 import java.io.File;
 
 
+//pomodoro_timer.refresh
+//TODO loggin system for how much user is using timer ie. get count/get timer
+
+//TODO get status for timer
 
 
 @SuppressWarnings("serial")
@@ -22,13 +31,13 @@ public class Pomodoro_Timer implements ActionListener
 {
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
-	int breakmin =0,min = 0,sec=0 ,ms=0;
-	boolean chk=false;
+	
+	static int initalbreak = 0, initalmin = 0, breakmin =0,min= 0,sec=0 ,ms=0;
+	static boolean MainTimerRunning,BreakTimerRunning;
 	private JButton lastButtonPressed;  
+	//private ArrayList<Task> Task_list = new ArrayList<Task> ();
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 
-	public static int count=0,index=0;
-	//Container container = getContentPane();
 	JLabel time = new JLabel("00m:00s");
 	JButton startbut=new JButton("Start");
 	JButton pausebut=new JButton("Pause");
@@ -41,6 +50,10 @@ public class Pomodoro_Timer implements ActionListener
 	int width = 600;
 
 	Timer t;
+	
+	/**
+	 * main function, creates custom header, creates the jframe and calls the functions to run the timer
+	 */
 	public Pomodoro_Timer() {
 		
  		pt_frame.setUndecorated(true);
@@ -109,15 +122,19 @@ public class Pomodoro_Timer implements ActionListener
 		pt_frame.setResizable(true);
 		pt_frame.setLocationRelativeTo(null);
 	   
-	
+		
 		Initialize();
         addActionEvent();
-    	Maininput();
-		Breakinput();
+    	Maininput(5);
+		Breakinput(5); //TODO these wont be necessary the user will initalize these in the settings
+		
         
 		
 		
 	}
+	/**
+	 * initializes the buttons and adds them to the frame, and initializes the labels that are used depending on what timer is running
+	 */
 	private void Initialize() {
 		
 		time.setBounds(130,80, 300, 300);
@@ -177,28 +194,54 @@ public class Pomodoro_Timer implements ActionListener
 	
 		
 	}
-	
-	public void Maininput() {
-		int mainTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired time in minutes:"));
-		min = mainTimer;
+	/**
+	 * input window that prompts the user to input their desired time for the work period
+	 */
+	public static void Maininput(int maintime) {
 		
-		if(mainTimer == 0) {
-			JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame, "Invalid input. Please try again.");
+		//int mainTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired time in minutes:"));
+		min = maintime;
+		initalmin = min;
+		
+//		if(mainTimer == 0) {
+//			JFrame frame = new JFrame();
+//			JOptionPane.showMessageDialog(frame, "Invalid input. Please try again.");
+//		}
+	}
+	/**
+	 * input window that prompts the user to input their desired time for the break period 
+	 */
+	public static void Breakinput(int breaktime) {
+		//int breakTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired break time in minutes:"));
+		breakmin = breaktime;
+		initalbreak = breakmin;
+		
+//		if(breakTimer == 0) {
+//			JFrame frame = new JFrame();
+//			JOptionPane.showMessageDialog(frame, "Invalid input. Please try again.");
+//		}
+	}
+	public static boolean GetMainTimerStatus() {
+		if(MainTimerRunning == true) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	
+	}
+	public static boolean GetBreakTimerStatus() {
+		if(BreakTimerRunning == true) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
-	public void Breakinput() {
-		int breakTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired break time in minutes:"));
-		breakmin = breakTimer;
-		
-		if(breakTimer == 0) {
-			JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame, "Invalid input. Please try again.");
-		}
-	}
-	
-	
-	
+	/**
+	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
+	 */
 	public void MainTimer() {
 			
 		c.setVisible(true);
@@ -219,7 +262,85 @@ public class Pomodoro_Timer implements ActionListener
 					
 					t.stop();
 					c.setVisible(false);
-					BreakTimer();
+					 Object[] options = {"Yes","No"};
+					 int initaltask = JOptionPane.showOptionDialog(null,
+					             "Have you completed your task?",
+					             "Tasks",
+					             JOptionPane.YES_NO_CANCEL_OPTION,
+					             JOptionPane.DEFAULT_OPTION,
+					             null,
+					             options,
+					             options[1]);  
+
+					 System.out.println(initaltask);  
+
+					
+
+					 if(initaltask==0){  //for yes; the user has finished their initial task and will need to pick/assign a new task, or terminate the timer
+						 Object[] NewTask = {"Yes","No"}; //new option button to ask user if they have any other tasks to work on
+						 int NewTaskInt = JOptionPane.showOptionDialog(null,
+						             "Do you have any other tasks to work on?",
+						             "Other Tasks",
+						             JOptionPane.YES_NO_CANCEL_OPTION,
+						             JOptionPane.DEFAULT_OPTION,
+						             null,
+						             NewTask,
+						             NewTask[1]);  
+
+						 System.out.println(NewTaskInt);  
+						 if(NewTaskInt==0){ //for yes; i.e. user has another tasks to work on
+							  //ask the user to assign what task they are currently working on (pulled from database) 
+							 //TODO add another button where they can select their new task
+							 //prompt the user to input a new break and work timespan allotment
+							    t.stop();
+								sec=min=0;
+								time.setText(String.valueOf("00m:00s"));
+								//Maininput(); //TODO this is going to need to redirect the user back to the setting
+								//Breakinput(); //this prompts the user for new work timespan allotments, will need to occur after new task is assigned
+								c.setVisible(false);
+								b.setVisible(false);
+								MainTimer(); //begin timer with new work/break peroids
+							 
+							 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
+								 //(ask the user to assign a new task via priority manager)
+								 //or terminate the pomodoro timer
+										 Object[] NoNewTask = {"Add New Task","Close Pomodoro Timer"};
+										 int NonewTaskInt = JOptionPane.showOptionDialog(null,
+										             "Tasks",
+										             "Have you completed your task?",
+										             JOptionPane.YES_NO_CANCEL_OPTION,
+										             JOptionPane.DEFAULT_OPTION,
+										             null,
+										             NoNewTask,
+										             NoNewTask[1]);  
+							
+										 System.out.println(initaltask);  
+								
+										
+								
+										 if(NonewTaskInt==0){  //for yes
+											 JFrame frame = new JFrame();
+											JOptionPane.showMessageDialog(frame, "Please create a new task.");
+											//TODO link priority manager so user can add new task
+									      //deploy priority manager to have user assign a new task
+										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
+											 pt_frame.dispose();
+										 }else{ //none selected
+										     System.out.println("no option choosen");
+										 }
+									
+							 }else{ //none selected
+							     System.out.println("no option choosen");
+							 }
+
+					
+					 }else if(initaltask==1){ //for no
+						 //break timer repeats; user has not finished inital task. 
+						BreakTimer();
+					 }else{ //none selected
+					     System.out.println("no option choosen");
+					 }
+					
 				
 				}
 				
@@ -230,7 +351,7 @@ public class Pomodoro_Timer implements ActionListener
 					ddsecond = dformat.format(sec);
 					ddminute = dformat.format(min);
 					time.setText(String.valueOf(ddminute+"m:"+ddsecond+"s"));	
-					chk = false;
+					
 					
 				}
 				
@@ -265,7 +386,8 @@ public class Pomodoro_Timer implements ActionListener
 		
 			}
 			if(e.getSource()==pausebut) {
-				if(min == 0 && sec==0) {
+				if(this.t == null) {
+					//TODO inital timer begin pressing pause gives error beacuse min != 0
 					JFrame frame = new JFrame();
 					JOptionPane.showMessageDialog(frame, "Timer has ended.");
 				}
@@ -276,10 +398,10 @@ public class Pomodoro_Timer implements ActionListener
 			}
 			if(e.getSource()==endbut) {
 				t.stop();
-				sec=min=count=0;
+				sec=min=0;
 				time.setText(String.valueOf("00m:00s"));
-				Maininput();
-				Breakinput();
+//				Maininput();
+//				Breakinput(); //TODO redirect user back to settings to edit the timer input
 				c.setVisible(false);
 				b.setVisible(false);
 				
@@ -288,7 +410,9 @@ public class Pomodoro_Timer implements ActionListener
 		}
 		lastButtonPressed = buttonPressed;
 	}
-		
+	/**
+	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
+	 */
 	public void BreakTimer() {
 		b.setVisible(true);
 		
@@ -306,9 +430,11 @@ public class Pomodoro_Timer implements ActionListener
 				ddminute = dformat.format(breakmin);
 				time.setText(String.valueOf(ddminute+"m:"+ddsecond+"s"));
 				if(breakmin == 0 && sec==0) {
-					
 					t.stop();
-				
+					b.setVisible(false);
+					MainTimer();
+					min = initalmin;
+					
 				
 				}
 				
@@ -319,7 +445,7 @@ public class Pomodoro_Timer implements ActionListener
 					ddsecond = dformat.format(sec);
 					ddminute = dformat.format(breakmin);
 					time.setText(String.valueOf(ddminute+"m:"+ddsecond+"s"));	
-					chk = false;
+					
 					
 				}
 				
@@ -331,6 +457,30 @@ public class Pomodoro_Timer implements ActionListener
 		t.start();
 
 	}
+	
+//	 private void Tasks(){ 
+//		 Object[] options = {"Yes","No"};
+//		 int n = JOptionPane.showOptionDialog(null,
+//		             "Tasks",
+//		             "Have you completed your task?",
+//		             JOptionPane.YES_NO_CANCEL_OPTION,
+//		             JOptionPane.DEFAULT_OPTION,
+//		             null,
+//		             options,
+//		             options[1]);  
+//
+//		 System.out.println(n);  
+//
+//		
+//
+//		 if(n==0){  //for yes
+//		      //
+//		 }else if(n==1){ //for no
+//			 MainTimer();
+//		 }else{ //none selected
+//		     System.out.println("no option choosen");
+//		 }
+//	}
 	public static void run_pomo()
 	{
 	
