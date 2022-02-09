@@ -164,9 +164,9 @@ public class Test_DataBase {
     	Task nonDefaultAddedTask = new Task(nonDefaultTask); 
     	nonDefaultAddedTask.setTaskID(4);
     	
-    	test_task_List.add(UpdatedTask);
     	test_task_List.add(SelectedTask1);
     	test_task_List.add(nonDefaultAddedTask);
+    	test_task_List.add(UpdatedTask);
     	
     	test_database_task_List= db.SelectAllTasks();
     	
