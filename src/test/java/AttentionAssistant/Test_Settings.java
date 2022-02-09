@@ -24,6 +24,7 @@ public class Test_Settings {
 	
 	@BeforeEach
 	void setup() {
+		int testSettingsID = 999;
 		Color testIconCircles = Color.RED; 
 		Color testIcons = Color.YELLOW;
 		int testOpacityCircles = 75; 
@@ -57,7 +58,7 @@ public class Test_Settings {
 		
 		defaultSettings = new Settings();
 		
-		nonDefaultSettings = new Settings(testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+		nonDefaultSettings = new Settings(testSettingsID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
 										  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
 										  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
 										  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
@@ -72,16 +73,22 @@ public class Test_Settings {
 	@DisplayName("<Settings> Default Constructor")
 	void SettingsDefaultConstructor() {
 		/**
+		 * Make sure the Settings settingsID is set to 0 for the default constructor
+		 */
+		assertEquals(0, defaultSettings.getSettingsID(), "Default constructor Settings.settingsID should be 0. Returned: "
+					+ Integer.toString(defaultSettings.getSettingsID())); 
+		
+		/**
 		 * Make sure the Settings iconCircles are set to aa_purple for the default constructor
 		 */
 		assertEquals(aa_purple, defaultSettings.getIconCircles(), "Default constructor Settings.iconCircles should be aa_purple. Returned: " 
-				    + defaultSettings.getIconCircles());
+				    + Integer.toString(defaultSettings.getIconCircles().getRGB()));
 		
 		/**
 		 * Make sure Settings icons are set to Color.white for the default constructor
 		 */
 		assertEquals(Color.white, defaultSettings.getIcons(), "Default constructor Settings.icons should be Color.white. Returned: "
-					+ defaultSettings.getIcons()); 
+					+ Integer.toString(defaultSettings.getIcons().getRGB()));
 		
 		/**
 		 * Make sure Settings OpacityCircles is set to 100 for the default constructor 
@@ -258,16 +265,22 @@ public class Test_Settings {
 	@DisplayName("<Settings> Parameter Constructor")
 	void SettingsParameterConstructor() {
 		/**
+		 * Make sure the Settings settingsID is set to 999 for the nonDefault constructor
+		 */
+		assertEquals(999, nonDefaultSettings.getSettingsID(), "nonDefault constructor Settings.settingsID should be 999. Returned: "
+					+ Integer.toString(nonDefaultSettings.getSettingsID()));
+		
+		/**
 		 * Make sure the Settings iconCircles are set to Color.RED for the nonDefault constructor
 		 */
 		assertEquals(Color.RED, nonDefaultSettings.getIconCircles(), "nonDefault constructor Settings.iconCircles should be Color.Red. Returned: " 
-				    + nonDefaultSettings.getIconCircles());
+				    + Integer.toString(nonDefaultSettings.getIconCircles().getRGB()));
 		
 		/**
 		 * Make sure Settings icons are set to Color.YELLOW for the nonDefault constructor
 		 */
 		assertEquals(Color.YELLOW, nonDefaultSettings.getIcons(), "nonDefault constructor Settings.icons should be Color.YELLOW. Returned: "
-					+ nonDefaultSettings.getIcons()); 
+					+ Integer.toString(nonDefaultSettings.getIcons().getRGB())); 
 		
 		/**
 		 * Make sure Settings OpacityCircles is set to 75 for the nonDefault constructor 
@@ -443,16 +456,22 @@ public class Test_Settings {
 	@DisplayName("<Settings> Copy Constructor")
 	void SettingsCopyConstructor() {
 		/**
+		 * Make sure Settings settingsID is set to 999 for copy constructor
+		 */
+		assertEquals(999, copySettings.getSettingsID(), "Copy constructor Settings.settingsID should be 999. Returned: " 
+					+ Integer.toString(copySettings.getSettingsID()));
+		
+		/**
 		 * Make sure the Settings iconCircles are set to Color.RED for the copy constructor
 		 */
 		assertEquals(Color.RED, copySettings.getIconCircles(), "Copy constructor Settings.iconCircles should be Color.Red. Returned: " 
-				    + copySettings.getIconCircles());
+				    + Integer.toString(copySettings.getIconCircles().getRGB()));
 		
 		/**
 		 * Make sure Settings icons are set to Color.YELLOW for the copy constructor
 		 */
 		assertEquals(Color.YELLOW, copySettings.getIcons(), "Copy constructor Settings.icons should be Color.YELLOW. Returned: "
-					+ copySettings.getIcons()); 
+					+ Integer.toString(copySettings.getIcons().getRGB())); 
 		
 		/**
 		 * Make sure Settings OpacityCircles is set to 75 for the copy constructor 
@@ -625,12 +644,22 @@ public class Test_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	@Test
+	@DisplayName("<Settings> SetSettingsID")
+	void SettingsSetSettingsID() {
+		
+		copySettings.setSettingsID(123);
+		assertEquals(123, copySettings.getSettingsID(), "copySettings.settingsID should be set to 123, but returned: "
+					+ Integer.toString(copySettings.getSettingsID())); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	@Test
 	@DisplayName("<Settings> SetIconCircles")
 	void SettingsSetIconCircles() {
 		
 		copySettings.setIconCircles(Color.BLUE);
 		assertEquals(Color.BLUE, copySettings.getIconCircles(), "copySettings.iconCircles should be set to Color.Blue, but returned: "
-					+ copySettings.getIconCircles()); 
+					+ Integer.toString(copySettings.getIconCircles().getRGB())); 
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -641,7 +670,7 @@ public class Test_Settings {
 		
 		copySettings.setIcons(Color.GREEN);
 		assertEquals(Color.GREEN, copySettings.getIcons(), "copySettings.icons should be set to Color.GREEN, but returned: "
-					+ copySettings.getIcons()); 
+					+ Integer.toString(copySettings.getIcons().getRGB())); 
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

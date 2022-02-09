@@ -327,7 +327,7 @@ public class Nav_Bar{
 	        pomo_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		//Pomodoro_Timer.run_pomo();
+	        		Pomodoro_Timer.run_pomo();
 	        }});
 	        Image pomoi = pomo_icon.getImage();
 	        pomoi = pomoi.getScaledInstance(navbar.getSize(), navbar.getSize(), java.awt.Image.SCALE_SMOOTH);

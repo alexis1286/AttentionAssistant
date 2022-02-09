@@ -1,22 +1,22 @@
 package AttentionAssistant;
 
 import java.awt.*;
-//import java.awt.event.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 /**
  * Class that contains GUI and information whenever Settings 
  * is called.
  * @author krchr
  */
-
 
 public class Settings {
 	
@@ -26,19 +26,19 @@ public class Settings {
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
-	JFrame settings_frame = new JFrame("Attention Assistant Settings");
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	//creates card layout and panel for RHS settings that display with each button option 
-	CardLayout card_layout = new CardLayout();
-	JPanel card_panel = new JPanel();
 	int height = 700; 
 	int width = 550; 
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
+		
+	//variables for the Settings object
 	
-	
-	 //variables for the Settings object
+	/*
+	 * primary key for database
+	 */
+	 int settingsID;
 	
 	/*
 	 * color of the circles below the icons of the navigation bar
@@ -166,6 +166,7 @@ public class Settings {
 	 * Instantiating empty Settings object
 	 */
 	public Settings() {
+		this.settingsID = 0;
 		this.iconCircles = aa_purple; 
 		this.icons = Color.white;
 		this.opacityCircles = 100; 
@@ -211,36 +212,37 @@ public class Settings {
 	 *  database team once the table is set up 
 	 *
 	public Settings(DataBase db) {
-		this.iconCircles = db.SelectUserSettings().get(0); 
-		this.icons = db.SelectUserSettings().get(1);
-		this.opacityCircles = db.SelectUserSettings().get(2); 
-		this.opacityIcons = db.SelectUserSettings().get(3); 
-		this.isCollapsed = db.SelectUserSettings().get(4); 
-		this.xCoord = db.SelectUserSettings().get(5);
-		this.yCoord = db.SelectUserSettings().get(6); 
-		this.isVertical = db.SelectUserSettings().get(7);
-		this.iconSize = db.SelectUserSettings().get(8);
-		this.timerIsVisible = db.SelectUserSettings().get(9); 
-		this.pmIsVisible = db.SelectUserSettings().get(10); 
-		this.ftsIsVisible = db.SelectUserSettings().get(11); 
-		this.htbIsVisible = db.SelectUserSettings().get(12);
-		this.ntbIsVisible = db.SelectUserSettings().get(13); 
-		this.progReportIsVisible = db.SelectUserSettings().get(14); 
-		this.avatarIsActive = db.SelectUserSettings().get(15); 
-		this.textIsActive = db.SelectUserSettings().get(16); 
-		this.audioIsActive = db.SelectUserSettings().get(17);
-		this.avatarFilePath = db.SelectUserSettings().get(18); 
-		this.audioFilePath = db.SelectUserSettings().get(19);
-		this.alwaysOnScreen = db.SelectUserSettings().get(20); 
-		this.avatarSize = db.SelectUserSettings().get(21); 
-		this.pomodoroIsActive = db.SelectUserSettings().get(22); 
-		this.workPeriod = db.SelectUserSettings().get(23); 
-		this.breakPeriod = db.SelectUserSettings().get(24); 
-		this.timeShowing = db.SelectUserSettings().get(25); 
-		this.ftsIsActive = db.SelectUserSettings().get(26); 
-		this.ntbIsActive = db.SelectUserSettings().get(27); 
-		this.isAutoLinked = db.SelectUserSettings().get(28); 
-		this.htbIsActive = db.SelectUserSettings().get(29);
+		this.settingsID = db.SelectUserSettings().get(0);
+		this.iconCircles = db.SelectUserSettings().get(1); 
+		this.icons = db.SelectUserSettings().get(2);
+		this.opacityCircles = db.SelectUserSettings().get(3); 
+		this.opacityIcons = db.SelectUserSettings().get(4); 
+		this.isCollapsed = db.SelectUserSettings().get(5); 
+		this.xCoord = db.SelectUserSettings().get(6);
+		this.yCoord = db.SelectUserSettings().get(7); 
+		this.isVertical = db.SelectUserSettings().get(8);
+		this.iconSize = db.SelectUserSettings().get(9);
+		this.timerIsVisible = db.SelectUserSettings().get(10); 
+		this.pmIsVisible = db.SelectUserSettings().get(11); 
+		this.ftsIsVisible = db.SelectUserSettings().get(12); 
+		this.htbIsVisible = db.SelectUserSettings().get(13);
+		this.ntbIsVisible = db.SelectUserSettings().get(14); 
+		this.progReportIsVisible = db.SelectUserSettings().get(15); 
+		this.avatarIsActive = db.SelectUserSettings().get(16); 
+		this.textIsActive = db.SelectUserSettings().get(17); 
+		this.audioIsActive = db.SelectUserSettings().get(18);
+		this.avatarFilePath = db.SelectUserSettings().get(19); 
+		this.audioFilePath = db.SelectUserSettings().get(20);
+		this.alwaysOnScreen = db.SelectUserSettings().get(21); 
+		this.avatarSize = db.SelectUserSettings().get(22); 
+		this.pomodoroIsActive = db.SelectUserSettings().get(23); 
+		this.workPeriod = db.SelectUserSettings().get(24); 
+		this.breakPeriod = db.SelectUserSettings().get(25); 
+		this.timeShowing = db.SelectUserSettings().get(26); 
+		this.ftsIsActive = db.SelectUserSettings().get(27); 
+		this.ntbIsActive = db.SelectUserSettings().get(28); 
+		this.isAutoLinked = db.SelectUserSettings().get(29); 
+		this.htbIsActive = db.SelectUserSettings().get(30);
 	}
 	*/
 	
@@ -250,17 +252,18 @@ public class Settings {
 	 * Written as a placeholder for testing, once database is set up this
 	 * constructor should be deleted
 	 * 
-	 * @param Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
+	 * @param int, Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
 	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
 	 * 		  boolean, int, boolean, int, int, boolean, boolean, boolean, boolean, boolean
 	 */
-	public Settings(Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
+	public Settings(int settingsID, Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
 					int xCoord, int yCoord, boolean isVertical, int iconSize, boolean timerIsVisible, boolean pmIsVisible, 
 					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, 
 					boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, String avatarFilePath, String audioFilePath, 
 					boolean alwaysOnScreen, int avatarSize, boolean pomodoroIsActive, int workPeriod, int breakPeriod, boolean timeShowing, 
 					boolean ftsIsActive, boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive) {
 		
+		this.settingsID = settingsID;
 		this.iconCircles = iconCircles;
 		this.icons = icons;
 		this.opacityCircles = opacityCircles; 
@@ -298,6 +301,7 @@ public class Settings {
 	 * @param Settings object
 	 */
 	public Settings(Settings stgs) {
+		this.settingsID = stgs.settingsID;
 		this.iconCircles = stgs.iconCircles;
 		this.icons = stgs.icons;
 		this.opacityCircles = stgs.opacityCircles; 
@@ -333,6 +337,23 @@ public class Settings {
 	/**
 	 * Start of Encapsulation
 	 * 
+	 * get settingsID
+	 * @return int
+	 * 
+	 */
+	public int getSettingsID() {
+		return this.settingsID;
+	}
+	
+	/**
+	 * set settingsID
+	 * @param int
+	 */
+	public void setSettingsID(int settingsID) {
+		this.settingsID = settingsID;
+	}
+	
+	 /*
 	 * get iconCircles
 	 * @return Color 
 	 */
@@ -815,10 +836,9 @@ public class Settings {
 	
 	/**
 	 * RHS display for General Settings sub menu
-	 * @param DataBase
-	 * @param BufferedImage
+	 * 
 	 */
-	private void createGeneralPanel(DataBase db, BufferedImage guideIcon) {
+	private void createGeneralPanel(JPanel card_panel) {
 		
 		JPanel general_panel = new JPanel();
 		general_panel.setLayout(new BoxLayout(general_panel, BoxLayout.Y_AXIS));
@@ -827,38 +847,35 @@ public class Settings {
 		JPanel header_panel = new JPanel();
 		header_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		header_panel.setBackground(aa_grey);
-		header_panel.setMaximumSize(new Dimension(400, 25));
 		
-		JLabel overlayOptions = new JLabel("Overlay options:");
+		JLabel overlayOptions = new JLabel("Overlay Options:");
 		overlayOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
 		overlayOptions.setForeground(Color.white);
 		
 		header_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		header_panel.add(overlayOptions);
 		
-		JPanel colorOptions = new JPanel();
-		colorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		colorOptions.setBackground(aa_grey);
-		colorOptions.setMaximumSize(new Dimension(400, 35));
+		JPanel backgroundColorOptions = new JPanel();
+		backgroundColorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		backgroundColorOptions.setBackground(aa_grey);
+
 		
-		JLabel color = new JLabel("Color:");
-		color.setFont(new Font("Serif", Font.BOLD, 16));
-		color.setForeground(Color.white);
+		JLabel backgroundColor = new JLabel(("<html><center>Navigation Bar" + "<br/>Background Color: </center></html>"));
+		backgroundColor.setFont(new Font("Serif", Font.BOLD, 16));
+		backgroundColor.setForeground(Color.white);
 		
-		//can use JColorChooser API to allow color selection to change color of Frame
-		//right now it's a dead button
-		JButton colorChooser = new JButton("choose color");
-		colorChooser.setMaximumSize(new Dimension(108,20));
-		colorChooser.setBackground(Color.GRAY);
-		colorChooser.setForeground(Color.WHITE);
-		colorChooser.addActionListener(new ActionListener() {
+		//JColorChooser API allows color selection to change color of Frame - use to change color of circles and icons of nav_bar
+		JButton backgroundColorChooser = new JButton("select color");
+		backgroundColorChooser.setBackground(Color.GRAY);
+		backgroundColorChooser.setForeground(Color.WHITE);
+		backgroundColorChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open color chooser dialog
 				//needs to be able to change icons on navbar, right? 
 				//temporary setup -- needs modification with a refresh to show color change. and correct buffered image for nav bar instead of guideIcon.
 				//going to pass color instead of ints 
 				Color initialcolor = Color.ORANGE;
-				Color color = JColorChooser.showDialog(null,"Select a color", initialcolor);
+				Color backgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
 				
 				// won't be creating a nav bar object here in the long run, it will be passed in 
 				/*Nav_Bar navBar;
@@ -872,209 +889,261 @@ public class Settings {
 			}
 		});
 		
-		colorOptions.add(Box.createRigidArea(new Dimension(15, 0)));
-		colorOptions.add(color);
-		colorOptions.add(colorChooser);
+		backgroundColorOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		backgroundColorOptions.add(backgroundColor);
+		backgroundColorOptions.add(backgroundColorChooser);
 		
-		JPanel opacityOptions = new JPanel();
-		opacityOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		opacityOptions.setBackground(aa_grey);
-		opacityOptions.setMaximumSize(new Dimension(400, 35));
+		JPanel backgroundOpacityOptions = new JPanel();
+		backgroundOpacityOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		backgroundOpacityOptions.setBackground(aa_grey);
 		
-		/*
-		 * Adjust opacity if we are going to do that for prototype 
-		 * currently just a slider as a placeholder 
-		 * can't get it to the right position in line with the rest
-		 */
-		JLabel opacity = new JLabel("Opacity:");
-		opacity.setFont(new Font("Serif", Font.BOLD, 16));
-		opacity.setForeground(Color.white);
+		JLabel backgroundOpacity = new JLabel("<html><center>Background" + "<br/>Opacity: </center></html>");
+		backgroundOpacity.setFont(new Font("Serif", Font.BOLD, 16));
+		backgroundOpacity.setForeground(Color.white);
 		
-		JSlider opacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
-		opacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
-		opacitySlider.setBackground(Color.black);
-		opacitySlider.setForeground(Color.white);
-		opacitySlider.setMaximumSize(new Dimension(200, 25));
+		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		backgroundOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
+		backgroundOpacitySlider.setBackground(aa_grey);
+		backgroundOpacitySlider.setForeground(Color.white);
+		backgroundOpacitySlider.setMinorTickSpacing(25);
+		backgroundOpacitySlider.setMajorTickSpacing(25);
+		backgroundOpacitySlider.setPaintTicks(true);
+		backgroundOpacitySlider.setPaintLabels(true);
 		
-		opacityOptions.add(Box.createRigidArea(new Dimension(15, 0)));
-		opacityOptions.add(opacity);
-		opacityOptions.add(opacitySlider);
+		backgroundOpacityOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		backgroundOpacityOptions.add(backgroundOpacity);
+		backgroundOpacityOptions.add(backgroundOpacitySlider);
 		
-		JPanel toolbar_panel = new JPanel();
-		toolbar_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		toolbar_panel.setBackground(aa_grey);
-		toolbar_panel.setMaximumSize(new Dimension(400, 25));
+		JPanel iconColorOptions = new JPanel();
+		iconColorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		iconColorOptions.setBackground(aa_grey);
 		
-		JPanel toolbarOptions = new JPanel();
-		toolbarOptions.setBackground(aa_grey);
-		toolbarOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		toolbarOptions.setMaximumSize(new Dimension(400, 25));
+		JLabel iconColor = new JLabel(("<html><center>Navigation Bar" + "<br/>Icon Color: </center></html>"));
+		iconColor.setFont(new Font("Serif", Font.BOLD, 16));
+		iconColor.setForeground(Color.white);
 		
-		/*
-		 * Are we offering collapsed toolbar in the prototype?
-		 * check boxes are placeholders for now
-		 */
-		JLabel toolbarFormat = new JLabel("Toolbar format:");
-		toolbarFormat.setFont(new Font("Serif", Font.BOLD, 16));
-		toolbarFormat.setForeground(Color.white); 
+		//JColorChooser API allows color selection to change color of Frame - use to change color of circles and icons of nav_bar
+		JButton iconColorChooser = new JButton("select color");
+		iconColorChooser.setBackground(Color.GRAY);
+		iconColorChooser.setForeground(Color.WHITE);
+		iconColorChooser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//open color chooser dialog
+				//needs to be able to change icons on navbar, right? 
+				//temporary setup -- needs modification with a refresh to show color change. and correct buffered image for nav bar instead of guideIcon.
+				//going to pass color instead of ints 
+				Color initialcolor = Color.ORANGE;
+				Color backgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
+				
+				// won't be creating a nav bar object here in the long run, it will be passed in 
+				/*Nav_Bar navBar;
+				try {
+					navBar = new Nav_Bar(db);
+					navBar.colorIcon(guideIcon, color.getRed(), color.getBlue(), color.getGreen());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+			}
+		});
 		
-		toolbar_panel.add(Box.createRigidArea(new Dimension(15, 0)));
-		toolbar_panel.add(toolbarFormat);
+		iconColorOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		iconColorOptions.add(iconColor);
+		iconColorOptions.add(iconColorChooser);
+		
+		JPanel iconOpacityOptions = new JPanel();
+		iconOpacityOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		iconOpacityOptions.setBackground(aa_grey);
+		
+		JLabel iconOpacity = new JLabel("<html><center>Icon" + "<br/>Opacity: </center></html>");
+		iconOpacity.setFont(new Font("Serif", Font.BOLD, 16));
+		iconOpacity.setForeground(Color.white);
+		
+		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		iconOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
+		iconOpacitySlider.setBackground(aa_grey);
+		iconOpacitySlider.setForeground(Color.white);
+		iconOpacitySlider.setMinorTickSpacing(25);
+		iconOpacitySlider.setMajorTickSpacing(25);
+		iconOpacitySlider.setPaintTicks(true);
+		iconOpacitySlider.setPaintLabels(true);
+		
+		iconOpacityOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		iconOpacityOptions.add(iconOpacity);
+		iconOpacityOptions.add(iconOpacitySlider);
+		
+		JPanel navbar_panel = new JPanel();
+		navbar_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		navbar_panel.setBackground(aa_grey);
+		
+		JLabel navbarFormat = new JLabel("Navbar Format:");
+		navbarFormat.setFont(new Font("Serif", Font.BOLD, 16));
+		navbarFormat.setForeground(Color.white); 
+		
+		navbar_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		navbar_panel.add(navbarFormat);
 		
 		JCheckBox collapsed = new JCheckBox("Collapsed", false);
-		collapsed.setFont(new Font("Serif", Font.BOLD, 14));
+		collapsed.setFont(new Font("Serif", Font.BOLD, 15));
 		collapsed.setForeground(Color.white);
 		collapsed.setContentAreaFilled(false);
 		collapsed.setFocusPainted(false);
 		
 		JCheckBox expanded = new JCheckBox("Expanded", true);
-		expanded.setFont(new Font("Serif", Font.BOLD, 14));
+		expanded.setFont(new Font("Serif", Font.BOLD, 15));
 		expanded.setForeground(Color.white);
 		expanded.setContentAreaFilled(false);
 		expanded.setFocusPainted(false);
 		
-		JPanel moveAndResizePanel = new JPanel();
-		moveAndResizePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		moveAndResizePanel.setBackground(aa_grey);
-		moveAndResizePanel.setMaximumSize(new Dimension(400, 25));
+		navbar_panel.add(collapsed);
+		navbar_panel.add(expanded);
 		
-		//move and resize toolbar option available for prototype?
-		//right now it's a dead button
-		JButton moveAndResize= new JButton("Move & Resize Toolbar");
-		moveAndResize.setMaximumSize(new Dimension(170,20));
-		moveAndResize.setBackground(Color.GRAY);
-		moveAndResize.setForeground(Color.WHITE);
-		moveAndResize.addActionListener(new ActionListener() {
+		JPanel iconSizeOptions = new JPanel();
+		iconSizeOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		iconSizeOptions.setBackground(aa_grey);
+		
+		JLabel iconSize = new JLabel("<html><center>Icon" + "<br/>Size: </center></html>");
+		iconSize.setFont(new Font("Serif", Font.BOLD, 16));
+		iconSize.setForeground(Color.white);
+		
+		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		iconSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
+		iconSizeSlider.setBackground(aa_grey);
+		iconSizeSlider.setForeground(Color.white);
+		iconSizeSlider.setMinorTickSpacing(25);
+		iconSizeSlider.setMajorTickSpacing(25);
+		iconSizeSlider.setPaintTicks(true);
+		iconSizeSlider.setPaintLabels(true);
+		
+		iconSizeOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		iconSizeOptions.add(iconSize);
+		iconSizeOptions.add(iconSizeSlider);
+		
+		JPanel orientation_panel = new JPanel();
+		orientation_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		orientation_panel.setBackground(aa_grey);
+		
+		JLabel navbarOrientation = new JLabel("Navbar Orientation:");
+		navbarOrientation.setFont(new Font("Serif", Font.BOLD, 16));
+		navbarOrientation.setForeground(Color.white); 
+		
+		orientation_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		orientation_panel.add(navbarOrientation);
+		
+		JPanel orientationBoxes = new JPanel();
+		orientationBoxes.setLayout(new FlowLayout(FlowLayout.LEFT));
+		orientationBoxes.setBackground(aa_grey);
+		
+		JCheckBox vertical = new JCheckBox("Vertical", true);
+		vertical.setFont(new Font("Serif", Font.BOLD, 15));
+		vertical.setForeground(Color.white);
+		vertical.setContentAreaFilled(false);
+		vertical.setFocusPainted(false);
+		vertical.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement move and resize action 
 			}
 		});
 		
-		toolbarOptions.add(Box.createRigidArea(new Dimension(15, 0)));
-		toolbarOptions.add(collapsed);
-		toolbarOptions.add(expanded);
-		moveAndResizePanel.add(Box.createRigidArea(new Dimension(15, 0)));
-		moveAndResizePanel.add(moveAndResize);
+		JCheckBox horizontal = new JCheckBox("Horizontal", false);
+		horizontal.setFont(new Font("Serif", Font.BOLD, 15));
+		horizontal.setForeground(Color.white);
+		horizontal.setContentAreaFilled(false);
+		horizontal.setFocusPainted(false);
+		horizontal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//implement move and resize action 
+			}
+		});
+		
+		orientationBoxes.add(vertical);
+		orientationBoxes.add(horizontal);		
+		orientation_panel.add(orientationBoxes);
 		
 		JPanel featuresHeader = new JPanel();
 		featuresHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
 		featuresHeader.setBackground(aa_grey);
 		featuresHeader.setMaximumSize(new Dimension(400, 25));
 		
-		/*
-		 * active features check boxes -- currently just placeholder check boxes
-		 */
-		JLabel activeFeatures = new JLabel("Active toolbar features:");
+		JLabel activeFeatures = new JLabel("Active Navbar Features:");
 		activeFeatures.setFont(new Font("Serif", Font.BOLD, 16));
 		activeFeatures.setForeground(Color.white); 
 		
 		featuresHeader.add(Box.createRigidArea(new Dimension(15, 0)));
 		featuresHeader.add(activeFeatures);
 		
+		JPanel navBarBoxes = new JPanel();
+		GridLayout grid = new GridLayout(0,2);
+		navBarBoxes.setLayout(grid);
+		navBarBoxes.setBackground(aa_grey);
+		navBarBoxes.setMaximumSize(new Dimension(325, 60));
+		
 		JCheckBox timerBox = new JCheckBox("Timer", true);
-		timerBox.setFont(new Font("Serif", Font.BOLD, 14));
+		timerBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerBox.setForeground(Color.white);
 		timerBox.setContentAreaFilled(false);
 		timerBox.setFocusPainted(false);
 		
 		JCheckBox pmBox = new JCheckBox("Priority Manager", true);
-		pmBox.setFont(new Font("Serif", Font.BOLD, 14));
+		pmBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmBox.setForeground(Color.white);
 		pmBox.setContentAreaFilled(false);
 		pmBox.setFocusPainted(false);
 		
-		JCheckBox ftsBox = new JCheckBox("Free Thought Space", true);
-		ftsBox.setFont(new Font("Serif", Font.BOLD, 14));
+		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", true);
+		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
 		ftsBox.setFocusPainted(false);
 		
-		JCheckBox ntbBox = new JCheckBox("Negative Thought Burner", true);
-		ntbBox.setFont(new Font("Serif", Font.BOLD, 14));
+		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", true);
+		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
 		ntbBox.setFocusPainted(false);
 		
-		JCheckBox htbBox = new JCheckBox("Happy Thought Button", true);
-		htbBox.setFont(new Font("Serif", Font.BOLD, 14));
+		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", true);
+		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
 		htbBox.setFocusPainted(false);
 		
 		JCheckBox prBox = new JCheckBox("Progress Report", true);
-		prBox.setFont(new Font("Serif", Font.BOLD, 14));
+		prBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prBox.setForeground(Color.white);
 		prBox.setContentAreaFilled(false);
 		prBox.setFocusPainted(false);
 		
-		
-		JPanel displayOptionsHeader = new JPanel();
-		displayOptionsHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-		displayOptionsHeader.setBackground(aa_grey);
-		displayOptionsHeader.setMaximumSize(new Dimension(400, 25));
-		/*
-		 * Are we offering light mode/dark mode in the prototype?
-		 * check boxes are placeholders for now
-		 */
-		JLabel settingsOptions = new JLabel("Settings options:");
-		settingsOptions.setFont(new Font("Serif", Font.BOLD, 16));
-		settingsOptions.setForeground(Color.white); 
-		
-		displayOptionsHeader.add(Box.createRigidArea(new Dimension(15, 0)));
-		displayOptionsHeader.add(settingsOptions);
-		
-		JPanel displayBoxes = new JPanel();
-		displayBoxes.setLayout(new FlowLayout(FlowLayout.LEFT));
-		displayBoxes.setBackground(aa_grey);
-		
-		JCheckBox lightMode = new JCheckBox("Light mode", false);
-		lightMode.setFont(new Font("Serif", Font.BOLD, 14));
-		lightMode.setForeground(Color.white);
-		lightMode.setContentAreaFilled(false);
-		lightMode.setFocusPainted(false);
-		
-		JCheckBox darkMode = new JCheckBox("Dark mode", true);
-		darkMode.setFont(new Font("Serif", Font.BOLD, 14));
-		darkMode.setForeground(Color.white);
-		darkMode.setContentAreaFilled(false);
-		darkMode.setFocusPainted(false);
-		
-		displayBoxes.add(Box.createRigidArea(new Dimension(15, 0)));
-		displayBoxes.add(lightMode);
-		displayBoxes.add(Box.createRigidArea(new Dimension(25, 0)));
-		displayBoxes.add(darkMode);
+		navBarBoxes.add(timerBox);
+		navBarBoxes.add(pmBox);
+		navBarBoxes.add(ftsBox);
+		navBarBoxes.add(ntbBox);
+		navBarBoxes.add(htbBox);
+		navBarBoxes.add(prBox);
 		
 		/*
 		 * add everything to general_panel
 		 */
-		general_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		general_panel.add(header_panel);
-		general_panel.add(colorOptions);
-		general_panel.add(opacityOptions);
-		general_panel.add(toolbar_panel);
-		general_panel.add(toolbarOptions);
-		general_panel.add(moveAndResizePanel);
-		//general_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		general_panel.add(backgroundColorOptions);
+		general_panel.add(backgroundOpacityOptions);
+		general_panel.add(iconColorOptions);
+		general_panel.add(iconOpacityOptions);
+		general_panel.add(navbar_panel);
+		general_panel.add(iconSizeOptions);
+		general_panel.add(orientation_panel);
 		general_panel.add(featuresHeader);
-		general_panel.add(timerBox);
-		general_panel.add(pmBox);
-		general_panel.add(ftsBox);
-		general_panel.add(htbBox);
-		general_panel.add(ntbBox);
-		general_panel.add(prBox);
-		//general_panel.add(Box.createRigidArea(new Dimension(0, 10)));
-		general_panel.add(displayOptionsHeader);
-		general_panel.add(displayBoxes);
+		general_panel.add(navBarBoxes);
+		general_panel.add(Box.createRigidArea(new Dimension(0, 100)));
 		
 		//add to general_panel to  card_panel
-		card_panel.add("general", general_panel);
+		card_panel.add("general", general_panel);		
 	}
-	
 	
 	/**
 	 * RHS display for Notifications System
 	 */
-	private void createNotificationsPanel() {
+	private void createNotificationsPanel(JPanel card_panel) {
 		
 		JPanel notifications_panel = new JPanel();
 		notifications_panel.setLayout(new BoxLayout(notifications_panel, BoxLayout.Y_AXIS));
@@ -1092,28 +1161,24 @@ public class Settings {
 		avatarDisplay.setBackground(aa_grey);
 		avatarDisplay.setLayout(new BoxLayout(avatarDisplay, BoxLayout.Y_AXIS));
 		
-		JLabel notificationOptions = new JLabel("Notification options:");
+		JLabel notificationOptions = new JLabel("Notification Options:");
 		notificationOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
 		notificationOptions.setForeground(Color.white);
 		
-		/*
-		 * notifications check boxes -- currently just placeholder check boxes
-		 */
-		
 		JCheckBox avatarBox = new JCheckBox("Avatar", false);
-		avatarBox.setFont(new Font("Serif", Font.BOLD, 14));
+		avatarBox.setFont(new Font("Serif", Font.BOLD, 16));
 		avatarBox.setForeground(Color.white);
 		avatarBox.setContentAreaFilled(false);
 		avatarBox.setFocusPainted(false);
 		
 		JCheckBox textBox = new JCheckBox("Text", true);
-		textBox.setFont(new Font("Serif", Font.BOLD, 14));
+		textBox.setFont(new Font("Serif", Font.BOLD, 16));
 		textBox.setForeground(Color.white);
 		textBox.setContentAreaFilled(false);
 		textBox.setFocusPainted(false);
 		
 		JCheckBox audioBox = new JCheckBox("Audio", false);
-		audioBox.setFont(new Font("Serif", Font.BOLD, 14));
+		audioBox.setFont(new Font("Serif", Font.BOLD, 16));
 		audioBox.setForeground(Color.white);
 		audioBox.setContentAreaFilled(false);
 		audioBox.setFocusPainted(false);
@@ -1124,8 +1189,10 @@ public class Settings {
 		optionsBoxes.add(textBox);
 		optionsBoxes.add(audioBox);
 				
-		// displaying sample avatar selection as a placeholder 
-		// long term this will be linked directly to the choose button ... as the action listener
+		/*
+		 * displaying sample avatar selection as a placeholder 
+		 * will be updated to link directly to the choose button as the action listener
+		 */
 		BufferedImage avatar = null;
 		try {
 			//will pass string for file path 
@@ -1144,48 +1211,34 @@ public class Settings {
 		optionsAndDisplay.add(optionsBoxes);
 		optionsAndDisplay.add(avatarDisplay);
 		
-		JPanel frequency = new JPanel();
-		frequency.setLayout(new FlowLayout(FlowLayout.LEFT));
-		frequency.setBackground(aa_grey);
-		frequency.setMaximumSize(new Dimension(400, 40));
+		JPanel avatarSizeOptions = new JPanel();
+		avatarSizeOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		avatarSizeOptions.setBackground(aa_grey);
+		avatarSizeOptions.setMaximumSize(new Dimension(500, 60));
 		
-		JLabel frequencyLabel = new JLabel("Frequency:");
-		frequencyLabel.setFont(new Font("Serif", Font.BOLD, 16));
-		frequencyLabel.setForeground(Color.white);
+		JLabel avatarSize = new JLabel("Avatar Size: ");
+		avatarSize.setFont(new Font("Serif", Font.BOLD, 16));
+		avatarSize.setForeground(Color.white);
 		
-		JSlider frequenceySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
-		frequenceySlider.setBackground(Color.black);
-		frequenceySlider.setForeground(Color.white);
-		frequenceySlider.setMaximumSize(new Dimension(200, 25));
+		JSlider avatarSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		avatarSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
+		avatarSizeSlider.setBackground(aa_grey);
+		avatarSizeSlider.setForeground(Color.white);
+		avatarSizeSlider.setMinorTickSpacing(25);
+		avatarSizeSlider.setMajorTickSpacing(25);
+		avatarSizeSlider.setPaintTicks(true);
+		avatarSizeSlider.setPaintLabels(true);
 		
-		frequency.add(Box.createRigidArea(new Dimension(15, 0)));
-		frequency.add(frequencyLabel);
-		frequency.add(frequenceySlider);
-		
-		JPanel text = new JPanel();
-		text.setLayout(new FlowLayout(FlowLayout.LEFT));
-		text.setBackground(aa_grey);
-		text.setMaximumSize(new Dimension(400, 40));
-		
-		JLabel textSize = new JLabel("Text size:  ");
-		textSize.setFont(new Font("Serif", Font.BOLD, 16));
-		textSize.setForeground(Color.white);
-		
-		JSlider textSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
-		textSizeSlider.setBackground(Color.black);
-		textSizeSlider.setForeground(Color.white);
-		textSizeSlider.setMaximumSize(new Dimension(200, 25));
-		
-		text.add(Box.createRigidArea(new Dimension(15, 0)));
-		text.add(textSize);
-		text.add(textSizeSlider);
+		avatarSizeOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		avatarSizeOptions.add(avatarSize);
+		avatarSizeOptions.add(avatarSizeSlider);
 		
 		JPanel voice = new JPanel();
 		voice.setLayout(new FlowLayout(FlowLayout.LEFT));
 		voice.setBackground(aa_grey);
-		voice.setMaximumSize(new Dimension(400, 40));
+		voice.setMaximumSize(new Dimension(500, 35));
 		
-		JLabel voiceSelection = new JLabel("Voice selection:");
+		JLabel voiceSelection = new JLabel("Audio Selection:");
 		voiceSelection.setFont(new Font("Serif", Font.BOLD, 16));
 		voiceSelection.setForeground(Color.white);
 		
@@ -1206,14 +1259,14 @@ public class Settings {
 		JPanel avLabelAndBox = new JPanel();
 		avLabelAndBox.setLayout(new FlowLayout(FlowLayout.LEFT));
 		avLabelAndBox.setBackground(aa_grey);
-		avLabelAndBox.setMaximumSize(new Dimension(400, 40));
+		avLabelAndBox.setMaximumSize(new Dimension(500, 35));
 		
 		JLabel avatarLabel = new JLabel("Avatar:");
 		avatarLabel.setFont(new Font("Serif", Font.BOLD, 16));
 		avatarLabel.setForeground(Color.white);
 		
-		JCheckBox onScreenBox = new JCheckBox("Always on screen", false);
-		onScreenBox.setFont(new Font("Serif", Font.BOLD, 14));
+		JCheckBox onScreenBox = new JCheckBox("Always on Screen", false);
+		onScreenBox.setFont(new Font("Serif", Font.BOLD, 16));
 		onScreenBox.setForeground(Color.white);
 		onScreenBox.setContentAreaFilled(false);
 		onScreenBox.setFocusPainted(false);
@@ -1222,9 +1275,14 @@ public class Settings {
 		avLabelAndBox.add(avatarLabel);
 		avLabelAndBox.add(onScreenBox);
 		
-		JPanel avatarSelectionButtons = new JPanel();
-		avatarSelectionButtons.setLayout(new FlowLayout(FlowLayout.LEFT));
-		avatarSelectionButtons.setBackground(aa_grey);
+		JPanel avatarSelectionOptions = new JPanel();
+		avatarSelectionOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+		avatarSelectionOptions.setBackground(aa_grey);
+		avatarSelectionOptions.setMaximumSize(new Dimension(500, 35));
+		
+		JLabel avatarSelection = new JLabel("Select Your Avatar: ");
+		avatarSelection.setFont(new Font("Serif", Font.BOLD, 16));
+		avatarSelection.setForeground(Color.white);
 		
 		JButton chooseAvatar = new JButton("Choose");
 		chooseAvatar.setMaximumSize(new Dimension(70,20));
@@ -1236,32 +1294,20 @@ public class Settings {
 			}
 		});
 		
-		//pretty sure we are not implementing this part
-		JButton uploadAvatar = new JButton("Upload");
-		uploadAvatar.setMaximumSize(new Dimension(70,20));
-		uploadAvatar.setBackground(Color.GRAY);
-		uploadAvatar.setForeground(Color.WHITE);
-		uploadAvatar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//implement chooseVoice 
-			}
-		});
-		
-		avatarSelectionButtons.add(Box.createRigidArea(new Dimension(15, 0)));
-		avatarSelectionButtons.add(chooseAvatar);
-		avatarSelectionButtons.add(Box.createRigidArea(new Dimension(25, 0)));
-		avatarSelectionButtons.add(uploadAvatar);
+		avatarSelectionOptions.add(Box.createRigidArea(new Dimension(15, 0)));
+		avatarSelectionOptions.add(avatarSelection);
+		avatarSelectionOptions.add(chooseAvatar);
 		
 		/*
 		 * add everything to notifications_panel
 		 */
 		notifications_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		notifications_panel.add(optionsAndDisplay);
-		notifications_panel.add(frequency);
-		notifications_panel.add(text);
-		notifications_panel.add(voice);
+		notifications_panel.add(avatarSizeOptions);
+		notifications_panel.add(avatarSelectionOptions);
 		notifications_panel.add(avLabelAndBox);
-		notifications_panel.add(avatarSelectionButtons);
+		notifications_panel.add(voice);
+		notifications_panel.add(Box.createRigidArea(new Dimension(0, 100)));
 		
 		//add notifications panel to card_panel
 		card_panel.add("notifications", notifications_panel);
@@ -1270,7 +1316,7 @@ public class Settings {
 	/**
 	 * RHS display for Priority Manager
 	 */
-	private void createPriorityManagerPanel() {
+	private void createPriorityManagerPanel(JPanel card_panel) {
 		
 		JPanel pm_panel = new JPanel();
 		pm_panel.setLayout(new BoxLayout(pm_panel, BoxLayout.Y_AXIS));
@@ -1315,11 +1361,11 @@ public class Settings {
 		
 		pm_panel.add(Box.createRigidArea(new Dimension(25, 10)));
 		pm_panel.add(managerOptions);
-		pm_panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		pm_panel.add(Box.createRigidArea(new Dimension(0, 25)));
 		pm_panel.add(openPM);
-		pm_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		pm_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		pm_panel.add(calendar);
-		pm_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		pm_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		pm_panel.add(calendarInt);
 	
 		card_panel.add("priority manager", pm_panel);
@@ -1328,7 +1374,7 @@ public class Settings {
 	/**
 	 * RHS display for Pomodoro Timer
 	 */
-	private void createPomodoroTimerPanel() {
+	private void createPomodoroTimerPanel(JPanel card_panel) {
 		
 		JPanel pomodoro_panel = new JPanel();
 		pomodoro_panel.setLayout(new BoxLayout(pomodoro_panel, BoxLayout.Y_AXIS));
@@ -1351,93 +1397,101 @@ public class Settings {
 		pomToggle.setBackground(aa_grey);
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox toggleOn = new JCheckBox("On", true);
-		toggleOn.setFont(new Font("Serif", Font.BOLD, 14));
-		toggleOn.setForeground(Color.white);
-		toggleOn.setContentAreaFilled(false);
-		toggleOn.setFocusPainted(false);
-		
-		JCheckBox toggleOff = new JCheckBox("Off", false);
-		toggleOff.setFont(new Font("Serif", Font.BOLD, 14));
-		toggleOff.setForeground(Color.white);
-		toggleOff.setContentAreaFilled(false);
-		toggleOff.setFocusPainted(false);
+		JCheckBox toggleTimer = new JCheckBox("Timer Active", true);
+		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
+		toggleTimer.setForeground(Color.white);
+		toggleTimer.setContentAreaFilled(false);
+		toggleTimer.setFocusPainted(false);
 		
 		pomToggle.add(Box.createRigidArea(new Dimension(15, 0)));
-		pomToggle.add(toggleOn);
-		pomToggle.add(Box.createRigidArea(new Dimension(25, 0)));
-		pomToggle.add(toggleOff);
+		pomToggle.add(toggleTimer);
 		
 		JPanel intervalSettings = new JPanel();
-		GridLayout grid = new GridLayout(0,2);
+		GridLayout grid = new GridLayout(0,3);
 		intervalSettings.setLayout(grid);
 		intervalSettings.setBackground(aa_grey);
-		intervalSettings.setMaximumSize(new Dimension(325, 60));
+		intervalSettings.setMaximumSize(new Dimension(300, 100));
 		
-		//can't figure out how to make text boxes lest wide wit this layout
-		JTextArea workInterval = new JTextArea();
-		workInterval.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		JLabel workPeriod = new JLabel("<html><center>Enter Work" + "<br/>Period: </center></html>");
+		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
+		workPeriod.setForeground(Color.white);
+		
+		SimpleAttributeSet attribs = new SimpleAttributeSet();
+		attribs.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
+		StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
+		StyleConstants.setFontSize(attribs, 16);
+		
+		JTextPane workInterval = new JTextPane();
+		workInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
 		workInterval.setBorder(new LineBorder(Color.black,5,false));
+		workInterval.setParagraphAttributes(attribs, true);
 		
-		JLabel workMinutes = new JLabel("minute work periods");
-		workMinutes.setFont(new Font("Serif", Font.BOLD, 16));
-		workMinutes.setForeground(Color.white);
+		JLabel minutesWork = new JLabel("minutes");
+		minutesWork.setFont(new Font("Serif", Font.BOLD, 16));
+		minutesWork.setForeground(Color.white);
 		
-		//can't figure out how to make text boxes lest wide wit this layout
-		JTextArea breakInterval = new JTextArea();
-		breakInterval.setFont(new Font("TimesRoman", Font.BOLD, 16));
+		JLabel breakPeriod = new JLabel("<html><center>Enter Break" + "<br/>Period: </center></html>");
+		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
+		breakPeriod.setForeground(Color.white);
+		
+		JTextPane breakInterval = new JTextPane();
+		breakInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
 		breakInterval.setBorder(new LineBorder(Color.black,5,false));
+		breakInterval.setParagraphAttributes(attribs, true);
 		
-		JLabel breakMinutes = new JLabel("minute break periods");
-		breakMinutes.setFont(new Font("Serif", Font.BOLD, 16));
-		breakMinutes.setForeground(Color.white);
+		JLabel minutesBreak = new JLabel("minutes");
+		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
+		minutesBreak.setForeground(Color.white);
 		
+		intervalSettings.add(workPeriod);
 		intervalSettings.add(workInterval);
-		intervalSettings.add(workMinutes);
+		intervalSettings.add(minutesWork);
+		intervalSettings.add(breakPeriod);
 		intervalSettings.add(breakInterval);
-		intervalSettings.add(breakMinutes);
-		
-		// we don't need time remaining display settings anymore, right?
-		JPanel timeRemaining = new JPanel();
-		timeRemaining.setLayout(new FlowLayout(FlowLayout.LEFT));
-		timeRemaining.setBackground(aa_grey);
-		timeRemaining.setMaximumSize(new Dimension(400, 25));
-		
-		JLabel showTime = new JLabel("Show time remaining:");
-		showTime.setFont(new Font("Serif", Font.BOLD, 16));
-		showTime.setForeground(Color.white);
-		
-		timeRemaining.add(Box.createRigidArea(new Dimension(15, 0)));
-		timeRemaining.add(showTime);
+		intervalSettings.add(minutesBreak);
 		
 		JPanel countdownToggle = new JPanel();
 		countdownToggle.setLayout(new FlowLayout(FlowLayout.LEFT));
 		countdownToggle.setBackground(aa_grey);
 		countdownToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox toggleTimerOn = new JCheckBox("On", true);
-		toggleTimerOn.setFont(new Font("Serif", Font.BOLD, 14));
-		toggleTimerOn.setForeground(Color.white);
-		toggleTimerOn.setContentAreaFilled(false);
-		toggleTimerOn.setFocusPainted(false);
-		
-		JCheckBox toggleTimerOff = new JCheckBox("Off", false);
-		toggleTimerOff.setFont(new Font("Serif", Font.BOLD, 14));
-		toggleTimerOff.setForeground(Color.white);
-		toggleTimerOff.setContentAreaFilled(false);
-		toggleTimerOff.setFocusPainted(false);
+		JCheckBox countDown = new JCheckBox("Show Time Remaining", true);
+		countDown.setFont(new Font("Serif", Font.BOLD, 16));
+		countDown.setForeground(Color.white);
+		countDown.setContentAreaFilled(false);
+		countDown.setFocusPainted(false);
 		
 		countdownToggle.add(Box.createRigidArea(new Dimension(15, 0)));
-		countdownToggle.add(toggleTimerOn);
-		countdownToggle.add(Box.createRigidArea(new Dimension(25, 0)));
-		countdownToggle.add(toggleTimerOff);		
+		countdownToggle.add(countDown);		
+		
+		JPanel openPomPanel = new JPanel();
+		openPomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		openPomPanel.setBackground(aa_grey);
+		openPomPanel.setMaximumSize(new Dimension(500, 35));
+		
+		JButton openPM = new JButton("Open Pomodoro Timer");
+		openPM.setMaximumSize(new Dimension(200, 30));
+		openPM.setBackground(Color.GRAY);
+		openPM.setForeground(Color.WHITE);
+		openPM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//implement chooseAvatar 
+			}
+		});
+		
+		openPomPanel.add(Box.createRigidArea(new Dimension(15, 0)));
+		openPomPanel.add(openPM);
 		
 		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		pomodoro_panel.add(pomodoro_header);
+		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		pomodoro_panel.add(pomToggle);
+		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		pomodoro_panel.add(intervalSettings);
-		pomodoro_panel.add(timeRemaining);
+		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		pomodoro_panel.add(countdownToggle);
+		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		pomodoro_panel.add(openPomPanel);
 	
 		card_panel.add("pomodoro timer", pomodoro_panel);
 	}
@@ -1445,51 +1499,142 @@ public class Settings {
 	/**
 	 * RHS display for Thought Management
 	 */
-	private void createThoughtPanel() {
+	private void createThoughtPanel(JPanel card_panel) {
 		
 		JPanel thought_panel = new JPanel();
 		thought_panel.setLayout(new BoxLayout(thought_panel, BoxLayout.Y_AXIS));
 		thought_panel.setBackground(aa_grey);
 		
+		JPanel ftsHeader = new JPanel();
+		ftsHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		ftsHeader.setBackground(aa_grey);
+		ftsHeader.setMaximumSize(new Dimension(400, 35));
+		
 		JLabel activeHeader = new JLabel("Active:"); 
 		activeHeader.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
 		activeHeader.setForeground(Color.white);
 		
+		ftsHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		ftsHeader.add(activeHeader);
+		
+		JPanel checkBoxes = new JPanel();
+		GridLayout grid = new GridLayout(0,1);
+		checkBoxes.setLayout(grid);
+		checkBoxes.setBackground(aa_grey);
+		checkBoxes.setMaximumSize(new Dimension(350, 150));
+		
 		JCheckBox ftsBox = new JCheckBox("Free Thought Space", true);
-		ftsBox.setFont(new Font("Serif", Font.BOLD, 14));
+		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
 		ftsBox.setFocusPainted(false);
 		
 		JCheckBox ntbBox = new JCheckBox("Negative Thought Burner", true);
-		ntbBox.setFont(new Font("Serif", Font.BOLD, 14));
+		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
 		ntbBox.setFocusPainted(false);
 		
-		
-		JCheckBox autoLinkBox = new JCheckBox("Auto-link NTB to Happy Thought Button", true);
-		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 14));
+		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", true);
+		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 16));
 		autoLinkBox.setForeground(Color.white);
 		autoLinkBox.setContentAreaFilled(false);
 		autoLinkBox.setFocusPainted(false);
 		
 		JCheckBox htbBox = new JCheckBox("Happy Thought Button", true);
-		htbBox.setFont(new Font("Serif", Font.BOLD, 14));
+		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
 		htbBox.setFocusPainted(false);
 		
+		checkBoxes.add(ftsBox);
+		checkBoxes.add(ntbBox);
+		checkBoxes.add(autoLinkBox);
+		checkBoxes.add(htbBox);
+		
+		JPanel htbUploadPanel = new JPanel();
+		htbUploadPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		htbUploadPanel.setBackground(aa_grey);
+		htbUploadPanel.setMaximumSize(new Dimension(500, 35));
+		
+		JLabel htbUpload = new JLabel("Upload Happy Thoughts: ");
+		htbUpload.setFont(new Font("Serif", Font.BOLD, 16));
+		htbUpload.setForeground(Color.white);
+		
+		JButton upload = new JButton("Upload");
+		upload.setMaximumSize(new Dimension(70,20));
+		upload.setBackground(Color.GRAY);
+		upload.setForeground(Color.WHITE);
+		upload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//implement chooseAvatar 
+			}
+		});
+		
+		htbUploadPanel.add(Box.createRigidArea(new Dimension(15, 0)));
+		htbUploadPanel.add(htbUpload);
+		htbUploadPanel.add(upload);
+		
+		JPanel ftsButtonPanel = new JPanel();
+		ftsButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		ftsButtonPanel.setBackground(aa_grey);
+		ftsButtonPanel.setMaximumSize(new Dimension(350, 35));
+		
+		JButton openFTS = new JButton("     Open Free Thought Space     ");
+		openFTS.setBackground(Color.GRAY);
+		openFTS.setForeground(Color.WHITE);
+		openFTS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to open Free Thought Space
+			}
+		});
+		
+		ftsButtonPanel.add(openFTS);
+		
+		JPanel htbButtonPanel = new JPanel();
+		htbButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		htbButtonPanel.setBackground(aa_grey);
+		htbButtonPanel.setMaximumSize(new Dimension(350, 35));
+		
+		JButton openHTB = new JButton("   Open Happy Thought Button   ");
+		openHTB.setBackground(Color.GRAY);
+		openHTB.setForeground(Color.WHITE);
+		openHTB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to open Happy Thought Button
+			}
+		});
+		
+		htbButtonPanel.add(openHTB);
+		
+		JPanel ntbButtonPanel = new JPanel();
+		ntbButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		ntbButtonPanel.setBackground(aa_grey);
+		ntbButtonPanel.setMaximumSize(new Dimension(350, 35));
+		
+		JButton openNTB = new JButton("Open Negative Thought Burner");
+		openNTB.setBackground(Color.GRAY);
+		openNTB.setForeground(Color.WHITE);
+		openNTB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to open Negative Thought Burner
+			}
+		});
+		
+		ntbButtonPanel.add(openNTB);
+
 		thought_panel.add(Box.createRigidArea(new Dimension(25, 10)));
-		thought_panel.add(activeHeader);
+		thought_panel.add(ftsHeader);
+		thought_panel.add(checkBoxes);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
-		thought_panel.add(ftsBox);
-		thought_panel.add(Box.createRigidArea(new Dimension(0, 5)));
-		thought_panel.add(ntbBox);
-		thought_panel.add(Box.createRigidArea(new Dimension(50, 5)));
-		thought_panel.add(autoLinkBox);
-		thought_panel.add(Box.createRigidArea(new Dimension(0, 5)));
-		thought_panel.add(htbBox);
+		thought_panel.add(htbUploadPanel);
+		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		thought_panel.add(ftsButtonPanel);
+		thought_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		thought_panel.add(htbButtonPanel);
+		thought_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		thought_panel.add(ntbButtonPanel);
+		
 	
 		card_panel.add("thought management", thought_panel);
 	}
@@ -1502,30 +1647,28 @@ public class Settings {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
-				//gets rid of normal title bar
+						
+				JFrame settings_frame = new JFrame("Attention Assistant Settings");
+				
 				settings_frame.setUndecorated(true);
-				//sets window width and height
 				settings_frame.setPreferredSize(new Dimension(width, height)); 
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
 				
-				//creates panel for custom title bar
 				JMenuBar title_panel = new JMenuBar();
 				title_panel.setBorder(line);
-				//aligns buttons in title panel from right -> left
 				title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
-				//makes title panel background grey
 				title_panel.setBackground(aa_grey);
-				//creates border and sets to purple
 				title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-				//creates label
+
 				JLabel title = new JLabel("Settings");
-				//makes font color white
 				title.setForeground(Color.white);
-				//sets font, size, and bold
 				title.setFont(new Font("Serif", Font.BOLD, 20));
 				
+				/*
+				 * create icons to use as buttons for title bar
+				 */
 				BufferedImage ci = null;
 				BufferedImage gi = null;
 				try {
@@ -1538,18 +1681,21 @@ public class Settings {
 				
 				Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 				Icon close = new ImageIcon(c_img);
+				
 				JButton close_window = new JButton(close);
 				close_window.setBorderPainted(false);
 				close_window.setContentAreaFilled(false);
 				close_window.setFocusPainted(false);
 				close_window.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		//close window without saving info
+		        		//close window without saving 
 		        		settings_frame.dispose();
+		        	
 		        }});
 				
 				Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 				Icon guideIcon = new ImageIcon(g_img);
+				
 				JButton guide = new JButton(guideIcon);
 				guide.setBorderPainted(false);
 				guide.setContentAreaFilled(false);
@@ -1560,153 +1706,199 @@ public class Settings {
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
-				/*
-				 * creates layout for sub-menus and panels for each sub-menu
-				 */
+				//ccard layout and panel for RHS of settings that displays sub-menu with each button option 
+				JPanel card_panel = new JPanel();
+				//creates layout for sub-menus and panels for each sub-menu
+				CardLayout card_layout = new CardLayout();
 				card_panel.setLayout(card_layout);
-				//move these calls to their respective action listeners 
-				createGeneralPanel(db, gi); 
-				createNotificationsPanel();
-				createPriorityManagerPanel();
-				createPomodoroTimerPanel();
-				createThoughtPanel();								
+	
+				createGeneralPanel(card_panel);
+				createNotificationsPanel(card_panel);
+				createPriorityManagerPanel(card_panel);
+				createPomodoroTimerPanel(card_panel);
+				createThoughtPanel(card_panel);								
 				
-				
-		
 				/*
-				 * create buttons for sideMenu
+				 * buttons for bottom border
 				 */
-				JButton general = new JButton("General");
-				//makes font color white
+				JButton general = new JButton("<html><center>General" + "<br/>Settings</center></html>");
+				JButton notifications = new JButton("<html><center>Notification" + "<br/>System</center></html>");
+				JButton pm = new JButton("<html><center>Priority" + "<br/>Manager</center></html>");
+				JButton pomTimer = new JButton("<html><center>Pomodoro" + "<br/>Timer</center></html>");
+				JButton thoughts = new JButton("<html><center>Thought" + "<br/>Management</center></html>");
+				
+				/*
+				 * specifications for general button
+				 */
 				general.setForeground(Color.white);
-				//sets font, size, and bold
-				general.setFont(new Font("Serif", Font.BOLD, 12));
+				general.setFont(new Font("Serif", Font.BOLD, 16));
 				general.setContentAreaFilled(true);
-				general.setBorderPainted(false);
+				general.setBorderPainted(true);
+				general.setBorder(new LineBorder(aa_purple));
 				general.setFocusPainted(false);
 				general.setBackground(aa_grey);
-				general.setMaximumSize(new Dimension(180,20));
+				general.setMaximumSize(new Dimension(175, 47));
 				general.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//open general sub-menu
+						/*
+						 * open general sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						notifications.setBorderPainted(false);
+						pm.setBorderPainted(false);
+						pomTimer.setBorderPainted(false);
+						thoughts.setBorderPainted(false);
+						general.setBorderPainted(true);
+						general.setBorder(new LineBorder(aa_purple));
 						card_layout.show(card_panel, "general");						
 					}
 				});
 				
-				JButton notifications = new JButton("Notification System");
-				//makes font color white
+				/*
+				 * specifications for notifications button
+				 */
 				notifications.setForeground(Color.white);
-				//sets font, size, and bold
-				notifications.setFont(new Font("Serif", Font.BOLD, 12));
+				notifications.setFont(new Font("Serif", Font.BOLD, 16));
 				notifications.setContentAreaFilled(true);
 				notifications.setBorderPainted(false);
 				notifications.setFocusPainted(false);
 				notifications.setBackground(aa_grey);
-				notifications.setMaximumSize(new Dimension(180,20));
+				notifications.setMaximumSize(new Dimension(175, 47));
 				notifications.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//open notification systems sub-menu
+						/*
+						 * open notification systems sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						general.setBorderPainted(false);
+						pm.setBorderPainted(false);
+						pomTimer.setBorderPainted(false);
+						thoughts.setBorderPainted(false);
+						notifications.setBorderPainted(true);
+						notifications.setBorder(new LineBorder(aa_purple));
 						card_layout.show(card_panel, "notifications");
 					}
 				});
 				
-				JButton pm = new JButton("Priority Manager");
-				//makes font color white
+				/*
+				 * specifications for priority manager button 
+				 */
 				pm.setForeground(Color.white);
-				//sets font, size, and bold
-				pm.setFont(new Font("Serif", Font.BOLD, 12));
+				pm.setFont(new Font("Serif", Font.BOLD, 16));
 				pm.setContentAreaFilled(true);
 				pm.setBorderPainted(false);
 				pm.setFocusPainted(false);
 				pm.setBackground(aa_grey);
-				pm.setMaximumSize(new Dimension(180,20));
+				pm.setMaximumSize(new Dimension(170, 47));
 				pm.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//open priority manager sub-menu
+						/*
+						 * open priority manager sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						general.setBorderPainted(false);
+						notifications.setBorderPainted(false);
+						pomTimer.setBorderPainted(false);
+						thoughts.setBorderPainted(false);
+						pm.setBorderPainted(true);
+						pm.setBorder(new LineBorder(aa_purple));
 						card_layout.show(card_panel, "priority manager");
 					}
 				});
 				
-				JButton pomTimer = new JButton("Pomodoro Timer");
-				//makes font color white
+				/*
+				 * specifications for pomodoro timer button
+				 */
 				pomTimer.setForeground(Color.white);
-				//sets font, size, and bold
-				pomTimer.setFont(new Font("Serif", Font.BOLD, 12));
+				pomTimer.setFont(new Font("Serif", Font.BOLD, 16));
 				pomTimer.setContentAreaFilled(true);
 				pomTimer.setBorderPainted(false);
 				pomTimer.setFocusPainted(false);
 				pomTimer.setBackground(aa_grey);
-				pomTimer.setMaximumSize(new Dimension(180,20));
+				pomTimer.setMaximumSize(new Dimension(170, 47));
 				pomTimer.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//open pomodoro timer sub-menu
+						/*
+						 * open pomodoro timer sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						general.setBorderPainted(false);
+						notifications.setBorderPainted(false);
+						pm.setBorderPainted(false);
+						thoughts.setBorderPainted(false);
+						pomTimer.setBorderPainted(true);
+						pomTimer.setBorder(new LineBorder(aa_purple));
 						card_layout.show(card_panel, "pomodoro timer");
 					}
 				});
 				
-				JButton thoughts = new JButton("Thought Management");
-				//makes font color white
+				/*
+				 * specifications for thought management button 
+				 */
 				thoughts.setForeground(Color.white);
-				//sets font, size, and bold
-				thoughts.setFont(new Font("Serif", Font.BOLD, 12));
+				thoughts.setFont(new Font("Serif", Font.BOLD, 16));
 				thoughts.setContentAreaFilled(true);
 				thoughts.setBorderPainted(false);
 				thoughts.setFocusPainted(false);
 				thoughts.setBackground(aa_grey);
-				thoughts.setMaximumSize(new Dimension(180,20));
+				thoughts.setMaximumSize(new Dimension(170, 47));
 				thoughts.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//open free through space sub-menu
+						/*
+						 * open free through space sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						general.setBorderPainted(false);
+						notifications.setBorderPainted(false);
+						pm.setBorderPainted(false);
+						pomTimer.setBorderPainted(false);
+						thoughts.setBorderPainted(true);
+						thoughts.setBorder(new LineBorder(aa_purple));
+						
 						card_layout.show(card_panel, "thought management");
 					}
 				});
 				
-				
-				/*
-				 * create buttons for bottom border
-				 */
-				JButton progressReport = new JButton("Download Progress Report");
-				//makes font color white
+				JButton progressReport = new JButton("<html><center>Download" + "<br/>Progress Report</center></html>");
 				progressReport.setForeground(Color.white);
-				//sets font, size, and bold
-				progressReport.setFont(new Font("Serif", Font.BOLD, 12));
+				progressReport.setFont(new Font("Serif", Font.BOLD, 16));
 				progressReport.setContentAreaFilled(true);
 				progressReport.setBorderPainted(false);
 				progressReport.setFocusPainted(false);
 				progressReport.setBackground(aa_purple);
-				progressReport.setMaximumSize(new Dimension(180,20));
+				progressReport.setMaximumSize(new Dimension(170, 47));
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
 					}
 				});
 				
-				JButton guideButton = new JButton("Guide");
-				//makes font color white
+				JButton guideButton = new JButton(guideIcon);
+				guideButton.setText("<html><center>Guide" + "<br/>       </center></html>");
 				guideButton.setForeground(Color.white);
-				//sets font, size, and bold
-				guideButton.setFont(new Font("Serif", Font.BOLD, 12));
+				guideButton.setFont(new Font("Serif", Font.BOLD, 16));
 				guideButton.setContentAreaFilled(true);
 				guideButton.setBorderPainted(false);
 				guideButton.setFocusPainted(false);
 				guideButton.setBackground(aa_purple);
-				guideButton.setMaximumSize(new Dimension(175,20));
+				guideButton.setMaximumSize(new Dimension(170, 30));
 				guideButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//open guide
 					}
 				});
 				
+				/*
+				 * buttons for bottom border
+				 */
 				JButton apply = new JButton("apply");
-				//makes font color white
 				apply.setForeground(Color.white);
-				//sets font, size, and bold
-				apply.setFont(new Font("Serif", Font.BOLD, 12));
+				apply.setFont(new Font("Serif", Font.BOLD, 16));
 				apply.setContentAreaFilled(true);
 				apply.setBorderPainted(false);
 				apply.setFocusPainted(false);
 				apply.setBackground(aa_grey);
-				apply.setMaximumSize(new Dimension(70,20));
+				apply.setMaximumSize(new Dimension(70,25));
 				apply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//call to apply changes 
@@ -1714,15 +1906,13 @@ public class Settings {
 				});
 				
 				JButton cancel = new JButton("cancel");
-				//makes font color white
 				cancel.setForeground(Color.white);
-				//sets font, size, and bold
-				cancel.setFont(new Font("Serif", Font.BOLD, 12));
+				cancel.setFont(new Font("Serif", Font.BOLD, 16));
 				cancel.setContentAreaFilled(true);
 				cancel.setBorderPainted(false);
 				cancel.setFocusPainted(false);
 				cancel.setBackground(aa_grey);
-				cancel.setMaximumSize(new Dimension(70,20));
+				cancel.setMaximumSize(new Dimension(80,25));
 				cancel.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//close window without saving info
@@ -1733,9 +1923,10 @@ public class Settings {
 				
 				/*
 				 * creates layout for left side panel and buttons for side-bar sub-menus 
-				 */
+				 */ 
 				JPanel sideMenu = new JPanel();
 				sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
+				sideMenu.setPreferredSize(new Dimension(160, 675));
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(general);
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
@@ -1746,8 +1937,10 @@ public class Settings {
 				sideMenu.add(pomTimer);
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(thoughts);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,390)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,177)));
 				sideMenu.add(progressReport);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,25)));
+				sideMenu.add(guideButton);
 				sideMenu.setBackground(Color.black);
 				
 				/*
@@ -1763,8 +1956,7 @@ public class Settings {
 				 */
 				JPanel bottomButtons = new JPanel();
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
-				bottomButtons.add(guideButton);
-				bottomButtons.add(Box.createRigidArea(new Dimension(175, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(345, 0)));
 				bottomButtons.add(apply);
 				bottomButtons.add(Box.createRigidArea(new Dimension(30, 0)));
 				bottomButtons.add(cancel);
@@ -1778,7 +1970,7 @@ public class Settings {
 				masterPanel.add(bottomButtons, BorderLayout.PAGE_END);
 			
 				/*
-				 * add master panel to frame
+				 * adds master panel to frame
 				 */
 				settings_frame.getContentPane().add(masterPanel); 
 				settings_frame.getContentPane().setBackground(Color.black);
@@ -1786,9 +1978,8 @@ public class Settings {
 				settings_frame.setAlwaysOnTop(true);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
-				//settings_frame.setLocationRelativeTo(null);
-				//changed to this to move on my screen
-				settings_frame.setLocation(75, 100);
+				settings_frame.setLocationRelativeTo(null);
+				
 			}
 		});
 	}
