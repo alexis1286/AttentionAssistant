@@ -37,7 +37,6 @@ public class Nav_Bar{
 	private boolean ntb_active;
 	private boolean htb_active;
 	private boolean fts_active;
-	private boolean progress_active;
 	
 	static JFrame frame = new JFrame();
 	
@@ -64,34 +63,32 @@ public class Nav_Bar{
 		this.ntb_active = false;
 		this.htb_active = false;
 		this.fts_active = false;
-		this.progress_active = false;
 	}
 
 	/*
 	 * create Nav_Bar with variables set by settings
 	 */
 	public Nav_Bar(Settings set) {
-		this.x_coord = 0;//set.getXCoord();
-		this.y_coord = 0;//set.getYCoord();
-		this.size = 50;//set.getIconSize();
-		this.iconColor = Color.white;//set.getIconColor();
-		this.iconOpacity = 100;//set.getIconOpacity();
-		this.circleColor = aa_grey;//set.getCircleColor();
-		this.circleOpacity = 100;//set.getCircleOpacity();
-		this.isVert = true;//set.getIsVert();
-		this.isCollapsed = false;//set.getIsCollapsed();
+		this.x_coord = set.getXCoord();
+		this.y_coord = set.getYCoord();
+		this.size = set.getIconSize();
+		this.iconColor = set.getIcons();
+		this.iconOpacity = set.getOpacityIcons();
+		this.circleColor = set.getIconCircles();
+		this.circleOpacity =set.getOpacityCircles();
+		this.isVert = set.getIsVertical();
+		this.isCollapsed = set.getIsCollapsed();
 		
-		this.pomo_visible = true;//set.getTimerIsVisible();
-		this.ntb_visible = true;//set.getNtbIsVisible();
-		this.htb_visible = true;//set.getHtbIsVisible();
-		this.fts_visible = true;//set.getFtsIsVisible();
-		this.progress_visible = true;//set.getProgressIsVisible();
+		this.pomo_visible = set.getTimerIsVisible();
+		this.ntb_visible = set.getNtbIsVisible();
+		this.htb_visible = set.getHtbIsVisible();
+		this.fts_visible = set.getFtsIsVisible();
+		this.progress_visible = set.getProgReportIsVisible();
 		
-		this.pomodoro_active = true;//set.getTimerIsActive();
-		this.ntb_active = true;//set.getNtbIsActive();
-		this.htb_active = true;//set.getHtbIsActive();
-		this.fts_active = true;//set.getFtsIsActive();
-		this.progress_active = true;//set.getProgressIsActive();
+		this.pomodoro_active = set.getPomodoroIsActive();
+		this.ntb_active = set.getNtbIsActive();
+		this.htb_active = set.getHtbIsActive();
+		this.fts_active = set.getFtsIsActive();
 	}
 	
 	/*
@@ -294,7 +291,7 @@ public class Nav_Bar{
 	        settings_button.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(db);
+	        		settings.open_settings(db, navbar, settings, pm, pomo, ntb, htb, fts);
 	        }});
 	        //scale and assign icon to button
 	        Image si = settings_icon.getImage();
@@ -544,8 +541,5 @@ public class Nav_Bar{
 	}
 	public void setFts_active(boolean active) {
 		fts_active = active;
-	}
-	private boolean getProgress_active() {
-		return progress_active;
 	}
 }

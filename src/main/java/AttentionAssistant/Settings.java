@@ -9,6 +9,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -27,8 +29,10 @@ public class Settings {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	int height = 700; 
-	int width = 550; 
+	private int height = 700; 
+	private int width = 550; 
+	private int mouseX;
+	private int mouseY;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
@@ -167,7 +171,7 @@ public class Settings {
 	 */
 	public Settings() {
 		this.settingsID = 0;
-		this.iconCircles = aa_purple; 
+		this.iconCircles = aa_grey; 
 		this.icons = Color.white;
 		this.opacityCircles = 100; 
 		this.opacityIcons = 100; 
@@ -838,7 +842,7 @@ public class Settings {
 	 * RHS display for General Settings sub menu
 	 * 
 	 */
-	private void createGeneralPanel(JPanel card_panel) {
+	private void createGeneralPanel(JPanel card_panel, Settings settingsChanges) {
 		
 		JPanel general_panel = new JPanel();
 		general_panel.setLayout(new BoxLayout(general_panel, BoxLayout.Y_AXIS));
@@ -871,21 +875,11 @@ public class Settings {
 		backgroundColorChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open color chooser dialog
-				//needs to be able to change icons on navbar, right? 
-				//temporary setup -- needs modification with a refresh to show color change. and correct buffered image for nav bar instead of guideIcon.
-				//going to pass color instead of ints 
-				Color initialcolor = Color.ORANGE;
-				Color backgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
 				
-				// won't be creating a nav bar object here in the long run, it will be passed in 
-				/*Nav_Bar navBar;
-				try {
-					navBar = new Nav_Bar(db);
-					navBar.colorIcon(guideIcon, color.getRed(), color.getBlue(), color.getGreen());
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
+				Color initialcolor = settingsChanges.iconCircles;
+				Color newBackgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
+				
+				settingsChanges.iconCircles = newBackgroundColor; 
 			}
 		});
 		
@@ -908,7 +902,12 @@ public class Settings {
 		backgroundOpacitySlider.setMinorTickSpacing(25);
 		backgroundOpacitySlider.setMajorTickSpacing(25);
 		backgroundOpacitySlider.setPaintTicks(true);
-		backgroundOpacitySlider.setPaintLabels(true);
+		backgroundOpacitySlider.setPaintLabels(true);		
+		backgroundOpacitySlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				settingsChanges.opacityCircles = backgroundOpacitySlider.getValue();
+			}
+		});
 		
 		backgroundOpacityOptions.add(Box.createRigidArea(new Dimension(15, 0)));
 		backgroundOpacityOptions.add(backgroundOpacity);
@@ -929,21 +928,11 @@ public class Settings {
 		iconColorChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open color chooser dialog
-				//needs to be able to change icons on navbar, right? 
-				//temporary setup -- needs modification with a refresh to show color change. and correct buffered image for nav bar instead of guideIcon.
-				//going to pass color instead of ints 
-				Color initialcolor = Color.ORANGE;
-				Color backgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
 				
-				// won't be creating a nav bar object here in the long run, it will be passed in 
-				/*Nav_Bar navBar;
-				try {
-					navBar = new Nav_Bar(db);
-					navBar.colorIcon(guideIcon, color.getRed(), color.getBlue(), color.getGreen());
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
+				Color initialcolor = settingsChanges.icons;
+				Color newIconColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
+				
+				settingsChanges.icons = newIconColor; 
 			}
 		});
 		
@@ -967,6 +956,11 @@ public class Settings {
 		iconOpacitySlider.setMajorTickSpacing(25);
 		iconOpacitySlider.setPaintTicks(true);
 		iconOpacitySlider.setPaintLabels(true);
+		iconOpacitySlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				settingsChanges.opacityIcons = iconOpacitySlider.getValue();
+			}
+		});
 		
 		iconOpacityOptions.add(Box.createRigidArea(new Dimension(15, 0)));
 		iconOpacityOptions.add(iconOpacity);
@@ -987,16 +981,14 @@ public class Settings {
 		collapsed.setFont(new Font("Serif", Font.BOLD, 15));
 		collapsed.setForeground(Color.white);
 		collapsed.setContentAreaFilled(false);
-		collapsed.setFocusPainted(false);
-		
-		JCheckBox expanded = new JCheckBox("Expanded", true);
-		expanded.setFont(new Font("Serif", Font.BOLD, 15));
-		expanded.setForeground(Color.white);
-		expanded.setContentAreaFilled(false);
-		expanded.setFocusPainted(false);
+		collapsed.setFocusPainted(false);	
+		collapsed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.isCollapsed = collapsed.isSelected(); 
+			}
+		});
 		
 		navbar_panel.add(collapsed);
-		navbar_panel.add(expanded);
 		
 		JPanel iconSizeOptions = new JPanel();
 		iconSizeOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -1014,6 +1006,11 @@ public class Settings {
 		iconSizeSlider.setMajorTickSpacing(25);
 		iconSizeSlider.setPaintTicks(true);
 		iconSizeSlider.setPaintLabels(true);
+		iconSizeSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				settingsChanges.iconSize = iconSizeSlider.getValue();
+			}
+		});
 		
 		iconSizeOptions.add(Box.createRigidArea(new Dimension(15, 0)));
 		iconSizeOptions.add(iconSize);
@@ -1041,23 +1038,11 @@ public class Settings {
 		vertical.setFocusPainted(false);
 		vertical.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//implement move and resize action 
+				settingsChanges.isVertical = vertical.isSelected(); 
 			}
 		});
 		
-		JCheckBox horizontal = new JCheckBox("Horizontal", false);
-		horizontal.setFont(new Font("Serif", Font.BOLD, 15));
-		horizontal.setForeground(Color.white);
-		horizontal.setContentAreaFilled(false);
-		horizontal.setFocusPainted(false);
-		horizontal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//implement move and resize action 
-			}
-		});
-		
-		orientationBoxes.add(vertical);
-		orientationBoxes.add(horizontal);		
+		orientationBoxes.add(vertical);		
 		orientation_panel.add(orientationBoxes);
 		
 		JPanel featuresHeader = new JPanel();
@@ -1065,7 +1050,7 @@ public class Settings {
 		featuresHeader.setBackground(aa_grey);
 		featuresHeader.setMaximumSize(new Dimension(400, 25));
 		
-		JLabel activeFeatures = new JLabel("Active Navbar Features:");
+		JLabel activeFeatures = new JLabel("Features Displayed in NavBar:");
 		activeFeatures.setFont(new Font("Serif", Font.BOLD, 16));
 		activeFeatures.setForeground(Color.white); 
 		
@@ -1083,36 +1068,66 @@ public class Settings {
 		timerBox.setForeground(Color.white);
 		timerBox.setContentAreaFilled(false);
 		timerBox.setFocusPainted(false);
+		timerBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.timerIsVisible = timerBox.isSelected(); 
+			}
+		});
 		
 		JCheckBox pmBox = new JCheckBox("Priority Manager", true);
 		pmBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmBox.setForeground(Color.white);
 		pmBox.setContentAreaFilled(false);
 		pmBox.setFocusPainted(false);
+		pmBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.pmIsVisible = pmBox.isSelected(); 
+			}
+		});
 		
 		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", true);
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
 		ftsBox.setFocusPainted(false);
+		ftsBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.ftsIsVisible = ftsBox.isSelected(); 
+			}
+		});
 		
 		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", true);
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
 		ntbBox.setFocusPainted(false);
+		ntbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.ntbIsVisible = ntbBox.isSelected(); 
+			}
+		});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", true);
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
 		htbBox.setFocusPainted(false);
+		htbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.htbIsVisible = htbBox.isSelected(); 
+			}
+		});
 		
 		JCheckBox prBox = new JCheckBox("Progress Report", true);
 		prBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prBox.setForeground(Color.white);
 		prBox.setContentAreaFilled(false);
 		prBox.setFocusPainted(false);
+		prBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.progReportIsVisible = prBox.isSelected(); 
+			}
+		});
 		
 		navBarBoxes.add(timerBox);
 		navBarBoxes.add(pmBox);
@@ -1639,15 +1654,21 @@ public class Settings {
 		card_panel.add("thought management", thought_panel);
 	}
 	
-		/**
+	/**
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(DataBase db) {
+	public void open_settings(DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
-						
+				
+				/*
+				 * instantiate a new settings object using the copy constructor so that it is a copy of
+				 * the passed settings object. 
+				 */
+				Settings settingsChanges = new Settings(settings); 
+				
 				JFrame settings_frame = new JFrame("Attention Assistant Settings");
 				
 				settings_frame.setUndecorated(true);
@@ -1656,11 +1677,30 @@ public class Settings {
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
 				
+				
 				JMenuBar title_panel = new JMenuBar();
 				title_panel.setBorder(line);
 				title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
 				title_panel.setBackground(aa_grey);
 				title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+				
+				/*
+				 * allows drag and drop of frame
+				 */
+				title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+					@Override
+					public void mouseDragged(MouseEvent e) {
+						settings_frame.setLocation(settings_frame.getX() + e.getX() - mouseX, settings_frame.getY() + e.getY() - mouseY);
+					}
+				});
+				
+				title_panel.addMouseListener(new MouseAdapter(){
+					@Override 
+					public void mousePressed(MouseEvent e) {
+						mouseX = e.getX();
+						mouseY = e.getY();
+					}
+				});
 
 				JLabel title = new JLabel("Settings");
 				title.setForeground(Color.white);
@@ -1712,7 +1752,10 @@ public class Settings {
 				CardLayout card_layout = new CardLayout();
 				card_panel.setLayout(card_layout);
 	
-				createGeneralPanel(card_panel);
+				/*
+				 * pass the new settingsChanges object to be modified by all action listeners
+				 */
+				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel);
 				createPriorityManagerPanel(card_panel);
 				createPomodoroTimerPanel(card_panel);
@@ -1899,9 +1942,44 @@ public class Settings {
 				apply.setFocusPainted(false);
 				apply.setBackground(aa_grey);
 				apply.setMaximumSize(new Dimension(70,25));
+				/*
+				 * When apply is selected all changes made to settingsChanges are applied to settings
+				 */
 				apply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//call to apply changes 
+						settings.settingsID = settingsChanges.settingsID;
+						settings.iconCircles = settingsChanges.iconCircles;
+						settings.icons = settingsChanges.icons;
+						settings.opacityCircles = settingsChanges.opacityCircles; 
+						settings.opacityIcons = settingsChanges.opacityIcons; 
+						settings.isCollapsed = settingsChanges.isCollapsed; 
+						settings.xCoord = settingsChanges.xCoord;
+						settings.yCoord = settingsChanges.yCoord; 
+						settings.isVertical = settingsChanges.isVertical;
+						settings.iconSize = settingsChanges.iconSize;
+						settings.timerIsVisible = settingsChanges.timerIsVisible; 
+						settings.pmIsVisible = settingsChanges.pmIsVisible; 
+						settings.ftsIsVisible = settingsChanges.ftsIsVisible; 
+						settings.htbIsVisible = settingsChanges.htbIsVisible;
+						settings.ntbIsVisible = settingsChanges.ntbIsVisible; 
+						settings.progReportIsVisible = settingsChanges.progReportIsVisible; 
+						settings.avatarIsActive = settingsChanges.avatarIsActive; 
+						settings.textIsActive = settingsChanges.textIsActive; 
+						settings.audioIsActive = settingsChanges.audioIsActive;
+						settings.avatarFilePath = settingsChanges.avatarFilePath; 
+						settings.audioFilePath = settingsChanges.audioFilePath;
+						settings.alwaysOnScreen = settingsChanges.alwaysOnScreen; 
+						settings.avatarSize = settingsChanges.avatarSize; 
+						settings.pomodoroIsActive = settingsChanges.pomodoroIsActive; 
+						settings.workPeriod = settingsChanges.workPeriod; 
+						settings.breakPeriod = settingsChanges.breakPeriod; 
+						settings.timeShowing = settingsChanges.timeShowing; 
+						settings.ftsIsActive = settingsChanges.ftsIsActive; 
+						settings.ntbIsActive = settingsChanges.ntbIsActive; 
+						settings.isAutoLinked = settingsChanges.isAutoLinked; 
+						settings.htbIsActive = settingsChanges.htbIsActive;
+						
+						navbar.refresh(); 
 					}
 				});
 				
@@ -1975,7 +2053,7 @@ public class Settings {
 				settings_frame.getContentPane().add(masterPanel); 
 				settings_frame.getContentPane().setBackground(Color.black);
 				settings_frame.pack();
-				settings_frame.setAlwaysOnTop(true);
+				settings_frame.setAlwaysOnTop(false);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
 				settings_frame.setLocationRelativeTo(null);
