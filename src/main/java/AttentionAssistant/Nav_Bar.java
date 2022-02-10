@@ -112,12 +112,6 @@ public class Nav_Bar{
 		        
 		        //panel for buttons
 		        JPanel iconPanel = iconPanel(db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
-		       /* refresh(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame).addActionListener(new ActionListener() {
-		        	public void actionPerformed(ActionEvent e) {
-		        		frame.revalidate();
-		        		frame.repaint();
-		        	}
-		        });*/
 		        
 		        frame.getContentPane().add(iconPanel);
 				frame.pack();
