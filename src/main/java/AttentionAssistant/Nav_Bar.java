@@ -157,7 +157,7 @@ public class Nav_Bar{
         	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(db, navbar, settings, pm, pomo, ntb, htb, fts);
+	        		settings.open_settings(db, navbar, settings, observer, pm, pomo, ntb, htb, fts);
 	        }});
         	panel.add(settingsButton);
         	
@@ -176,7 +176,7 @@ public class Nav_Bar{
         		pomoButton.addActionListener(new ActionListener() {
     	        	public void actionPerformed(ActionEvent e) {
     	        		//open pomo
-    	        		//Pomodoro_Timer.run_pomo();
+    	        		pomo.run_pomo(settings);
     	        }});
         		panel.add(pomoButton);
         	
