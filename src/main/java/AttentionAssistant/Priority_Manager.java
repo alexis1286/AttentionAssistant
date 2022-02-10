@@ -257,7 +257,7 @@ public class Priority_Manager {
 		calendar_button.setFocusPainted(false);
 		calendar_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		editTask(db,model,table);
+        		//open calendar view of tasks
         }});
 		
 		
