@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -42,135 +43,135 @@ public class Settings {
 	/*
 	 * primary key for database
 	 */
-	 int settingsID;
+	private int settingsID;
 	
 	/*
 	 * color of the circles below the icons of the navigation bar
 	 */
-	Color iconCircles;
+	private Color iconCircles;
 	
 	/*
 	 * color of the icons of the navigation bar
 	 */
-	Color icons;
+	private Color icons;
 	
 	/*
 	 * opacity of the circles in the navigation bar
 	 */
-	int opacityCircles; 
+	private int opacityCircles; 
 	
 	/*
 	 * opacity of the icons in the navigation bar
 	 */
-	int opacityIcons; 
+	private int opacityIcons; 
 	
 	/*
 	 * determines if the nav bar is collapsed or expanded 
 	 */
-	boolean isCollapsed; 
+	private boolean isCollapsed; 
 	
 	/*
 	 * x coordinate for location of navigation bar
 	 */
-	int xCoord;
+	private int xCoord;
 	
 	/*
 	 * y coordinate for location of navigation bar 
 	 */
-	int yCoord; 
+	private int yCoord; 
 	
 	/*
 	 * sets nav bar to vertical instead of horizontal 
 	 */
-	boolean isVertical; 
+	private boolean isVertical; 
 	
 	/*
 	 * size option for icon sizes in navigation bar 
 	 */
-	int iconSize; 
+	private int iconSize; 
 	
 	/*
 	 * sets features visible in the navigation bar 
 	 */
-	boolean timerIsVisible; 
-	boolean pmIsVisible; 
-	boolean ftsIsVisible; 
-	boolean htbIsVisible; 
-	boolean ntbIsVisible; 
-	boolean progReportIsVisible; 
+	private boolean timerIsVisible; 
+	private boolean pmIsVisible; 
+	private boolean ftsIsVisible; 
+	private boolean htbIsVisible; 
+	private boolean ntbIsVisible; 
+	private boolean progReportIsVisible; 
 	
 	/*
 	 * determines if avatar is used for notifications
 	 */
-	boolean avatarIsActive; 
+	private boolean avatarIsActive; 
 	
 	/*
 	 * determines if text is used for notifications
 	 */
-	boolean textIsActive; 
+	private boolean textIsActive; 
 	
 	/*
 	 * determines if audio is used for notifications
 	 */
-	boolean audioIsActive;
+	private boolean audioIsActive;
 	
 	/*
 	 * file path for selected avatar 
 	 */
-	String avatarFilePath; 
+	private String avatarFilePath; 
 	
 	/*
 	 * file path for audio file
 	 */
-	String audioFilePath;
+	private String audioFilePath;
 	
 	/*
 	 * determines if avatar is always on screen
 	 */
-	boolean alwaysOnScreen; 
+	private boolean alwaysOnScreen; 
 	
 	/*
 	 * size option of avatar 
 	 */
-	int avatarSize; 
+	private int avatarSize; 
 	
 	/*
 	 * determines if pomodoro timer is active
 	 */
-	boolean pomodoroIsActive; 
+	private boolean pomodoroIsActive; 
 	
 	/*
 	 * work period for pomodoro timer
 	 */
-	int workPeriod; 
+	private int workPeriod; 
 	
 	/*
 	 * break period for the Pomodoro Timer
 	 */
-	int breakPeriod; 
+	private int breakPeriod; 
 	
 	/*
 	 * determines if times remaining on timer shows
 	 */
-	boolean timeShowing; 
+	private boolean timeShowing; 
 	
 	/*
 	 * determines if thought management features are active 
 	 */
-	boolean ftsIsActive; 
-	boolean ntbIsActive; 
-	boolean htbIsActive; 
+	private boolean ftsIsActive; 
+	private boolean ntbIsActive; 
+	private boolean htbIsActive; 
 	
 	/*
 	 * determines if HTB is linked to NTB
 	 */
-	boolean isAutoLinked; 
+	private boolean isAutoLinked; 
 	
 	/**
 	 * Instantiating empty Settings object
 	 */
 	public Settings() {
-		this.settingsID = 0;
+		this.settingsID = 1;
 		this.iconCircles = aa_grey; 
 		this.icons = Color.white;
 		this.opacityCircles = 100; 
@@ -877,7 +878,7 @@ public class Settings {
 				//open color chooser dialog
 				
 				Color initialcolor = settingsChanges.iconCircles;
-				Color newBackgroundColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
+				Color newBackgroundColor = JColorChooser.showDialog(null,"Select a Background Color", initialcolor);
 				
 				settingsChanges.iconCircles = newBackgroundColor; 
 			}
@@ -895,7 +896,7 @@ public class Settings {
 		backgroundOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		backgroundOpacity.setForeground(Color.white);
 		
-		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityCircles);
 		backgroundOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		backgroundOpacitySlider.setBackground(aa_grey);
 		backgroundOpacitySlider.setForeground(Color.white);
@@ -930,7 +931,7 @@ public class Settings {
 				//open color chooser dialog
 				
 				Color initialcolor = settingsChanges.icons;
-				Color newIconColor = JColorChooser.showDialog(null,"Select a Color", initialcolor);
+				Color newIconColor = JColorChooser.showDialog(null,"Select an Icon Color", initialcolor);
 				
 				settingsChanges.icons = newIconColor; 
 			}
@@ -948,7 +949,7 @@ public class Settings {
 		iconOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		iconOpacity.setForeground(Color.white);
 		
-		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityIcons);
 		iconOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconOpacitySlider.setBackground(aa_grey);
 		iconOpacitySlider.setForeground(Color.white);
@@ -977,7 +978,7 @@ public class Settings {
 		navbar_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		navbar_panel.add(navbarFormat);
 		
-		JCheckBox collapsed = new JCheckBox("Collapsed", false);
+		JCheckBox collapsed = new JCheckBox("Collapsed", settingsChanges.isCollapsed);
 		collapsed.setFont(new Font("Serif", Font.BOLD, 15));
 		collapsed.setForeground(Color.white);
 		collapsed.setContentAreaFilled(false);
@@ -998,7 +999,7 @@ public class Settings {
 		iconSize.setFont(new Font("Serif", Font.BOLD, 16));
 		iconSize.setForeground(Color.white);
 		
-		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.iconSize);
 		iconSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconSizeSlider.setBackground(aa_grey);
 		iconSizeSlider.setForeground(Color.white);
@@ -1031,7 +1032,7 @@ public class Settings {
 		orientationBoxes.setLayout(new FlowLayout(FlowLayout.LEFT));
 		orientationBoxes.setBackground(aa_grey);
 		
-		JCheckBox vertical = new JCheckBox("Vertical", true);
+		JCheckBox vertical = new JCheckBox("Vertical", settingsChanges.isVertical);
 		vertical.setFont(new Font("Serif", Font.BOLD, 15));
 		vertical.setForeground(Color.white);
 		vertical.setContentAreaFilled(false);
@@ -1063,7 +1064,7 @@ public class Settings {
 		navBarBoxes.setBackground(aa_grey);
 		navBarBoxes.setMaximumSize(new Dimension(325, 60));
 		
-		JCheckBox timerBox = new JCheckBox("Timer", true);
+		JCheckBox timerBox = new JCheckBox("Pomodoro Timer", settingsChanges.timerIsVisible);
 		timerBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerBox.setForeground(Color.white);
 		timerBox.setContentAreaFilled(false);
@@ -1074,7 +1075,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox pmBox = new JCheckBox("Priority Manager", true);
+		JCheckBox pmBox = new JCheckBox("Priority Manager", settingsChanges.pmIsVisible);
 		pmBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmBox.setForeground(Color.white);
 		pmBox.setContentAreaFilled(false);
@@ -1085,7 +1086,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", true);
+		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", settingsChanges.ftsIsVisible);
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
@@ -1096,7 +1097,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", true);
+		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.ntbIsVisible);
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
@@ -1107,7 +1108,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", true);
+		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.htbIsVisible);
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
@@ -1118,7 +1119,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox prBox = new JCheckBox("Progress Report", true);
+		JCheckBox prBox = new JCheckBox("Progress Report", settingsChanges.progReportIsVisible);
 		prBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prBox.setForeground(Color.white);
 		prBox.setContentAreaFilled(false);
@@ -1158,7 +1159,7 @@ public class Settings {
 	/**
 	 * RHS display for Notifications System
 	 */
-	private void createNotificationsPanel(JPanel card_panel) {
+	private void createNotificationsPanel(JPanel card_panel, Settings settingsChanges) {
 		
 		JPanel notifications_panel = new JPanel();
 		notifications_panel.setLayout(new BoxLayout(notifications_panel, BoxLayout.Y_AXIS));
@@ -1169,9 +1170,9 @@ public class Settings {
 		optionsAndDisplay.setBackground(aa_grey);
 		optionsAndDisplay.setMaximumSize(new Dimension(400, 130));
 		
-		JPanel optionsBoxes = new JPanel();
-		optionsBoxes.setLayout(new BoxLayout(optionsBoxes, BoxLayout.Y_AXIS));
-		optionsBoxes.setBackground(aa_grey);
+		JPanel optionsRadioButtons = new JPanel();
+		optionsRadioButtons.setLayout(new BoxLayout(optionsRadioButtons, BoxLayout.Y_AXIS));
+		optionsRadioButtons.setBackground(aa_grey);
 		JPanel avatarDisplay = new JPanel();
 		avatarDisplay.setBackground(aa_grey);
 		avatarDisplay.setLayout(new BoxLayout(avatarDisplay, BoxLayout.Y_AXIS));
@@ -1180,29 +1181,74 @@ public class Settings {
 		notificationOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
 		notificationOptions.setForeground(Color.white);
 		
-		JCheckBox avatarBox = new JCheckBox("Avatar", false);
-		avatarBox.setFont(new Font("Serif", Font.BOLD, 16));
-		avatarBox.setForeground(Color.white);
-		avatarBox.setContentAreaFilled(false);
-		avatarBox.setFocusPainted(false);
+		JRadioButton avatarRB = new JRadioButton("Avatar", settingsChanges.avatarIsActive);
+		JRadioButton textRB = new JRadioButton("Text", settingsChanges.textIsActive);
+		JRadioButton audioRB = new JRadioButton("Audio", settingsChanges.audioIsActive);
 		
-		JCheckBox textBox = new JCheckBox("Text", true);
-		textBox.setFont(new Font("Serif", Font.BOLD, 16));
-		textBox.setForeground(Color.white);
-		textBox.setContentAreaFilled(false);
-		textBox.setFocusPainted(false);
+		ButtonGroup notificationsOptions = new ButtonGroup();
+		notificationsOptions.add(avatarRB);
+		notificationsOptions.add(textRB);
+		notificationsOptions.add(audioRB);
 		
-		JCheckBox audioBox = new JCheckBox("Audio", false);
-		audioBox.setFont(new Font("Serif", Font.BOLD, 16));
-		audioBox.setForeground(Color.white);
-		audioBox.setContentAreaFilled(false);
-		audioBox.setFocusPainted(false);
+		/*
+		 * avatar Selection details
+		 */
+		avatarRB.setFont(new Font("Serif", Font.BOLD, 16));
+		avatarRB.setForeground(Color.white);
+		avatarRB.setContentAreaFilled(false);
+		avatarRB.setFocusPainted(false);
+		avatarRB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.avatarIsActive = avatarRB.isSelected(); 
+				
+				if(settingsChanges.avatarIsActive == true) {
+					settingsChanges.textIsActive = false;
+					settingsChanges.audioIsActive = false;
+				} 
+			}
+		});
 		
-		optionsBoxes.add(Box.createRigidArea(new Dimension(35, 0)));
-		optionsBoxes.add(notificationOptions);
-		optionsBoxes.add(avatarBox);
-		optionsBoxes.add(textBox);
-		optionsBoxes.add(audioBox);
+		/*
+		 * text selection details
+		 */
+		textRB.setFont(new Font("Serif", Font.BOLD, 16));
+		textRB.setForeground(Color.white);
+		textRB.setContentAreaFilled(false);
+		textRB.setFocusPainted(false);
+		textRB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.textIsActive = textRB.isSelected(); 
+				
+				if(settingsChanges.textIsActive == true) {
+					settingsChanges.avatarIsActive = false;
+					settingsChanges.audioIsActive = false;
+				}
+			}
+		});
+		
+		/*
+		 * audio selection details
+		 */
+		audioRB.setFont(new Font("Serif", Font.BOLD, 16));
+		audioRB.setForeground(Color.white);
+		audioRB.setContentAreaFilled(false);
+		audioRB.setFocusPainted(false);
+		audioRB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.audioIsActive = audioRB.isSelected(); 
+				
+				if(settingsChanges.audioIsActive == true) {
+					settingsChanges.avatarIsActive = false;
+					settingsChanges.textIsActive = false;
+				}
+			}
+		});
+		
+		optionsRadioButtons.add(Box.createRigidArea(new Dimension(35, 0)));
+		optionsRadioButtons.add(notificationOptions);
+		optionsRadioButtons.add(avatarRB);
+		optionsRadioButtons.add(textRB);
+		optionsRadioButtons.add(audioRB);
 				
 		/*
 		 * displaying sample avatar selection as a placeholder 
@@ -1211,19 +1257,19 @@ public class Settings {
 		BufferedImage avatar = null;
 		try {
 			//will pass string for file path 
-			avatar = ImageIO.read(new File("images/avatar_dino.png"));
+			avatar = ImageIO.read(new File(settingsChanges.avatarFilePath));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
 		Image av_img = avatar.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
-		Icon avatarSample = new ImageIcon(av_img);
-		JLabel displayAvatar = new JLabel(avatarSample);
+		Icon defaultAvatar = new ImageIcon(av_img);
+		JLabel displayAvatar = new JLabel(defaultAvatar);
 		
 		avatarDisplay.add(Box.createRigidArea(new Dimension(50, 0)));
 		avatarDisplay.add(displayAvatar);
-		optionsAndDisplay.add(optionsBoxes);
+		optionsAndDisplay.add(optionsRadioButtons);
 		optionsAndDisplay.add(avatarDisplay);
 		
 		JPanel avatarSizeOptions = new JPanel();
@@ -1235,7 +1281,7 @@ public class Settings {
 		avatarSize.setFont(new Font("Serif", Font.BOLD, 16));
 		avatarSize.setForeground(Color.white);
 		
-		JSlider avatarSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		JSlider avatarSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.avatarSize);
 		avatarSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		avatarSizeSlider.setBackground(aa_grey);
 		avatarSizeSlider.setForeground(Color.white);
@@ -1243,6 +1289,11 @@ public class Settings {
 		avatarSizeSlider.setMajorTickSpacing(25);
 		avatarSizeSlider.setPaintTicks(true);
 		avatarSizeSlider.setPaintLabels(true);
+		avatarSizeSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				settingsChanges.avatarSize = avatarSizeSlider.getValue();
+			}
+		});
 		
 		avatarSizeOptions.add(Box.createRigidArea(new Dimension(15, 0)));
 		avatarSizeOptions.add(avatarSize);
@@ -1263,7 +1314,22 @@ public class Settings {
 		chooseVoice.setForeground(Color.WHITE);
 		chooseVoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//implement chooseVoice 
+				/*
+				 * needs to point to dedicated pre-loaded file where audio selections will be
+				 * leave commented out until if/when audio is an option
+				 * 
+				 *  JFileChooser audioDirectory = new JFileChooser(settingsChanges.audioFilePath);
+					audioDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("MP3 AUDIO", "mp3");
+					audioDirectory.setFileFilter(fileFilter);
+					int returnVal = audioDirectory.showDialog(null, "Select audio file");
+					
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						File audioFile = audioDirectory.getSelectedFile();
+						settingsChanges.audioFilePath = audioFile.getAbsolutePath();
+					}
+				 */
+				
 			}
 		});
 		
@@ -1280,11 +1346,16 @@ public class Settings {
 		avatarLabel.setFont(new Font("Serif", Font.BOLD, 16));
 		avatarLabel.setForeground(Color.white);
 		
-		JCheckBox onScreenBox = new JCheckBox("Always on Screen", false);
+		JCheckBox onScreenBox = new JCheckBox("Always on Screen", settingsChanges.alwaysOnScreen);
 		onScreenBox.setFont(new Font("Serif", Font.BOLD, 16));
 		onScreenBox.setForeground(Color.white);
 		onScreenBox.setContentAreaFilled(false);
 		onScreenBox.setFocusPainted(false);
+		onScreenBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.alwaysOnScreen = onScreenBox.isSelected(); 
+			}
+		});
 		
 		avLabelAndBox.add(Box.createRigidArea(new Dimension(15, 0)));
 		avLabelAndBox.add(avatarLabel);
@@ -1305,7 +1376,26 @@ public class Settings {
 		chooseAvatar.setForeground(Color.WHITE);
 		chooseAvatar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//implement chooseAvatar 
+				/*
+				 *  right now this just opens to where we have all the images stored for the project
+				 *  will need to update to the pre-loaded avatar directory we give users
+				 */
+				JFileChooser avatarDirectory = new JFileChooser(settingsChanges.avatarFilePath);
+				avatarDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Only PNG Images", "png");
+				avatarDirectory.setFileFilter(fileFilter);
+				int returnVal = avatarDirectory.showDialog(null, "Select Your New Avatar");
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					File avatarFile = avatarDirectory.getSelectedFile();
+					settingsChanges.avatarFilePath = avatarFile.getAbsolutePath();
+					
+					/*
+					 * need to refresh the image on the panel to their new avatar selection. 
+					 * the below calls are not working. 
+					 */
+					//notifications_panel.revalidate();
+					//notifications_panel.repaint();
+				}
 			}
 		});
 		
@@ -1331,7 +1421,7 @@ public class Settings {
 	/**
 	 * RHS display for Priority Manager
 	 */
-	private void createPriorityManagerPanel(JPanel card_panel) {
+	private void createPriorityManagerPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager priority_manager, DataBase db, Observer observer) {
 		
 		JPanel pm_panel = new JPanel();
 		pm_panel.setLayout(new BoxLayout(pm_panel, BoxLayout.Y_AXIS));
@@ -1347,10 +1437,7 @@ public class Settings {
 		openPM.setForeground(Color.WHITE);
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//call to open PM 
-				//needs to be passed through nav_bar with database when open settings is called from nav bar   
-				//Priority_Manager pm = new Priority_Manager();
-        		//pm.open_pm();
+				priority_manager.open_pm(db,observer);
 			}
 		});
 		
@@ -1361,6 +1448,7 @@ public class Settings {
 		calendar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open calendar
+				priority_manager.userCalendar();
 			}
 		});
 		
@@ -1371,6 +1459,7 @@ public class Settings {
 		calendarInt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to integrate calendar
+				priority_manager.importCalendar();
 			}
 		});
 		
@@ -1389,7 +1478,7 @@ public class Settings {
 	/**
 	 * RHS display for Pomodoro Timer
 	 */
-	private void createPomodoroTimerPanel(JPanel card_panel) {
+	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer) {
 		
 		JPanel pomodoro_panel = new JPanel();
 		pomodoro_panel.setLayout(new BoxLayout(pomodoro_panel, BoxLayout.Y_AXIS));
@@ -1407,16 +1496,36 @@ public class Settings {
 		pomodoro_header.add(Box.createRigidArea(new Dimension(15, 0)));
 		pomodoro_header.add(pomHeader);
 		
+		JButton openPom = new JButton("Open Pomodoro Timer");
+		openPom.setMaximumSize(new Dimension(200, 30));
+		openPom.setBackground(Color.GRAY);
+		openPom.setForeground(Color.WHITE);
+		openPom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//implement chooseAvatar 
+				pomodoro_timer.run_pomo(settingsChanges);
+			}
+		});
+		
 		JPanel pomToggle = new JPanel();
 		pomToggle.setLayout(new FlowLayout(FlowLayout.LEFT));
 		pomToggle.setBackground(aa_grey);
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox toggleTimer = new JCheckBox("Timer Active", true);
+		JCheckBox toggleTimer = new JCheckBox("Timer Active", settingsChanges.pomodoroIsActive);
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
 		toggleTimer.setForeground(Color.white);
 		toggleTimer.setContentAreaFilled(false);
 		toggleTimer.setFocusPainted(false);
+		toggleTimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.pomodoroIsActive = toggleTimer.isSelected(); 
+				
+				if(settingsChanges.pomodoroIsActive == false) {
+					settingsChanges.timerIsVisible = false; 
+				}
+			}
+		});
 		
 		pomToggle.add(Box.createRigidArea(new Dimension(15, 0)));
 		pomToggle.add(toggleTimer);
@@ -1434,12 +1543,18 @@ public class Settings {
 		SimpleAttributeSet attribs = new SimpleAttributeSet();
 		attribs.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
 		StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
-		StyleConstants.setFontSize(attribs, 16);
+		StyleConstants.setFontSize(attribs, 30);
 		
 		JTextPane workInterval = new JTextPane();
 		workInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
 		workInterval.setBorder(new LineBorder(Color.black,5,false));
 		workInterval.setParagraphAttributes(attribs, true);
+		workInterval.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {}
+			public void focusLost(FocusEvent e) {
+				settingsChanges.workPeriod = Integer.parseInt(workInterval.getText());
+			}
+		});
 		
 		JLabel minutesWork = new JLabel("minutes");
 		minutesWork.setFont(new Font("Serif", Font.BOLD, 16));
@@ -1453,6 +1568,12 @@ public class Settings {
 		breakInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
 		breakInterval.setBorder(new LineBorder(Color.black,5,false));
 		breakInterval.setParagraphAttributes(attribs, true);
+		breakInterval.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {}
+			public void focusLost(FocusEvent e) {
+				settingsChanges.breakPeriod = Integer.parseInt(breakInterval.getText());
+			}
+		});
 		
 		JLabel minutesBreak = new JLabel("minutes");
 		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
@@ -1470,11 +1591,16 @@ public class Settings {
 		countdownToggle.setBackground(aa_grey);
 		countdownToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox countDown = new JCheckBox("Show Time Remaining", true);
+		JCheckBox countDown = new JCheckBox("Show Time Remaining", settingsChanges.timeShowing);
 		countDown.setFont(new Font("Serif", Font.BOLD, 16));
 		countDown.setForeground(Color.white);
 		countDown.setContentAreaFilled(false);
 		countDown.setFocusPainted(false);
+		countDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.timeShowing = countDown.isSelected(); 
+			}
+		});
 		
 		countdownToggle.add(Box.createRigidArea(new Dimension(15, 0)));
 		countdownToggle.add(countDown);		
@@ -1484,18 +1610,8 @@ public class Settings {
 		openPomPanel.setBackground(aa_grey);
 		openPomPanel.setMaximumSize(new Dimension(500, 35));
 		
-		JButton openPM = new JButton("Open Pomodoro Timer");
-		openPM.setMaximumSize(new Dimension(200, 30));
-		openPM.setBackground(Color.GRAY);
-		openPM.setForeground(Color.WHITE);
-		openPM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//implement chooseAvatar 
-			}
-		});
-		
 		openPomPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-		openPomPanel.add(openPM);
+		openPomPanel.add(openPom);
 		
 		pomodoro_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		pomodoro_panel.add(pomodoro_header);
@@ -1514,7 +1630,7 @@ public class Settings {
 	/**
 	 * RHS display for Thought Management
 	 */
-	private void createThoughtPanel(JPanel card_panel) {
+	private void createThoughtPanel(JPanel card_panel, Settings settingsChanges, Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		
 		JPanel thought_panel = new JPanel();
 		thought_panel.setLayout(new BoxLayout(thought_panel, BoxLayout.Y_AXIS));
@@ -1538,29 +1654,70 @@ public class Settings {
 		checkBoxes.setBackground(aa_grey);
 		checkBoxes.setMaximumSize(new Dimension(350, 150));
 		
-		JCheckBox ftsBox = new JCheckBox("Free Thought Space", true);
+		JCheckBox ftsBox = new JCheckBox("Free Thought Space", settingsChanges.ftsIsActive);
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
 		ftsBox.setFocusPainted(false);
+		ftsBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.ftsIsActive = ftsBox.isSelected(); 
+				
+				if(settingsChanges.ftsIsActive == false) {
+					settingsChanges.ftsIsVisible = false; 
+				}
+			}
+		});
 		
-		JCheckBox ntbBox = new JCheckBox("Negative Thought Burner", true);
-		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
-		ntbBox.setForeground(Color.white);
-		ntbBox.setContentAreaFilled(false);
-		ntbBox.setFocusPainted(false);
 		
-		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", true);
+		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", settingsChanges.isAutoLinked);
 		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 16));
 		autoLinkBox.setForeground(Color.white);
 		autoLinkBox.setContentAreaFilled(false);
 		autoLinkBox.setFocusPainted(false);
+		autoLinkBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.isAutoLinked = autoLinkBox.isSelected(); 
+			}
+		});
 		
-		JCheckBox htbBox = new JCheckBox("Happy Thought Button", true);
+		JCheckBox ntbBox = new JCheckBox("Negative Thought Burner", settingsChanges.ntbIsActive);
+		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ntbBox.setForeground(Color.white);
+		ntbBox.setContentAreaFilled(false);
+		ntbBox.setFocusPainted(false);
+		ntbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.ntbIsActive = ntbBox.isSelected(); 
+				
+				if(settingsChanges.ntbIsActive == false) {
+					settingsChanges.ntbIsVisible = false; 
+					settingsChanges.isAutoLinked = false;
+					autoLinkBox.setEnabled(false); 
+				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
+					autoLinkBox.setEnabled(true);
+				}
+			}
+		});
+		
+		JCheckBox htbBox = new JCheckBox("Happy Thought Button", settingsChanges.htbIsActive);
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
 		htbBox.setFocusPainted(false);
+		htbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.htbIsActive = htbBox.isSelected(); 
+				
+				if(settingsChanges.htbIsActive == false) {
+					settingsChanges.htbIsVisible = false; 
+					settingsChanges.isAutoLinked = false;
+					autoLinkBox.setEnabled(false); 
+				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
+					autoLinkBox.setEnabled(true);
+				}
+			}
+		});
 		
 		checkBoxes.add(ftsBox);
 		checkBoxes.add(ntbBox);
@@ -1658,14 +1815,14 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
+	public void open_settings(DataBase db,Nav_Bar navbar,Settings settings, Observer observer, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
 				
 				/*
-				 * instantiate a new settings object using the copy constructor so that it is a copy of
-				 * the passed settings object. 
+				 * instantiate a new settings object using the copy constructor 
+				 * so that it is a copy of the passed settings object. 
 				 */
 				Settings settingsChanges = new Settings(settings); 
 				
@@ -1756,10 +1913,10 @@ public class Settings {
 				 * pass the new settingsChanges object to be modified by all action listeners
 				 */
 				createGeneralPanel(card_panel, settingsChanges);
-				createNotificationsPanel(card_panel);
-				createPriorityManagerPanel(card_panel);
-				createPomodoroTimerPanel(card_panel);
-				createThoughtPanel(card_panel);								
+				createNotificationsPanel(card_panel, settingsChanges);
+				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db, observer);
+				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer);
+				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space);								
 				
 				/*
 				 * buttons for bottom border
@@ -1979,7 +2136,8 @@ public class Settings {
 						settings.isAutoLinked = settingsChanges.isAutoLinked; 
 						settings.htbIsActive = settingsChanges.htbIsActive;
 						
-						navbar.refresh(); 
+						navbar.refresh(settings);
+						db.UpdateSettings(settings);
 					}
 				});
 				
@@ -2053,7 +2211,7 @@ public class Settings {
 				settings_frame.getContentPane().add(masterPanel); 
 				settings_frame.getContentPane().setBackground(Color.black);
 				settings_frame.pack();
-				settings_frame.setAlwaysOnTop(false);
+				settings_frame.setAlwaysOnTop(true);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
 				settings_frame.setLocationRelativeTo(null);
