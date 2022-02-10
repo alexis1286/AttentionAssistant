@@ -33,7 +33,7 @@ public class EyeMovementTracker {
 	/**
 	 * Boolean for whether the Eye movement tracker should continue or remain.
 	 */
-	//I know this warning is here, will be using this to implement the do/while loop
+	//I know this warning is here, will be using this to implement the do/while loop in Start Tracking()
 	private boolean continueTracking;
 	
 	/**
