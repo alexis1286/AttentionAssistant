@@ -16,6 +16,9 @@ public class AttentionAssistantDriver {
 		
 		db.DatabaseSetUp();
 		//get settings
+		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
+		db.AddSettings(settings);
+		
 	   	 Nav_Bar.run_nav_bar(db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
 		
 		/**

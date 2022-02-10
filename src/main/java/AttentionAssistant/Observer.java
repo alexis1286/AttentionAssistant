@@ -143,7 +143,7 @@ public class Observer{
 			 * mouseTracker.startTracking();
 			 * eyeMovementTracker.startTracking();  
 			 * keyBoardTracker.startTracking(keyWords);
-			 * osEventsTracker.startTracking(activeTask.getTaskID);
+			 * osEventsTracker.startTracking();
 			 * internetTracker.startTracking(keyWords);
 			 * 
 			 * //(insert some timer here in while loop) So we grab all scores at once.

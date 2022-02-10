@@ -1,6 +1,7 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class Test_DataBase {
 	Task nonDefaultTask;
 	Happy_Thought_Button nonDefaultHTB;
 	Observer nonDefaultObserver;
+	Settings nonDefaultSettings;
 	DataBase db = new DataBase();
 	
 	@BeforeEach
@@ -59,6 +61,48 @@ public class Test_DataBase {
 
 	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
 	
+	/**
+	 * Set up for nonDefault Settings 
+	 */
+	int testSettingsID = 999;
+	Color testIconCircles = Color.RED; 
+	Color testIcons = Color.YELLOW;
+	int testOpacityCircles = 75; 
+	int testOpacityIcons = 75; 
+	boolean testIsCollapsed = true; 
+	int testXCoord = 15;
+	int testYCoord = 15; 
+	boolean testIsVertical = false; 
+	int testIconSize = 30; 
+	boolean testTimerIsVisible = false; 
+	boolean testPmIsVisible = false; 
+	boolean testFtsIsVisible = false; 
+	boolean testHtbIsVisible = false; 
+	boolean testNtbIsVisible = false; 
+	boolean testProgReportIsVisible = false; 
+	boolean testAvatarIsActive = true; 
+	boolean testTextIsActive = false; 
+	boolean testAudioIsActive = true;
+	String testAvatarFilePath = "images/avatar_cat1.png"; 
+	String testAudioFilePath = "test";
+	boolean testAlwaysOnScreen = true; 
+	int testAvatarSize = 75; 
+	boolean testPomodoroIsActive = false; 
+	int testWorkPeriod = 33; 
+	int testBreakPeriod = 23; 
+	boolean testTimeShowing = false; 
+	boolean testFtsIsActive = false; 
+	boolean testNtbIsActive = false; 
+	boolean testIsAutoLinked = false; 
+	boolean testHtbIsActive = false; 
+
+	nonDefaultSettings = new Settings(testSettingsID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+			  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
+			  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
+			  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
+			  testPomodoroIsActive, testWorkPeriod, testBreakPeriod, testTimeShowing, testFtsIsActive, 
+			  testNtbIsActive, testIsAutoLinked, testHtbIsActive);
+	
 	db.DatabaseSetUp();	
 	}
 
@@ -69,6 +113,7 @@ public class Test_DataBase {
     db.DeleteAllTasks();
     db.DeleteAllHTBs();
     db.DeleteAllObservers();
+    db.DeleteAllSettings();
     }
 
 	
@@ -164,9 +209,9 @@ public class Test_DataBase {
     	Task nonDefaultAddedTask = new Task(nonDefaultTask); 
     	nonDefaultAddedTask.setTaskID(4);
     	
-    	test_task_List.add(UpdatedTask);
     	test_task_List.add(SelectedTask1);
     	test_task_List.add(nonDefaultAddedTask);
+    	test_task_List.add(UpdatedTask);
     	
     	test_database_task_List= db.SelectAllTasks();
     	
@@ -299,5 +344,109 @@ public class Test_DataBase {
         			+ selectedObserver2.toString());
         
     }
+
+    @Test
+    @Order(15)
+    @DisplayName("<DataBase> DatabaseSelectAllObservers")
+    void DatabaseSelectAllObservers() {
+    	ArrayList<Observer> test_Observer_List = new ArrayList<Observer>();
+    	ArrayList<Observer> test_database_Observer_List = new ArrayList<Observer>();
+    	
+    	Observer UpdatedObserver= new Observer(nonDefaultObserver);
+    	UpdatedObserver.setObserverID(1);
+    	UpdatedObserver.setObserverScore(98);
+    	UpdatedObserver.setThreshold(98);
+       	
+    	Observer selectedObserver = new Observer(nonDefaultObserver);
+    	selectedObserver.setObserverID(2);
+    	selectedObserver.setObserverScore(0);
+    	selectedObserver.setThreshold(0);
+
+    	
+    	Observer nonDefaultAddedObserver = new Observer(nonDefaultObserver); 
+    	nonDefaultAddedObserver.setObserverID(4);
+
+    	test_Observer_List.add(UpdatedObserver);
+    	test_Observer_List.add(selectedObserver);
+    	test_Observer_List.add(nonDefaultAddedObserver);
+
+    	test_database_Observer_List= db.SelectAllObservers(4);
+    	
+    	for (int i =0; i< test_database_Observer_List.size(); i++) {        
+    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
+        }
+
+    	
+    }
+
+    /**
+    ******* END OF TEST OBSERVER CRUD *******
+    */
+
+    /**
+    ******* START OF TEST SETTINGS CRUD *******
+     */
+
+    
+    @Test
+    @Order(16)
+    @DisplayName("<DataBase> DatabaseAddNewSettings")
+    void DatabaseAddNewSettings() {
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+        db.AddSettings(nonDefaultSettings);
+    }
+    
+    @Test
+    @Order(17)
+    @DisplayName("<DataBase> DatabaseUpdateSettings")
+    void DatabaseUpdateSettings() {
+    	Settings UpdatedSettings= new Settings(nonDefaultSettings);
+    	UpdatedSettings.setSettingsID(1);
+    	UpdatedSettings.setAvatarFilePath("I am an Updated Avatar File Path");
+    	UpdatedSettings.setIconCircles(new Color(51,204,255));
+    	db.UpdateSettings(UpdatedSettings);
+    }
+    
+    @Test
+    @Order(18)
+    @DisplayName("<DataBase> DatabaseDeleteSettings")
+    void DatabaseDeleteSettings() {
+    	Settings deletedSettings = new Settings(nonDefaultSettings);
+    	deletedSettings.setSettingsID(3);
+    	deletedSettings.setAvatarFilePath("I AM A DELETED AVATAR FILE PATH");
+    	db.UpdateSettings(deletedSettings);
+    	db.DeleteSettings(3);
+    }
+
+    
+    @Test
+    @Order(19)
+    @DisplayName("<DataBase> DatabaseSelectSettings")
+    void DatabaseSelectSettings() {
+    	Settings selectedSettings = new Settings(nonDefaultSettings);
+    	selectedSettings.setSettingsID(2);
+    	selectedSettings.setIcons(new Color(255,51,51));
+    	selectedSettings.setOpacityIcons(25);
+    	selectedSettings.setIsCollapsed(false);
+    	selectedSettings.setAvatarFilePath("I am a selected Avatar File Path");
+    	db.UpdateSettings(selectedSettings);
+    	
+    	Settings selectedSettings2 = new Settings();
+    	selectedSettings2 = db.SelectSettings(2);
+        
+        assertEquals(2, selectedSettings2.getSettingsID(), "selectedSettings2 SettingsID should be set to 2 instead returned: " 
+        			+ selectedSettings2.getSettingsID());
+        assertEquals(new Color(255,51,51), selectedSettings2.getIcons(), "selectedSettings2 icons should be set to Color(255,51,51) instead returned: " 
+    			+ selectedSettings2.getIcons());
+        assertEquals(25, selectedSettings2.getOpacityIcons(), "selectedSettings2 OpacityIcons should be set to 75 instead returned: " 
+    			+ selectedSettings2.getOpacityIcons());
+        assertEquals(false, selectedSettings2.getIsCollapsed(), "selectedSettings2 isCollapsed should be set to false instead returned: " 
+    			+ selectedSettings2.getIsCollapsed());
+        assertEquals("I am a selected Avatar File Path", selectedSettings2.getAvatarFilePath(), "selectedSettings2 Avatar File Path should be set to \"I am a selected Avatar File Path\" instead returned: " 
+    			+ selectedSettings2.getAvatarFilePath());       
+    }
+
 
 }

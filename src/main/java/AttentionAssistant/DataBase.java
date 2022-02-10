@@ -1,5 +1,6 @@
 package AttentionAssistant;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class DataBase {
         /**
          * Set up for Table Task
          */
-    	String queryTable = "CREATE TABLE IF NOT EXISTS task ( " +
+    	String queryTask = "CREATE TABLE IF NOT EXISTS task ( " +
    			 "taskID INTEGER PRIMARY KEY, " +
    			 "description TEXT, " +
    			 "observable BOOLEAN, " +
@@ -77,15 +78,53 @@ public class DataBase {
    			 "dT_Gathered DATE, " +
    			 "FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\"))";
 
+        /**
+         * Set up for Table Settings
+         */
+    	String querySettings = "CREATE TABLE IF NOT EXISTS settings ( " +
+   			 "settingsID INTEGER PRIMARY KEY, " +
+   			 "iconCircles INTEGER, " +
+   			 "icons INTEGER, " +
+   			 "opacityCircles INTEGER, " + 
+   			 "opacityIcons INTEGER, " +
+   			 "isCollapsed BOOLEAN, " +
+   			 "xCoord INTEGER, " +
+   			 "yCoord INTEGER, " +
+   			 "isVertical BOOLEAN, " +
+   			 "iconSize INTEGER, " +
+   			 "timerIsVisible BOOLEAN, " +
+   			 "pmIsVisible BOOLEAN, " +
+   			 "ftsIsVisible BOOLEAN, " +
+   			 "htbIsVisible BOOLEAN, " +
+   			 "ntbIsVisible BOOLEAN, " +
+   			 "progReportIsVisible BOOLEAN, " +
+   			 "avatarIsActive BOOLEAN, " +
+   			 "textIsActive BOOLEAN, " +
+   			 "audioIsActive BOOLEAN, " +
+   			 "avatarFilePath TEXT, " +
+   			 "audioFilePath TEXT, " +
+   			 "alwaysOnScreen BOOLEAN, " +
+   			 "avatarSize INTEGER, " +
+   			 "pomodoroIsActive BOOLEAN, " +
+   			 "workPeriod INTEGER, " +
+   			 "breakPeriod INTEGER, " +
+   			 "timeShowing BOOLEAN, " +
+   			 "ftsIsActive BOOLEAN, " +
+   			 "ntbIsActive BOOLEAN, " +
+   			 "isAutoLinked BOOLEAN, " +
+   			 "htbIsActive BOOLEAN)";
+
+    	
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
-   		int rv1 = stmt.executeUpdate(queryTable);
+   		int rv1 = stmt.executeUpdate(queryTask);
    		System.out.println( "CreateTaskTable() returned " + rv1 );
    		int rv2 = stmt.executeUpdate(queryHappyThoughtButton);
    		System.out.println( "CreateHTBTable() returned " + rv2 );
    		int rv3 = stmt.executeUpdate(queryObserver);
    		System.out.println( "CreateObserverTable() returned " + rv3 );
-   		
+   		int rv4 = stmt.executeUpdate(querySettings);
+   		System.out.println( "CreateSettingsTable() returned " + rv4 );
        } catch ( SQLException e ) {
            e.printStackTrace();
            System.exit( 0 );
@@ -201,7 +240,7 @@ public class DataBase {
         public ArrayList<Task> SelectAllTasks(){
         	ArrayList<Task> tasksOnList = new ArrayList<Task>();
         	Task blankTask = new Task();
-        	String query1 = "SELECT * FROM task";
+        	String query1 = "SELECT * FROM task ORDER BY observable DESC, priority DESC, dueDate ASC";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    ResultSet rs = stmt.executeQuery( query1 );
@@ -365,7 +404,7 @@ public class DataBase {
              */
 
              /**
-             ******* START OF Observer CRUD *******
+             ******* START OF OBSERVER CRUD *******
              * @author jmitchel2, ehols001
              */
  
@@ -477,4 +516,229 @@ public class DataBase {
                 	}
                 	
                 }
+
+                /**
+                 * Grab all observers within the Database
+                 * 
+                 * @return ArrayList<Observers>
+                 */
+                public ArrayList<Observer> SelectAllObservers(int task_ID){
+                	ArrayList<Observer> ObserversOnList = new ArrayList<Observer>();
+                	Observer blankObserver = new Observer();
+                	String query1 = "SELECT * FROM observer WHERE fk_taskID='" + task_ID + "' ORDER BY dT_Gathered ASC";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    ResultSet rs = stmt.executeQuery( query1 );
+                		    while (rs.next()){
+                		    blankObserver = new Observer();
+                		    blankObserver.setObserverID(rs.getInt("observerID"));
+                		    blankObserver.setObserverScore(rs.getInt("observerScore"));
+                		    blankObserver.setThreshold(rs.getInt("threshold"));
+                		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Gathered"));
+                		    blankObserver.setDTGathered(date1);
+                		    ObserversOnList.add(blankObserver);
+                		    }
+                		    System.out.println( "SelectAllTasks() returned " + rs );
+                		} catch ( SQLException e ) {
+                			e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                		  catch ( ParseException p ) {
+                			p.printStackTrace();
+                			System.exit( 0 );
+                		}
+                	return ObserversOnList;
+                }
+
+                /**
+                 ******* END OF OBSERVER CRUD *******
+                 */
+
+                 /**
+                 ******* START OF SETTINGS CRUD *******
+                 * @author jmitchel2
+                 */
+
+                /**
+                 * Add a new Settings to the database.
+                 * @param Settings
+                 */
+                public void AddSettings(Settings settings) {
+
+                	String query1 = "INSERT INTO settings " +
+                			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+                			settings.getIconCircles().getRGB() + "', '" +
+                			settings.getIcons().getRGB() + "', '" +
+                			settings.getOpacityCircles() + "', '" +
+                			settings.getOpacityIcons() + "', '" +
+                			settings.getIsCollapsed() + "', '" +
+                			settings.getXCoord() + "', '" +
+                			settings.getYCoord() + "', '" +
+                			settings.getIsVertical() + "', '" +
+                			settings.getIconSize() + "', '" +
+                			settings.getTimerIsVisible() + "', '" +
+                			settings.getPmIsVisible() + "', '" +
+                			settings.getFtsIsVisible() + "', '" +
+                			settings.getHtbIsVisible() + "', '" +
+                			settings.getNtbIsVisible() + "', '" +
+                			settings.getProgReportIsVisible() + "', '" +
+                			settings.getAvatarIsActive() + "', '" +
+                			settings.getTextIsActive() + "', '" +
+                			settings.getAudioIsActive() + "', '" +
+                			settings.getAvatarFilePath() + "', '" +
+                			settings.getAudioFilePath() + "', '" +
+                			settings.getAlwaysOnScreen() + "', '" +
+                			settings.getAvatarSize() + "', '" +
+                			settings.getPomodoroIsActive() + "', '" +
+                			settings.getWorkPeriod() + "', '" +
+                			settings.getBreakPeriod() + "', '" +
+                			settings.getTimeShowing() + "', '" +
+                			settings.getFtsIsActive() + "', '" +
+                			settings.getNtbIsActive() + "', '" +
+                			settings.getIsAutoLinked() + "', '" +
+                			settings.getHtbIsActive() +"')";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    int rv = stmt.executeUpdate( query1 );
+                		    System.out.println( "AddSettings() returned " + rv );
+                		} catch ( SQLException e ) {
+                		    e.printStackTrace();
+                		    System.exit( 0 );
+                		}
+                }
+
+                /**
+                 * Update a Settings within the Database
+                 * 
+                 * @param Settings
+                 */
+                    public void UpdateSettings(Settings settings) {
+                    	String query1 = "UPDATE settings " +
+                    			"SET iconCircles = '" + settings.getIconCircles().getRGB() + 
+                    			"', icons = '" + settings.getIcons().getRGB() + 
+                    			"', opacityCircles = '" + settings.getOpacityCircles() + 
+                    			"', opacityIcons = '" + settings.getOpacityIcons() + 
+                    			"', isCollapsed = '" + settings.getIsCollapsed() + 
+                    			"', xCoord = '" + settings.getXCoord() + 
+                    			"', yCoord = '" + settings.getYCoord() + 
+                    			"', isVertical = '" + settings.getIsVertical() + 
+                    			"', iconSize = '" + settings.getIconSize() + 
+                    			"', timerIsVisible = '" + settings.getTimerIsVisible() + 
+                    			"', pmIsVisible = '" + settings.getPmIsVisible() + 
+                    			"', ftsIsVisible = '" + settings.getFtsIsVisible() + 
+                    			"', htbIsVisible = '" + settings.getHtbIsVisible() + 
+                    			"', ntbIsVisible = '" + settings.getNtbIsVisible() + 
+                    			"', progReportIsVisible = '" + settings.getProgReportIsVisible() + 
+                    			"', avatarIsActive = '" + settings.getAvatarIsActive() + 
+                    			"', textIsActive = '" + settings.getTextIsActive() + 
+                    			"', audioIsActive = '" + settings.getAudioIsActive() + 
+                    			"', avatarFilePath = '" + settings.getAvatarFilePath() + 
+                    			"', audioFilePath = '" + settings.getAudioFilePath() + 
+                    			"', alwaysOnScreen = '" + settings.getAlwaysOnScreen() + 
+                    			"', avatarSize = '" + settings.getAvatarSize() + 
+                    			"', pomodoroIsActive = '" + settings.getPomodoroIsActive() + 
+                    			"', workPeriod = '" + settings.getWorkPeriod() + 
+                    			"', breakPeriod = '" + settings.getBreakPeriod() + 
+                    			"', timeShowing = '" + settings.getTimeShowing() + 
+                    			"', ftsIsActive = '" + settings.getFtsIsActive() + 
+                    			"', ntbIsActive = '" + settings.getNtbIsActive() + 
+                    			"', isAutoLinked = '" + settings.getIsAutoLinked() + 
+                    			"', htbIsActive = '" + settings.getHtbIsActive() + 
+                    			"' WHERE settingsID = '" + settings.getSettingsID() + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    int rv = stmt.executeUpdate( query1 );
+                    		    System.out.println( "UpdateSettings() returned " + rv );
+                    		} catch ( SQLException e ) {
+                    		    e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	
+                    }
+                    
+                    /**
+                     * Delete a Settings within the Database
+                     * @param int
+                     */
+                    public void DeleteSettings(int settingsID) {
+                    	String query1 = "DELETE FROM settings WHERE settingsID = '" + settingsID + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    int rv = stmt.executeUpdate( query1 );
+                    		    System.out.println( "DeleteSettings() returned " + rv );
+                    		} catch ( SQLException e ) {
+                    		    e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	
+                    }    	
+
+                
+                    /**
+                     * Select a Settings within the database using the settingsID
+                     * @param int
+                     * @return Settings
+                     */
+                    public Settings SelectSettings(int settingsID) {
+                    	Settings settings1 = new Settings();
+                    	String query1 = "SELECT * FROM settings WHERE settingsID = '" + settingsID + "'";
+                    	try ( Connection conn = ds.getConnection();
+                    		    Statement stmt = conn.createStatement(); ) {
+                    		    ResultSet rs = stmt.executeQuery( query1 );
+                    		    settings1.setSettingsID(rs.getInt("settingsID"));
+                    		    settings1.setIconCircles(new Color(rs.getInt("iconCircles")));
+                    		    settings1.setIcons(new Color(rs.getInt("icons")));
+                    		    settings1.setOpacityCircles(rs.getInt("opacityCircles"));
+                    		    settings1.setOpacityIcons(rs.getInt("opacityIcons"));
+                    		    settings1.setIsCollapsed(Boolean.valueOf(rs.getString("isCollapsed")));
+                    		    settings1.setXCoord(rs.getInt("xCoord"));
+                    		    settings1.setYCoord(rs.getInt("yCoord"));
+                    		    settings1.setIsVertical(Boolean.valueOf(rs.getString("isVertical")));
+                    		    settings1.setIconSize(rs.getInt("iconSize"));
+                    		    settings1.setTimerIsVisible(Boolean.valueOf(rs.getString("timerIsVisible")));
+                    		    settings1.setPmIsVisible(Boolean.valueOf(rs.getString("pmIsVisible")));
+                    		    settings1.setFtsIsVisible(Boolean.valueOf(rs.getString("ftsIsVisible")));
+                    		    settings1.setHtbIsVisible(Boolean.valueOf(rs.getString("htbIsVisible")));
+                    		    settings1.setNtbIsVisible(Boolean.valueOf(rs.getString("ntbIsVisible")));
+                    		    settings1.setProgReportIsVisible(Boolean.valueOf(rs.getString("progReportIsVisible")));
+                    		    settings1.setAvatarIsActive(Boolean.valueOf(rs.getString("avatarIsActive")));
+                    		    settings1.setTextIsActive(Boolean.valueOf(rs.getString("textIsActive")));
+                    		    settings1.setAudioIsActive(Boolean.valueOf(rs.getString("audioIsActive")));
+                    		    settings1.setAvatarFilePath(rs.getString("avatarFilePath"));
+                    		    settings1.setAudioFilePath(rs.getString("audioFilePath"));
+                    		    settings1.setAlwaysOnScreen(Boolean.valueOf(rs.getString("alwaysOnScreen")));
+                    		    settings1.setAvatarSize(rs.getInt("avatarSize"));
+                    		    settings1.setPomodoroIsActive(Boolean.valueOf(rs.getString("pomodoroIsActive")));
+                    		    settings1.setWorkPeriod(rs.getInt("workPeriod"));
+                    		    settings1.setBreakPeriod(rs.getInt("breakPeriod"));
+                    		    settings1.setTimeShowing(Boolean.valueOf(rs.getString("timeShowing")));
+                    		    settings1.setFtsIsActive(Boolean.valueOf(rs.getString("ftsIsActive")));
+                    		    settings1.setNtbIsActive(Boolean.valueOf(rs.getString("ntbIsActive")));
+                    		    settings1.setIsAutoLinked(Boolean.valueOf(rs.getString("isAutoLinked")));
+                    		    settings1.setHtbIsActive(Boolean.valueOf(rs.getString("htbIsActive")));                   		    
+                    		    System.out.println( "SelectSettings() returned " + rs );
+                    		} catch ( SQLException e ) {
+                    			e.printStackTrace();
+                    		    System.exit( 0 );
+                    		}
+                    	return settings1;
+                    }
+
+                
+                /**
+                 * Mainly used for JUNIT testing, deletes the Settings table at the beginning of testing to remove all test data.
+                 */
+                public void DeleteAllSettings(){
+                	String query1 = "DROP TABLE IF EXISTS 'settings'";
+                	try ( Connection conn = this.ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+            		    int rv = stmt.executeUpdate( query1 );
+            		    System.out.println( "DeleteAllSettings() returned " + rv );
+                	} catch ( SQLException e ) {
+            			e.printStackTrace();
+            		    System.exit( 0 );
+                	}
+                	
+                }
+
 }
