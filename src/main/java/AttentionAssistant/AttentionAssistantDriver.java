@@ -5,7 +5,7 @@ public class AttentionAssistantDriver {
 	static Settings settings = new Settings();
 	
 	static Observer observer = new Observer();
-	static Priority_Manager priority_manager = new Priority_Manager(observer);
+	static Priority_Manager priority_manager;
 	static Pomodoro_Timer pomodoro_timer = new Pomodoro_Timer();
 	static Negative_Thought_Burner negative_thought_burner = new Negative_Thought_Burner();
 	static Happy_Thought_Button happy_thought_button = new Happy_Thought_Button();
@@ -18,6 +18,7 @@ public class AttentionAssistantDriver {
 		//get settings
 		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
 		db.AddSettings(settings);
+		priority_manager = new Priority_Manager(db,observer);
 		
 	   	 navbar.run_nav_bar(db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
 		

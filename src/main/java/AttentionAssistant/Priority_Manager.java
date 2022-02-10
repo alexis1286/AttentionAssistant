@@ -33,21 +33,20 @@ public class Priority_Manager {
 	private ArrayList<Task> Task_List;
 	private Task working_task;
 	
-	
-	public Priority_Manager(Observer observe) {
+	public Priority_Manager(DataBase db,Observer observer) {
 		this.Task_List = new ArrayList<Task>();
+		populateTaskList(db);
 		this.working_task = taskToObserve();
-		
-		if(this.working_task != null) {
-			observe.monitor(working_task);
-		}
+		System.out.println(this.working_task);
+		observer.monitor(working_task);
 	}
 	
 	private Task taskToObserve() {
 		Task task = new Task();
-		//if active task is stored
+		//if active task is stored******************************************
 		//set task = to active task
-		
+		//makes working_task 1st task in sorted list
+		task = Task_List.get(0);
 		
 		return task;
 	}
@@ -126,6 +125,13 @@ public class Priority_Manager {
 		return panel;
 	}
 	
+	private void populateTaskList(DataBase db) {
+		for(int i=0; i<db.SelectAllTasks().size();i++) {
+			System.out.println(db.SelectAllTasks().get(i));
+			Task_List.add(db.SelectAllTasks().get(i));
+		}
+	}
+	
 	//*****************************************************************************************************************
 	/*
 	 * create panel that contains task list and buttons to edit/interact with task list
@@ -137,10 +143,7 @@ public class Priority_Manager {
 		 * populate task list from database
 		 */
 		Task_List.removeAll(Task_List);
-		for(int i=0; i<db.SelectAllTasks().size();i++) {
-			System.out.println(db.SelectAllTasks().get(i));
-			Task_List.add(db.SelectAllTasks().get(i));
-		}
+		populateTaskList(db);
 		
 		/*
 		 * Create JTable to display task

@@ -1739,7 +1739,20 @@ public class Settings {
 		upload.setForeground(Color.WHITE);
 		upload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//implement chooseAvatar 
+				/*
+				 * NEEDS TO BE UPDATED when HTB is implemented
+				 */
+				JFileChooser happyThoughtsDirectory = new JFileChooser();
+				happyThoughtsDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				//what file types will we accept? add them here
+				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("JPEG and PNG Images", "png", "jpeg");
+				happyThoughtsDirectory.setFileFilter(fileFilter);
+				int returnVal = happyThoughtsDirectory.showDialog(null, "Select Your New Avatar");
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					File happyThoughtFile = happyThoughtsDirectory.getSelectedFile();
+					//settingsChanges.happyThoughtsDirectory = happyThoughtFile.getAbsolutePath();
+					//ask how happy thought media will be stored and implement that storage here 
+				}
 			}
 		});
 		
@@ -1758,6 +1771,7 @@ public class Settings {
 		openFTS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Free Thought Space
+				free_thought_space.runFts(free_thought_space);
 			}
 		});
 		
@@ -1773,7 +1787,7 @@ public class Settings {
 		openHTB.setForeground(Color.WHITE);
 		openHTB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//call to open Happy Thought Button
+				//call to open Happy Thought Button 
 			}
 		});
 		
@@ -1868,9 +1882,12 @@ public class Settings {
 				 */
 				BufferedImage ci = null;
 				BufferedImage gi = null;
+				BufferedImage exit = null;
+				
 				try {
 					ci = ImageIO.read(new File("images/exit_circle.png"));
 					gi = ImageIO.read(new File("images/guide.png"));
+					exit = ImageIO.read(new File("images/AA_exit.png"));
 				}catch(Exception e) {
 					e.printStackTrace();
 					System.exit(1);
@@ -1903,7 +1920,7 @@ public class Settings {
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
-				//ccard layout and panel for RHS of settings that displays sub-menu with each button option 
+				//card layout and panel for RHS of settings that displays sub-menu with each button option 
 				JPanel card_panel = new JPanel();
 				//creates layout for sub-menus and panels for each sub-menu
 				CardLayout card_layout = new CardLayout();
@@ -2088,6 +2105,44 @@ public class Settings {
 					}
 				});
 				
+				Image ex_img = exit.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+				Icon exitIcon = new ImageIcon(ex_img);
+				
+				JButton exit_AA = new JButton(exitIcon);
+				exit_AA.setText("EXIT");
+				exit_AA.setForeground(Color.white);
+				exit_AA.setFont(new Font("Serif", Font.BOLD, 16));
+				exit_AA.setContentAreaFilled(true);
+				exit_AA.setBorderPainted(false);
+				exit_AA.setFocusPainted(false);
+				exit_AA.setBackground(aa_purple);
+				exit_AA.setMaximumSize(new Dimension(170, 30));
+				exit_AA.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// exit entire application 
+						UIManager.put("Button.foreground", aa_purple);
+						UIManager.put("Button.background", aa_grey);
+						UIManager.put("OptionPane.background", Color.black);
+						UIManager.put("Panel.setOpaque", true);
+						UIManager.put("Panel.background", aa_grey);
+						UIManager.put("TextField.selectionBackground", Color.WHITE);
+						UIManager.put("TextField.selectionForeground", Color.WHITE);
+						
+						JLabel warning = new JLabel("<html><center>Are you sure you want to EXIT" + "<br/>The Attention Assistant?</center></html>");
+						warning.setFont(new Font("Serif", Font.BOLD, 16));
+						warning.setForeground(Color.white);
+						
+						int response = JOptionPane.showConfirmDialog(null, warning, "The Attention Assistant", JOptionPane.OK_CANCEL_OPTION);
+						switch (response) {
+						case JOptionPane.OK_OPTION:
+							System.exit(0); 
+						case JOptionPane.CANCEL_OPTION:
+							break; 
+						}
+						
+					}
+				});
+				
 				/*
 				 * buttons for bottom border
 				 */
@@ -2173,10 +2228,12 @@ public class Settings {
 				sideMenu.add(pomTimer);
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(thoughts);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,177)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,135)));
 				sideMenu.add(progressReport);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,25)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(guideButton);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
+				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
 				
 				/*
@@ -2211,7 +2268,7 @@ public class Settings {
 				settings_frame.getContentPane().add(masterPanel); 
 				settings_frame.getContentPane().setBackground(Color.black);
 				settings_frame.pack();
-				settings_frame.setAlwaysOnTop(true);
+				settings_frame.setAlwaysOnTop(false);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
 				settings_frame.setLocationRelativeTo(null);
