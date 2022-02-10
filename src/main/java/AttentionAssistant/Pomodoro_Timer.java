@@ -254,11 +254,15 @@ public class Pomodoro_Timer extends JFrame implements ActionListener
 		t.start();
 
 	}
-	public static void run_pomo()
-	{
-	
-		Pomodoro_Timer tm = new Pomodoro_Timer();
-		tm.setVisible(true);
-		
+	public static void run_pomo() {
+		EventQueue.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				Pomodoro_Timer tm = new Pomodoro_Timer();
+				tm.setVisible(true);
+			
+			}
+		});
 	}
+	
 }
