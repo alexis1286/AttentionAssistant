@@ -93,6 +93,7 @@ public class Nav_Bar{
 		this.fts_active = set.getFtsIsActive();
 	}
 	
+	JPanel icon_panel;
 	
 	public void run_nav_bar(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -111,9 +112,9 @@ public class Nav_Bar{
 		        frame.setVisible(true);
 		        
 		        //panel for buttons
-		        JPanel iconPanel = iconPanel(db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
+		        icon_panel = iconPanel(db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
 		        
-		        frame.getContentPane().add(iconPanel);
+		        frame.getContentPane().add(icon_panel);
 				frame.pack();
 				frame.setVisible(true);
 				frame.setResizable(true);	
@@ -121,10 +122,11 @@ public class Nav_Bar{
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		JPanel newPanel = new JPanel();
-		        		newPanel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
-		        		frame.remove(iconPanel);
-		        		frame.add(newPanel);
+		        		
+		        		frame.remove(icon_panel);
+		        		icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+		        		
+		        		frame.add(icon_panel);
 		        		System.out.println(iconColor);
 		        		frame.revalidate();
 		        	}
