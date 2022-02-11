@@ -33,12 +33,14 @@ public class Priority_Manager {
 	private ArrayList<Task> Task_List;
 	private Task working_task;
 	
-	public Priority_Manager(DataBase db,Observer observer) {
+	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) {
 		this.Task_List = new ArrayList<Task>();
 		populateTaskList(db);
 		this.working_task = taskToObserve();
 		System.out.println(this.working_task);
 		observer.monitor(working_task);
+		//pomo.setActiveTask(working_task);
+		
 	}
 	
 	private Task taskToObserve() {

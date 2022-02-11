@@ -18,7 +18,7 @@ public class AttentionAssistantDriver {
 		//get settings
 		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
 		db.AddSettings(settings);
-		priority_manager = new Priority_Manager(db,observer);
+		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
 		
 	   	 navbar.run_nav_bar(db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
 		
