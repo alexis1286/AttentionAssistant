@@ -137,6 +137,7 @@ public class Test_DataBase {
     db.DeleteAllHTBs();
     db.DeleteAllObservers();
     db.DeleteAllSettings();
+    db.DeleteAllLinkedAccounts();
     }
 
     /**
@@ -589,5 +590,62 @@ public class Test_DataBase {
     			+ selectedSettings2.getAvatarFilePath());       
     }
 
+    @Test
+    @Order(28)
+    @DisplayName("<DataBase> DatabaseAddLinked_Account")
+    void DatabaseAddLinked_Account() {
+    	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
+    	linkParent.setParentID(1);
+    	User_Account linkUser1 = new User_Account(nonDefaultUser);
+    	linkUser1.setUserID(1);
+    	User_Account linkUser2 = new User_Account(nonDefaultUser);
+    	linkUser2.setUserID(2);
+    	User_Account linkUser4 = new User_Account(nonDefaultUser);
+    	linkUser4.setUserID(4);
+    	
+    	db.AddLinked_Account(linkParent, linkUser1);
+    	db.AddLinked_Account(linkParent, linkUser2);
+    	db.AddLinked_Account(linkParent, linkUser4);
+    }
+
+    @Test
+    @Order(29)
+    @DisplayName("<DataBase> DatabaseAddLinked_Account")
+    void DatabaseDeleteLinked_Account() {
+    	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
+    	linkParent.setParentID(1);
+    	User_Account DeletedLinkUser = new User_Account(nonDefaultUser);
+    	DeletedLinkUser.setUserID(4);    	
+    	db.DeleteLinked_Account(linkParent, DeletedLinkUser);
+    }
+
+    @Test
+    @Order(30)
+    @DisplayName("<DataBase> DatabaseAddLinked_Account")
+    void DatabaseSelect_All_Users_Linked_Account() {
+    	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
+    	linkParent.setParentID(1);
+    	ArrayList<User_Account> testDBlinkedUsersList= new ArrayList<User_Account>();
+    	testDBlinkedUsersList= db.Select_All_Users_Linked_Account(linkParent);
+
+    	ArrayList<User_Account> testLinkedUsersList= new ArrayList<User_Account>();
+
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+    	UpdatedUser.setUserID(1);
+    	UpdatedUser.setUsername("UpdatedUsername123");
+    	UpdatedUser.setPassword("UpdatedPassword123");
+    	testLinkedUsersList.add(UpdatedUser);
+
+    	User_Account SelectedUser = new User_Account(nonDefaultUser);
+    	SelectedUser.setUserID(2);
+    	SelectedUser.setUsername("SelectedUsername123");
+    	SelectedUser.setPassword("SelectedPassword123");
+    	testLinkedUsersList.add(SelectedUser);
+
+    	for (int i =0; i< testDBlinkedUsersList.size(); i++) {        
+    		assertEquals(testLinkedUsersList.get(i).toString(), testDBlinkedUsersList.get(i).toString(), "testDBlinkedUsersList " + i + " should be set to " + testLinkedUsersList.get(i).toString() + " but instead returned: " + testDBlinkedUsersList.get(i).toString());
+        }
+
+    }
 
 }

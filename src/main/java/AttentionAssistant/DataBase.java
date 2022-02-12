@@ -129,6 +129,17 @@ public class DataBase {
       		 "parentID INTEGER PRIMARY KEY, " +
    			 "username TEXT, " +
    			 "password TEXT)";
+        
+        /**
+         * Set up for Table LinkedAccounts
+         */
+    	String queryLinkedAccounts = "CREATE TABLE IF NOT EXISTS linked_Accounts ( " +
+   			 "linkedAccountID INTEGER PRIMARY KEY, " +
+   			 "fk_ParentID INTEGER, " +
+   			 "fk_UserID INTEGER, " +
+			 "FOREIGN KEY (\"fk_ParentID\") REFERENCES \"parent\"(\"parentID\"), " +
+   			 "FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\"))";
+
 
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
@@ -144,6 +155,8 @@ public class DataBase {
    		System.out.println( "CreateObserverTable() returned " + rv5 );
    		int rv6 = stmt.executeUpdate(querySettings);
    		System.out.println( "CreateSettingsTable() returned " + rv6 );
+   		int rv7 = stmt.executeUpdate(queryLinkedAccounts);
+   		System.out.println( "CreateLinkedAccountsTable() returned " + rv7 );
 
        } catch ( SQLException e ) {
            e.printStackTrace();
@@ -966,4 +979,90 @@ public class DataBase {
                 	
                 }
 
+                
+     /**
+      ******* END OF SETTINGS CRUD *******
+      */
+
+     /**
+      ******* START OF LINKING ACCOUNTS *******
+      * @author jmitchel2
+      */
+     /**
+      * Add a new Linked Account to the database.
+      * @param Parent_Account, User_Account
+      */
+    public void AddLinked_Account(Parent_Account parent, User_Account user) {
+         	String query1 = "INSERT INTO linked_Accounts " +
+      			"( fk_ParentID, fk_UserID) Values ( '" +
+       			parent.getParentID() + "', '" +
+       			user.getUserID() + "')";
+           	try ( Connection conn = ds.getConnection();
+       		    Statement stmt = conn.createStatement(); ) {
+       		    int rv = stmt.executeUpdate( query1 );
+       		    System.out.println( "AddLinked_Account() returned " + rv );
+           		} catch ( SQLException e ) {
+           		    e.printStackTrace();
+          		    System.exit( 0 );
+          		}
+            }
+    /**
+     * Delete a new Account the database.
+     * @param Parent_Account, User_Account
+     */
+   public void DeleteLinked_Account(Parent_Account parent, User_Account user) {
+        	String query1 = "DELETE FROM linked_Accounts WHERE fk_ParentID= '" + parent.getParentID() + "' AND fk_UserID= '" + user.getUserID() +"'";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    int rv = stmt.executeUpdate( query1 );
+        		    System.out.println( "DeleteLinked_Account() returned " + rv );
+        		} catch ( SQLException e ) {
+        		    e.printStackTrace();
+        		    System.exit( 0 );
+        		}
+           }
+   
+   /**
+    * Returns all user accounts that are related to a parent account.
+    * 
+    * @param Parent_Account
+    * @return ArrayList<User_Account>
+    */
+   
+   public ArrayList<User_Account> Select_All_Users_Linked_Account(Parent_Account parent){
+	   ArrayList<User_Account> userAccountList = new ArrayList<User_Account>();
+	   User_Account blankUser= new User_Account();
+	   String query1 = "SELECT fk_UserID FROM linked_Accounts WHERE fk_ParentID = '" + parent.getParentID() + "'";
+   		try ( Connection conn = ds.getConnection();
+		    Statement stmt = conn.createStatement(); ) {
+		    ResultSet rs = stmt.executeQuery( query1 );
+		    while (rs.next()){
+    		blankUser = new User_Account();
+    		blankUser = this.SelectUser_Account(rs.getInt("fk_UserID"));
+    		userAccountList.add(blankUser);
+		    }		    
+   		}catch ( SQLException e ) {
+			e.printStackTrace();
+		    System.exit( 0 );
+		}
+	   return userAccountList;
+   }
+
+   /**
+    * Mainly used for JUNIT testing, deletes the LinkedAccounts table at the beginning of testing to remove all test data.
+    */ 
+   public void DeleteAllLinkedAccounts() {
+   	String query1 = "DROP TABLE IF EXISTS 'linked_Account'";
+   	try ( Connection conn = this.ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+		    int rv = stmt.executeUpdate( query1 );
+		    System.out.println( "DeleteAllLinkedAccounts() returned " + rv );
+   	} catch ( SQLException e ) {
+			e.printStackTrace();
+		    System.exit( 0 );
+   	}
+   	
+	   
+   }
+   
 }
