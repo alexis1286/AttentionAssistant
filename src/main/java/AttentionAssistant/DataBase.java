@@ -113,26 +113,251 @@ public class DataBase {
    			 "ntbIsActive BOOLEAN, " +
    			 "isAutoLinked BOOLEAN, " +
    			 "htbIsActive BOOLEAN)";
-
     	
+    	/**
+    	 * Set up for Table user
+    	 */
+    	String queryUser = "CREATE TABLE IF NOT EXISTS user ( " +
+      		 "userID INTEGER PRIMARY KEY, " +
+   			 "username TEXT, " +
+   			 "password TEXT)";
+
+    	/**
+    	 * Set up for Table parent
+    	 */
+    	String queryParent = "CREATE TABLE IF NOT EXISTS parent ( " +
+      		 "parentID INTEGER PRIMARY KEY, " +
+   			 "username TEXT, " +
+   			 "password TEXT)";
+
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
-   		int rv1 = stmt.executeUpdate(queryTask);
-   		System.out.println( "CreateTaskTable() returned " + rv1 );
-   		int rv2 = stmt.executeUpdate(queryHappyThoughtButton);
-   		System.out.println( "CreateHTBTable() returned " + rv2 );
-   		int rv3 = stmt.executeUpdate(queryObserver);
-   		System.out.println( "CreateObserverTable() returned " + rv3 );
-   		int rv4 = stmt.executeUpdate(querySettings);
-   		System.out.println( "CreateSettingsTable() returned " + rv4 );
+   		int rv1 = stmt.executeUpdate(queryUser);
+   		System.out.println( "CreateUserTable() returned " + rv1 );
+   		int rv2 = stmt.executeUpdate(queryParent);
+   		System.out.println( "CreateParentTable() returned " + rv2 );
+		int rv3 = stmt.executeUpdate(queryTask);
+   		System.out.println( "CreateTaskTable() returned " + rv3 );
+   		int rv4 = stmt.executeUpdate(queryHappyThoughtButton);
+   		System.out.println( "CreateHTBTable() returned " + rv4 );
+   		int rv5 = stmt.executeUpdate(queryObserver);
+   		System.out.println( "CreateObserverTable() returned " + rv5 );
+   		int rv6 = stmt.executeUpdate(querySettings);
+   		System.out.println( "CreateSettingsTable() returned " + rv6 );
+
        } catch ( SQLException e ) {
            e.printStackTrace();
            System.exit( 0 );
        }
     
     }
+    /**
+    ******* START OF USER_ACCOUNT CRUD *******
+    * @author jmitchel2
+    */
+    /**
+     * Add a new User to the database.
+     * @param User_Account
+     */
+    public void AddUser_Account(User_Account user) {
+    	String query1 = "INSERT INTO user " +
+    			"( username, password ) Values ( '" +
+    			user.getUsername() + "', '" +
+    			user.getPassword() + "')";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    int rv = stmt.executeUpdate( query1 );
+    		    System.out.println( "AddUser_Account() returned " + rv );
+    		} catch ( SQLException e ) {
+    		    e.printStackTrace();
+    		    System.exit( 0 );
+    		}
+    }
 
-    
+    /**
+     * Update a User_Account within the Database
+     * @param User_Account
+     */
+	public void UpdateUser_Account(User_Account user) {
+		String query1 = "UPDATE user " +
+				"SET username = '" + user.getUsername() +
+        		"', password = '" + user.getPassword() +
+        		"' WHERE userID = '" + user.getUserID() + "'";
+        try ( Connection conn = ds.getConnection();
+        	Statement stmt = conn.createStatement(); ) {
+        	int rv = stmt.executeUpdate( query1 );
+        	System.out.println( "UpdateUser_Account() returned " + rv );
+        	} catch ( SQLException e ) {
+        	e.printStackTrace();
+        	System.exit( 0 );
+        	}
+
+	}
+
+        /**
+         * Delete a User_Account within the Database
+         * @param int
+         */
+	public void DeleteUser_Account(int userID) {
+		String query1 = "DELETE FROM user WHERE userID = '" + userID + "'";
+		try ( Connection conn = ds.getConnection();
+			Statement stmt = conn.createStatement(); ) {
+			int rv = stmt.executeUpdate( query1 );
+			System.out.println( "DeleteUser_Account() returned " + rv );
+        	} catch ( SQLException e ) {
+            e.printStackTrace();
+            System.exit( 0 );
+        }
+    }
+            
+       	/**
+       	 * Select a user within the database using the userID
+         * @param int
+         * @return User_Account
+         */
+	public User_Account SelectUser_Account(int userID) {
+		User_Account user1 = new User_Account();
+        String query1 = "SELECT * FROM user WHERE userID = '" + userID + "'";
+        try ( Connection conn = ds.getConnection();
+        	Statement stmt = conn.createStatement(); ) {
+        	ResultSet rs = stmt.executeQuery( query1 );
+            user1.setUserID(rs.getInt("userID"));
+            user1.setUsername(rs.getString("username"));
+            user1.setPassword(rs.getString("password"));
+            System.out.println( "SelectUser_Account() returned " + rs );
+        	} catch ( SQLException e ) {
+            e.printStackTrace();
+            System.exit( 0 );
+        }
+          return user1;
+        }
+    /**
+     * Mainly used for JUNIT testing, deletes the user table at the beginning of testing to remove all test data.
+     * 
+     */
+    public void DeleteAllUser_Accounts(){
+    	String query1 = "DROP TABLE IF EXISTS 'user'";
+    	try ( Connection conn = this.ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+		    int rv = stmt.executeUpdate( query1 );
+		    System.out.println( "DeleteAllUser_Accounts() returned " + rv );
+    	} catch ( SQLException e ) {
+			e.printStackTrace();
+		    System.exit( 0 );
+    	}
+    }
+
+ 
+       /**
+        ******* END OF USER_ACCOUNT CRUD *******
+        */
+            
+       /**
+        ******* START OF PARENT_ACCOUNT CRUD *******
+        * @author jmitchel2
+        */
+            
+       /**
+        * Add a new Parent_Account to the database.
+        * @param Parent_Account
+        */
+	public void AddParent_Account(Parent_Account parent) {
+		String query1 = "INSERT INTO parent " +
+             "( username, password ) Values ( '" +
+             parent.getUsername() + "', '" +
+             parent.getPassword() + "')";
+        try ( Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement(); ) {
+             int rv = stmt.executeUpdate( query1 );
+             System.out.println( "AddParent_Account() returned " + rv );
+        	} catch ( SQLException e ) {
+             e.printStackTrace();
+             System.exit( 0 );
+             }
+        }
+
+        /**
+         * Update a Parent_Account within the Database
+         * @param User_Account
+         */
+	public void UpdateParent_Account(Parent_Account parent) {
+		String query1 = "UPDATE parent " +
+				"SET username = '" + parent.getUsername() +
+                "', password = '" + parent.getPassword() +
+                "' WHERE parentID = '" + parent.getParentID() + "'";
+        try ( Connection conn = ds.getConnection();
+        		Statement stmt = conn.createStatement(); ) {
+                int rv = stmt.executeUpdate( query1 );
+                System.out.println( "UpdateParent_Account() returned " + rv );
+        	} catch ( SQLException e ) {
+                e.printStackTrace();
+                System.exit( 0 );
+        	}
+
+        }
+
+		/**
+         * Delete a Parent_Account within the Database
+         * @param int
+         */
+	public void DeleteParent_Account(int parentID) {
+       	String query1 = "DELETE FROM parent WHERE parentID = '" + parentID + "'";
+        try ( Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement(); ) {
+             int rv = stmt.executeUpdate( query1 );
+             System.out.println( "DeleteParent_Account() returned " + rv );
+             } catch ( SQLException e ) {
+             e.printStackTrace();
+             System.exit( 0 );
+             }
+        }
+                     
+        /**
+         * Select a Parent_Account within the database using the parentID
+         * @param int
+         * @return Parent_Account
+         */
+	public Parent_Account SelectParent_Account(int parentID) {
+		Parent_Account parent1 = new Parent_Account();
+        String query1 = "SELECT * FROM parent WHERE parentID = '" + parentID + "'";
+        try ( Connection conn = ds.getConnection();
+        		Statement stmt = conn.createStatement(); ) {
+                ResultSet rs = stmt.executeQuery( query1 );
+                parent1.setParentID(rs.getInt("parentID"));
+                parent1.setUsername(rs.getString("username"));
+                parent1.setPassword(rs.getString("password"));
+                System.out.println( "SelectParent_Account() returned " + rs );
+                } catch ( SQLException e ) {
+                     e.printStackTrace();
+                     System.exit( 0 );
+                }
+         return parent1;
+         }
+
+	/**
+     * Mainly used for JUNIT testing, deletes the parent table at the beginning of testing to remove all test data.
+     * 
+     */
+    public void DeleteAllParent_Accounts(){
+    	String query1 = "DROP TABLE IF EXISTS 'parent'";
+    	try ( Connection conn = this.ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+		    int rv = stmt.executeUpdate( query1 );
+		    System.out.println( "DeleteAllParent_Accounts() returned " + rv );
+    	} catch ( SQLException e ) {
+			e.printStackTrace();
+		    System.exit( 0 );
+    	}
+    }
+
+
+   /**
+   ******* END OF PARENT_ACCOUNT CRUD *******
+   */
+        
+    /**
+    ******* START OF TASK CRUD *******
+    */
     /**
      * Add a new task to the database.
      * @param task

@@ -25,6 +25,8 @@ public class Test_DataBase {
 	Happy_Thought_Button nonDefaultHTB;
 	Observer nonDefaultObserver;
 	Settings nonDefaultSettings;
+	User_Account nonDefaultUser;
+	Parent_Account nonDefaultParent;
 	DataBase db = new DataBase();
 	
 	@BeforeEach
@@ -103,26 +105,165 @@ public class Test_DataBase {
 			  testPomodoroIsActive, testWorkPeriod, testBreakPeriod, testTimeShowing, testFtsIsActive, 
 			  testNtbIsActive, testIsAutoLinked, testHtbIsActive);
 	
+	/**
+	 * Set up for nonDefault User_Account 
+	 */
+	int testUserID= 999;
+	String testUserUsername= "TestUser123";
+	String testUserPassword= "TestPass123";
+
+	nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword);
+	
+	/**
+	 * Set up for nonDefault Parent_Account 
+	 */
+	int testParentID= 999;
+	String testParentUsername= "TestParentUser123";
+	String testParentPassword= "TestParentPass123";
+
+	nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword);
+
 	db.DatabaseSetUp();	
+
 	}
 
     @Test
     @Order(1)
     @DisplayName("<DataBase> DatabaseDeleteAllTables")
     void DatabaseDeleteAllTables() {
+    db.DeleteAllUser_Accounts();
+    db.DeleteAllParent_Accounts();
     db.DeleteAllTasks();
     db.DeleteAllHTBs();
     db.DeleteAllObservers();
     db.DeleteAllSettings();
     }
 
+    /**
+     ******* START OF TEST USER_ACCOUNT CRUD *******
+	 */
 	
+    @Test
+    @Order(2)
+    @DisplayName("<DataBase> DatabaseAddNewUserAccount")
+    void DatabaseAddNewUserAccount() {
+    	db.AddUser_Account(nonDefaultUser);
+    	db.AddUser_Account(nonDefaultUser);
+    	db.AddUser_Account(nonDefaultUser);
+    	db.AddUser_Account(nonDefaultUser);
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("<DataBase> DatabaseUpdateUserAccount")
+    void DatabaseUpdateUserAccount() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+    	UpdatedUser.setUserID(1);
+    	UpdatedUser.setUsername("UpdatedUsername123");
+    	UpdatedUser.setPassword("UpdatedPassword123");
+    	db.UpdateUser_Account(UpdatedUser);
+    }
+    
+    @Test
+    @Order(5)
+    @DisplayName("<DataBase> DatabaseDeleteUserAccount")
+    void DatabaseDeleteUserAccount() {
+    	User_Account DeletedUser= new User_Account(nonDefaultUser);
+    	DeletedUser.setUserID(3);
+    	DeletedUser.setUsername("DeletedUsername123");
+    	DeletedUser.setPassword("DeletedPassword123");
+    	db.UpdateUser_Account(DeletedUser);
+    	
+    	db.DeleteUser_Account(3);    
+    }
+    
+    @Test
+    @Order(4)
+    @DisplayName("<DataBase> DatabaseSelectUserAccount")
+    void DatabaseSelectUserAccount() {
+    	User_Account SelectedUser = new User_Account(nonDefaultUser);
+    	SelectedUser.setUserID(2);
+    	SelectedUser.setUsername("SelectedUsername123");
+    	SelectedUser.setPassword("SelectedPassword123");
+    	db.UpdateUser_Account(SelectedUser);
+    	
+    	User_Account SelectedUser2 = new User_Account();
+    	SelectedUser2 = db.SelectUser_Account(2);
+        
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
+    }
+	
+    /**
+     ******* END OF TEST USER_ACCOUNT CRUD *******
+	 */
+	
+    /**
+     ******* START OF TEST USER_ACCOUNT CRUD *******
+	 */
+	
+    @Test
+    @Order(6)
+    @DisplayName("<DataBase> DatabaseAddNewParentAccount")
+    void DatabaseAddNewParentAccount() {
+    	db.AddParent_Account(nonDefaultParent);
+    	db.AddParent_Account(nonDefaultParent);
+    	db.AddParent_Account(nonDefaultParent);
+    	db.AddParent_Account(nonDefaultParent);
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("<DataBase> DatabaseUpdateParentAccount")
+    void DatabaseUpdateParentAccount() {
+    	Parent_Account UpdatedParent= new Parent_Account(nonDefaultParent);
+    	UpdatedParent.setParentID(1);
+    	UpdatedParent.setUsername("UpdatedParentUser123");
+    	UpdatedParent.setPassword("UpdatedParentPass123");
+    	db.UpdateParent_Account(UpdatedParent);
+    }
+    
+    @Test
+    @Order(9)
+    @DisplayName("<DataBase> DatabaseDeleteParentAccount")
+    void DatabaseDeleteParentAccount() {
+    	Parent_Account DeletedParent= new Parent_Account(nonDefaultParent);
+    	DeletedParent.setParentID(3);
+    	DeletedParent.setUsername("DeletedParentUser123");
+    	DeletedParent.setPassword("DeletedParentPass123");
+    	db.UpdateParent_Account(DeletedParent);
+    	
+    	db.DeleteParent_Account(3);    
+    }
+    
+    @Test
+    @Order(8)
+    @DisplayName("<DataBase> DatabaseSelectParentAccount")
+    void DatabaseSelectParentAccount() {
+    	Parent_Account SelectedParent = new Parent_Account(nonDefaultParent);
+    	SelectedParent.setParentID(2);
+    	SelectedParent.setUsername("SelectedParentUser123");
+    	SelectedParent.setPassword("SelectedParentPass123");
+    	db.UpdateParent_Account(SelectedParent);
+    	
+    	Parent_Account SelectedParent2 = new Parent_Account();
+    	SelectedParent2 = db.SelectParent_Account(2);
+        
+        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123";
+        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123\" but instead returned: " + SelectedParent2.toString());
+    }
+	
+    /**
+     ******* END OF TEST USER_ACCOUNT CRUD *******
+	 */
+
+    
 	/**
      ******* START OF TEST TASK CRUD *******
 	 */
 	
     @Test
-    @Order(2)
+    @Order(10)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
     	db.AddTask(nonDefaultTask);
@@ -132,7 +273,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(3)
+    @Order(11)
     @DisplayName("<DataBase> DatabaseUpdateTask")
     void DatabaseUpdateTask() {
     	Task UpdatedTask= new Task(nonDefaultTask);
@@ -145,7 +286,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(5)
+    @Order(13)
     @DisplayName("<DataBase> DatabaseDeleteTask")
     void DatabaseDeleteTask() {
     	Task DeletedTask= new Task(nonDefaultTask);
@@ -159,7 +300,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(4)
+    @Order(12)
     @DisplayName("<DataBase> DatabaseSelectTask")
     void DatabaseSelectTask() {
     	Task SelectedTask1= new Task(nonDefaultTask);
@@ -187,7 +328,7 @@ public class Test_DataBase {
 
  
     @Test
-    @Order(6)
+    @Order(14)
     @DisplayName("<DataBase> DatabaseSelectAllTasks")
     void DatabaseSelectAllTasks() {
     	ArrayList<Task> test_task_List = new ArrayList<Task>();
@@ -229,7 +370,7 @@ public class Test_DataBase {
     */
     
     @Test
-    @Order(7)
+    @Order(15)
     @DisplayName("<DataBase> DatabaseAddNewHTB")
     void DatabaseAddHTB() {
     db.AddHTB(nonDefaultHTB);
@@ -239,7 +380,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(8)
+    @Order(16)
     @DisplayName("<DataBase> DatabaseUpdateHTB")
     void DatabaseUpdateHTB() {
     	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
@@ -251,7 +392,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(9)
+    @Order(17)
     @DisplayName("<DataBase> DatabaseDeleteHTB")
     void DatabaseDeleteHTB() {
     	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
@@ -264,7 +405,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(10)
+    @Order(18)
     @DisplayName("<DataBase> DatabaseSelectHTB")
     void DatabaseSelectHTB() {
     	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
@@ -290,7 +431,7 @@ public class Test_DataBase {
     ******* START OF TEST OBSERVER CRUD *******
      */
     @Test
-    @Order(11)
+    @Order(19)
     @DisplayName("<DataBase> DatabaseAddNewObserver")
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);
@@ -302,7 +443,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(12)
+    @Order(20)
     @DisplayName("<DataBase> DatabaseUpdateObserver")
     void DatabaseUpdateObserver() {
     	Observer UpdatedObserver= new Observer(nonDefaultObserver);
@@ -314,7 +455,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(13)
+    @Order(21)
     @DisplayName("<DataBase> DatabaseDeleteObserver")
     void DatabaseDeleteObserver() {
     	Observer DeletedObserver = new Observer(nonDefaultObserver);
@@ -327,7 +468,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(14)
+    @Order(22)
     @DisplayName("<DataBase> DatabaseSelectObserver")
     void DatabaseSelectObserver() {
     	Observer selectedObserver = new Observer(nonDefaultObserver);
@@ -346,7 +487,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(15)
+    @Order(23)
     @DisplayName("<DataBase> DatabaseSelectAllObservers")
     void DatabaseSelectAllObservers() {
     	ArrayList<Observer> test_Observer_List = new ArrayList<Observer>();
@@ -389,7 +530,7 @@ public class Test_DataBase {
 
     
     @Test
-    @Order(16)
+    @Order(24)
     @DisplayName("<DataBase> DatabaseAddNewSettings")
     void DatabaseAddNewSettings() {
         db.AddSettings(nonDefaultSettings);
@@ -399,7 +540,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(17)
+    @Order(25)
     @DisplayName("<DataBase> DatabaseUpdateSettings")
     void DatabaseUpdateSettings() {
     	Settings UpdatedSettings= new Settings(nonDefaultSettings);
@@ -410,7 +551,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(18)
+    @Order(26)
     @DisplayName("<DataBase> DatabaseDeleteSettings")
     void DatabaseDeleteSettings() {
     	Settings deletedSettings = new Settings(nonDefaultSettings);
@@ -422,7 +563,7 @@ public class Test_DataBase {
 
     
     @Test
-    @Order(19)
+    @Order(27)
     @DisplayName("<DataBase> DatabaseSelectSettings")
     void DatabaseSelectSettings() {
     	Settings selectedSettings = new Settings(nonDefaultSettings);
