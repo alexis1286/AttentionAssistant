@@ -1052,7 +1052,7 @@ public class DataBase {
     * Mainly used for JUNIT testing, deletes the LinkedAccounts table at the beginning of testing to remove all test data.
     */ 
    public void DeleteAllLinkedAccounts() {
-   	String query1 = "DROP TABLE IF EXISTS 'linked_Account'";
+   	String query1 = "DROP TABLE IF EXISTS 'linked_Accounts'";
    	try ( Connection conn = this.ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
 		    int rv = stmt.executeUpdate( query1 );

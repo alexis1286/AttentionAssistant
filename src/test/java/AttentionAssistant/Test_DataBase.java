@@ -594,8 +594,10 @@ public class Test_DataBase {
     @Order(28)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseAddLinked_Account() {
-    	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
-    	linkParent.setParentID(1);
+    	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
+    	linkParent1.setParentID(1);
+    	Parent_Account linkParent2 = new Parent_Account(nonDefaultParent);
+    	linkParent2.setParentID(2);
     	User_Account linkUser1 = new User_Account(nonDefaultUser);
     	linkUser1.setUserID(1);
     	User_Account linkUser2 = new User_Account(nonDefaultUser);
@@ -603,9 +605,11 @@ public class Test_DataBase {
     	User_Account linkUser4 = new User_Account(nonDefaultUser);
     	linkUser4.setUserID(4);
     	
-    	db.AddLinked_Account(linkParent, linkUser1);
-    	db.AddLinked_Account(linkParent, linkUser2);
-    	db.AddLinked_Account(linkParent, linkUser4);
+    	db.AddLinked_Account(linkParent1, linkUser1);
+    	db.AddLinked_Account(linkParent1, linkUser2);
+    	db.AddLinked_Account(linkParent1, linkUser4);
+    	db.AddLinked_Account(linkParent2, linkUser1);
+    	db.AddLinked_Account(linkParent2, linkUser4);
     }
 
     @Test
@@ -623,27 +627,43 @@ public class Test_DataBase {
     @Order(30)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseSelect_All_Users_Linked_Account() {
-    	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
-    	linkParent.setParentID(1);
-    	ArrayList<User_Account> testDBlinkedUsersList= new ArrayList<User_Account>();
-    	testDBlinkedUsersList= db.Select_All_Users_Linked_Account(linkParent);
+    	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
+    	Parent_Account linkParent2 = new Parent_Account(nonDefaultParent);
+    	
+    	linkParent1.setParentID(1);
+    	ArrayList<User_Account> testDBlinkedUsersList1= new ArrayList<User_Account>();
+    	testDBlinkedUsersList1= db.Select_All_Users_Linked_Account(linkParent1);
+    	linkParent2.setParentID(2);
+    	ArrayList<User_Account> testDBlinkedUsersList2= new ArrayList<User_Account>();
+    	testDBlinkedUsersList2= db.Select_All_Users_Linked_Account(linkParent2);
 
-    	ArrayList<User_Account> testLinkedUsersList= new ArrayList<User_Account>();
+    	ArrayList<User_Account> testLinkedUsersList1= new ArrayList<User_Account>();
+    	ArrayList<User_Account> testLinkedUsersList2= new ArrayList<User_Account>();
 
     	User_Account UpdatedUser= new User_Account(nonDefaultUser);
     	UpdatedUser.setUserID(1);
     	UpdatedUser.setUsername("UpdatedUsername123");
     	UpdatedUser.setPassword("UpdatedPassword123");
-    	testLinkedUsersList.add(UpdatedUser);
+    	testLinkedUsersList1.add(UpdatedUser);
+    	testLinkedUsersList2.add(UpdatedUser);
 
     	User_Account SelectedUser = new User_Account(nonDefaultUser);
     	SelectedUser.setUserID(2);
     	SelectedUser.setUsername("SelectedUsername123");
     	SelectedUser.setPassword("SelectedPassword123");
-    	testLinkedUsersList.add(SelectedUser);
+    	testLinkedUsersList1.add(SelectedUser);
+    	
+    	User_Account DefaultUser= new User_Account(nonDefaultUser);
+    	DefaultUser.setUserID(4);
+    	testLinkedUsersList2.add(DefaultUser);
+    	
 
-    	for (int i =0; i< testDBlinkedUsersList.size(); i++) {        
-    		assertEquals(testLinkedUsersList.get(i).toString(), testDBlinkedUsersList.get(i).toString(), "testDBlinkedUsersList " + i + " should be set to " + testLinkedUsersList.get(i).toString() + " but instead returned: " + testDBlinkedUsersList.get(i).toString());
+    	for (int i =0; i< testDBlinkedUsersList1.size(); i++) {        
+    		assertEquals(testLinkedUsersList1.get(i).toString(), testDBlinkedUsersList1.get(i).toString(), "testDBlinkedUsersList " + i + " should be set to " + testLinkedUsersList1.get(i).toString() + " but instead returned: " + testDBlinkedUsersList1.get(i).toString());
+        }
+    	
+    	for (int i2 =0; i2< testDBlinkedUsersList2.size(); i2++) {        
+    		assertEquals(testLinkedUsersList2.get(i2).toString(), testDBlinkedUsersList2.get(i2).toString(), "testDBlinkedUsersList " + i2 + " should be set to " + testLinkedUsersList2.get(i2).toString() + " but instead returned: " + testDBlinkedUsersList2.get(i2).toString());
         }
 
     }
