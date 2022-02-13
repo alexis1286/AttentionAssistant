@@ -373,13 +373,17 @@ public class Test_DataBase {
     @Test
     @Order(15)
     @DisplayName("<DataBase> DatabaseAddNewHTB")
-    void DatabaseAddHTB() {
+    void DatabaseAddHTB() throws Exception {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
+    db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
     db.AddHTB(nonDefaultHTB, Test_User_Account);
     db.AddHTB(nonDefaultHTB, Test_User_Account);
     db.AddHTB(nonDefaultHTB, Test_User_Account);
     db.AddHTB(nonDefaultHTB, Test_User_Account);
+    Test_User_Account.setUserID(5);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.DeleteUser_Account(5);
     }
     
     @Test

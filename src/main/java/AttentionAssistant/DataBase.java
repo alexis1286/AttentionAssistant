@@ -11,11 +11,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
 public class DataBase {
 	
 	private SQLiteDataSource ds;
+	SQLiteConfig sqlCon;
+
 	
 	
 	/**
@@ -24,6 +27,7 @@ public class DataBase {
 	 */
 	public DataBase() {
 		this.ds= new SQLiteDataSource();
+		this.sqlCon = new SQLiteConfig();
 	}
 
 	
@@ -67,7 +71,7 @@ public class DataBase {
   			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
    			 "dT_Executed DATE, " +
-			 "FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\"))";
+			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
     	/**
     	 * Set up for Table Observer
@@ -78,7 +82,7 @@ public class DataBase {
    			 "observerScore INTEGER, " +
    			 "threshold INTEGER, " +
    			 "dT_Gathered DATE, " +
-   			 "FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\"))";
+   			 "CONSTRAINT fk_taskID FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\") ON DELETE CASCADE)";
 
         /**
          * Set up for Table Settings
@@ -139,8 +143,8 @@ public class DataBase {
    			 "linkedAccountID INTEGER PRIMARY KEY, " +
    			 "fk_ParentID INTEGER, " +
    			 "fk_UserID INTEGER, " +
-			 "FOREIGN KEY (\"fk_ParentID\") REFERENCES \"parent\"(\"parentID\"), " +
-   			 "FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\"))";
+			 "CONSTRAINT fk_ParentID FOREIGN KEY (\"fk_ParentID\") REFERENCES \"parent\"(\"parentID\") ON DELETE CASCADE, " +
+   			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
 
 	try (Connection conn = this.ds.getConnection();
@@ -164,7 +168,9 @@ public class DataBase {
            e.printStackTrace();
            System.exit( 0 );
        }
-    
+
+
+
     }
     /**
     ******* START OF USER_ACCOUNT CRUD *******
@@ -175,6 +181,8 @@ public class DataBase {
      * @param User_Account
      */
     public void AddUser_Account(User_Account user) {
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
     	String query1 = "INSERT INTO user " +
     			"( username, password ) Values ( '" +
     			user.getUsername() + "', '" +
@@ -187,6 +195,8 @@ public class DataBase {
     		    e.printStackTrace();
     		    System.exit( 0 );
     		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
     }
 
     /**
@@ -194,6 +204,8 @@ public class DataBase {
      * @param User_Account
      */
 	public void UpdateUser_Account(User_Account user) {
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		String query1 = "UPDATE user " +
 				"SET username = '" + user.getUsername() +
         		"', password = '" + user.getPassword() +
@@ -206,6 +218,8 @@ public class DataBase {
         	e.printStackTrace();
         	System.exit( 0 );
         	}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
 
 	}
 
@@ -214,6 +228,8 @@ public class DataBase {
          * @param int
          */
 	public void DeleteUser_Account(int userID) {
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		String query1 = "DELETE FROM user WHERE userID = '" + userID + "'";
 		try ( Connection conn = ds.getConnection();
 			Statement stmt = conn.createStatement(); ) {
@@ -223,6 +239,8 @@ public class DataBase {
             e.printStackTrace();
             System.exit( 0 );
         }
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
     }
             
        	/**
@@ -231,6 +249,8 @@ public class DataBase {
          * @return User_Account
          */
 	public User_Account SelectUser_Account(int userID) {
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		User_Account user1 = new User_Account();
         String query1 = "SELECT * FROM user WHERE userID = '" + userID + "'";
         try ( Connection conn = ds.getConnection();
@@ -244,6 +264,8 @@ public class DataBase {
             e.printStackTrace();
             System.exit( 0 );
         }
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
           return user1;
         }
     /**
@@ -277,6 +299,8 @@ public class DataBase {
         * @param Parent_Account
         */
 	public void AddParent_Account(Parent_Account parent) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		String query1 = "INSERT INTO parent " +
              "( username, password ) Values ( '" +
              parent.getUsername() + "', '" +
@@ -289,6 +313,8 @@ public class DataBase {
              e.printStackTrace();
              System.exit( 0 );
              }
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
         }
 
         /**
@@ -296,6 +322,8 @@ public class DataBase {
          * @param User_Account
          */
 	public void UpdateParent_Account(Parent_Account parent) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		String query1 = "UPDATE parent " +
 				"SET username = '" + parent.getUsername() +
                 "', password = '" + parent.getPassword() +
@@ -308,6 +336,8 @@ public class DataBase {
                 e.printStackTrace();
                 System.exit( 0 );
         	}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
 
         }
 
@@ -316,6 +346,8 @@ public class DataBase {
          * @param int
          */
 	public void DeleteParent_Account(int parentID) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
        	String query1 = "DELETE FROM parent WHERE parentID = '" + parentID + "'";
         try ( Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement(); ) {
@@ -325,6 +357,8 @@ public class DataBase {
              e.printStackTrace();
              System.exit( 0 );
              }
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
         }
                      
         /**
@@ -333,6 +367,8 @@ public class DataBase {
          * @return Parent_Account
          */
 	public Parent_Account SelectParent_Account(int parentID) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 		Parent_Account parent1 = new Parent_Account();
         String query1 = "SELECT * FROM parent WHERE parentID = '" + parentID + "'";
         try ( Connection conn = ds.getConnection();
@@ -346,6 +382,8 @@ public class DataBase {
                      e.printStackTrace();
                      System.exit( 0 );
                 }
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
          return parent1;
          }
 
@@ -378,7 +416,8 @@ public class DataBase {
      * @param task
      */
     public void AddTask(Task task) {
-
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
     	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
     			"( description, observable, status, name, dueDate, priority ) Values ( '" +
@@ -396,6 +435,8 @@ public class DataBase {
     		    e.printStackTrace();
     		    System.exit( 0 );
     		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
     }
     
     /**
@@ -403,6 +444,8 @@ public class DataBase {
      * @param task
      */
         public void UpdateTask(Task task) {
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
         	String query1 = "UPDATE task " +
         			"SET description = '" + task.getDescription() + 
@@ -420,6 +463,8 @@ public class DataBase {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
         	
         }
         
@@ -428,6 +473,8 @@ public class DataBase {
          * @param int
          */
         public void DeleteTask(int taskid) {
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
         	String query1 = "DELETE FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
@@ -437,6 +484,8 @@ public class DataBase {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
         	
         }    	
         
@@ -446,6 +495,8 @@ public class DataBase {
          * @return Task
          */
         public Task SelectTask(int taskid) {
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
         	Task task1 = new Task();
         	String query1 = "SELECT * FROM task WHERE taskID = '" + taskid + "'";
         	try ( Connection conn = ds.getConnection();
@@ -468,6 +519,8 @@ public class DataBase {
         			p.printStackTrace();
         			System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
         	return task1;
         }
         
@@ -478,6 +531,8 @@ public class DataBase {
          * @return ArrayList<Task>
          */
         public ArrayList<Task> SelectAllTasks(){
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
         	ArrayList<Task> tasksOnList = new ArrayList<Task>();
         	Task blankTask = new Task();
         	String query1 = "SELECT * FROM task ORDER BY observable DESC, priority DESC, dueDate ASC";
@@ -505,6 +560,8 @@ public class DataBase {
         			p.printStackTrace();
         			System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
         	return tasksOnList;
         }
         
@@ -537,7 +594,9 @@ public class DataBase {
          * Add a new Happy_Thought_Button to the database.
          * @param Happy_Thought_Button
          */
-        public void AddHTB(Happy_Thought_Button hTB, User_Account user) {
+        public void AddHTB(Happy_Thought_Button hTB, User_Account user) throws Exception {
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
         			"(fk_userID, media_ID_Tag, flagged, dT_Executed) Values ( '" +
@@ -553,6 +612,8 @@ public class DataBase {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
         }
         /**
          * Update a Happy_Thought_Button within the Database
@@ -560,6 +621,8 @@ public class DataBase {
          * @param Happy_Thought_Button
          */
             public void UpdateHTB(Happy_Thought_Button hTB) {
+        		sqlCon.enforceForeignKeys(true);
+                ds.setConfig(sqlCon);
             	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
             	String query1 = "UPDATE happy_thought_button " +
             			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag() + 
@@ -574,6 +637,8 @@ public class DataBase {
             		    e.printStackTrace();
             		    System.exit( 0 );
             		}
+        		sqlCon.enforceForeignKeys(false);
+                ds.setConfig(sqlCon);
             	
             }   
             /**
@@ -582,6 +647,8 @@ public class DataBase {
              * @param int
              */
             public void DeleteHTB(int hTBID) {
+        		sqlCon.enforceForeignKeys(true);
+                ds.setConfig(sqlCon);
             	String query1 = "DELETE FROM happy_thought_button WHERE hTBID = '" + hTBID + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
@@ -591,6 +658,8 @@ public class DataBase {
             		    e.printStackTrace();
             		    System.exit( 0 );
             		}
+        		sqlCon.enforceForeignKeys(false);
+                ds.setConfig(sqlCon);
             	
             }    	
             /**
@@ -600,6 +669,8 @@ public class DataBase {
              * @return Happy_Thought_Button
              */
             public Happy_Thought_Button SelectHTB(int hTBID) {
+        		sqlCon.enforceForeignKeys(true);
+                ds.setConfig(sqlCon);
             	Happy_Thought_Button hTB1 = new Happy_Thought_Button();
             	String query1 = "SELECT * FROM happy_thought_button WHERE hTBID = '" + hTBID + "'";
             	try ( Connection conn = ds.getConnection();
@@ -619,7 +690,8 @@ public class DataBase {
       				 p.printStackTrace();
       				 System.exit( 0 );
       			 }
-
+        		sqlCon.enforceForeignKeys(false);
+                ds.setConfig(sqlCon);
             	return hTB1;
             }
             
@@ -655,7 +727,8 @@ public class DataBase {
              * @param Observer, Task
              */
             public void AddObserver(Observer observer, Task task) {
-
+            	sqlCon.enforceForeignKeys(true);
+                ds.setConfig(sqlCon);
             	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
             	String query1 = "INSERT INTO observer " +
             			"( fk_taskID, observerScore, threshold, dT_Gathered) Values ( '" +
@@ -671,6 +744,8 @@ public class DataBase {
             		    e.printStackTrace();
             		    System.exit( 0 );
             		}
+        		sqlCon.enforceForeignKeys(false);
+                ds.setConfig(sqlCon);
             }
 
             /**
@@ -679,6 +754,8 @@ public class DataBase {
              * @param Observer
              */
                 public void UpdateObserver(Observer observer) {
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
                 	String query1 = "UPDATE observer " +
                 			"SET observerScore = '" + observer.getObserverScore() + 
@@ -693,6 +770,8 @@ public class DataBase {
                 		    e.printStackTrace();
                 		    System.exit( 0 );
                 		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 	
                 }
                 
@@ -701,6 +780,8 @@ public class DataBase {
                  * @param int
                  */
                 public void DeleteObserver(int observerID) {
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	String query1 = "DELETE FROM observer WHERE observerID = '" + observerID + "'";
                 	try ( Connection conn = ds.getConnection();
                 		    Statement stmt = conn.createStatement(); ) {
@@ -710,6 +791,8 @@ public class DataBase {
                 		    e.printStackTrace();
                 		    System.exit( 0 );
                 		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 	
                 }    	
                 
@@ -719,6 +802,8 @@ public class DataBase {
                  * @return Observer
                  */
                 public Observer SelectObserver(int observerID) {
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	Observer observer1 = new Observer();
                 	String query1 = "SELECT * FROM observer WHERE observerID = '" + observerID + "'";
                 	try ( Connection conn = ds.getConnection();
@@ -738,6 +823,8 @@ public class DataBase {
                 			p.printStackTrace();
                 			System.exit( 0 );
                 		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 	return observer1;
                 }
             	
@@ -746,6 +833,8 @@ public class DataBase {
                  * 
                  */
                 public void DeleteAllObservers(){
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	String query1 = "DROP TABLE IF EXISTS 'observer'";
                 	try ( Connection conn = this.ds.getConnection();
                 		    Statement stmt = conn.createStatement(); ) {
@@ -755,6 +844,8 @@ public class DataBase {
             			e.printStackTrace();
             		    System.exit( 0 );
                 	}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 	
                 }
 
@@ -764,6 +855,8 @@ public class DataBase {
                  * @return ArrayList<Observers>
                  */
                 public ArrayList<Observer> SelectAllObservers(int task_ID){
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	ArrayList<Observer> ObserversOnList = new ArrayList<Observer>();
                 	Observer blankObserver = new Observer();
                 	String query1 = "SELECT * FROM observer WHERE fk_taskID='" + task_ID + "' ORDER BY dT_Gathered ASC";
@@ -788,6 +881,8 @@ public class DataBase {
                 			p.printStackTrace();
                 			System.exit( 0 );
                 		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 	return ObserversOnList;
                 }
 
@@ -805,7 +900,8 @@ public class DataBase {
                  * @param Settings
                  */
                 public void AddSettings(Settings settings) {
-
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
                 	String query1 = "INSERT INTO settings " +
                 			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
                 			settings.getIconCircles().getRGB() + "', '" +
@@ -846,6 +942,8 @@ public class DataBase {
                 		    e.printStackTrace();
                 		    System.exit( 0 );
                 		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
                 }
 
                 /**
@@ -854,6 +952,8 @@ public class DataBase {
                  * @param Settings
                  */
                     public void UpdateSettings(Settings settings) {
+                		sqlCon.enforceForeignKeys(true);
+                        ds.setConfig(sqlCon);
                     	String query1 = "UPDATE settings " +
                     			"SET iconCircles = '" + settings.getIconCircles().getRGB() + 
                     			"', icons = '" + settings.getIcons().getRGB() + 
@@ -894,6 +994,8 @@ public class DataBase {
                     		    e.printStackTrace();
                     		    System.exit( 0 );
                     		}
+                		sqlCon.enforceForeignKeys(false);
+                        ds.setConfig(sqlCon);
                     	
                     }
                     
@@ -902,6 +1004,8 @@ public class DataBase {
                      * @param int
                      */
                     public void DeleteSettings(int settingsID) {
+                		sqlCon.enforceForeignKeys(true);
+                        ds.setConfig(sqlCon);
                     	String query1 = "DELETE FROM settings WHERE settingsID = '" + settingsID + "'";
                     	try ( Connection conn = ds.getConnection();
                     		    Statement stmt = conn.createStatement(); ) {
@@ -911,6 +1015,8 @@ public class DataBase {
                     		    e.printStackTrace();
                     		    System.exit( 0 );
                     		}
+                		sqlCon.enforceForeignKeys(false);
+                        ds.setConfig(sqlCon);
                     	
                     }    	
 
@@ -921,6 +1027,8 @@ public class DataBase {
                      * @return Settings
                      */
                     public Settings SelectSettings(int settingsID) {
+                		sqlCon.enforceForeignKeys(true);
+                        ds.setConfig(sqlCon);
                     	Settings settings1 = new Settings();
                     	String query1 = "SELECT * FROM settings WHERE settingsID = '" + settingsID + "'";
                     	try ( Connection conn = ds.getConnection();
@@ -962,6 +1070,8 @@ public class DataBase {
                     			e.printStackTrace();
                     		    System.exit( 0 );
                     		}
+                		sqlCon.enforceForeignKeys(false);
+                        ds.setConfig(sqlCon);
                     	return settings1;
                     }
 
@@ -996,6 +1106,8 @@ public class DataBase {
       * @param Parent_Account, User_Account
       */
     public void AddLinked_Account(Parent_Account parent, User_Account user) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
          	String query1 = "INSERT INTO linked_Accounts " +
       			"( fk_ParentID, fk_UserID) Values ( '" +
        			parent.getParentID() + "', '" +
@@ -1008,12 +1120,16 @@ public class DataBase {
            		    e.printStackTrace();
           		    System.exit( 0 );
           		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
             }
     /**
      * Delete a new Account the database.
      * @param Parent_Account, User_Account
      */
    public void DeleteLinked_Account(Parent_Account parent, User_Account user) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
         	String query1 = "DELETE FROM linked_Accounts WHERE fk_ParentID= '" + parent.getParentID() + "' AND fk_UserID= '" + user.getUserID() +"'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
@@ -1023,6 +1139,8 @@ public class DataBase {
         		    e.printStackTrace();
         		    System.exit( 0 );
         		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
            }
    
    /**
@@ -1033,6 +1151,8 @@ public class DataBase {
     */
    
    public ArrayList<User_Account> Select_All_Users_Linked_Account(Parent_Account parent){
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
 	   ArrayList<User_Account> userAccountList = new ArrayList<User_Account>();
 	   User_Account blankUser= new User_Account();
 	   String query1 = "SELECT fk_UserID FROM linked_Accounts WHERE fk_ParentID = '" + parent.getParentID() + "'";
@@ -1048,6 +1168,8 @@ public class DataBase {
 			e.printStackTrace();
 		    System.exit( 0 );
 		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
 	   return userAccountList;
    }
 
