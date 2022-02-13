@@ -63,10 +63,12 @@ public class DataBase {
     	 */
     	String queryHappyThoughtButton = "CREATE TABLE IF NOT EXISTS happy_thought_button ( " +
    			 "hTBID INTEGER PRIMARY KEY, " +
-   			 "media_ID_Tag TEXT, " +
+   			 "fk_userID INTEGER, " +
+  			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
-   			 "dT_Executed DATE)";
-    	
+   			 "dT_Executed DATE, " +
+			 "FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\"))";
+
     	/**
     	 * Set up for Table Observer
     	 */
@@ -535,10 +537,11 @@ public class DataBase {
          * Add a new Happy_Thought_Button to the database.
          * @param Happy_Thought_Button
          */
-        public void AddHTB(Happy_Thought_Button hTB) {
+        public void AddHTB(Happy_Thought_Button hTB, User_Account user) {
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
-        			"( media_ID_Tag, flagged, dT_Executed) Values ( '" +
+        			"(fk_userID, media_ID_Tag, flagged, dT_Executed) Values ( '" +
+        			user.getUserID() + "', '" +
         			hTB.getMedia_ID_Tag() + "', '" +
         			hTB.getFlagged() + "', '" +
         			DateTime + "')";

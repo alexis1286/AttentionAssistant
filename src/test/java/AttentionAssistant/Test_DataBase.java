@@ -374,10 +374,12 @@ public class Test_DataBase {
     @Order(15)
     @DisplayName("<DataBase> DatabaseAddNewHTB")
     void DatabaseAddHTB() {
-    db.AddHTB(nonDefaultHTB);
-    db.AddHTB(nonDefaultHTB);
-    db.AddHTB(nonDefaultHTB);
-    db.AddHTB(nonDefaultHTB);
+    User_Account Test_User_Account= new User_Account(nonDefaultUser);
+    Test_User_Account.setUserID(1);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
     }
     
     @Test
