@@ -166,7 +166,6 @@ public class DataBase {
 
        } catch ( SQLException e ) {
            e.printStackTrace();
-           System.exit( 0 );
        }
 
 
@@ -193,7 +192,6 @@ public class DataBase {
     		    System.out.println( "AddUser_Account() returned " + rv );
     		} catch ( SQLException e ) {
     		    e.printStackTrace();
-    		    System.exit( 0 );
     		}
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -216,7 +214,6 @@ public class DataBase {
         	System.out.println( "UpdateUser_Account() returned " + rv );
         	} catch ( SQLException e ) {
         	e.printStackTrace();
-        	System.exit( 0 );
         	}
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -237,7 +234,6 @@ public class DataBase {
 			System.out.println( "DeleteUser_Account() returned " + rv );
         	} catch ( SQLException e ) {
             e.printStackTrace();
-            System.exit( 0 );
         }
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -262,7 +258,6 @@ public class DataBase {
             System.out.println( "SelectUser_Account() returned " + rs );
         	} catch ( SQLException e ) {
             e.printStackTrace();
-            System.exit( 0 );
         }
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -280,7 +275,6 @@ public class DataBase {
 		    System.out.println( "DeleteAllUser_Accounts() returned " + rv );
     	} catch ( SQLException e ) {
 			e.printStackTrace();
-		    System.exit( 0 );
     	}
     }
 
@@ -311,7 +305,6 @@ public class DataBase {
              System.out.println( "AddParent_Account() returned " + rv );
         	} catch ( SQLException e ) {
              e.printStackTrace();
-             System.exit( 0 );
              }
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -334,7 +327,6 @@ public class DataBase {
                 System.out.println( "UpdateParent_Account() returned " + rv );
         	} catch ( SQLException e ) {
                 e.printStackTrace();
-                System.exit( 0 );
         	}
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -355,7 +347,6 @@ public class DataBase {
              System.out.println( "DeleteParent_Account() returned " + rv );
              } catch ( SQLException e ) {
              e.printStackTrace();
-             System.exit( 0 );
              }
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -380,7 +371,6 @@ public class DataBase {
                 System.out.println( "SelectParent_Account() returned " + rs );
                 } catch ( SQLException e ) {
                      e.printStackTrace();
-                     System.exit( 0 );
                 }
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -399,7 +389,6 @@ public class DataBase {
 		    System.out.println( "DeleteAllParent_Accounts() returned " + rv );
     	} catch ( SQLException e ) {
 			e.printStackTrace();
-		    System.exit( 0 );
     	}
     }
 
@@ -432,8 +421,8 @@ public class DataBase {
     		    int rv = stmt.executeUpdate( query1 );
     		    System.out.println( "AddTask() returned " + rv );
     		} catch ( SQLException e ) {
-    		    e.printStackTrace();
-    		    System.exit( 0 );
+    		    //gets called when a user is passed in that isn't in the user table.
+    			e.printStackTrace();
     		}
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -461,7 +450,6 @@ public class DataBase {
         		    System.out.println( "UpdateTask() returned " + rv );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
-        		    System.exit( 0 );
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -482,7 +470,6 @@ public class DataBase {
         		    System.out.println( "DeleteTask() returned " + rv );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
-        		    System.exit( 0 );
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -513,11 +500,9 @@ public class DataBase {
         		    System.out.println( "SelectTask() returned " + rs );
         		} catch ( SQLException e ) {
         			e.printStackTrace();
-        		    System.exit( 0 );
         		}
         		  catch ( ParseException p ) {
         			p.printStackTrace();
-        			System.exit( 0 );
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -554,11 +539,9 @@ public class DataBase {
         		    System.out.println( "SelectAllTasks() returned " + rs );
         		} catch ( SQLException e ) {
         			e.printStackTrace();
-        		    System.exit( 0 );
         		}
         		  catch ( ParseException p ) {
         			p.printStackTrace();
-        			System.exit( 0 );
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -577,7 +560,6 @@ public class DataBase {
     		    System.out.println( "DeleteAllTasks() returned " + rv );
         	} catch ( SQLException e ) {
     			e.printStackTrace();
-    		    System.exit( 0 );
         }
 
         }
@@ -594,7 +576,7 @@ public class DataBase {
          * Add a new Happy_Thought_Button to the database.
          * @param Happy_Thought_Button
          */
-        public void AddHTB(Happy_Thought_Button hTB, User_Account user) throws Exception {
+        public void AddHTB(Happy_Thought_Button hTB, User_Account user) {
     		sqlCon.enforceForeignKeys(true);
             ds.setConfig(sqlCon);
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
@@ -609,8 +591,8 @@ public class DataBase {
         		    int rv = stmt.executeUpdate( query1 );
         		    System.out.println( "AddhTB() returned " + rv );
         		} catch ( SQLException e ) {
-        		    e.printStackTrace();
-        		    System.exit( 0 );
+        		    //gets called when a user is passed in that isn't in the user table.
+        			e.printStackTrace();
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -634,8 +616,8 @@ public class DataBase {
             		    int rv = stmt.executeUpdate( query1 );
             		    System.out.println( "UpdateHTB() returned " + rv );
             		} catch ( SQLException e ) {
-            		    e.printStackTrace();
-            		    System.exit( 0 );
+            		    //I have no idea how to get inside of this statement without the DB not connecting.
+            			e.printStackTrace();
             		}
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
@@ -656,7 +638,6 @@ public class DataBase {
             		    System.out.println( "DeleteHTB() returned " + rv );
             		} catch ( SQLException e ) {
             		    e.printStackTrace();
-            		    System.exit( 0 );
             		}
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
@@ -684,11 +665,9 @@ public class DataBase {
             		    System.out.println( "SelectTask() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
-            		    System.exit( 0 );
             		}
       			 catch ( ParseException p ) {
       				 p.printStackTrace();
-      				 System.exit( 0 );
       			 }
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
@@ -707,7 +686,6 @@ public class DataBase {
         		    System.out.println( "DeleteAllHTBs() returned " + rv );
             	} catch ( SQLException e ) {
         			e.printStackTrace();
-        		    System.exit( 0 );
             }
             	
             }
@@ -741,8 +719,8 @@ public class DataBase {
             		    int rv = stmt.executeUpdate( query1 );
             		    System.out.println( "AddObserver() returned " + rv );
             		} catch ( SQLException e ) {
-            		    e.printStackTrace();
-            		    System.exit( 0 );
+            		    //gets called when a task is passed in that isn't in the task table.
+            			e.printStackTrace();
             		}
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
@@ -768,7 +746,6 @@ public class DataBase {
                 		    System.out.println( "UpdateObserver() returned " + rv );
                 		} catch ( SQLException e ) {
                 		    e.printStackTrace();
-                		    System.exit( 0 );
                 		}
             		sqlCon.enforceForeignKeys(false);
                     ds.setConfig(sqlCon);
@@ -789,7 +766,6 @@ public class DataBase {
                 		    System.out.println( "DeleteObserver() returned " + rv );
                 		} catch ( SQLException e ) {
                 		    e.printStackTrace();
-                		    System.exit( 0 );
                 		}
             		sqlCon.enforceForeignKeys(false);
                     ds.setConfig(sqlCon);
@@ -817,7 +793,6 @@ public class DataBase {
                 		    System.out.println( "SelectObserver() returned " + rs );
                 		} catch ( SQLException e ) {
                 			e.printStackTrace();
-                		    System.exit( 0 );
                 		}
                 		  catch ( ParseException p ) {
                 			p.printStackTrace();
@@ -842,7 +817,6 @@ public class DataBase {
             		    System.out.println( "DeleteAllObservers() returned " + rv );
                 	} catch ( SQLException e ) {
             			e.printStackTrace();
-            		    System.exit( 0 );
                 	}
             		sqlCon.enforceForeignKeys(false);
                     ds.setConfig(sqlCon);
@@ -875,7 +849,6 @@ public class DataBase {
                 		    System.out.println( "SelectAllTasks() returned " + rs );
                 		} catch ( SQLException e ) {
                 			e.printStackTrace();
-                		    System.exit( 0 );
                 		}
                 		  catch ( ParseException p ) {
                 			p.printStackTrace();
@@ -940,7 +913,6 @@ public class DataBase {
                 		    System.out.println( "AddSettings() returned " + rv );
                 		} catch ( SQLException e ) {
                 		    e.printStackTrace();
-                		    System.exit( 0 );
                 		}
             		sqlCon.enforceForeignKeys(false);
                     ds.setConfig(sqlCon);
@@ -992,7 +964,6 @@ public class DataBase {
                     		    System.out.println( "UpdateSettings() returned " + rv );
                     		} catch ( SQLException e ) {
                     		    e.printStackTrace();
-                    		    System.exit( 0 );
                     		}
                 		sqlCon.enforceForeignKeys(false);
                         ds.setConfig(sqlCon);
@@ -1013,7 +984,6 @@ public class DataBase {
                     		    System.out.println( "DeleteSettings() returned " + rv );
                     		} catch ( SQLException e ) {
                     		    e.printStackTrace();
-                    		    System.exit( 0 );
                     		}
                 		sqlCon.enforceForeignKeys(false);
                         ds.setConfig(sqlCon);
@@ -1068,7 +1038,6 @@ public class DataBase {
                     		    System.out.println( "SelectSettings() returned " + rs );
                     		} catch ( SQLException e ) {
                     			e.printStackTrace();
-                    		    System.exit( 0 );
                     		}
                 		sqlCon.enforceForeignKeys(false);
                         ds.setConfig(sqlCon);
@@ -1087,7 +1056,6 @@ public class DataBase {
             		    System.out.println( "DeleteAllSettings() returned " + rv );
                 	} catch ( SQLException e ) {
             			e.printStackTrace();
-            		    System.exit( 0 );
                 	}
                 	
                 }
@@ -1117,8 +1085,8 @@ public class DataBase {
        		    int rv = stmt.executeUpdate( query1 );
        		    System.out.println( "AddLinked_Account() returned " + rv );
            		} catch ( SQLException e ) {
+        		    //gets called when a user or parent is passed in that isn't in the user table or parent table.
            		    e.printStackTrace();
-          		    System.exit( 0 );
           		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -1137,7 +1105,6 @@ public class DataBase {
         		    System.out.println( "DeleteLinked_Account() returned " + rv );
         		} catch ( SQLException e ) {
         		    e.printStackTrace();
-        		    System.exit( 0 );
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
@@ -1166,7 +1133,6 @@ public class DataBase {
 		    }		    
    		}catch ( SQLException e ) {
 			e.printStackTrace();
-		    System.exit( 0 );
 		}
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
@@ -1184,7 +1150,6 @@ public class DataBase {
 		    System.out.println( "DeleteAllLinkedAccounts() returned " + rv );
    	} catch ( SQLException e ) {
 			e.printStackTrace();
-		    System.exit( 0 );
    	}
    	
 	   
