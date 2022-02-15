@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.*;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.imageio.*;
@@ -19,6 +20,8 @@ public class Nav_Bar{
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
 	JButton toRefresh;
+	DecimalFormat df = new DecimalFormat("#.#"); 
+	
 		
 	/*
 	 * variables
@@ -27,9 +30,9 @@ public class Nav_Bar{
 	private int y_coord;
 	private int size;
 	private Color iconColor;
-	private int iconOpacity;
+	private float iconOpacity;
 	private Color circleColor;
-	private int circleOpacity;
+	private float circleOpacity;
 	private boolean isVert;
 	private boolean isCollapsed;
 	private boolean pomo_visible;
@@ -94,10 +97,11 @@ public class Nav_Bar{
 	}
 	
 	JPanel icon_panel;
-	
+	int counter;
 	public void run_nav_bar(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				counter = 1;
 				JFrame frame = new JFrame();
 				//removes default title bar from frame 
 		        frame.setUndecorated(true);
@@ -111,10 +115,15 @@ public class Nav_Bar{
 		        //makes frame and contents visible
 		        frame.setVisible(true);
 		        
+		        CardLayout cardLayout = new CardLayout();
+		        JPanel panel = new JPanel();
+		        panel.setLayout(cardLayout);
+		        
 		        //panel for buttons
 		        icon_panel = iconPanel(db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
-		        
-		        frame.getContentPane().add(icon_panel);
+		        panel.add("iPanel", icon_panel);
+		        cardLayout.show(panel, "iPanel");
+		        frame.getContentPane().add(panel);
 				frame.pack();
 				frame.setVisible(true);
 				frame.setResizable(true);	
@@ -122,17 +131,42 @@ public class Nav_Bar{
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		
-		        		frame.remove(icon_panel);
-		        		icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
-		        		
-		        		frame.add(icon_panel);
-		        		System.out.println(iconColor);
+		        		JPanel new_icon_panel = new JPanel();
+		        		if(counter % 2 != 0) {
+		        			new_icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+		        			panel.add("newIPanel",new_icon_panel);
+		        			cardLayout.show(panel, "newIPanel");
+		        			panel.remove(icon_panel);
+		        		}else {
+		        			icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+		        			panel.add("iPanel",icon_panel);
+		        			cardLayout.show(panel, "iPanel");
+		        			panel.remove(new_icon_panel);
+		        		}
+		        		counter++;
+		        		panel.revalidate();
+		        		panel.repaint();
+		        		panel.validate();
 		        		frame.revalidate();
+		        		frame.validate();
+		        		frame.repaint();
 		        	}
 		        });
 			}
 		});
+	}
+	
+	private BoxLayout vertlayout(JPanel pan) {
+		BoxLayout bl;
+		bl = new BoxLayout(pan,BoxLayout.Y_AXIS);
+		return bl;
+	}
+	
+	private BoxLayout horizlayout(JPanel pan) {
+		System.out.println(isVert);
+		BoxLayout bl;
+		bl = new BoxLayout(pan,BoxLayout.X_AXIS);
+		return bl;
 	}
 	
 	/*
@@ -140,11 +174,12 @@ public class Nav_Bar{
 	 */
 	private JPanel iconPanel(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
 		JPanel panel = new JPanel();
-				
+		BoxLayout layout;
 		//displays buttons vertically if true, horizontally is false
-        if(isVert == true) {
-        	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        }else {panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));}
+		if(isVert == true) {
+			layout = vertlayout(panel);
+		}else {layout = horizlayout(panel);}
+        panel.setLayout(layout);
         
         //displays only menu button until clicked if false
         if(isCollapsed == false) {
@@ -232,7 +267,6 @@ public class Nav_Bar{
         
         //sets background of panel to transparent
         panel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
-		
 		return panel;
 	}
 	
@@ -249,15 +283,30 @@ public class Nav_Bar{
 			System.exit(1);
 		}
 		
-		colorIcon(img,iconColor,iconOpacity);
-		colorCircle(circle,circleColor,circleOpacity);
+		
+		float iconOpac = iconOpacity/100;
+		colorIcon(img);
+		BufferedImage imgOpac = new BufferedImage(size, size,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gicon = imgOpac.createGraphics();
+        gicon.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iconOpac));
+        gicon.drawImage(img, 0, 0, size, size, 0, 0, img.getWidth(), img.getHeight(), panel);
+		
+        
+        float circleOpac = circleOpacity/100;
+		colorCircle(circle);
+		BufferedImage circOpac = new BufferedImage(size, size,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gcirc = circOpac.createGraphics();
+        gcirc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, circleOpac));
+        gcirc.drawImage(circle, 0, 0, size, size, 0, 0, circle.getWidth(), circle.getHeight(), panel);
+		
+		
 		
 		// create new image of icon image on top of circle image
         BufferedImage newImg = new BufferedImage(
-        		70, 70,BufferedImage.TYPE_INT_ARGB);
+        		size, size,BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphic = newImg.createGraphics();
-        graphic.drawImage(circle, 0, 0, 70, 70, 0, 0, circle.getWidth(), circle.getHeight(), panel);
-        graphic.drawImage(img,10,10,60,60,0,0,img.getWidth(),img.getHeight(), panel);
+        graphic.drawImage(circOpac, 0, 0, size, size, 0, 0, circOpac.getWidth(), circOpac.getHeight(), panel);
+        graphic.drawImage(imgOpac,10,10,(size-10),(size-10),0,0,imgOpac.getWidth(),imgOpac.getHeight(), panel);
         graphic.dispose();
         
       //creates an ImageIcon
@@ -279,11 +328,11 @@ public class Nav_Bar{
 	/*
 	 * adjusts color and/or opacity of specified icon image to specified color/opacity
 	 */
-	public static BufferedImage colorIcon(BufferedImage image, Color color, int opacity) {
+	public BufferedImage colorIcon(BufferedImage image) {
 		//get new red, green, blue values from color
-		int red = color.getRed();
-		int green = color.getGreen();
-		int blue = color.getBlue();
+		int red = iconColor.getRed();
+		int green = iconColor.getGreen();
+		int blue = iconColor.getBlue();
 		//get height and width of image to be altered
 	    int width = image.getWidth();
 	    int height = image.getHeight();
@@ -299,23 +348,17 @@ public class Nav_Bar{
 	        raster.setPixel(xx, yy, pixels);
 	      }
 	    }
-	    
-	  //alters opacity of image 
-	    float o = (float)opacity / 100;
-	    Graphics2D g2d = image.createGraphics();
-	    AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, o);
-		g2d.setComposite(composite);
 	    return image;
 	  }
 	
 	/*
 	 * adjusts color and/or opacity of circle image to specified color/opacity
 	 */
-	private static BufferedImage colorCircle(BufferedImage image, Color color, int opacity) {
+	private BufferedImage colorCircle(BufferedImage image) {
 		//get new red, green, blue values from color
-		int red = color.getRed();
-		int green = color.getGreen();
-		int blue = color.getBlue();
+		int red = circleColor.getRed();
+		int green = circleColor.getGreen();
+		int blue = circleColor.getBlue();
 		//get height and width of image to be altered
 	    int width = image.getWidth();
 	    int height = image.getHeight();
@@ -332,12 +375,6 @@ public class Nav_Bar{
 	        raster.setPixel(xx, yy, pixels);
 	      }
 	    }
-	    
-	    //alters opacity of image 
-	    float o = (float)opacity / 100;
-	    Graphics2D g2d = image.createGraphics();
-	    AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, o);
-		g2d.setComposite(composite);
 	    return image;
 	  }
 	
