@@ -70,20 +70,20 @@ public class EyeMovementTracker {
 	/**
 	 * Start tracking for the EyeMovementTracker
 	 */
-	public void startTracking(int secondsGatheringAverage) {
+	public void startTracking() {
 	/**
 	 * Still implementing uncomment at your own risk. -jmitchel2
-	 * Code will print out HelloWorld to the command line 
+	 * Code will print out Whether you are looking at the screen or not to the command line 
 	 * every time a users face is recognized
 	 * 
 	 * currently no way to terminate.
-	 * 
+	 *
 	  	boolean i = true;
-	 
-		while (i==true) {
 		OpenCV.loadShared();
 		//new capture object
 		VideoCapture capture= new VideoCapture(0);
+		while (i==true) {	 
+		boolean isFaceDetected=false;
 		//Creates Mat Object
 		Mat mat = new Mat();
 		//Grabs a from from capture and stores it in mat
@@ -102,10 +102,11 @@ public class EyeMovementTracker {
         Rect[] facesArray = facesDetected.toArray();
         //I know this warning is here -jmitchel, 
         //just need to check the array to make sure it isn't null if it is null
-        //don't do anything, calculations will be made in the while loop.
+        //don't do anything, calculations will be made in separately
         for(Rect face : facesArray) {
-        System.out.println("HELLO WORLD");
+        isFaceDetected=true;
         }
+        System.out.println("Looking at screen: " + isFaceDetected);
 		}
 	*/
 	}

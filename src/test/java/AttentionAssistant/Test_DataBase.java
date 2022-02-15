@@ -373,7 +373,7 @@ public class Test_DataBase {
     @Test
     @Order(15)
     @DisplayName("<DataBase> DatabaseAddNewHTB")
-    void DatabaseAddHTB() throws Exception {
+    void DatabaseAddHTB() {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
     db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
@@ -384,6 +384,8 @@ public class Test_DataBase {
     Test_User_Account.setUserID(5);
     db.AddHTB(nonDefaultHTB, Test_User_Account);
     db.DeleteUser_Account(5);
+    Test_User_Account.setUserID(3);
+    db.AddHTB(nonDefaultHTB, Test_User_Account);
     }
     
     @Test
@@ -395,7 +397,6 @@ public class Test_DataBase {
     	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
     	UpdatedHTB.setFlagged(false);
     	db.UpdateHTB(UpdatedHTB);
-    
     }
     
     @Test
@@ -674,4 +675,16 @@ public class Test_DataBase {
 
     }
 
+    @Test
+    @Order(31)
+    @DisplayName("<DataBase> DatabaseTestPlayGround")
+    void DatabaseTestPlayground() {
+    /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     *	UpdatedUser.setUserID(1);
+     *	UpdatedUser.setUsername("UpdatedUsername1234");
+     *	UpdatedUser.setPassword("UpdatedPassword1234");
+     *	db.UpdateUser_Account(UpdatedUser);
+    */
+    	
+    }
 }
