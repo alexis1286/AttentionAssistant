@@ -896,12 +896,12 @@ public class Settings {
 		backgroundOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		backgroundOpacity.setForeground(Color.white);
 		
-		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityCircles);
+		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 10, 100, settingsChanges.opacityCircles);
 		backgroundOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		backgroundOpacitySlider.setBackground(aa_grey);
 		backgroundOpacitySlider.setForeground(Color.white);
-		backgroundOpacitySlider.setMinorTickSpacing(25);
-		backgroundOpacitySlider.setMajorTickSpacing(25);
+		backgroundOpacitySlider.setMinorTickSpacing(15);
+		backgroundOpacitySlider.setMajorTickSpacing(15);
 		backgroundOpacitySlider.setPaintTicks(true);
 		backgroundOpacitySlider.setPaintLabels(true);		
 		backgroundOpacitySlider.addChangeListener(new ChangeListener() {
@@ -949,12 +949,12 @@ public class Settings {
 		iconOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		iconOpacity.setForeground(Color.white);
 		
-		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityIcons);
+		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 10, 100, settingsChanges.opacityIcons);
 		iconOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconOpacitySlider.setBackground(aa_grey);
 		iconOpacitySlider.setForeground(Color.white);
-		iconOpacitySlider.setMinorTickSpacing(25);
-		iconOpacitySlider.setMajorTickSpacing(25);
+		iconOpacitySlider.setMinorTickSpacing(15);
+		iconOpacitySlider.setMajorTickSpacing(15);
 		iconOpacitySlider.setPaintTicks(true);
 		iconOpacitySlider.setPaintLabels(true);
 		iconOpacitySlider.addChangeListener(new ChangeListener() {
@@ -999,12 +999,12 @@ public class Settings {
 		iconSize.setFont(new Font("Serif", Font.BOLD, 16));
 		iconSize.setForeground(Color.white);
 		
-		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.iconSize);
+		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 35, 95, settingsChanges.iconSize);
 		iconSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconSizeSlider.setBackground(aa_grey);
 		iconSizeSlider.setForeground(Color.white);
-		iconSizeSlider.setMinorTickSpacing(25);
-		iconSizeSlider.setMajorTickSpacing(25);
+		iconSizeSlider.setMinorTickSpacing(15);
+		iconSizeSlider.setMajorTickSpacing(15);
 		iconSizeSlider.setPaintTicks(true);
 		iconSizeSlider.setPaintLabels(true);
 		iconSizeSlider.addChangeListener(new ChangeListener() {
@@ -1393,8 +1393,8 @@ public class Settings {
 					 * need to refresh the image on the panel to their new avatar selection. 
 					 * the below calls are not working. 
 					 */
-					//notifications_panel.revalidate();
-					//notifications_panel.repaint();
+					notifications_panel.revalidate();
+					notifications_panel.repaint();
 				}
 			}
 		});
