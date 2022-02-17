@@ -128,34 +128,77 @@ public class Observer{
 	 * Main monitoring function
 	 * Will calculate the observerScore and
 	 * send the appropriate notification
+	 * @throws IOException 
 	 */
-	protected void monitor(Task activeTask) {			
+	protected void monitor(Task activeTask) throws IOException {			
+			
+			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
+			//new Objects
+			MouseTracker mouseTracker = new MouseTracker();
+			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
+			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
+			OSEventsTracker osEventsTracker = new OSEventsTracker();
+			InternetTracker internetTracker = new InternetTracker();
+			 
+			//Start tracking Objects
+			mouseTracker.startTracking();
+			eyeMovementTracker.startTracking();  
+			keyBoardTracker.startTracking(keyWords);
+			osEventsTracker.startTracking();
+			internetTracker.startTracking(keyWords);
+			 
+			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
-			 * ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
-			 * //new Objects
-			 * MouseTracker mouseTracker = new MouseTracker();
-			 * EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
-			 * KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
-			 * OSEventsTracker osEventsTracker = new OSEventsTracker();
-			 * InternetTracker internetTracker = new InternetTracker();
-			 * 
-			 * //Start tracking Objects
-			 * mouseTracker.startTracking();
-			 * eyeMovementTracker.startTracking();  
-			 * keyBoardTracker.startTracking(keyWords);
-			 * osEventsTracker.startTracking();
-			 * internetTracker.startTracking(keyWords);
-			 * 
-			 * //(insert some timer here in while loop) So we grab all scores at once.
-			 *  {
-			 *  this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
-			 *  eyeMovementTracker.getEyeMovementScore(),
-			 *  keyBoardTracker.getKeyBoardScore(),
-			 *  osEventsTracker.getOSEventsScore(),
-			 *  internetTracker.getInternetScore())
-			 *  }
+			{
+			this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
+			eyeMovementTracker.getEyeMovementScore(),
+			keyBoardTracker.getKeyBoardScore(),
+			osEventsTracker.getOSEventsScore(),
+			internetTracker.getInternetScore())
+			}
+			*/
+			
+			
+			/**
+			 * Calculate the overall observerScore
 			 */
-	}
+			
+			/**
+			observerScore = calculateObserverScore(mouseMovementsScore, eyeMovementScore, 
+					keyBoardScore, osEventsScore, internetScore);
+			
+			/**
+			 * Check if user is focused on task when they should be working or
+			 * hyperfocusing when they should be off task
+			 */
+			
+			/**
+			if(observerScore >= threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK ) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			/**
+			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			/**
+			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK) {
+				/**
+				 * TAKE ACTION
+				 * User should be working but is not
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			/**
+			} else {
+				/**
+				 * TAKE ACTION
+				 * User is hyperforcusing
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			}
 
 	/**
 	 * Returns an ArrayList with keywords based on the task's description
