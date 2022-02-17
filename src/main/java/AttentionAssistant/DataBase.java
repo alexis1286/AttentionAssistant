@@ -263,6 +263,33 @@ public class DataBase {
         ds.setConfig(sqlCon);
           return user1;
         }
+	
+	
+    /**
+     * Search for a User_Account in the database.
+     * @param String, String
+     * @return User_Account
+     */
+    public User_Account SearchUser_Account(String username, String password) {
+    	User_Account tempuser= new User_Account();
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+    	String query1 = "SELECT * FROM user WHERE username = '"+ username + "' AND password = '" + password + "'";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    ResultSet rs = stmt.executeQuery( query1 );
+    		    tempuser.setUserID(rs.getInt("userID"));
+    		    tempuser.setUsername(rs.getString("username"));
+    		    tempuser.setPassword(rs.getString("password"));
+    		    System.out.println( "SearchUser_Account() returned " + rs );
+    		} catch ( SQLException e ) {
+    		    e.printStackTrace();
+    		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);        
+        return tempuser;
+    }
+
     /**
      * Mainly used for JUNIT testing, deletes the user table at the beginning of testing to remove all test data.
      * 
@@ -277,8 +304,6 @@ public class DataBase {
 			e.printStackTrace();
     	}
     }
-
- 
        /**
         ******* END OF USER_ACCOUNT CRUD *******
         */
@@ -376,6 +401,31 @@ public class DataBase {
         ds.setConfig(sqlCon);
          return parent1;
          }
+   
+	/**
+     * Search for a Parent_Account in the database.
+     * @param String, String
+     * @return User_Account
+     */
+    public Parent_Account SearchParent_Account(String username, String password) {
+    	Parent_Account tempparent= new Parent_Account();
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+    	String query1 = "SELECT * FROM parent WHERE username = '"+ username + "' AND password = '" + password + "'";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    ResultSet rs = stmt.executeQuery( query1 );
+    		    tempparent.setParentID(rs.getInt("parentID"));
+    		    tempparent.setUsername(rs.getString("username"));
+    		    tempparent.setPassword(rs.getString("password"));
+    		    System.out.println( "SearchParent_Account() returned " + rs );
+    		} catch ( SQLException e ) {
+    		    e.printStackTrace();
+    		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
+        return tempparent;
+    }
 
 	/**
      * Mainly used for JUNIT testing, deletes the parent table at the beginning of testing to remove all test data.
