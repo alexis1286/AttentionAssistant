@@ -6,7 +6,11 @@
 
 package AttentionAssistant;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class InternetTracker {
 	
@@ -17,7 +21,7 @@ public class InternetTracker {
 	 * @author jmitchel2
 	 */
 	public InternetTracker(){
-	this.internetScore = 100;
+		this.internetScore = 100;
 	}
 	
 	/**
@@ -26,7 +30,7 @@ public class InternetTracker {
 	 * @param int 
 	 */
 	public InternetTracker(int internetScore) {
-		this.internetScore= internetScore;
+		this.internetScore = internetScore;
 	}
 	/**
 	 * Start of Encapsulation
@@ -47,11 +51,61 @@ public class InternetTracker {
 	}
 	
 	/**
-	 * Start Tracking Internet
+	 * Iterates through a list of provided keywords checking if the 
+	 * current keyword exists within the webpage, totaling up an average score.
+	 * 
 	 * @param ArrayList<String>
+	 * @author ehols001
 	 */
-	public void startTracking(ArrayList<String> keywords) {
-		//update internetScore every second
+	public void startTracking(ArrayList<String> keywords) throws IOException {
+		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
+		String uri = "https://en.wikipedia.org";
+		
+		String text = parseFromOrigin(uri);
+		
+		int score = 0;
+		int total = 0;
+		for (String keyword : keywords) {
+			if (text.contains(keyword)) {
+				score = 100;
+				total += score;
+			}
+			else {
+				score = 0;
+			}
+		}
+		if (total == 0) {
+			this.setInternetScore(total);
+			//System.out.println(total);
+		}
+		else {
+			int averageScore = total / keywords.size();
+			this.setInternetScore(averageScore);
+			//System.out.println(averageScore);
+		}
+	}
+	
+	/**
+	 * Parses the contents of a webpage from live or local origin
+	 * and returns all text within the body.
+	 * 
+	 * @param String - Can be either a live url or a local file path 
+	 * @return String - The parsed contents of the page
+	 * @throws IOException
+	 * @author ehols001
+	 */
+	public String parseFromOrigin(String uri) throws IOException {
+		String text = "";
+		if (uri.startsWith("http")) {
+			Document webpage = Jsoup.connect(uri).get();
+			text = webpage.body().text();
+			return text;
+		}
+		else {
+			Document localpage = Jsoup.parse(uri, "UTF-8");
+			text = localpage.body().text();
+			return text;
+		}
 	}
 	
 }
