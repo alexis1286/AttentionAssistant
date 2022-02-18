@@ -23,10 +23,13 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+    
     //Library used for facial detection
 	implementation 'org.openpnp:opencv:3.4.2-0'
     //Library used for keyword generator in the observer
     implementation 'edu.mit:jwi:2.2.3'
+    //Library for HTML parsing
+    implementation 'org.jsoup:jsoup:1.14.3'
 }
 //end of dependencies
 
