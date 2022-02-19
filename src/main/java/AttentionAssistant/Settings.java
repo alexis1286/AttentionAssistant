@@ -2096,6 +2096,7 @@ public class Settings {
 		openHTB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Happy Thought Button 
+				happy_thought_button.open_htb();
 			}
 		});
 		
@@ -2447,7 +2448,6 @@ public class Settings {
 						case JOptionPane.CANCEL_OPTION:
 							break; 
 						}
-						
 					}
 				});
 				
