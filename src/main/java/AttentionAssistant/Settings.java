@@ -6,12 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
+import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -1613,7 +1616,6 @@ public class Settings {
 						settingsChanges.audioFilePath = audioFile.getAbsolutePath();
 					}
 				 */
-				
 			}
 		});
 		
@@ -1816,23 +1818,26 @@ public class Settings {
 		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		workPeriod.setForeground(Color.white);
 		
-		SimpleAttributeSet attribs = new SimpleAttributeSet();
-		attribs.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-		StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
-		StyleConstants.setFontSize(attribs, 30);
+		Integer minutes[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
-		JTextPane workInterval = new JTextPane();
-		workInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
-		workInterval.setBorder(new LineBorder(Color.black,5,false));
-		workInterval.setParagraphAttributes(attribs, true);
-		workInterval.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {}
-			public void focusLost(FocusEvent e) {
-				settingsChanges.workPeriod = Integer.parseInt(workInterval.getText());
-			}
+		JComboBox<Integer> workInterval = new JComboBox<>(minutes); 
+		AccessibleContext accessCont = workInterval.getAccessibleContext();
+		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
+		JList workList = pop.getList();
+		workList.setSelectionForeground(Color.WHITE);
+		workList.setSelectionBackground(aa_purple);
+		workInterval.setBackground(Color.black);
+		workInterval.setForeground(Color.white);
+		workInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		((JLabel)workInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		workInterval.setMaximumSize(new Dimension(50,25));
+		workInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.workPeriod = (int) workInterval.getSelectedItem();	
+			} 
 		});
 		
-		JLabel minutesWork = new JLabel("minutes");
+		JLabel minutesWork = new JLabel(" minutes");
 		minutesWork.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesWork.setForeground(Color.white);
 		
@@ -1840,18 +1845,24 @@ public class Settings {
 		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		breakPeriod.setForeground(Color.white);
 		
-		JTextPane breakInterval = new JTextPane();
-		breakInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
-		breakInterval.setBorder(new LineBorder(Color.black,5,false));
-		breakInterval.setParagraphAttributes(attribs, true);
-		breakInterval.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {}
-			public void focusLost(FocusEvent e) {
-				settingsChanges.breakPeriod = Integer.parseInt(breakInterval.getText());
-			}
+		JComboBox<Integer> breakInterval = new JComboBox<>(minutes); 
+		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
+		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
+		JList breakList = pop2.getList();
+		breakList.setSelectionForeground(Color.WHITE);
+		breakList.setSelectionBackground(aa_purple);
+		breakInterval.setBackground(Color.black);
+		breakInterval.setForeground(Color.white);
+		breakInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		((JLabel)breakInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		breakInterval.setMaximumSize(new Dimension(50,25));
+		breakInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.breakPeriod = (int) breakInterval.getSelectedItem();	
+			} 
 		});
 		
-		JLabel minutesBreak = new JLabel("minutes");
+		JLabel minutesBreak = new JLabel(" minutes");
 		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesBreak.setForeground(Color.white);
 		
