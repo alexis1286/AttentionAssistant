@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +36,7 @@ public class Settings {
 	private int width = 550; 
 	private int mouseX;
 	private int mouseY;
+	JLabel displayAvatar;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
@@ -812,7 +812,7 @@ public class Settings {
 	 * avatar selection window
 	 * @param
 	 */
-	private void avatarSelectionWindow(JPanel notificationsPanel, Settings settingsChanges) {
+	private void avatarSelectionWindow(Settings settingsChanges) {
 		//create window for user to select avatar
 		JFrame avatar_window = new JFrame("Select Your Avatar");
 		avatar_window.setAlwaysOnTop(true);
@@ -1104,6 +1104,28 @@ public class Settings {
 		close_avatarWindow.setMaximumSize(new Dimension(70,20));
 		close_avatarWindow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*
+				 * create new icon to display updated avatar selection in frame
+				 */
+				BufferedImage avatar = null;
+				try {
+					//will pass string for file path 
+					avatar = ImageIO.read(new File(settingsChanges.avatarFilePath));
+				}catch(Exception f) {
+					f.printStackTrace();
+					System.exit(1);
+				}
+				
+				Image av_img = avatar.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+				Icon newAvatarChoice = new ImageIcon(av_img);
+				
+				/*
+				 * updates avatar preview in notifications_panel once selection window is closed
+				 * even though preview is updated, changes are *not* sent to database
+				 * unless user clicks 'apply' 
+				 */
+				displayAvatar.setIcon(newAvatarChoice); 
+				
 				avatar_window.dispose();
 			}
 		});
@@ -1552,7 +1574,7 @@ public class Settings {
 		
 		Image av_img = avatar.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
 		Icon defaultAvatar = new ImageIcon(av_img);
-		JLabel displayAvatar = new JLabel(defaultAvatar);
+		displayAvatar = new JLabel(defaultAvatar);
 		
 		avatarDisplay.add(Box.createRigidArea(new Dimension(50, 0)));
 		avatarDisplay.add(displayAvatar);
@@ -1666,14 +1688,7 @@ public class Settings {
 				 *  right now this just opens to where we have all the images stored for the project
 				 *  will need to update to the pre-loaded avatar directory we give users
 				 */
-				avatarSelectionWindow(notifications_panel, settingsChanges);
-					
-					/*
-					 * need to refresh the image on the panel to their new avatar selection. 
-					 * the below calls are not working. 
-					 */
-					notifications_panel.revalidate();
-					notifications_panel.repaint();
+				avatarSelectionWindow(settingsChanges);
 			}
 		});
 		
@@ -1801,6 +1816,8 @@ public class Settings {
 				
 				if(settingsChanges.pomodoroIsActive == false) {
 					settingsChanges.timerIsVisible = false; 
+				}else if(settingsChanges.pomodoroIsActive == true) {
+					settingsChanges.timerIsVisible = true;
 				}
 			}
 		});
@@ -1952,6 +1969,8 @@ public class Settings {
 				
 				if(settingsChanges.ftsIsActive == false) {
 					settingsChanges.ftsIsVisible = false; 
+				}else if(settingsChanges.ftsIsActive == true) {
+					settingsChanges.ftsIsVisible = true; 
 				}
 			}
 		});
@@ -1983,6 +2002,7 @@ public class Settings {
 					autoLinkBox.setEnabled(false); 
 				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
 					autoLinkBox.setEnabled(true);
+					settingsChanges.ntbIsVisible = true; 
 				}
 			}
 		});
@@ -2002,6 +2022,7 @@ public class Settings {
 					autoLinkBox.setEnabled(false); 
 				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
 					autoLinkBox.setEnabled(true);
+					settingsChanges.htbIsVisible = true; 
 				}
 			}
 		});
