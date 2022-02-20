@@ -141,11 +141,21 @@ public class DataBase {
          */
     	String queryLinkedAccounts = "CREATE TABLE IF NOT EXISTS linked_Accounts ( " +
    			 "linkedAccountID INTEGER PRIMARY KEY, " +
-   			 "fk_ParentID INTEGER, " +
-   			 "fk_UserID INTEGER, " +
+   			 "fk_parentID INTEGER, " +
+   			 "fk_userID INTEGER, " +
 			 "CONSTRAINT fk_ParentID FOREIGN KEY (\"fk_ParentID\") REFERENCES \"parent\"(\"parentID\") ON DELETE CASCADE, " +
    			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
-
+    	
+        /**
+         * Set up for Table Notification_System
+         */
+    	String queryNotification_System = "CREATE TABLE IF NOT EXISTS notification ( " +
+      			 "notificationID INTEGER PRIMARY KEY, " +
+      			 "fk_UserID INTEGER, " +
+      			 "type TEXT, " +
+      			 "ignored BOOLEAN, " +
+      			 "dT_Notification DATE, " +
+      			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
@@ -163,7 +173,9 @@ public class DataBase {
    		System.out.println( "CreateSettingsTable() returned " + rv6 );
    		int rv7 = stmt.executeUpdate(queryLinkedAccounts);
    		System.out.println( "CreateLinkedAccountsTable() returned " + rv7 );
-
+   		int rv8 = stmt.executeUpdate(queryNotification_System);
+   		System.out.println( "CreateNotificationTable() returned " + rv8 );
+   		
        } catch ( SQLException e ) {
            e.printStackTrace();
        }
@@ -712,7 +724,7 @@ public class DataBase {
             		    hTB1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
             		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
             		    hTB1.setDT_Executed(date1);
-            		    System.out.println( "SelectTask() returned " + rs );
+            		    System.out.println( "SelectHTB() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		}
@@ -1109,7 +1121,6 @@ public class DataBase {
                 	}
                 	
                 }
-
                 
      /**
       ******* END OF SETTINGS CRUD *******
@@ -1127,7 +1138,7 @@ public class DataBase {
 		sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
          	String query1 = "INSERT INTO linked_Accounts " +
-      			"( fk_ParentID, fk_UserID) Values ( '" +
+      			"( fk_parentID, fk_userID) Values ( '" +
        			parent.getParentID() + "', '" +
        			user.getUserID() + "')";
            	try ( Connection conn = ds.getConnection();
@@ -1148,7 +1159,7 @@ public class DataBase {
    public void DeleteLinked_Account(Parent_Account parent, User_Account user) {
 		sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
-        	String query1 = "DELETE FROM linked_Accounts WHERE fk_ParentID= '" + parent.getParentID() + "' AND fk_UserID= '" + user.getUserID() +"'";
+        	String query1 = "DELETE FROM linked_Accounts WHERE fk_parentID= '" + parent.getParentID() + "' AND fk_userID= '" + user.getUserID() +"'";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
@@ -1172,13 +1183,13 @@ public class DataBase {
         ds.setConfig(sqlCon);
 	   ArrayList<User_Account> userAccountList = new ArrayList<User_Account>();
 	   User_Account blankUser= new User_Account();
-	   String query1 = "SELECT fk_UserID FROM linked_Accounts WHERE fk_ParentID = '" + parent.getParentID() + "'";
+	   String query1 = "SELECT fk_userID FROM linked_Accounts WHERE fk_parentID = '" + parent.getParentID() + "'";
    		try ( Connection conn = ds.getConnection();
 		    Statement stmt = conn.createStatement(); ) {
 		    ResultSet rs = stmt.executeQuery( query1 );
 		    while (rs.next()){
     		blankUser = new User_Account();
-    		blankUser = this.SelectUser_Account(rs.getInt("fk_UserID"));
+    		blankUser = this.SelectUser_Account(rs.getInt("fk_userID"));
     		userAccountList.add(blankUser);
 		    }		    
    		}catch ( SQLException e ) {
@@ -1200,9 +1211,133 @@ public class DataBase {
 		    System.out.println( "DeleteAllLinkedAccounts() returned " + rv );
    	} catch ( SQLException e ) {
 			e.printStackTrace();
-   	}
-   	
-	   
+   	}   
    }
    
+   /**
+    ******* END OF LINKING ACCOUNTS CRUD *******
+    */
+
+   /**
+    ******* START OF NOTIFICATION SYSTEM CRUD *******
+    * @author jmitchel2
+    */
+   
+   /**
+    * Add a new Notification_System to the database.
+    * @param Notification_System, User_Account
+    */
+   public void AddNotification(Notification_System notification, User_Account user) {
+   	sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+   	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
+   	String query1 = "INSERT INTO notification " +
+   			"( fk_userID, type, ignored, dT_Notification) Values ( '" +
+   			user.getUserID() + "', '" +
+   			notification.getType() + "', '" +
+   			notification.getIgnored() + "', '" +
+   			DateTime + "')"; 
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "AddNotification() returned " + rv );
+   		} catch ( SQLException e ) {
+   		    //gets called when a task is passed in that isn't in the task table.
+   			e.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+
+   /**
+    * Update a Notification_System within the Database
+    * 
+    * @param Notification_System
+    */
+   public void UpdateNotification(Notification_System notification) {
+	    sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+        String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
+        String query1 = "UPDATE notification " +
+        "SET type = '" + notification.getType() + 
+        "', ignored = '" + notification.getIgnored() + 
+        "', dT_Notification = '" + DateTime + 
+        "' WHERE notificationID = '" + notification.getNotificationID() + "'";
+        try ( Connection conn = ds.getConnection();
+    	    Statement stmt = conn.createStatement(); ) {
+    	    int rv = stmt.executeUpdate( query1 );
+       	    System.out.println( "UpdateNotification() returned " + rv );
+        } catch ( SQLException e ) {
+       		e.printStackTrace();
+        }
+        sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
+   }
+
+   /**
+    * Delete a Notification_System within the Database
+    *              * 
+    * @param int
+    */
+   public void DeleteNotification(int notificationID) {
+	   sqlCon.enforceForeignKeys(true);
+	   ds.setConfig(sqlCon);
+   	   String query1 = "DELETE FROM notification WHERE notificationID = '" + notificationID + "'";
+   	   try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "DeleteNotification() returned " + rv );
+   	   } catch ( SQLException e ) {
+   		    e.printStackTrace();
+   	   }
+   	   sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   } 	
+
+   /**
+    * Select a Notification_System within the database using the notificationID
+    *              * 
+    * @param int
+    * @return Notification_System
+    */
+   public Notification_System SelectNotification(int notificationID) {
+		sqlCon.enforceForeignKeys(true);
+		ds.setConfig(sqlCon);
+		Notification_System notification1 = new Notification_System();
+		String query1 = "SELECT * FROM notification WHERE notificationID = '" + notificationID + "'";
+		try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    ResultSet rs = stmt.executeQuery( query1 );
+   		    notification1.setNotificationID(rs.getInt("notificationID"));
+   		    notification1.setType(rs.getString("type"));
+   		    notification1.setIgnored(Boolean.valueOf(rs.getString("ignored")));
+   		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Notification"));
+   		    notification1.setDT_Notification(date1);
+   		    System.out.println( "SelectNotification() returned " + rs );
+   			} catch ( SQLException e ) {
+   				e.printStackTrace();
+   			}
+			 catch ( ParseException p ) {
+				 p.printStackTrace();
+			 }
+		sqlCon.enforceForeignKeys(false);
+		ds.setConfig(sqlCon);
+   		return notification1;
+   }
+   /**
+    * Mainly used for JUNIT testing, deletes the notification table at the beginning of testing to remove all test data.
+    * 
+    */
+   public void DeleteAllNotifications(){
+   	String query1 = "DROP TABLE IF EXISTS 'notification'";
+   	try ( Connection conn = this.ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+		    int rv = stmt.executeUpdate( query1 );
+		    System.out.println( "DeleteAllNotifications() returned " + rv );
+   	} catch ( SQLException e ) {
+			e.printStackTrace();
+   }
+
+   }
+
 }
