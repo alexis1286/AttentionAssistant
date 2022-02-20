@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.apache.commons.lang3.StringUtils;
 
 public class InternetTracker {
 	
@@ -60,13 +61,13 @@ public class InternetTracker {
 	public void startTracking(ArrayList<String> keywords) throws IOException {
 		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
 		String uri = "https://en.wikipedia.org";
-		
 		String text = parseFromOrigin(uri);
 		
-		int score = 0;
-		int total = 0;
+		int score = 0, total = 0;
 		for (String keyword : keywords) {
 			if (text.contains(keyword)) {
+				//int count = StringUtils.countMatches(text, keyword);
+				//System.out.println(count);
 				score = 100;
 				total += score;
 			}
@@ -76,12 +77,12 @@ public class InternetTracker {
 		}
 		if (total == 0) {
 			this.setInternetScore(total);
-			//System.out.println(total);
+			System.out.println(total);
 		}
 		else {
 			int averageScore = total / keywords.size();
 			this.setInternetScore(averageScore);
-			//System.out.println(averageScore);
+			System.out.println(averageScore);
 		}
 	}
 	
