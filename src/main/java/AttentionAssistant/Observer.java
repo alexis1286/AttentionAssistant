@@ -135,14 +135,14 @@ public class Observer{
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
 			//new Objects
 			MouseTracker mouseTracker = new MouseTracker();
-			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
+			//EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
 			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
 			 
 			//Start tracking Objects
 			mouseTracker.startTracking();
-			eyeMovementTracker.startTracking();  
+			//eyeMovementTracker.startTracking();  
 			keyBoardTracker.startTracking(keyWords);
 			osEventsTracker.startTracking();
 			internetTracker.startTracking(keyWords);
@@ -236,6 +236,7 @@ public class Observer{
 		 */
 		ISynset wSynset = word.getSynset();
 		for(IWord w : wSynset.getWords()) {
+			keywords.add(w.getLemma());
 			System.out.println(w.getLemma());
 		}
 		
