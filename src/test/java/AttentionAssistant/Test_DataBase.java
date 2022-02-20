@@ -27,7 +27,9 @@ public class Test_DataBase {
 	Settings nonDefaultSettings;
 	User_Account nonDefaultUser;
 	Parent_Account nonDefaultParent;
+	Notification_System nonDefaultNotify;
 	DataBase db = new DataBase();
+	
 	
 	@BeforeEach
 	void setup() {
@@ -122,9 +124,18 @@ public class Test_DataBase {
 	String testParentPassword= "TestParentPass123";
 
 	nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword);
+	
+	/**
+	 * Set up for nonDefault Notification_System
+	 */
+	int testNotificationID= 999;
+	String testType = "This is a test type";
+	boolean testIgnored= true;
+	Date testDT_Notification = new Date(1220227200L * 1000);
+
+	nonDefaultNotify= new Notification_System(testNotificationID, testType, testIgnored, testDT_Notification);
 
 	db.DatabaseSetUp();	
-
 	}
 
     @Test
@@ -138,6 +149,7 @@ public class Test_DataBase {
     db.DeleteAllObservers();
     db.DeleteAllSettings();
     db.DeleteAllLinkedAccounts();
+    db.DeleteAllNotifications();
     }
 
     /**
@@ -707,9 +719,74 @@ public class Test_DataBase {
         }
 
     }
+    
+    /**
+    ******* END OF TEST SETTINGS CRUD *******
+    */
+
+    /**
+    ******* START OF TEST NOTIFICATIONS CRUD *******
+     */
 
     @Test
     @Order(33)
+    @DisplayName("<DataBase> DatabaseAddNewNotification")
+    void DatabaseAddNotification() {
+    User_Account Test_User_Account= new User_Account(nonDefaultUser);
+    db.AddUser_Account(Test_User_Account);
+    Test_User_Account.setUserID(1);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    Test_User_Account.setUserID(5);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.DeleteUser_Account(5);
+    Test_User_Account.setUserID(3);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    }
+
+    @Test
+    @Order(34)
+    @DisplayName("<DataBase> DatabaseUpdateNotification_System")
+    void DatabaseUpdateNotification() {
+    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	UpdatedNotify.setNotificationID(1);
+    	UpdatedNotify.setType("I am a updated type");
+    	UpdatedNotify.setIgnored(false);
+    	db.UpdateNotification(UpdatedNotify);
+    }
+    
+    @Test
+    @Order(35)
+    @DisplayName("<DataBase> DatabaseDeleteNotification_System")
+    void DatabaseDeleteNotification() {
+    	Notification_System DeletedNotify= new Notification_System(nonDefaultNotify);
+    	DeletedNotify.setNotificationID(3);
+    	DeletedNotify.setType("I am supposed to be deleted");
+    	DeletedNotify.setIgnored(false);
+    	db.UpdateNotification(DeletedNotify);
+      	db.DeleteNotification(3);
+    }
+
+    @Test
+    @Order(36)
+    @DisplayName("<DataBase> DatabaseSelectNotification")
+    void DatabaseSelectNotification() {
+    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	SelectedNotify.setNotificationID(2);
+    	SelectedNotify.setType("I am a Selected Type");
+    	SelectedNotify.setIgnored(true);
+    	db.UpdateNotification(SelectedNotify);
+    	Notification_System selectedNotify2 = new Notification_System();
+    	selectedNotify2 = db.SelectNotification(2);
+    	String String1 = "Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008";
+        assertEquals(String1, selectedNotify2.toString(), "selectedHTB2 should be set to \"Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008\" but instead returned: " + selectedNotify2.toString());
+    }
+    
+    
+    @Test
+    @Order(37)
     @DisplayName("<DataBase> DatabaseTestPlayGround")
     void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
@@ -720,4 +797,5 @@ public class Test_DataBase {
     */
     	
     }
+
 }
