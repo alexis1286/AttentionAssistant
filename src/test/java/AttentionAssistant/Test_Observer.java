@@ -1,11 +1,18 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.IDictionary;
 
 //import net.didion.jwnl.dictionary.Dictionary;
 
@@ -16,6 +23,7 @@ public class Test_Observer {
 	Observer defaultObserver;
 	Observer nonDefaultObserver;
 	Observer copyObserver;
+	Task testActiveTask;
 	
 	@BeforeEach
 	void setup() {
@@ -183,6 +191,47 @@ public class Test_Observer {
     	defaultObserver.setDictionary(tempDict);
 
     	assertEquals(tempDict, defaultObserver.getDictionary(), "tempDict should be = to defaultObserver dict");
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> filterTaskDescription")
+    void observerFilterTaskDescription() {
+    	Date testTaskDate = new Date(1220227200L * 1000);
+    	testActiveTask = new Task(999, "This is a test description", true, TaskStatus.OPEN,
+											"This is a test Name", testTaskDate, true);
+    	ArrayList<String> testTaskWords = defaultObserver.filterTaskDescription(testActiveTask);
+    	assertEquals("This", testTaskWords.get(0), "Expected: This | Actual: " + testTaskWords.get(0));
+    	assertEquals("test", testTaskWords.get(1), "Expected: test | Actual: " + testTaskWords.get(1));
+    	assertEquals("description", testTaskWords.get(2), "Expected: description | Actual: " + testTaskWords.get(2));
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> setKeywordSynonyms")
+    void observerSetKeywordSynonyms() throws IOException {
+    	URL location =  new File("src/main/resources/dict").toURI().toURL();
+    	IDictionary dict = new Dictionary(location);
+		dict.open();
+		
+		ArrayList<String> testKeywords = new ArrayList<String>();
+		ArrayList<String> testTaskWords = new ArrayList<String>();
+		testTaskWords.add("This");
+		testTaskWords.add("test"); 
+		testTaskWords.add("description");
+		
+		defaultObserver.setKeywordSynonyms(dict, testTaskWords, testKeywords);
+		assertEquals("trial", testKeywords.get(0), "Expected: This | Actual: " + testKeywords.get(0));
+		assertEquals("test", testKeywords.get(1), "Expected: This | Actual: " + testKeywords.get(1));
+		assertEquals("tryout", testKeywords.get(2), "Expected: This | Actual: " + testKeywords.get(2));
+		assertEquals("test", testKeywords.get(3), "Expected: This | Actual: " + testKeywords.get(3));
+		assertEquals("prove", testKeywords.get(4), "Expected: This | Actual: " + testKeywords.get(4));
+		assertEquals("try", testKeywords.get(5), "Expected: This | Actual: " + testKeywords.get(5));
+		assertEquals("examine", testKeywords.get(6), "Expected: This | Actual: " + testKeywords.get(6));
+		assertEquals("essay", testKeywords.get(7), "Expected: This | Actual: " + testKeywords.get(7));
+		assertEquals("description", testKeywords.get(8), "Expected: This | Actual: " + testKeywords.get(8));
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
