@@ -61,7 +61,7 @@ public class InternetTracker {
 	public void startTracking(ArrayList<String> keywords) throws IOException {
 		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
 		String uri = "https://en.wikipedia.org";
-		String text = parseFromOrigin(uri);
+		String text = parseFromOrigin(uri).toLowerCase();
 		
 		int score = 0, total = 0;
 		for (String keyword : keywords) {

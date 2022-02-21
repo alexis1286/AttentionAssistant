@@ -217,29 +217,43 @@ public class Observer{
 		System.out.println("URL of resource " + location);
 		IDictionary dict = new Dictionary(location);
 		dict.open();
-				
-		// look up first sense of the word "dog"
-		IIndexWord idxWord = dict.getIndexWord("wish", POS.NOUN);
-				
-		/**
-		 * A word can have multiple definitions, 
-		 * therefore each will have its own related words
-		 */
-		IWordID wordID = idxWord.getWordIDs().get(0); 
-		IWord word = dict.getWord(wordID);
-		System.out.println("Id = " + wordID);
-		System.out.println("Lemma = " + word.getLemma());
-		System.out.println("Gloss = " + word.getSynset().getGloss());
-				
-		/**
-		 * iterate over words associated with the synset
-		 */
-		ISynset wSynset = word.getSynset();
-		for(IWord w : wSynset.getWords()) {
-			keywords.add(w.getLemma());
-			System.out.println(w.getLemma());
+			
+		//Splitting apart the task description at each 'space' and storing each word
+		String[] taskWords = activeTask.getDescription().split("\\s+");
+		for(int i = 0; i < taskWords.length; i++) {
+			taskWords[i] = taskWords[i].replaceAll("[^A-Za-z]", "");
 		}
 		
+		//Identifying synonyms for each word consisting of >=3 letters from the task description
+		for(int i = 0; i < taskWords.length; i++) {
+			if(taskWords[i].length() >= 3) {
+				for(POS p : POS.values()) {
+					IIndexWord idxWord = dict.getIndexWord(taskWords[i], p);
+					if(idxWord != null) {
+						/**
+					 	* A word can have multiple definitions, 
+					 	* therefore each will have its own related words
+					 	*/
+						IWordID wordID = idxWord.getWordIDs().get(0); 
+						IWord word = dict.getWord(wordID);
+						//System.out.println("Id = " + wordID);
+						//System.out.println("Lemma = " + word.getLemma());
+						//System.out.println("Gloss = " + word.getSynset().getGloss());
+
+						ISynset wSynset = word.getSynset();
+						for(IWord w : wSynset.getWords()) {
+							//Makes sure the word only contains alphabetical chars before adding to keywords list
+							if(w.getLemma().matches("[a-zA-Z]+"))
+								keywords.add(w.getLemma());
+								//System.out.println(w.getLemma());
+						}
+						//System.out.println(keywords.size() + "\n");
+					}
+					else ;
+				}
+			}
+			else ;
+		}
 		return keywords;
 	}
 
