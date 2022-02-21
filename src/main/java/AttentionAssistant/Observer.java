@@ -1,7 +1,6 @@
 package AttentionAssistant;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -202,59 +201,77 @@ public class Observer{
 
 	/**
 	 * Returns an ArrayList with keywords based on the task's description
-	 * @param activeTask - task that used to generator keywords
-	 * @return keywordsList - ArrayList of keywords
+	 * @param activeTask - task that's used to generate keywords
+	 * @return ArrayList<String> keywords - ArrayList of keywords
 	 * @throws IOException 
 	 */
-	
-	
-	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException{
+	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException {
 		ArrayList<String> keywords = new ArrayList<String>();
 		
 		//create a instance of the IDictionary Object from the WordNet datasets
-		@SuppressWarnings("deprecation")
-		URL location =  new File("src/main/resources/dict").toURL();
-		System.out.println("URL of resource " + location);
+		URL location =  new File("src/main/resources/dict").toURI().toURL();
+		//System.out.println("URL of resource " + location);
 		IDictionary dict = new Dictionary(location);
 		dict.open();
 			
-		//Splitting apart the task description at each 'space' and storing each word
-		String[] taskWords = activeTask.getDescription().split("\\s+");
-		for(int i = 0; i < taskWords.length; i++) {
-			taskWords[i] = taskWords[i].replaceAll("[^A-Za-z]", "");
-		}
-		
-		//Identifying synonyms for each word consisting of >=3 letters from the task description
-		for(int i = 0; i < taskWords.length; i++) {
-			if(taskWords[i].length() >= 3) {
-				for(POS p : POS.values()) {
-					IIndexWord idxWord = dict.getIndexWord(taskWords[i], p);
-					if(idxWord != null) {
-						/**
-					 	* A word can have multiple definitions, 
-					 	* therefore each will have its own related words
-					 	*/
-						IWordID wordID = idxWord.getWordIDs().get(0); 
-						IWord word = dict.getWord(wordID);
-						//System.out.println("Id = " + wordID);
-						//System.out.println("Lemma = " + word.getLemma());
-						//System.out.println("Gloss = " + word.getSynset().getGloss());
-
-						ISynset wSynset = word.getSynset();
-						for(IWord w : wSynset.getWords()) {
-							//Makes sure the word only contains alphabetical chars before adding to keywords list
-							if(w.getLemma().matches("[a-zA-Z]+"))
-								keywords.add(w.getLemma());
-								//System.out.println(w.getLemma());
-						}
-						//System.out.println(keywords.size() + "\n");
-					}
-					else ;
-				}
-			}
-			else ;
-		}
+		ArrayList<String> taskWords = filterTaskDescription(activeTask);
+		setKeywordSynonyms(dict, taskWords, keywords);
 		return keywords;
+	}
+	
+	/**
+	 * Stores each three or more letter word from the task description into a ArrayList
+	 * @param activeTask - task to get description from
+	 * @return ArrayList<String> - ArrayList of words from the task description
+	 */
+	public ArrayList<String> filterTaskDescription(Task activeTask) {
+		ArrayList<String> filteredWords = new ArrayList<String>();
+		//Splitting apart the task description at each 'space' and storing each word
+		String[] words = activeTask.getDescription().split("\\s+");
+		
+		for(int i = 0; i < words.length; i++) {
+			//Removing all non-alphabetical chars from the words 
+			words[i] = words[i].replaceAll("[^A-Za-z]", "");
+		}
+		for(String word : words) {
+			if(word.length() >= 3)
+				filteredWords.add(word);
+		}
+		return filteredWords;
+	}
+	
+	/**
+	 * Identify and store synonyms into keywords for each word from taskWords
+	 * @param dict - dictionary to get synonyms from
+	 * @param taskWords - list of words from the task description
+	 * @param ArrayList<String> keywords - ArrayList of keywords
+	 */
+	public void setKeywordSynonyms(IDictionary dict, ArrayList<String> taskWords, ArrayList<String> keywords) {
+		for(int i = 0; i < taskWords.size(); i++) {
+			for(POS p : POS.values()) {
+				IIndexWord idxWord = dict.getIndexWord(taskWords.get(i), p);
+				if(idxWord != null) {
+					/**
+					 * A word can have multiple definitions, 
+					 * therefore each will have its own related words
+					 */
+					IWordID wordID = idxWord.getWordIDs().get(0); 
+					IWord word = dict.getWord(wordID);
+					//System.out.println("Id = " + wordID);
+					//System.out.println("Lemma = " + word.getLemma());
+					//System.out.println("Gloss = " + word.getSynset().getGloss());
+
+					ISynset wSynset = word.getSynset();
+					for(IWord w : wSynset.getWords()) {
+						//Makes sure the word only contains alphabetical chars before adding to keywords list
+						if(w.getLemma().matches("[a-zA-Z]+"))
+							keywords.add(w.getLemma());
+							//System.out.println(w.getLemma());
+					}
+				}
+				else;
+			}
+		}
 	}
 
 	/**
