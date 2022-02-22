@@ -6,6 +6,7 @@
 
 package AttentionAssistant;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -52,8 +53,7 @@ public class InternetTracker {
 	}
 	
 	/**
-	 * Iterates through a list of provided keywords checking if the 
-	 * current keyword exists within the webpage, totaling up an average score.
+	 * Starts tracking relevance of Internet activity 
 	 * 
 	 * @param ArrayList<String>
 	 * @author ehols001
@@ -61,8 +61,20 @@ public class InternetTracker {
 	public void startTracking(ArrayList<String> keywords) throws IOException {
 		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
 		String uri = "https://en.wikipedia.org";
-		String text = parseFromOrigin(uri).toLowerCase();
 		
+		String text = parseFromOrigin(uri).toLowerCase();
+		calculateInternetScore(keywords, text);
+	}
+	
+	/**
+	 * Iterates through a list of provided keywords checking if the 
+	 * current keyword exists within the webpage, totaling up an average score.
+	 * 
+	 * @param ArrayList<String> keywords
+	 * @param String text - text from a web page
+	 * @author ehols001
+	 */
+	public void calculateInternetScore(ArrayList<String> keywords, String text) {
 		int score = 0, total = 0;
 		for (String keyword : keywords) {
 			if (text.contains(keyword)) {
@@ -77,17 +89,17 @@ public class InternetTracker {
 		}
 		if (total == 0) {
 			this.setInternetScore(total);
-			System.out.println(total);
+			System.out.println("Internet Score: " + total);
 		}
 		else {
 			int averageScore = total / keywords.size();
 			this.setInternetScore(averageScore);
-			System.out.println(averageScore);
+			System.out.println("Internet Score: " + averageScore);
 		}
 	}
 	
 	/**
-	 * Parses the contents of a webpage from live or local origin
+	 * Parses the contents of a web page from live or local origin
 	 * and returns all text within the body.
 	 * 
 	 * @param String - Can be either a live url or a local file path 
@@ -103,7 +115,8 @@ public class InternetTracker {
 			return text;
 		}
 		else {
-			Document localpage = Jsoup.parse(uri, "UTF-8");
+			File input = new File(uri);
+			Document localpage = Jsoup.parse(input, "UTF-8");
 			text = localpage.body().text();
 			return text;
 		}
