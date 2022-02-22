@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -132,19 +133,30 @@ public class Observer{
 	protected void monitor(Task activeTask) throws IOException {			
 			
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
-			//new Objects
+/**			for (int i =0; i< keyWords.size(); i++)
+ *			{
+ *				System.out.println(keyWords.get(i));
+ *			}
+ */			//new Objects
 			MouseTracker mouseTracker = new MouseTracker();
-			//EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
+			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
 			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
 			 
 			//Start tracking Objects
 			mouseTracker.startTracking();
-			//eyeMovementTracker.startTracking();  
+			eyeMovementTracker.startTracking();  
 			keyBoardTracker.startTracking(keyWords);
 			osEventsTracker.startTracking();
 			internetTracker.startTracking(keyWords);
+			
+			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
+					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
+					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
+					"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
+					"\ninternetTracker: " + internetTracker.getInternetScore());
+			
 			 
 			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
@@ -209,7 +221,7 @@ public class Observer{
 		ArrayList<String> keywords = new ArrayList<String>();
 		
 		//create a instance of the IDictionary Object from the WordNet datasets
-		URL location =  new File("src/main/resources/dict").toURI().toURL();
+		URL location =  new File("./src/main/resources/dict").toURI().toURL();
 		//System.out.println("URL of resource " + location);
 		IDictionary dict = new Dictionary(location);
 		dict.open();
@@ -255,7 +267,9 @@ public class Observer{
 					 * A word can have multiple definitions, 
 					 * therefore each will have its own related words
 					 */
-					IWordID wordID = idxWord.getWordIDs().get(0); 
+					for (int j = 0; j < idxWord.getWordIDs().size(); j++)
+					{
+					IWordID wordID = idxWord.getWordIDs().get(j); 
 					IWord word = dict.getWord(wordID);
 					//System.out.println("Id = " + wordID);
 					//System.out.println("Lemma = " + word.getLemma());
@@ -267,6 +281,7 @@ public class Observer{
 						if(w.getLemma().matches("[a-zA-Z]+"))
 							keywords.add(w.getLemma());
 							//System.out.println(w.getLemma());
+					}
 					}
 				}
 				else;
