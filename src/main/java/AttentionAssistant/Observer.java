@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import edu.mit.jwi.Dictionary;
@@ -267,9 +268,10 @@ public class Observer{
 					 * A word can have multiple definitions, 
 					 * therefore each will have its own related words
 					 */
-					for (int j = 0; j < idxWord.getWordIDs().size(); j++)
+					List<IWordID> idxWordIDs = idxWord.getWordIDs();
+					for (int j = 0; j < idxWordIDs.size(); j++)
 					{
-					IWordID wordID = idxWord.getWordIDs().get(j); 
+					IWordID wordID = idxWordIDs.get(j); 
 					IWord word = dict.getWord(wordID);
 					//System.out.println("Id = " + wordID);
 					//System.out.println("Lemma = " + word.getLemma());
