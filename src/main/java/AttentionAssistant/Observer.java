@@ -152,12 +152,12 @@ public class Observer{
 			osEventsTracker.startTracking();
 			internetTracker.startTracking(keyWords);
 			
-			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
-					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
-					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
-					"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
-					"\ninternetTracker: " + internetTracker.getInternetScore());
-			
+/**			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
+ *					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
+ *					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
+ *					"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
+ *					"\ninternetTracker: " + internetTracker.getInternetScore());
+ */			
 			 
 			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
