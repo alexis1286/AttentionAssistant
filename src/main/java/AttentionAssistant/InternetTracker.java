@@ -60,7 +60,8 @@ public class InternetTracker {
 	 */
 	public void startTracking(ArrayList<String> keywords) throws IOException {
 		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
-		String uri = "https://en.wikipedia.org";
+//		String uri = "https://en.wikipedia.org/wiki/Final_Fantasy";		
+		String uri = "https://www.biologicaldiversity.org/species/mammals/polar_bear/natural_history.html#:~:text=MIGRATION%3A%20Some%20polar%20bears%20make,the%20nearest%20land%2D%20or%20icefall.";
 		
 		String text = parseFromOrigin(uri).toLowerCase();
 		calculateInternetScore(keywords, text);
@@ -72,27 +73,62 @@ public class InternetTracker {
 	 * 
 	 * @param ArrayList<String> keywords
 	 * @param String text - text from a web page
-	 * @author ehols001
+	 * @author ehols001, jmitchel2
 	 */
 	public void calculateInternetScore(ArrayList<String> keywords, String text) {
-		int score = 0, total = 0;
-		for (String keyword : keywords) {
-			if (text.contains(keyword)) {
-				//int count = StringUtils.countMatches(text, keyword);
-				score = 100;
-				total += score;
+		//declaration
+		double keywordsAppear=0;
+		double calculatedScore=0;
+		//int score = 0, total = 0;
+		//Split the text on a page by each space
+		String[] wordsOnAPage = text.split("\\s+");
+		//turn each word into only A-Z characters
+		for(int i = 0; i < wordsOnAPage.length; i++)
+		{
+			wordsOnAPage[i] = wordsOnAPage[i].replaceAll("[^A-Za-z]", "");
+		}
+		//search keywords for the words on a page.
+		for(String keyword : keywords) 
+		{
+			for (int j=0; j < wordsOnAPage.length; j++) 
+			{
+				if (wordsOnAPage[j].equals(keyword)) 
+				{
+				keywordsAppear= keywordsAppear + 1;
+				}
 			}
-			else {
-				score = 0;
-			}
 		}
-		if (total == 0) {
-			this.setInternetScore(total);
+		
+		//System.out.println("Keywords= " + keywordsAppear);
+		//System.out.println("words On a Page= " + wordsOnAPage.length);
+		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
+		//System.out.println(calculatedScore);
+		//If calculatedScore is greater than 100
+		if (calculatedScore > 100) {
+			this.internetScore= 100;
 		}
-		else {
-			int averageScore = total / keywords.size();
-			this.setInternetScore(averageScore);
+		else{
+			this.internetScore = (int)calculatedScore;
 		}
+		
+		//for (String keyword : keywords) {
+		//	if (text.contains(keyword)) {
+		//		//int count = StringUtils.countMatches(text, keyword);
+		//		score = 100;
+		//		total += score;
+		//	}
+		//	else {
+		//		score = 0;
+		//	}
+		//}
+		//if (total == 0) {
+		//	this.setInternetScore(total);
+		//}
+		//else {
+		//	int averageScore = total / keywords.size();
+		//	this.setInternetScore(averageScore);
+		//}
+	
 	}
 	
 	/**
