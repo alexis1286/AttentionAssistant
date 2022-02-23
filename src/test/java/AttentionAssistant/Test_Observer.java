@@ -223,6 +223,24 @@ public class Test_Observer {
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     
     @Test
+    @DisplayName("<Observer> removeDuplicateKeywords")
+    void observerRemoveDuplicateKeywords() {
+    	ArrayList<String> testKeywords = new ArrayList<String>();
+    	testKeywords.add("test");
+    	testKeywords.add("history");
+    	testKeywords.add("test");
+    	testKeywords.add("history");
+    	testKeywords.add("paper");
+    	
+    	ArrayList<String> newTestKeywords = defaultObserver.removeDuplicateKeywords(testKeywords);
+    	assertEquals("test", newTestKeywords.get(0), "Expected: test | Actual: " + newTestKeywords.get(0));
+    	assertEquals("history", newTestKeywords.get(1), "Expected: history | Actual: " + newTestKeywords.get(1));
+    	assertEquals("paper", newTestKeywords.get(2), "Expected: paper | Actual: " + newTestKeywords.get(2));
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
     @DisplayName("<Observer> setKeywordSynonyms")
     void observerSetKeywordSynonyms() throws IOException {
     	URL location =  new File("./src/main/resources/dict").toURI().toURL();
@@ -230,21 +248,21 @@ public class Test_Observer {
 		dict.open();
 		
 		ArrayList<String> testKeywords = new ArrayList<String>();
+		String[] testSynonyms = {"trial", "test", "tryout", "examination", "exam", "run", "prove", 
+				"try", "examine", "essay", "screen", "quiz", "history", "account", "chronicle", 
+				"story", "paper", "composition", "report", "theme", "newspaper", "wallpaper"};
+		
 		ArrayList<String> testTaskWords = new ArrayList<String>();
-		testTaskWords.add("This");
-		testTaskWords.add("test"); 
-		testTaskWords.add("description");
+		testTaskWords.add("test");
+		testTaskWords.add("history"); 
+		testTaskWords.add("paper");
 		
 		defaultObserver.setKeywordSynonyms(dict, testTaskWords, testKeywords);
-		assertEquals("trial", testKeywords.get(0), "Expected: This | Actual: " + testKeywords.get(0));
-		assertEquals("test", testKeywords.get(1), "Expected: This | Actual: " + testKeywords.get(1));
-		assertEquals("tryout", testKeywords.get(2), "Expected: This | Actual: " + testKeywords.get(2));
-		assertEquals("test", testKeywords.get(3), "Expected: This | Actual: " + testKeywords.get(3));
-//		assertEquals("prove", testKeywords.get(4), "Expected: This | Actual: " + testKeywords.get(4));
-//		assertEquals("try", testKeywords.get(5), "Expected: This | Actual: " + testKeywords.get(5));
-//		assertEquals("examine", testKeywords.get(6), "Expected: This | Actual: " + testKeywords.get(6));
-//		assertEquals("essay", testKeywords.get(7), "Expected: This | Actual: " + testKeywords.get(7));
-//		assertEquals("description", testKeywords.get(8), "Expected: This | Actual: " + testKeywords.get(8));
+		defaultObserver.removeDuplicateKeywords(testKeywords);
+		
+		for(int i = 0; i < testSynonyms.length; i++) {
+			assertEquals(testSynonyms[i], testKeywords.get(i), "Expected: " + testSynonyms[i] + " | Actual: " + testKeywords.get(i));
+		}
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
