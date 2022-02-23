@@ -79,7 +79,6 @@ public class InternetTracker {
 		for (String keyword : keywords) {
 			if (text.contains(keyword)) {
 				//int count = StringUtils.countMatches(text, keyword);
-				//System.out.println(count);
 				score = 100;
 				total += score;
 			}
@@ -89,12 +88,10 @@ public class InternetTracker {
 		}
 		if (total == 0) {
 			this.setInternetScore(total);
-			System.out.println("Internet Score: " + total);
 		}
 		else {
 			int averageScore = total / keywords.size();
 			this.setInternetScore(averageScore);
-			System.out.println("Internet Score: " + averageScore);
 		}
 	}
 	
