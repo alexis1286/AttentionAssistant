@@ -1,9 +1,11 @@
 package AttentionAssistant;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -134,11 +136,12 @@ public class Observer{
 	protected void monitor(Task activeTask) throws IOException {			
 			
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
-/**			for (int i =0; i< keyWords.size(); i++)
- *			{
- *				System.out.println(keyWords.get(i));
- *			}
- */			//new Objects
+			
+			//for (int i =0; i< keyWords.size(); i++)
+ 			//{
+ 				//System.out.println(keyWords.get(i));
+ 			//}
+
 			MouseTracker mouseTracker = new MouseTracker();
 			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
 			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
@@ -152,12 +155,12 @@ public class Observer{
 			osEventsTracker.startTracking();
 			internetTracker.startTracking(keyWords);
 			
-/**			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
- *					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
- *					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
- *					"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
- *					"\ninternetTracker: " + internetTracker.getInternetScore());
- */			
+			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
+ 					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
+ 					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
+    				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
+ 					"\ninternetTracker: " + internetTracker.getInternetScore());
+ 			
 			 
 			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
@@ -229,6 +232,7 @@ public class Observer{
 			
 		ArrayList<String> taskWords = filterTaskDescription(activeTask);
 		setKeywordSynonyms(dict, taskWords, keywords);
+		keywords = removeDuplicateKeywords(keywords);
 		return keywords;
 	}
 	
@@ -256,7 +260,7 @@ public class Observer{
 	/**
 	 * Identify and store synonyms into keywords for each word from taskWords
 	 * @param dict - dictionary to get synonyms from
-	 * @param taskWords - list of words from the task description
+	 * @param taskWords - list of filtered words from the task description
 	 * @param ArrayList<String> keywords - ArrayList of keywords
 	 */
 	public void setKeywordSynonyms(IDictionary dict, ArrayList<String> taskWords, ArrayList<String> keywords) {
@@ -264,31 +268,39 @@ public class Observer{
 			for(POS p : POS.values()) {
 				IIndexWord idxWord = dict.getIndexWord(taskWords.get(i), p);
 				if(idxWord != null) {
-					/**
-					 * A word can have multiple definitions, 
-					 * therefore each will have its own related words
-					 */
+					
+					//Gets all definitions of the word
 					List<IWordID> idxWordIDs = idxWord.getWordIDs();
-					for (int j = 0; j < idxWordIDs.size(); j++)
-					{
-					IWordID wordID = idxWordIDs.get(j); 
-					IWord word = dict.getWord(wordID);
-					//System.out.println("Id = " + wordID);
-					//System.out.println("Lemma = " + word.getLemma());
-					//System.out.println("Gloss = " + word.getSynset().getGloss());
+					
+					for (int j = 0; j < idxWordIDs.size(); j++) {
+						IWordID wordID = idxWordIDs.get(j);
+						IWord word = dict.getWord(wordID);
 
-					ISynset wSynset = word.getSynset();
-					for(IWord w : wSynset.getWords()) {
-						//Makes sure the word only contains alphabetical chars before adding to keywords list
-						if(w.getLemma().matches("[a-zA-Z]+"))
-							keywords.add(w.getLemma());
-							//System.out.println(w.getLemma());
-					}
+						ISynset wSynset = word.getSynset();
+						for(IWord w : wSynset.getWords()) {
+							//Makes sure the word only contains alphabetical chars before adding to keywords list
+							if(w.getLemma().matches("[a-zA-Z]+")) {
+								keywords.add(w.getLemma());
+							}
+						}
 					}
 				}
 				else;
 			}
 		}
+	}
+	
+	/**
+	 * Removes any duplicate keywords from the keyword list
+	 * @param ArrayList<String> keywords
+	 * @return ArrayList<String> keywords
+	 */
+	public ArrayList<String> removeDuplicateKeywords(ArrayList<String> keywords) {
+		Set<String> temp = new LinkedHashSet<>();
+		temp.addAll(keywords);
+		keywords.clear();
+		keywords.addAll(temp);
+		return keywords;
 	}
 
 	/**
