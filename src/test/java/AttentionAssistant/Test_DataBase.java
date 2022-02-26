@@ -474,7 +474,39 @@ public class Test_DataBase {
         assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedHTB2.toString());
         
     }
+    
+    @Test
+    @Order(21)
+    @DisplayName("<DataBase> DatabaseSelectAllHTBs")
+    void DatabaseSelectAllHTBs() {
+    	ArrayList<Happy_Thought_Button> test_HTB_List = new ArrayList<Happy_Thought_Button>();
+    	ArrayList<Happy_Thought_Button> test_database_HTB_List = new ArrayList<Happy_Thought_Button>();
 
+    	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	UpdatedHTB.setHTBID(1);
+    	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
+    	UpdatedHTB.setFlagged(false);
+    	
+    	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
+    	SelectedHTB1.setHTBID(2);
+    	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
+    	SelectedHTB1.setFlagged(true);
+    	
+    	Happy_Thought_Button DefaultHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	DefaultHTB.setHTBID(4);
+    	
+    	test_HTB_List.add(UpdatedHTB);
+    	test_HTB_List.add(SelectedHTB1);
+    	test_HTB_List.add(DefaultHTB);
+    	
+    	test_database_HTB_List= db.SelectAllHTBs(1);
+ 
+    	for (int i =0; i< test_database_HTB_List.size(); i++) {        
+    		assertEquals(test_HTB_List.get(i).toString(), test_database_HTB_List.get(i).toString(), "test_database_HTB_List " + i + " should be set to " + test_HTB_List.get(i).toString() + " but instead returned: " + test_database_HTB_List.get(i).toString());
+        }
+        
+    }
+    
     
     /**
     ******* END OF TEST HTB CRUD *******
@@ -484,7 +516,7 @@ public class Test_DataBase {
     ******* START OF TEST OBSERVER CRUD *******
      */
     @Test
-    @Order(21)
+    @Order(22)
     @DisplayName("<DataBase> DatabaseAddNewObserver")
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);
@@ -496,7 +528,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(22)
+    @Order(23)
     @DisplayName("<DataBase> DatabaseUpdateObserver")
     void DatabaseUpdateObserver() {
     	Observer UpdatedObserver= new Observer(nonDefaultObserver);
@@ -508,7 +540,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(23)
+    @Order(24)
     @DisplayName("<DataBase> DatabaseDeleteObserver")
     void DatabaseDeleteObserver() {
     	Observer DeletedObserver = new Observer(nonDefaultObserver);
@@ -521,7 +553,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(24)
+    @Order(25)
     @DisplayName("<DataBase> DatabaseSelectObserver")
     void DatabaseSelectObserver() {
     	Observer selectedObserver = new Observer(nonDefaultObserver);
@@ -540,7 +572,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(25)
+    @Order(26)
     @DisplayName("<DataBase> DatabaseSelectAllObservers")
     void DatabaseSelectAllObservers() {
     	ArrayList<Observer> test_Observer_List = new ArrayList<Observer>();
@@ -583,7 +615,7 @@ public class Test_DataBase {
 
     
     @Test
-    @Order(26)
+    @Order(27)
     @DisplayName("<DataBase> DatabaseAddNewSettings")
     void DatabaseAddNewSettings() {
         db.AddSettings(nonDefaultSettings);
@@ -593,7 +625,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(27)
+    @Order(28)
     @DisplayName("<DataBase> DatabaseUpdateSettings")
     void DatabaseUpdateSettings() {
     	Settings UpdatedSettings= new Settings(nonDefaultSettings);
@@ -604,7 +636,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(28)
+    @Order(29)
     @DisplayName("<DataBase> DatabaseDeleteSettings")
     void DatabaseDeleteSettings() {
     	Settings deletedSettings = new Settings(nonDefaultSettings);
@@ -616,7 +648,7 @@ public class Test_DataBase {
 
     
     @Test
-    @Order(29)
+    @Order(30)
     @DisplayName("<DataBase> DatabaseSelectSettings")
     void DatabaseSelectSettings() {
     	Settings selectedSettings = new Settings(nonDefaultSettings);
@@ -643,7 +675,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(30)
+    @Order(31)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseAddLinked_Account() {
     	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
@@ -665,7 +697,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(31)
+    @Order(32)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseDeleteLinked_Account() {
     	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
@@ -676,7 +708,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(32)
+    @Order(33)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseSelect_All_Users_Linked_Account() {
     	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
@@ -729,7 +761,7 @@ public class Test_DataBase {
      */
 
     @Test
-    @Order(33)
+    @Order(34)
     @DisplayName("<DataBase> DatabaseAddNewNotification")
     void DatabaseAddNotification() {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
@@ -747,7 +779,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(34)
+    @Order(35)
     @DisplayName("<DataBase> DatabaseUpdateNotification_System")
     void DatabaseUpdateNotification() {
     	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
@@ -758,7 +790,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(35)
+    @Order(36)
     @DisplayName("<DataBase> DatabaseDeleteNotification_System")
     void DatabaseDeleteNotification() {
     	Notification_System DeletedNotify= new Notification_System(nonDefaultNotify);
@@ -770,7 +802,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(36)
+    @Order(37)
     @DisplayName("<DataBase> DatabaseSelectNotification")
     void DatabaseSelectNotification() {
     	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
@@ -784,9 +816,41 @@ public class Test_DataBase {
         assertEquals(String1, selectedNotify2.toString(), "selectedHTB2 should be set to \"Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008\" but instead returned: " + selectedNotify2.toString());
     }
     
+    @Test
+    @Order(38)
+    @DisplayName("<DataBase> DatabaseSelectAllNotifications")
+    void DatabaseSelectAllNotifications() {
+    	ArrayList<Notification_System> test_Notification_List = new ArrayList<Notification_System>();
+    	ArrayList<Notification_System> test_database_Notification_List = new ArrayList<Notification_System>();
+    	
+    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	UpdatedNotify.setNotificationID(1);
+    	UpdatedNotify.setType("I am a updated type");
+    	UpdatedNotify.setIgnored(false);
+    
+    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	SelectedNotify.setNotificationID(2);
+    	SelectedNotify.setType("I am a Selected Type");
+    	SelectedNotify.setIgnored(true);
+    
+    	Notification_System DefaultNotify= new Notification_System(nonDefaultNotify);
+    	DefaultNotify.setNotificationID(4);
+
+    	test_Notification_List.add(UpdatedNotify);
+    	test_Notification_List.add(SelectedNotify);
+    	test_Notification_List.add(DefaultNotify);    	
+    	
+    	test_database_Notification_List= db.SelectAllNotifications(1);
+    	
+    	for (int i =0; i< test_database_Notification_List.size(); i++) {        
+    		assertEquals(test_Notification_List.get(i).toString(), test_database_Notification_List.get(i).toString(), "test_database_Notification_List " + i + " should be set to " + test_Notification_List.get(i).toString() + " but instead returned: " + test_database_Notification_List.get(i).toString());
+        }
+    	
+    } 
+
     
     @Test
-    @Order(37)
+    @Order(39)
     @DisplayName("<DataBase> DatabaseTestPlayGround")
     void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);

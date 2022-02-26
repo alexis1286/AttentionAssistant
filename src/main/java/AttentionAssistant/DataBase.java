@@ -151,7 +151,7 @@ public class DataBase {
          */
     	String queryNotification_System = "CREATE TABLE IF NOT EXISTS notification ( " +
       			 "notificationID INTEGER PRIMARY KEY, " +
-      			 "fk_UserID INTEGER, " +
+      			 "fk_userID INTEGER, " +
       			 "type TEXT, " +
       			 "ignored BOOLEAN, " +
       			 "dT_Notification DATE, " +
@@ -753,6 +753,42 @@ public class DataBase {
             }
             
             /**
+             * Grab all Happy_Thought_Buttons within the Database
+             * 
+             * @param int
+             * @return ArrayList<Happy_Thought_Button>
+             */
+            public ArrayList<Happy_Thought_Button> SelectAllHTBs(int userID){
+        		sqlCon.enforceForeignKeys(true);
+                ds.setConfig(sqlCon);
+            	ArrayList<Happy_Thought_Button> hTBsOnList = new ArrayList<Happy_Thought_Button>();
+            	Happy_Thought_Button blankHTB = new Happy_Thought_Button();
+            	String query1 = "SELECT * FROM happy_thought_button WHERE fk_userID = '" + userID + "'";
+            	try ( Connection conn = ds.getConnection();
+            		    Statement stmt = conn.createStatement(); ) {
+            		    ResultSet rs = stmt.executeQuery( query1 );
+            		    while (rs.next()){
+            		    blankHTB = new Happy_Thought_Button();
+            		    blankHTB.setHTBID(rs.getInt("hTBID"));
+            		    blankHTB.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
+            		    blankHTB.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
+            		    blankHTB.setDT_Executed(date1);
+            		    hTBsOnList.add(blankHTB);
+            		    }
+            		    System.out.println( "SelectAllHTBs() returned " + rs );
+            		} catch ( SQLException e ) {
+            			e.printStackTrace();
+            		}
+            		  catch ( ParseException p ) {
+            			p.printStackTrace();
+            		}
+        		sqlCon.enforceForeignKeys(false);
+                ds.setConfig(sqlCon);
+            	return hTBsOnList;
+            }
+
+            /**
              ******* END OF HTB CRUD *******
              */
 
@@ -1340,4 +1376,39 @@ public class DataBase {
 
    }
 
+   /**
+    * Grab all Notifications within the Database
+    * 
+    * @param int
+    * @return ArrayList<Notification_System>
+    */
+   public ArrayList<Notification_System> SelectAllNotifications(int userID){
+		sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+   	ArrayList<Notification_System> notificationsOnList = new ArrayList<Notification_System>();
+   	Notification_System blankNotification = new Notification_System();
+   	String query1 = "SELECT * FROM notification WHERE fk_userID = '" + userID + "'";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    ResultSet rs = stmt.executeQuery( query1 );
+   		    while (rs.next()){
+   		    blankNotification = new Notification_System();
+   		    blankNotification.setNotificationID(rs.getInt("notificationID"));
+   		    blankNotification.setType(rs.getString("type"));
+   		    blankNotification.setIgnored(Boolean.valueOf(rs.getString("ignored")));
+   		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Notification"));
+   		    blankNotification.setDT_Notification(date1);
+   		    notificationsOnList.add(blankNotification);
+   		    }
+   		    System.out.println( "SelectAllNotifications() returned " + rs );
+   		} catch ( SQLException e ) {
+   			e.printStackTrace();
+   		}
+   		  catch ( ParseException p ) {
+   			p.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   	return notificationsOnList;
+   }
 }
