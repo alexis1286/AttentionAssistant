@@ -1411,4 +1411,9 @@ public class DataBase {
        ds.setConfig(sqlCon);
    	return notificationsOnList;
    }
+   
+   /**
+    ******* END OF NOTIFICATION SYSTEM CRUD *******
+    */
+
 }

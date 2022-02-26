@@ -138,6 +138,9 @@ public class Test_DataBase {
 	db.DatabaseSetUp();	
 	}
 
+	/**
+	 * Delete All Tables within the Database
+	 */
     @Test
     @Order(1)
     @DisplayName("<DataBase> DatabaseDeleteAllTables")
@@ -153,7 +156,7 @@ public class Test_DataBase {
     }
 
     /**
-     ******* START OF TEST USER_ACCOUNT CRUD *******
+     ***************** START OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     @Test
@@ -224,11 +227,11 @@ public class Test_DataBase {
     }
     
     /**
-     ******* END OF TEST USER_ACCOUNT CRUD *******
+     ***************** END OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     /**
-     ******* START OF TEST USER_ACCOUNT CRUD *******
+     ***************** START OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     @Test
@@ -300,12 +303,12 @@ public class Test_DataBase {
     
     
     /**
-     ******* END OF TEST PARENT_ACCOUNT CRUD *******
+     ***************** END OF TEST PARENT_ACCOUNT CRUD *****************
 	 */
 
     
 	/**
-     ******* START OF TEST TASK CRUD *******
+     ***************** START OF TEST TASK CRUD *****************
 	 */
 	
     @Test
@@ -407,11 +410,11 @@ public class Test_DataBase {
         }
     }
     /**
-    ******* END OF TEST TASK CRUD *******
+    ***************** END OF TEST TASK CRUD *****************
     */
 
     /**
-    ******* START OF TEST HTB CRUD *******
+    ***************** START OF TEST HTB CRUD *****************
     * @author jmitchel2
     */
     
@@ -509,11 +512,11 @@ public class Test_DataBase {
     
     
     /**
-    ******* END OF TEST HTB CRUD *******
+    ***************** END OF TEST HTB CRUD *****************
     */
 
     /**
-    ******* START OF TEST OBSERVER CRUD *******
+    ***************** START OF TEST OBSERVER CRUD *****************
      */
     @Test
     @Order(22)
@@ -599,18 +602,18 @@ public class Test_DataBase {
     	test_database_Observer_List= db.SelectAllObservers(4);
     	
     	for (int i =0; i< test_database_Observer_List.size(); i++) {        
-    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
+    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_Observerr_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
         }
 
     	
     }
 
     /**
-    ******* END OF TEST OBSERVER CRUD *******
+    ***************** END OF TEST OBSERVER CRUD *****************
     */
 
     /**
-    ******* START OF TEST SETTINGS CRUD *******
+    ***************** START OF TEST SETTINGS CRUD *****************
      */
 
     
@@ -753,11 +756,11 @@ public class Test_DataBase {
     }
     
     /**
-    ******* END OF TEST SETTINGS CRUD *******
+    ***************** END OF TEST SETTINGS CRUD *****************
     */
 
     /**
-    ******* START OF TEST NOTIFICATIONS CRUD *******
+    ***************** START OF TEST NOTIFICATIONS CRUD *****************
      */
 
     @Test
@@ -847,6 +850,10 @@ public class Test_DataBase {
         }
     	
     } 
+
+    /**
+     ***************** END OF TEST NOTIFICATION SYSTEM CRUD *****************
+     */
 
     
     @Test
