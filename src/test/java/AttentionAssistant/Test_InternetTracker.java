@@ -59,8 +59,8 @@ public class Test_InternetTracker {
 		
 		testDefaultIT.calculateInternetScore(testKeywords, testText);
 		
-		assertEquals(50, testDefaultIT.getInternetScore(), 
-			        "Expected: 50 | Actual: " + testDefaultIT.getInternetScore());
+		assertEquals(100, testDefaultIT.getInternetScore(), 
+			        "Expected: 100 | Actual: " + testDefaultIT.getInternetScore());
 	}
 	
 	@Test
