@@ -3,6 +3,9 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.*;
 import java.io.*;
@@ -21,7 +24,8 @@ public class Nav_Bar{
 	Color aa_purple = new Color(137,31,191);
 	JButton toRefresh;
 	DecimalFormat df = new DecimalFormat("#.#"); 
-	
+	private int mouseX;
+	private int mouseY;
 		
 	/*
 	 * variables
@@ -103,6 +107,7 @@ public class Nav_Bar{
 			public void run() {
 				counter = 1;
 				JFrame frame = new JFrame();
+				frame.setBounds(x_coord, y_coord, 1000, 1000);
 				//removes default title bar from frame 
 		        frame.setUndecorated(true);
 		        //sets background of frame to transparent
@@ -117,6 +122,7 @@ public class Nav_Bar{
 		        
 		        CardLayout cardLayout = new CardLayout();
 		        JPanel panel = new JPanel();
+		        panel.setBounds(x_coord, y_coord, 1000, 1000);
 		        panel.setLayout(cardLayout);
 		        
 		        //panel for buttons
@@ -126,7 +132,7 @@ public class Nav_Bar{
 		        frame.getContentPane().add(panel);
 				frame.pack();
 				frame.setVisible(true);
-				frame.setResizable(true);	
+				frame.setResizable(true);
 				
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
@@ -146,9 +152,7 @@ public class Nav_Bar{
 		        		counter++;
 		        		panel.revalidate();
 		        		panel.repaint();
-		        		panel.validate();
 		        		frame.revalidate();
-		        		frame.validate();
 		        		frame.repaint();
 		        	}
 		        });
@@ -185,11 +189,16 @@ public class Nav_Bar{
         if(isCollapsed == false) {
         	//displays all visible and active buttons
         	JButton settingsButton = createButton("images/setting_button.png",panel);
+        	settingsButton.setFocusPainted(false);
         	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
 	        		settings.open_settings(db, navbar, settings, observer, pm, pomo, ntb, htb, fts);
 	        }});
+        	settingsButton.addMouseListener(new MouseAdapter() {
+        		public void mouseReleased(MouseEvent e) {
+        			
+        		}});
         	panel.add(settingsButton);
         	
         	
@@ -228,6 +237,7 @@ public class Nav_Bar{
 				htbButton.addActionListener(new ActionListener() {
     	        	public void actionPerformed(ActionEvent e) {
     	        		//open htb
+    	        		htb.open_htb();
     	        }});
 				panel.add(htbButton);
 			
@@ -267,7 +277,7 @@ public class Nav_Bar{
         
         //sets background of panel to transparent
         panel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
-		return panel;
+        return panel;
 	}
 	
 	private JButton createButton(String imgFile,JPanel panel) {
@@ -322,6 +332,7 @@ public class Nav_Bar{
         //remove button border
         button.setBorderPainted(false);
         button.setFocusPainted(false);
+        button.setRolloverEnabled(false);
 		return button;
 	}
 	
