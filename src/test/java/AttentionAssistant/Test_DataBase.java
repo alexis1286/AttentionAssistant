@@ -27,7 +27,9 @@ public class Test_DataBase {
 	Settings nonDefaultSettings;
 	User_Account nonDefaultUser;
 	Parent_Account nonDefaultParent;
+	Notification_System nonDefaultNotify;
 	DataBase db = new DataBase();
+	
 	
 	@BeforeEach
 	void setup() {
@@ -122,11 +124,23 @@ public class Test_DataBase {
 	String testParentPassword= "TestParentPass123";
 
 	nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword);
+	
+	/**
+	 * Set up for nonDefault Notification_System
+	 */
+	int testNotificationID= 999;
+	String testType = "This is a test type";
+	boolean testIgnored= true;
+	Date testDT_Notification = new Date(1220227200L * 1000);
+
+	nonDefaultNotify= new Notification_System(testNotificationID, testType, testIgnored, testDT_Notification);
 
 	db.DatabaseSetUp();	
-
 	}
 
+	/**
+	 * Delete All Tables within the Database
+	 */
     @Test
     @Order(1)
     @DisplayName("<DataBase> DatabaseDeleteAllTables")
@@ -138,10 +152,11 @@ public class Test_DataBase {
     db.DeleteAllObservers();
     db.DeleteAllSettings();
     db.DeleteAllLinkedAccounts();
+    db.DeleteAllNotifications();
     }
 
     /**
-     ******* START OF TEST USER_ACCOUNT CRUD *******
+     ***************** START OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     @Test
@@ -195,16 +210,32 @@ public class Test_DataBase {
         assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
     }
 	
+    @Test
+    @Order(6)
+    @DisplayName("<DataBase> DatabaseSelectUserAccount")
+    void DatabaseSearchUserAccount() {
+    	User_Account SelectedUser = new User_Account(nonDefaultUser);
+    	SelectedUser.setUserID(2);
+    	SelectedUser.setUsername("SelectedUsername123");
+    	SelectedUser.setPassword("SelectedPassword123");
+    	
+    	User_Account SelectedUser2 = new User_Account();
+    	SelectedUser2 = db.SearchUser_Account(SelectedUser.getUsername(), SelectedUser.getPassword());
+        
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
+    }
+    
     /**
-     ******* END OF TEST USER_ACCOUNT CRUD *******
+     ***************** END OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     /**
-     ******* START OF TEST USER_ACCOUNT CRUD *******
+     ***************** START OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("<DataBase> DatabaseAddNewParentAccount")
     void DatabaseAddNewParentAccount() {
     	db.AddParent_Account(nonDefaultParent);
@@ -214,7 +245,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     @DisplayName("<DataBase> DatabaseUpdateParentAccount")
     void DatabaseUpdateParentAccount() {
     	Parent_Account UpdatedParent= new Parent_Account(nonDefaultParent);
@@ -225,7 +256,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(9)
+    @Order(10)
     @DisplayName("<DataBase> DatabaseDeleteParentAccount")
     void DatabaseDeleteParentAccount() {
     	Parent_Account DeletedParent= new Parent_Account(nonDefaultParent);
@@ -238,7 +269,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(8)
+    @Order(9)
     @DisplayName("<DataBase> DatabaseSelectParentAccount")
     void DatabaseSelectParentAccount() {
     	Parent_Account SelectedParent = new Parent_Account(nonDefaultParent);
@@ -254,17 +285,34 @@ public class Test_DataBase {
         assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123\" but instead returned: " + SelectedParent2.toString());
     }
 	
+    @Test
+    @Order(11)
+    @DisplayName("<DataBase> DatabaseSelectParentAccount")
+    void DatabaseSearchParentAccount() {
+    	Parent_Account SelectedParent = new Parent_Account(nonDefaultParent);
+    	SelectedParent.setParentID(2);
+    	SelectedParent.setUsername("SelectedParentUser123");
+    	SelectedParent.setPassword("SelectedParentPass123");
+    	
+    	Parent_Account SelectedParent2 = new Parent_Account();
+    	SelectedParent2 = db.SearchParent_Account(SelectedParent.getUsername(), SelectedParent.getPassword());
+        
+        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123";
+        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123\" but instead returned: " + SelectedParent2.toString());
+    }
+    
+    
     /**
-     ******* END OF TEST USER_ACCOUNT CRUD *******
+     ***************** END OF TEST PARENT_ACCOUNT CRUD *****************
 	 */
 
     
 	/**
-     ******* START OF TEST TASK CRUD *******
+     ***************** START OF TEST TASK CRUD *****************
 	 */
 	
     @Test
-    @Order(10)
+    @Order(12)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
     	db.AddTask(nonDefaultTask);
@@ -274,7 +322,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(11)
+    @Order(13)
     @DisplayName("<DataBase> DatabaseUpdateTask")
     void DatabaseUpdateTask() {
     	Task UpdatedTask= new Task(nonDefaultTask);
@@ -287,7 +335,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(13)
+    @Order(15)
     @DisplayName("<DataBase> DatabaseDeleteTask")
     void DatabaseDeleteTask() {
     	Task DeletedTask= new Task(nonDefaultTask);
@@ -301,7 +349,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(12)
+    @Order(14)
     @DisplayName("<DataBase> DatabaseSelectTask")
     void DatabaseSelectTask() {
     	Task SelectedTask1= new Task(nonDefaultTask);
@@ -329,7 +377,7 @@ public class Test_DataBase {
 
  
     @Test
-    @Order(14)
+    @Order(16)
     @DisplayName("<DataBase> DatabaseSelectAllTasks")
     void DatabaseSelectAllTasks() {
     	ArrayList<Task> test_task_List = new ArrayList<Task>();
@@ -362,16 +410,16 @@ public class Test_DataBase {
         }
     }
     /**
-    ******* END OF TEST TASK CRUD *******
+    ***************** END OF TEST TASK CRUD *****************
     */
 
     /**
-    ******* START OF TEST HTB CRUD *******
+    ***************** START OF TEST HTB CRUD *****************
     * @author jmitchel2
     */
     
     @Test
-    @Order(15)
+    @Order(17)
     @DisplayName("<DataBase> DatabaseAddNewHTB")
     void DatabaseAddHTB() {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
@@ -389,7 +437,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(16)
+    @Order(18)
     @DisplayName("<DataBase> DatabaseUpdateHTB")
     void DatabaseUpdateHTB() {
     	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
@@ -400,7 +448,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(17)
+    @Order(19)
     @DisplayName("<DataBase> DatabaseDeleteHTB")
     void DatabaseDeleteHTB() {
     	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
@@ -413,7 +461,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(18)
+    @Order(20)
     @DisplayName("<DataBase> DatabaseSelectHTB")
     void DatabaseSelectHTB() {
     	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
@@ -429,17 +477,49 @@ public class Test_DataBase {
         assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008 but instead returned: " + selectedHTB2.toString());
         
     }
+    
+    @Test
+    @Order(21)
+    @DisplayName("<DataBase> DatabaseSelectAllHTBs")
+    void DatabaseSelectAllHTBs() {
+    	ArrayList<Happy_Thought_Button> test_HTB_List = new ArrayList<Happy_Thought_Button>();
+    	ArrayList<Happy_Thought_Button> test_database_HTB_List = new ArrayList<Happy_Thought_Button>();
 
+    	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	UpdatedHTB.setHTBID(1);
+    	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
+    	UpdatedHTB.setFlagged(false);
+    	
+    	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
+    	SelectedHTB1.setHTBID(2);
+    	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
+    	SelectedHTB1.setFlagged(true);
+    	
+    	Happy_Thought_Button DefaultHTB= new Happy_Thought_Button(nonDefaultHTB);
+    	DefaultHTB.setHTBID(4);
+    	
+    	test_HTB_List.add(UpdatedHTB);
+    	test_HTB_List.add(SelectedHTB1);
+    	test_HTB_List.add(DefaultHTB);
+    	
+    	test_database_HTB_List= db.SelectAllHTBs(1);
+ 
+    	for (int i =0; i< test_database_HTB_List.size(); i++) {        
+    		assertEquals(test_HTB_List.get(i).toString(), test_database_HTB_List.get(i).toString(), "test_database_HTB_List " + i + " should be set to " + test_HTB_List.get(i).toString() + " but instead returned: " + test_database_HTB_List.get(i).toString());
+        }
+        
+    }
+    
     
     /**
-    ******* END OF TEST HTB CRUD *******
+    ***************** END OF TEST HTB CRUD *****************
     */
 
     /**
-    ******* START OF TEST OBSERVER CRUD *******
+    ***************** START OF TEST OBSERVER CRUD *****************
      */
     @Test
-    @Order(19)
+    @Order(22)
     @DisplayName("<DataBase> DatabaseAddNewObserver")
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);
@@ -451,7 +531,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(20)
+    @Order(23)
     @DisplayName("<DataBase> DatabaseUpdateObserver")
     void DatabaseUpdateObserver() {
     	Observer UpdatedObserver= new Observer(nonDefaultObserver);
@@ -463,7 +543,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(21)
+    @Order(24)
     @DisplayName("<DataBase> DatabaseDeleteObserver")
     void DatabaseDeleteObserver() {
     	Observer DeletedObserver = new Observer(nonDefaultObserver);
@@ -476,7 +556,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(22)
+    @Order(25)
     @DisplayName("<DataBase> DatabaseSelectObserver")
     void DatabaseSelectObserver() {
     	Observer selectedObserver = new Observer(nonDefaultObserver);
@@ -495,7 +575,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(23)
+    @Order(26)
     @DisplayName("<DataBase> DatabaseSelectAllObservers")
     void DatabaseSelectAllObservers() {
     	ArrayList<Observer> test_Observer_List = new ArrayList<Observer>();
@@ -522,23 +602,23 @@ public class Test_DataBase {
     	test_database_Observer_List= db.SelectAllObservers(4);
     	
     	for (int i =0; i< test_database_Observer_List.size(); i++) {        
-    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
+    		assertEquals(test_Observer_List.get(i).toString(), test_database_Observer_List.get(i).toString(), "test_database_Observerr_List " + i + " should be set to " + test_Observer_List.get(i).toString() + " but instead returned: " + test_database_Observer_List.get(i).toString());
         }
 
     	
     }
 
     /**
-    ******* END OF TEST OBSERVER CRUD *******
+    ***************** END OF TEST OBSERVER CRUD *****************
     */
 
     /**
-    ******* START OF TEST SETTINGS CRUD *******
+    ***************** START OF TEST SETTINGS CRUD *****************
      */
 
     
     @Test
-    @Order(24)
+    @Order(27)
     @DisplayName("<DataBase> DatabaseAddNewSettings")
     void DatabaseAddNewSettings() {
         db.AddSettings(nonDefaultSettings);
@@ -548,7 +628,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(25)
+    @Order(28)
     @DisplayName("<DataBase> DatabaseUpdateSettings")
     void DatabaseUpdateSettings() {
     	Settings UpdatedSettings= new Settings(nonDefaultSettings);
@@ -559,7 +639,7 @@ public class Test_DataBase {
     }
     
     @Test
-    @Order(26)
+    @Order(29)
     @DisplayName("<DataBase> DatabaseDeleteSettings")
     void DatabaseDeleteSettings() {
     	Settings deletedSettings = new Settings(nonDefaultSettings);
@@ -571,7 +651,7 @@ public class Test_DataBase {
 
     
     @Test
-    @Order(27)
+    @Order(30)
     @DisplayName("<DataBase> DatabaseSelectSettings")
     void DatabaseSelectSettings() {
     	Settings selectedSettings = new Settings(nonDefaultSettings);
@@ -598,7 +678,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(28)
+    @Order(31)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseAddLinked_Account() {
     	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
@@ -620,7 +700,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(29)
+    @Order(32)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseDeleteLinked_Account() {
     	Parent_Account linkParent = new Parent_Account(nonDefaultParent);
@@ -631,7 +711,7 @@ public class Test_DataBase {
     }
 
     @Test
-    @Order(30)
+    @Order(33)
     @DisplayName("<DataBase> DatabaseAddLinked_Account")
     void DatabaseSelect_All_Users_Linked_Account() {
     	Parent_Account linkParent1 = new Parent_Account(nonDefaultParent);
@@ -674,9 +754,110 @@ public class Test_DataBase {
         }
 
     }
+    
+    /**
+    ***************** END OF TEST SETTINGS CRUD *****************
+    */
+
+    /**
+    ***************** START OF TEST NOTIFICATIONS CRUD *****************
+     */
 
     @Test
-    @Order(31)
+    @Order(34)
+    @DisplayName("<DataBase> DatabaseAddNewNotification")
+    void DatabaseAddNotification() {
+    User_Account Test_User_Account= new User_Account(nonDefaultUser);
+    db.AddUser_Account(Test_User_Account);
+    Test_User_Account.setUserID(1);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    Test_User_Account.setUserID(5);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.DeleteUser_Account(5);
+    Test_User_Account.setUserID(3);
+    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    }
+
+    @Test
+    @Order(35)
+    @DisplayName("<DataBase> DatabaseUpdateNotification_System")
+    void DatabaseUpdateNotification() {
+    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	UpdatedNotify.setNotificationID(1);
+    	UpdatedNotify.setType("I am a updated type");
+    	UpdatedNotify.setIgnored(false);
+    	db.UpdateNotification(UpdatedNotify);
+    }
+    
+    @Test
+    @Order(36)
+    @DisplayName("<DataBase> DatabaseDeleteNotification_System")
+    void DatabaseDeleteNotification() {
+    	Notification_System DeletedNotify= new Notification_System(nonDefaultNotify);
+    	DeletedNotify.setNotificationID(3);
+    	DeletedNotify.setType("I am supposed to be deleted");
+    	DeletedNotify.setIgnored(false);
+    	db.UpdateNotification(DeletedNotify);
+      	db.DeleteNotification(3);
+    }
+
+    @Test
+    @Order(37)
+    @DisplayName("<DataBase> DatabaseSelectNotification")
+    void DatabaseSelectNotification() {
+    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	SelectedNotify.setNotificationID(2);
+    	SelectedNotify.setType("I am a Selected Type");
+    	SelectedNotify.setIgnored(true);
+    	db.UpdateNotification(SelectedNotify);
+    	Notification_System selectedNotify2 = new Notification_System();
+    	selectedNotify2 = db.SelectNotification(2);
+    	String String1 = "Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008";
+        assertEquals(String1, selectedNotify2.toString(), "selectedHTB2 should be set to \"Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008\" but instead returned: " + selectedNotify2.toString());
+    }
+    
+    @Test
+    @Order(38)
+    @DisplayName("<DataBase> DatabaseSelectAllNotifications")
+    void DatabaseSelectAllNotifications() {
+    	ArrayList<Notification_System> test_Notification_List = new ArrayList<Notification_System>();
+    	ArrayList<Notification_System> test_database_Notification_List = new ArrayList<Notification_System>();
+    	
+    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	UpdatedNotify.setNotificationID(1);
+    	UpdatedNotify.setType("I am a updated type");
+    	UpdatedNotify.setIgnored(false);
+    
+    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	SelectedNotify.setNotificationID(2);
+    	SelectedNotify.setType("I am a Selected Type");
+    	SelectedNotify.setIgnored(true);
+    
+    	Notification_System DefaultNotify= new Notification_System(nonDefaultNotify);
+    	DefaultNotify.setNotificationID(4);
+
+    	test_Notification_List.add(UpdatedNotify);
+    	test_Notification_List.add(SelectedNotify);
+    	test_Notification_List.add(DefaultNotify);    	
+    	
+    	test_database_Notification_List= db.SelectAllNotifications(1);
+    	
+    	for (int i =0; i< test_database_Notification_List.size(); i++) {        
+    		assertEquals(test_Notification_List.get(i).toString(), test_database_Notification_List.get(i).toString(), "test_database_Notification_List " + i + " should be set to " + test_Notification_List.get(i).toString() + " but instead returned: " + test_database_Notification_List.get(i).toString());
+        }
+    	
+    } 
+
+    /**
+     ***************** END OF TEST NOTIFICATION SYSTEM CRUD *****************
+     */
+
+    
+    @Test
+    @Order(39)
     @DisplayName("<DataBase> DatabaseTestPlayGround")
     void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
@@ -687,4 +868,5 @@ public class Test_DataBase {
     */
     	
     }
+
 }

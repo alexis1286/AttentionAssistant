@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -34,6 +36,7 @@ public class Settings {
 	private int width = 550; 
 	private int mouseX;
 	private int mouseY;
+	JLabel displayAvatar;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
@@ -190,7 +193,7 @@ public class Settings {
 		this.avatarIsActive = false; 
 		this.textIsActive = true; 
 		this.audioIsActive = false;
-		this.avatarFilePath = "images/avatar_dino.png"; 
+		this.avatarFilePath = "avatarSelection/avatar_dino.png"; 
 		this.audioFilePath = "";
 		this.alwaysOnScreen = false; 
 		this.avatarSize = 100; 
@@ -206,56 +209,22 @@ public class Settings {
 	
 	/**
 	 * Creates a Settings object loaded with settings from database
-	 * @param db
+	 * @param DataBase
+	 * @param int
 	 *
-	 * Placeholder constructor to get an idea of how the
-	 * settings could be loaded from the database
-	 * 
-	 *  assuming DataBase class will have a method called something along
-	 *  the lines of SelectUserSettings() that returns an arraylist of all the settings
-	 *  in the same order as the constructor -- just an idea to coordinate with
-	 *  database team once the table is set up 
-	 *
-	public Settings(DataBase db) {
-		this.settingsID = db.SelectUserSettings().get(0);
-		this.iconCircles = db.SelectUserSettings().get(1); 
-		this.icons = db.SelectUserSettings().get(2);
-		this.opacityCircles = db.SelectUserSettings().get(3); 
-		this.opacityIcons = db.SelectUserSettings().get(4); 
-		this.isCollapsed = db.SelectUserSettings().get(5); 
-		this.xCoord = db.SelectUserSettings().get(6);
-		this.yCoord = db.SelectUserSettings().get(7); 
-		this.isVertical = db.SelectUserSettings().get(8);
-		this.iconSize = db.SelectUserSettings().get(9);
-		this.timerIsVisible = db.SelectUserSettings().get(10); 
-		this.pmIsVisible = db.SelectUserSettings().get(11); 
-		this.ftsIsVisible = db.SelectUserSettings().get(12); 
-		this.htbIsVisible = db.SelectUserSettings().get(13);
-		this.ntbIsVisible = db.SelectUserSettings().get(14); 
-		this.progReportIsVisible = db.SelectUserSettings().get(15); 
-		this.avatarIsActive = db.SelectUserSettings().get(16); 
-		this.textIsActive = db.SelectUserSettings().get(17); 
-		this.audioIsActive = db.SelectUserSettings().get(18);
-		this.avatarFilePath = db.SelectUserSettings().get(19); 
-		this.audioFilePath = db.SelectUserSettings().get(20);
-		this.alwaysOnScreen = db.SelectUserSettings().get(21); 
-		this.avatarSize = db.SelectUserSettings().get(22); 
-		this.pomodoroIsActive = db.SelectUserSettings().get(23); 
-		this.workPeriod = db.SelectUserSettings().get(24); 
-		this.breakPeriod = db.SelectUserSettings().get(25); 
-		this.timeShowing = db.SelectUserSettings().get(26); 
-		this.ftsIsActive = db.SelectUserSettings().get(27); 
-		this.ntbIsActive = db.SelectUserSettings().get(28); 
-		this.isAutoLinked = db.SelectUserSettings().get(29); 
-		this.htbIsActive = db.SelectUserSettings().get(30);
+	 * load settings from database for existing user 
+	 */
+	public Settings(DataBase db, int settingID) {
+		
+		Settings loadSettings= db.SelectSettings(settingsID);
+		
 	}
-	*/
 	
 	 /**
 	 * Creates a Settings object loaded with all data types specified
 	 * 
 	 * Written as a placeholder for testing, once database is set up this
-	 * constructor should be deleted
+	 * constructor can be deleted
 	 * 
 	 * @param int, Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
 	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
@@ -840,6 +809,346 @@ public class Settings {
 	}
 	
 	/**
+	 * avatar selection window
+	 * @param
+	 */
+	private void avatarSelectionWindow(Settings settingsChanges) {
+		//create window for user to select avatar
+		JFrame avatar_window = new JFrame("Select Your Avatar");
+		avatar_window.setAlwaysOnTop(true);
+		avatar_window.setBackground(Color.black);
+		avatar_window.setUndecorated(true);
+		avatar_window.setVisible(true);
+		
+		JPanel title_panel = new JPanel();
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		JLabel title = new JLabel("Select Your Avatar");
+		title.setForeground(Color.white);
+		title.setFont(new Font("Serif", Font.BOLD, 18));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				avatar_window.setLocation(avatar_window.getX() + e.getX() - mouseX, avatar_window.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+		
+		//reads in images for the close and guide buttons
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+		BufferedImage dino = null;
+		BufferedImage cat1 = null;
+		BufferedImage cat2 = null;
+		BufferedImage cat3 = null;
+		BufferedImage duck = null;
+		BufferedImage pompom = null;
+		
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+			dino = ImageIO.read(new File("avatarSelection/avatar_dino.png"));
+			cat1 = ImageIO.read(new File("avatarSelection/avatar_cat1.png"));
+			cat2 = ImageIO.read(new File("avatarSelection/avatar_cat2.png"));
+			cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+			duck = ImageIO.read(new File("avatarSelection/avatar_duck.png"));
+			pompom = ImageIO.read(new File("avatarSelection/avatar_pompom.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		//creates close button with close icon and no background
+		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		Icon close = new ImageIcon(c_img);
+		JButton close_window = new JButton(close);
+		close_window.setBorderPainted(false);
+		close_window.setContentAreaFilled(false);
+		close_window.setFocusPainted(false);
+		close_window.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving info
+        		avatar_window.dispose();
+        	}
+        });
+		
+		//create guide button with guide icon and no background
+		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Icon guideIcon = new ImageIcon(g_img);
+		JButton guide = new JButton(guideIcon);
+		guide.setBorderPainted(false);
+		guide.setContentAreaFilled(false);
+		guide.setFocusPainted(false);
+		
+		//adds title JLabel, empty space, then guide button and close button
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
+		
+		JPanel avatarChoices = new JPanel();
+		avatarChoices.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
+		avatarChoices.setBackground(Color.black);
+		
+		GridLayout avatarGrid = new GridLayout(0,3);
+		avatarChoices.setLayout(avatarGrid);
+		
+		/*
+		 * make all avatar images into icons
+		 */
+		Image dino_img = dino.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon dinoOption = new ImageIcon(dino_img);
+		Image cat1_img = cat1.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon cat1Option = new ImageIcon(cat1_img);
+		Image cat2_img = cat2.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon cat2Option = new ImageIcon(cat2_img);
+		Image cat3_img = cat3.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon cat3Option = new ImageIcon(cat3_img);
+		Image duck_img = duck.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon duckOption = new ImageIcon(duck_img);
+		Image pompom_img = pompom.getScaledInstance(150, 100, java.awt.Image.SCALE_SMOOTH);
+		Icon pompomOption = new ImageIcon(pompom_img);
+		
+		/*
+		 * create all avatar buttons
+		 */
+		JButton dino_avatar = new JButton(dinoOption);
+		JButton cat1_avatar = new JButton(cat1Option);
+		JButton cat2_avatar = new JButton(cat2Option);
+		JButton cat3_avatar = new JButton(cat3Option);
+		JButton duck_avatar = new JButton(duckOption);
+		JButton pompom_avatar = new JButton(pompomOption);
+		
+		/*
+		 * dino_avatar button details
+		 */
+		dino_avatar.setBorderPainted(false);
+		dino_avatar.setContentAreaFilled(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_dino.png") {
+			dino_avatar.setBorderPainted(true);
+			dino_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			dino_avatar.setBorderPainted(false);
+		}
+		dino_avatar.setFocusPainted(false);
+		dino_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select dino avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_dino.png";
+        		cat1_avatar.setBorderPainted(false);
+        		cat2_avatar.setBorderPainted(false);
+        		cat3_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(false);
+				dino_avatar.setBorderPainted(true);
+				dino_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		/*
+		 * cat1_avatar button details
+		 */		
+		cat1_avatar.setBorderPainted(false);
+		cat1_avatar.setContentAreaFilled(false);
+		cat1_avatar.setBorderPainted(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_cat1.png") {
+			cat1_avatar.setBorderPainted(true);
+			cat1_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			cat1_avatar.setBorderPainted(false);
+		}
+		cat1_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select cat1 avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_cat1.png";
+        		dino_avatar.setBorderPainted(false);
+        		cat2_avatar.setBorderPainted(false);
+        		cat3_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(false);
+				cat1_avatar.setBorderPainted(true);
+				cat1_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		/*
+		 * cat2_avatar button details
+		 */
+		cat2_avatar.setBorderPainted(false);
+		cat2_avatar.setContentAreaFilled(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_cat2.png") {
+			cat2_avatar.setBorderPainted(true);
+			cat2_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			cat2_avatar.setBorderPainted(false);
+		}
+		cat2_avatar.setFocusPainted(false);
+		cat2_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select cat2 avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_cat2.png";
+        		dino_avatar.setBorderPainted(false);
+        		cat1_avatar.setBorderPainted(false);
+        		cat3_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(false);
+				cat2_avatar.setBorderPainted(true);
+				cat2_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		/*
+		 * cat3_avatar button details
+		 */
+		cat3_avatar.setBorderPainted(false);
+		cat3_avatar.setContentAreaFilled(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_cat3.png") {
+			cat3_avatar.setBorderPainted(true);
+			cat3_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			cat3_avatar.setBorderPainted(false);
+		}
+		cat3_avatar.setFocusPainted(false);
+		cat3_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select cat3 avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_cat3.png";
+        		dino_avatar.setBorderPainted(false);
+        		cat1_avatar.setBorderPainted(false);
+        		cat2_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(false);
+				cat3_avatar.setBorderPainted(true);
+				cat3_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		/*
+		 * duck_avatar button details
+		 */
+		duck_avatar.setBorderPainted(false);
+		duck_avatar.setContentAreaFilled(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_duck.png") {
+			duck_avatar.setBorderPainted(true);
+			duck_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			duck_avatar.setBorderPainted(false);
+		}
+		duck_avatar.setFocusPainted(false);
+		duck_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select duck avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_duck.png";
+        		dino_avatar.setBorderPainted(false);
+        		cat1_avatar.setBorderPainted(false);
+        		cat2_avatar.setBorderPainted(false);
+				cat3_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(true);
+				duck_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		/*
+		 * pompom_avatar button details
+		 */	
+		pompom_avatar.setBorderPainted(false);
+		pompom_avatar.setContentAreaFilled(false);
+		if(settingsChanges.avatarFilePath == "avatarSelection/avatar_pompom.png") {
+			pompom_avatar.setBorderPainted(true);
+			pompom_avatar.setBorder(new LineBorder(aa_purple));
+		}else {
+			pompom_avatar.setBorderPainted(false);
+		}
+		pompom_avatar.setFocusPainted(false);
+		pompom_avatar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//select pompom avatar
+        		settingsChanges.avatarFilePath = "avatarSelection/avatar_pompom.png";
+        		dino_avatar.setBorderPainted(false);
+        		cat1_avatar.setBorderPainted(false);
+        		cat2_avatar.setBorderPainted(false);
+				cat3_avatar.setBorderPainted(false);
+				duck_avatar.setBorderPainted(false);
+				pompom_avatar.setBorderPainted(true);
+				pompom_avatar.setBorder(new LineBorder(aa_purple));
+        	}
+        });
+		
+		avatarChoices.add(dino_avatar);
+		avatarChoices.add(cat1_avatar);
+		avatarChoices.add(cat2_avatar);
+		avatarChoices.add(cat3_avatar);
+		avatarChoices.add(duck_avatar);
+		avatarChoices.add(pompom_avatar);
+		
+		JButton close_avatarWindow = new JButton("close");
+		close_avatarWindow.setForeground(Color.white);
+		close_avatarWindow.setFont(new Font("Serif", Font.BOLD, 16));
+		close_avatarWindow.setContentAreaFilled(true);
+		close_avatarWindow.setBorderPainted(false);
+		close_avatarWindow.setFocusPainted(false);
+		close_avatarWindow.setBackground(aa_purple);
+		close_avatarWindow.setMaximumSize(new Dimension(70,20));
+		close_avatarWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*
+				 * create new icon to display updated avatar selection in frame
+				 */
+				BufferedImage avatar = null;
+				try {
+					//will pass string for file path 
+					avatar = ImageIO.read(new File(settingsChanges.avatarFilePath));
+				}catch(Exception f) {
+					f.printStackTrace();
+					System.exit(1);
+				}
+				
+				Image av_img = avatar.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+				Icon newAvatarChoice = new ImageIcon(av_img);
+				
+				/*
+				 * updates avatar preview in notifications_panel once selection window is closed
+				 * even though preview is updated, changes are *not* sent to database
+				 * unless user clicks 'apply' 
+				 */
+				displayAvatar.setIcon(newAvatarChoice); 
+				
+				avatar_window.dispose();
+			}
+		});
+		
+		JPanel bottom_panel = new JPanel();
+		bottom_panel.setLayout(new BoxLayout(bottom_panel, BoxLayout.X_AXIS));
+		bottom_panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
+		bottom_panel.add(Box.createRigidArea(new Dimension(475, 0)));
+		bottom_panel.add(close_avatarWindow);
+		bottom_panel.setBackground(aa_grey);
+		
+		//sets location and dimensions of task window
+		int x = (int) ((screen.getWidth() - avatar_window.getWidth()) /2);
+		int y = (int) ((screen.getHeight() - avatar_window.getHeight()) /2);
+		avatar_window.setLocation(x, y);
+		
+		avatar_window.add(title_panel, BorderLayout.PAGE_START); 
+		avatar_window.add(avatarChoices, BorderLayout.CENTER);
+		avatar_window.add(bottom_panel, BorderLayout.PAGE_END);
+		avatar_window.pack();
+	}
+	
+	/**
 	 * RHS display for General Settings sub menu
 	 * 
 	 */
@@ -896,12 +1205,12 @@ public class Settings {
 		backgroundOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		backgroundOpacity.setForeground(Color.white);
 		
-		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityCircles);
+		JSlider backgroundOpacitySlider = new JSlider(JSlider.HORIZONTAL, 10, 100, settingsChanges.opacityCircles);
 		backgroundOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		backgroundOpacitySlider.setBackground(aa_grey);
 		backgroundOpacitySlider.setForeground(Color.white);
-		backgroundOpacitySlider.setMinorTickSpacing(25);
-		backgroundOpacitySlider.setMajorTickSpacing(25);
+		backgroundOpacitySlider.setMinorTickSpacing(15);
+		backgroundOpacitySlider.setMajorTickSpacing(15);
 		backgroundOpacitySlider.setPaintTicks(true);
 		backgroundOpacitySlider.setPaintLabels(true);		
 		backgroundOpacitySlider.addChangeListener(new ChangeListener() {
@@ -949,12 +1258,12 @@ public class Settings {
 		iconOpacity.setFont(new Font("Serif", Font.BOLD, 16));
 		iconOpacity.setForeground(Color.white);
 		
-		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.opacityIcons);
+		JSlider iconOpacitySlider = new JSlider(JSlider.HORIZONTAL, 10, 100, settingsChanges.opacityIcons);
 		iconOpacitySlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconOpacitySlider.setBackground(aa_grey);
 		iconOpacitySlider.setForeground(Color.white);
-		iconOpacitySlider.setMinorTickSpacing(25);
-		iconOpacitySlider.setMajorTickSpacing(25);
+		iconOpacitySlider.setMinorTickSpacing(15);
+		iconOpacitySlider.setMajorTickSpacing(15);
 		iconOpacitySlider.setPaintTicks(true);
 		iconOpacitySlider.setPaintLabels(true);
 		iconOpacitySlider.addChangeListener(new ChangeListener() {
@@ -999,12 +1308,12 @@ public class Settings {
 		iconSize.setFont(new Font("Serif", Font.BOLD, 16));
 		iconSize.setForeground(Color.white);
 		
-		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, settingsChanges.iconSize);
+		JSlider iconSizeSlider = new JSlider(JSlider.HORIZONTAL, 35, 95, settingsChanges.iconSize);
 		iconSizeSlider.setAlignmentX(JSlider.CENTER_ALIGNMENT);
 		iconSizeSlider.setBackground(aa_grey);
 		iconSizeSlider.setForeground(Color.white);
-		iconSizeSlider.setMinorTickSpacing(25);
-		iconSizeSlider.setMajorTickSpacing(25);
+		iconSizeSlider.setMinorTickSpacing(15);
+		iconSizeSlider.setMajorTickSpacing(15);
 		iconSizeSlider.setPaintTicks(true);
 		iconSizeSlider.setPaintLabels(true);
 		iconSizeSlider.addChangeListener(new ChangeListener() {
@@ -1265,7 +1574,7 @@ public class Settings {
 		
 		Image av_img = avatar.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
 		Icon defaultAvatar = new ImageIcon(av_img);
-		JLabel displayAvatar = new JLabel(defaultAvatar);
+		displayAvatar = new JLabel(defaultAvatar);
 		
 		avatarDisplay.add(Box.createRigidArea(new Dimension(50, 0)));
 		avatarDisplay.add(displayAvatar);
@@ -1329,7 +1638,6 @@ public class Settings {
 						settingsChanges.audioFilePath = audioFile.getAbsolutePath();
 					}
 				 */
-				
 			}
 		});
 		
@@ -1380,22 +1688,7 @@ public class Settings {
 				 *  right now this just opens to where we have all the images stored for the project
 				 *  will need to update to the pre-loaded avatar directory we give users
 				 */
-				JFileChooser avatarDirectory = new JFileChooser(settingsChanges.avatarFilePath);
-				avatarDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Only PNG Images", "png");
-				avatarDirectory.setFileFilter(fileFilter);
-				int returnVal = avatarDirectory.showDialog(null, "Select Your New Avatar");
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					File avatarFile = avatarDirectory.getSelectedFile();
-					settingsChanges.avatarFilePath = avatarFile.getAbsolutePath();
-					
-					/*
-					 * need to refresh the image on the panel to their new avatar selection. 
-					 * the below calls are not working. 
-					 */
-					//notifications_panel.revalidate();
-					//notifications_panel.repaint();
-				}
+				avatarSelectionWindow(settingsChanges);
 			}
 		});
 		
@@ -1523,6 +1816,8 @@ public class Settings {
 				
 				if(settingsChanges.pomodoroIsActive == false) {
 					settingsChanges.timerIsVisible = false; 
+				}else if(settingsChanges.pomodoroIsActive == true) {
+					settingsChanges.timerIsVisible = true;
 				}
 			}
 		});
@@ -1540,23 +1835,26 @@ public class Settings {
 		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		workPeriod.setForeground(Color.white);
 		
-		SimpleAttributeSet attribs = new SimpleAttributeSet();
-		attribs.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-		StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
-		StyleConstants.setFontSize(attribs, 30);
+		Integer minutes[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
-		JTextPane workInterval = new JTextPane();
-		workInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
-		workInterval.setBorder(new LineBorder(Color.black,5,false));
-		workInterval.setParagraphAttributes(attribs, true);
-		workInterval.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {}
-			public void focusLost(FocusEvent e) {
-				settingsChanges.workPeriod = Integer.parseInt(workInterval.getText());
-			}
+		JComboBox<Integer> workInterval = new JComboBox<>(minutes); 
+		AccessibleContext accessCont = workInterval.getAccessibleContext();
+		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
+		JList workList = pop.getList();
+		workList.setSelectionForeground(Color.WHITE);
+		workList.setSelectionBackground(aa_purple);
+		workInterval.setBackground(Color.black);
+		workInterval.setForeground(Color.white);
+		workInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		((JLabel)workInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		workInterval.setMaximumSize(new Dimension(50,25));
+		workInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.workPeriod = (int) workInterval.getSelectedItem();	
+			} 
 		});
 		
-		JLabel minutesWork = new JLabel("minutes");
+		JLabel minutesWork = new JLabel(" minutes");
 		minutesWork.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesWork.setForeground(Color.white);
 		
@@ -1564,18 +1862,24 @@ public class Settings {
 		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		breakPeriod.setForeground(Color.white);
 		
-		JTextPane breakInterval = new JTextPane();
-		breakInterval.setFont(new Font("Serif", Font.BOLD | Font.PLAIN, 16));
-		breakInterval.setBorder(new LineBorder(Color.black,5,false));
-		breakInterval.setParagraphAttributes(attribs, true);
-		breakInterval.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {}
-			public void focusLost(FocusEvent e) {
-				settingsChanges.breakPeriod = Integer.parseInt(breakInterval.getText());
-			}
+		JComboBox<Integer> breakInterval = new JComboBox<>(minutes); 
+		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
+		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
+		JList breakList = pop2.getList();
+		breakList.setSelectionForeground(Color.WHITE);
+		breakList.setSelectionBackground(aa_purple);
+		breakInterval.setBackground(Color.black);
+		breakInterval.setForeground(Color.white);
+		breakInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		((JLabel)breakInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		breakInterval.setMaximumSize(new Dimension(50,25));
+		breakInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.breakPeriod = (int) breakInterval.getSelectedItem();	
+			} 
 		});
 		
-		JLabel minutesBreak = new JLabel("minutes");
+		JLabel minutesBreak = new JLabel(" minutes");
 		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesBreak.setForeground(Color.white);
 		
@@ -1665,6 +1969,8 @@ public class Settings {
 				
 				if(settingsChanges.ftsIsActive == false) {
 					settingsChanges.ftsIsVisible = false; 
+				}else if(settingsChanges.ftsIsActive == true) {
+					settingsChanges.ftsIsVisible = true; 
 				}
 			}
 		});
@@ -1696,6 +2002,7 @@ public class Settings {
 					autoLinkBox.setEnabled(false); 
 				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
 					autoLinkBox.setEnabled(true);
+					settingsChanges.ntbIsVisible = true; 
 				}
 			}
 		});
@@ -1715,6 +2022,7 @@ public class Settings {
 					autoLinkBox.setEnabled(false); 
 				}else if(settingsChanges.htbIsActive && settingsChanges.ntbIsActive) {
 					autoLinkBox.setEnabled(true);
+					settingsChanges.htbIsVisible = true; 
 				}
 			}
 		});
@@ -1788,6 +2096,7 @@ public class Settings {
 		openHTB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Happy Thought Button 
+				happy_thought_button.open_htb();
 			}
 		});
 		
@@ -2139,7 +2448,6 @@ public class Settings {
 						case JOptionPane.CANCEL_OPTION:
 							break; 
 						}
-						
 					}
 				});
 				

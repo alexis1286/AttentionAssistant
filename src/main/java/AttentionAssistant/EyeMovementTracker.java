@@ -85,7 +85,7 @@ public class EyeMovementTracker {
 	 * 
 	 */	
 		//load OpenCV shared library
-	  	OpenCV.loadShared();
+	  	OpenCV.loadLocally();
 		
 	  	//new capture object
 		VideoCapture capture= new VideoCapture(0);
@@ -184,7 +184,7 @@ public class EyeMovementTracker {
         
         //I know this warning is here -jmitchel, 
         //just need to check the array to make sure it isn't null if it is null
-        for(Rect face : facesArray) {
+        for(@SuppressWarnings("unused")Rect face : facesArray) {
         	//if a face is detected it will change to true
         	isFaceDetected=true;
         }

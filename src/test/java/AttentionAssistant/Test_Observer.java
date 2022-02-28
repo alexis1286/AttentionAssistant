@@ -1,11 +1,18 @@
 package AttentionAssistant;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.IDictionary;
 
 //import net.didion.jwnl.dictionary.Dictionary;
 
@@ -16,9 +23,11 @@ public class Test_Observer {
 	Observer defaultObserver;
 	Observer nonDefaultObserver;
 	Observer copyObserver;
+	Task testActiveTask;
 	
 	@BeforeEach
 	void setup() {
+	//Observer object creation
 	int testObserver_ID= 999;
 	int testObserverScore= 100;
 	int testThreshold= 100;
@@ -27,6 +36,18 @@ public class Test_Observer {
 	defaultObserver= new Observer();
 	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
 	copyObserver= new Observer(nonDefaultObserver);
+
+	//Task object creation
+	int testTaskID = 999;
+	String testDescription = "test of history paper";
+	boolean testObservable = true;
+	TaskStatus testStatus = TaskStatus.OPEN;
+	String testName = "This is a test Name";
+	Date testDate = new Date(1220227200L * 1000);
+	boolean testPriority = true;
+
+	testActiveTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
+	
 	}
 	
     @Test
@@ -186,4 +207,73 @@ public class Test_Observer {
     }
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> filterTaskDescription")
+    void observerFilterTaskDescription() {
+    	Date testTaskDate = new Date(1220227200L * 1000);
+    	testActiveTask = new Task(999, "This is a test description", true, TaskStatus.OPEN,
+											"This is a test Name", testTaskDate, true);
+    	ArrayList<String> testTaskWords = defaultObserver.filterTaskDescription(testActiveTask);
+    	assertEquals("This", testTaskWords.get(0), "Expected: This | Actual: " + testTaskWords.get(0));
+    	assertEquals("test", testTaskWords.get(1), "Expected: test | Actual: " + testTaskWords.get(1));
+    	assertEquals("description", testTaskWords.get(2), "Expected: description | Actual: " + testTaskWords.get(2));
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> removeDuplicateKeywords")
+    void observerRemoveDuplicateKeywords() {
+    	ArrayList<String> testKeywords = new ArrayList<String>();
+    	testKeywords.add("test");
+    	testKeywords.add("history");
+    	testKeywords.add("test");
+    	testKeywords.add("history");
+    	testKeywords.add("paper");
+    	
+    	ArrayList<String> newTestKeywords = defaultObserver.removeDuplicateKeywords(testKeywords);
+    	assertEquals("test", newTestKeywords.get(0), "Expected: test | Actual: " + newTestKeywords.get(0));
+    	assertEquals("history", newTestKeywords.get(1), "Expected: history | Actual: " + newTestKeywords.get(1));
+    	assertEquals("paper", newTestKeywords.get(2), "Expected: paper | Actual: " + newTestKeywords.get(2));
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> setKeywordSynonyms")
+    void observerSetKeywordSynonyms() throws IOException {
+    	URL location =  new File("./src/main/resources/dict").toURI().toURL();
+    	IDictionary dict = new Dictionary(location);
+		dict.open();
+		
+		ArrayList<String> testKeywords = new ArrayList<String>();
+		String[] testSynonyms = {"trial", "test", "tryout", "examination", "exam", "run", "prove", 
+				"try", "examine", "essay", "screen", "quiz", "history", "account", "chronicle", 
+				"story", "paper", "composition", "report", "theme", "newspaper", "wallpaper"};
+		
+		ArrayList<String> testTaskWords = new ArrayList<String>();
+		testTaskWords.add("test");
+		testTaskWords.add("history"); 
+		testTaskWords.add("paper");
+		
+		defaultObserver.setKeywordSynonyms(dict, testTaskWords, testKeywords);
+		defaultObserver.removeDuplicateKeywords(testKeywords);
+		
+		for(int i = 0; i < testSynonyms.length; i++) {
+			assertEquals(testSynonyms[i], testKeywords.get(i), "Expected: " + testSynonyms[i] + " | Actual: " + testKeywords.get(i));
+		}
+    }
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
+    @Test
+    @DisplayName("<Observer> monitory function")
+    void observerMonitor() throws IOException {
+    	defaultObserver.monitor(testActiveTask);
+    	
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 }

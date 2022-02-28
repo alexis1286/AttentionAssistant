@@ -33,8 +33,8 @@ public class Test_OSEventsTracker {
 	void OSEventsProcessDetails() {
 		String testapp1 = testEvent.processDetails("C:\\usr\\test\\appname1.exe");
 		String testapp2 = testEvent.processDetails("\\home\\usr\\test\\Appname2");
-		assertEquals(testapp1, "appname1");
-		assertEquals(testapp2, "appname2");
+		assertEquals(testapp1, "appname1", "Expected: appname1, Actual: " + testapp1);
+		assertEquals(testapp2, "appname2", "Expected: Appname2, Actual: " + testapp2);
 	}
 	
 	@Test
@@ -44,11 +44,14 @@ public class Test_OSEventsTracker {
 		testEvent.setOSEventsScore(100);
 		for(String testName : testNames) {
 			for(String line : testBlacklist) {
-				if(line.equals(testName))
+				if(line.equals(testName)) {
 					testEvent.setOSEventsScore(0);
+					assertEquals(0, testEvent.getOSEventsScore(), "Expected: 0, Actual: " + testEvent.getOSEventsScore());
+				}
+				else
+					assertEquals(100, testEvent.getOSEventsScore(), "Expected: 100, Actual: " + testEvent.getOSEventsScore());
 			}
 		}
-		assertEquals(0, testEvent.getOSEventsScore());
 	}
 	
 }

@@ -1,10 +1,13 @@
 package AttentionAssistant;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -128,74 +131,175 @@ public class Observer{
 	 * Main monitoring function
 	 * Will calculate the observerScore and
 	 * send the appropriate notification
+	 * @throws IOException 
 	 */
-	protected void monitor(Task activeTask) {			
+	protected void monitor(Task activeTask) throws IOException {			
+			
+			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
+			
+			//for (int i =0; i< keyWords.size(); i++)
+ 			//{
+ 				//System.out.println(keyWords.get(i));
+ 			//}
+
+			MouseTracker mouseTracker = new MouseTracker();
+			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
+			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
+			OSEventsTracker osEventsTracker = new OSEventsTracker();
+			InternetTracker internetTracker = new InternetTracker();
+			 
+			//Start tracking Objects
+			mouseTracker.startTracking();
+			eyeMovementTracker.startTracking();  
+			keyBoardTracker.startTracking(keyWords);
+			osEventsTracker.startTracking();
+			internetTracker.startTracking(keyWords);
+			
+			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
+ 					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
+ 					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
+    				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
+ 					"\ninternetTracker: " + internetTracker.getInternetScore());
+ 			
+			 
+			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
-			 * ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
-			 * //new Objects
-			 * MouseTracker mouseTracker = new MouseTracker();
-			 * EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
-			 * KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
-			 * OSEventsTracker osEventsTracker = new OSEventsTracker();
-			 * InternetTracker internetTracker = new InternetTracker();
-			 * 
-			 * //Start tracking Objects
-			 * mouseTracker.startTracking();
-			 * eyeMovementTracker.startTracking();  
-			 * keyBoardTracker.startTracking(keyWords);
-			 * osEventsTracker.startTracking();
-			 * internetTracker.startTracking(keyWords);
-			 * 
-			 * //(insert some timer here in while loop) So we grab all scores at once.
-			 *  {
-			 *  this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
-			 *  eyeMovementTracker.getEyeMovementScore(),
-			 *  keyBoardTracker.getKeyBoardScore(),
-			 *  osEventsTracker.getOSEventsScore(),
-			 *  internetTracker.getInternetScore())
-			 *  }
+			{
+			this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
+			eyeMovementTracker.getEyeMovementScore(),
+			keyBoardTracker.getKeyBoardScore(),
+			osEventsTracker.getOSEventsScore(),
+			internetTracker.getInternetScore())
+			}
+			*/
+			
+			
+			/**
+			 * Calculate the overall observerScore
 			 */
-	}
+			
+			/**
+			observerScore = calculateObserverScore(mouseMovementsScore, eyeMovementScore, 
+					keyBoardScore, osEventsScore, internetScore);
+			
+			/**
+			 * Check if user is focused on task when they should be working or
+			 * hyperfocusing when they should be off task
+			 */
+			
+			/**
+			if(observerScore >= threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK ) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			/**
+			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
+				/**
+				 * NO ACTION
+				 * User is doing what they should be doing
+				 */
+			/**
+			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK) {
+				/**
+				 * TAKE ACTION
+				 * User should be working but is not
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			/**
+			} else {
+				/**
+				 * TAKE ACTION
+				 * User is hyperforcusing
+				 * NEED TO IMPLEMENT - Send a message through the Avatar
+				 */
+			}
 
 	/**
 	 * Returns an ArrayList with keywords based on the task's description
-	 * @param activeTask - task that used to generator keywords
-	 * @return keywordsList - ArrayList of keywords
+	 * @param activeTask - task that's used to generate keywords
+	 * @return ArrayList<String> keywords - ArrayList of keywords
 	 * @throws IOException 
 	 */
-	
-	
-	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException{
+	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException {
 		ArrayList<String> keywords = new ArrayList<String>();
 		
 		//create a instance of the IDictionary Object from the WordNet datasets
-		@SuppressWarnings("deprecation")
-		URL location =  new File("src/main/resources/dict").toURL();
-		System.out.println("URL of resource " + location);
+		URL location =  new File("./src/main/resources/dict").toURI().toURL();
+		//System.out.println("URL of resource " + location);
 		IDictionary dict = new Dictionary(location);
 		dict.open();
-				
-		// look up first sense of the word "dog"
-		IIndexWord idxWord = dict.getIndexWord("wish", POS.NOUN);
-				
-		/**
-		 * A word can have multiple definitions, 
-		 * therefore each will have its own related words
-		 */
-		IWordID wordID = idxWord.getWordIDs().get(0); 
-		IWord word = dict.getWord(wordID);
-		System.out.println("Id = " + wordID);
-		System.out.println("Lemma = " + word.getLemma());
-		System.out.println("Gloss = " + word.getSynset().getGloss());
-				
-		/**
-		 * iterate over words associated with the synset
-		 */
-		ISynset wSynset = word.getSynset();
-		for(IWord w : wSynset.getWords()) {
-			System.out.println(w.getLemma());
-		}
+			
+		ArrayList<String> taskWords = filterTaskDescription(activeTask);
+		setKeywordSynonyms(dict, taskWords, keywords);
+		keywords = removeDuplicateKeywords(keywords);
+		return keywords;
+	}
+	
+	/**
+	 * Stores each three or more letter word from the task description into a ArrayList
+	 * @param activeTask - task to get description from
+	 * @return ArrayList<String> - ArrayList of words from the task description
+	 */
+	public ArrayList<String> filterTaskDescription(Task activeTask) {
+		ArrayList<String> filteredWords = new ArrayList<String>();
+		//Splitting apart the task description at each 'space' and storing each word
+		String[] words = activeTask.getDescription().split("\\s+");
 		
+		for(int i = 0; i < words.length; i++) {
+			//Removing all non-alphabetical chars from the words 
+			words[i] = words[i].replaceAll("[^A-Za-z]", "");
+		}
+		for(String word : words) {
+			if(word.length() >= 3)
+				filteredWords.add(word);
+		}
+		return filteredWords;
+	}
+	
+	/**
+	 * Identify and store synonyms into keywords for each word from taskWords
+	 * @param dict - dictionary to get synonyms from
+	 * @param taskWords - list of filtered words from the task description
+	 * @param ArrayList<String> keywords - ArrayList of keywords
+	 */
+	public void setKeywordSynonyms(IDictionary dict, ArrayList<String> taskWords, ArrayList<String> keywords) {
+		for(int i = 0; i < taskWords.size(); i++) {
+			for(POS p : POS.values()) {
+				IIndexWord idxWord = dict.getIndexWord(taskWords.get(i), p);
+				if(idxWord != null) {
+					
+					//Gets all definitions of the word
+					List<IWordID> idxWordIDs = idxWord.getWordIDs();
+					
+					for (int j = 0; j < idxWordIDs.size(); j++) {
+						IWordID wordID = idxWordIDs.get(j);
+						IWord word = dict.getWord(wordID);
+
+						ISynset wSynset = word.getSynset();
+						for(IWord w : wSynset.getWords()) {
+							//Makes sure the word only contains alphabetical chars before adding to keywords list
+							if(w.getLemma().matches("[a-zA-Z]+")) {
+								keywords.add(w.getLemma());
+							}
+						}
+					}
+				}
+				else;
+			}
+		}
+	}
+	
+	/**
+	 * Removes any duplicate keywords from the keyword list
+	 * @param ArrayList<String> keywords
+	 * @return ArrayList<String> keywords
+	 */
+	public ArrayList<String> removeDuplicateKeywords(ArrayList<String> keywords) {
+		Set<String> temp = new LinkedHashSet<>();
+		temp.addAll(keywords);
+		keywords.clear();
+		keywords.addAll(temp);
 		return keywords;
 	}
 

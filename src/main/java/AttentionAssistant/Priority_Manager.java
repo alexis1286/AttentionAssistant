@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,7 +34,7 @@ public class Priority_Manager {
 	private ArrayList<Task> Task_List;
 	private Task working_task;
 	
-	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) {
+	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		populateTaskList(db);
 		this.working_task = taskToObserve();
