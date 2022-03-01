@@ -58,12 +58,11 @@ public class InternetTracker {
 	 * @param ArrayList<String>
 	 * @author ehols001
 	 */
-	public void startTracking(ArrayList<String> keywords) throws IOException {
+	public void startTracking(ArrayList<String> keywords, String uri) throws IOException {
 		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
-//		String uri = "https://en.wikipedia.org/wiki/Final_Fantasy";		
-		String uri = "https://www.biologicaldiversity.org/species/mammals/polar_bear/natural_history.html#:~:text=MIGRATION%3A%20Some%20polar%20bears%20make,the%20nearest%20land%2D%20or%20icefall.";
 		
 		String text = parseFromOrigin(uri).toLowerCase();
+		System.out.println("\n" + uri + ":");
 		calculateInternetScore(keywords, text);
 	}
 	
@@ -99,10 +98,10 @@ public class InternetTracker {
 			}
 		}
 		
-		System.out.println("Keywords= " + keywordsAppear);
-		System.out.println("words On a Page= " + wordsOnAPage.length);
+		System.out.println("Keywords on a Page= " + keywordsAppear);
+		System.out.println("Total Words On a Page= " + wordsOnAPage.length);
 		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
-		System.out.println(calculatedScore);
+		System.out.println("Total Calculated Score= " +calculatedScore);
 		//If calculatedScore is greater than 100
 		if (calculatedScore > 100) {
 			this.internetScore= 100;

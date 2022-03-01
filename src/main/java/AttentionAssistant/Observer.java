@@ -134,9 +134,9 @@ public class Observer{
 	 * @throws IOException 
 	 */
 	protected void monitor(Task activeTask) throws IOException {			
-			
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
 			
+			System.out.println("Task Description: " + activeTask.getDescription());
 			System.out.println("Generated KeyWords List: ");
 			for (int i =0; i< keyWords.size(); i++)
  			{
@@ -148,21 +148,25 @@ public class Observer{
 			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
-			 
+			InternetTracker internetTracker2= new InternetTracker();
+			
+			String uri1 = "https://en.wikipedia.org/wiki/Final_Fantasy";		
+			String uri2 = "https://www.biologicaldiversity.org/species/mammals/polar_bear/natural_history.html#:~:text=MIGRATION%3A%20Some%20polar%20bears%20make,the%20nearest%20land%2D%20or%20icefall.";
+ 
 			//Start tracking Objects
 			mouseTracker.startTracking();
 			eyeMovementTracker.startTracking();  
 			keyBoardTracker.startTracking(keyWords);
 			osEventsTracker.startTracking();
-			internetTracker.startTracking(keyWords);
-			
+			internetTracker.startTracking(keyWords, uri1);
+			internetTracker2.startTracking(keyWords, uri2);
 			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
  					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
  					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
     				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
- 					"\ninternetTracker: " + internetTracker.getInternetScore());
- 			
-			 
+ 					"\ninternetTracker (for " + uri1 + "): " + internetTracker.getInternetScore() +
+					"\ninternetTracker (for " + uri2 + "): " + internetTracker2.getInternetScore());
+
 			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
 			{
