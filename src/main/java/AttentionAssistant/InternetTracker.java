@@ -78,7 +78,6 @@ public class InternetTracker {
 		//declaration
 		double keywordsAppear=0;
 		double calculatedScore=0;
-		//int score = 0, total = 0;
 		//Split the text on a page by each space
 		String[] wordsOnAPage = text.split("\\s+");
 		//turn each word into only A-Z characters
@@ -109,25 +108,6 @@ public class InternetTracker {
 		else{
 			this.internetScore = (int)calculatedScore;
 		}
-		
-		//for (String keyword : keywords) {
-		//	if (text.contains(keyword)) {
-		//		//int count = StringUtils.countMatches(text, keyword);
-		//		score = 100;
-		//		total += score;
-		//	}
-		//	else {
-		//		score = 0;
-		//	}
-		//}
-		//if (total == 0) {
-		//	this.setInternetScore(total);
-		//}
-		//else {
-		//	int averageScore = total / keywords.size();
-		//	this.setInternetScore(averageScore);
-		//}
-	
 	}
 	
 	/**
