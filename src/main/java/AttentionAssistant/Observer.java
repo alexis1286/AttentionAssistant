@@ -137,10 +137,11 @@ public class Observer{
 			
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
 			
-			//for (int i =0; i< keyWords.size(); i++)
- 			//{
- 				//System.out.println(keyWords.get(i));
- 			//}
+			System.out.println("Generated KeyWords List: ");
+			for (int i =0; i< keyWords.size(); i++)
+ 			{
+ 				System.out.println(keyWords.get(i));
+ 			}
 
 			MouseTracker mouseTracker = new MouseTracker();
 			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();

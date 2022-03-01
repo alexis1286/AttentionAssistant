@@ -99,10 +99,10 @@ public class InternetTracker {
 			}
 		}
 		
-		//System.out.println("Keywords= " + keywordsAppear);
-		//System.out.println("words On a Page= " + wordsOnAPage.length);
+		System.out.println("Keywords= " + keywordsAppear);
+		System.out.println("words On a Page= " + wordsOnAPage.length);
 		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
-		//System.out.println(calculatedScore);
+		System.out.println(calculatedScore);
 		//If calculatedScore is greater than 100
 		if (calculatedScore > 100) {
 			this.internetScore= 100;
