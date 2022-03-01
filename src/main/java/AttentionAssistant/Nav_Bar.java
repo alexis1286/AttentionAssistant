@@ -151,9 +151,7 @@ public class Nav_Bar{
 		        		}
 		        		counter++;
 		        		panel.revalidate();
-		        		panel.repaint();
 		        		frame.revalidate();
-		        		frame.repaint();
 		        	}
 		        });
 			}
@@ -286,46 +284,43 @@ public class Nav_Bar{
 		BufferedImage img = null;
 		BufferedImage circle = null;
 		try {
+			//gets image for specific buttons icon
 			img = ImageIO.read(new File(imgFile));
+			img.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+			//gets circle image
 			circle = ImageIO.read(new File("images/circle.png"));
+			circle.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
 		}catch(Exception e){
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
+		colorIcon(img);
+		colorCircle(circle);
 		
 		float iconOpac = iconOpacity/100;
-		colorIcon(img);
 		BufferedImage imgOpac = new BufferedImage(size, size,BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gicon = imgOpac.createGraphics();
         gicon.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iconOpac));
-        gicon.drawImage(img, 0, 0, size, size, 0, 0, img.getWidth(), img.getHeight(), panel);
+        gicon.drawImage(img, 0, 0, size, size, 0, 0, img.getWidth(), img.getHeight(), null);
 		
         
         float circleOpac = circleOpacity/100;
-		colorCircle(circle);
 		BufferedImage circOpac = new BufferedImage(size, size,BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gcirc = circOpac.createGraphics();
         gcirc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, circleOpac));
-        gcirc.drawImage(circle, 0, 0, size, size, 0, 0, circle.getWidth(), circle.getHeight(), panel);
-		
-		
+        gcirc.drawImage(circle, 0, 0, size, size, 0, 0, circle.getWidth(), circle.getHeight(), null);
+        
 		
 		// create new image of icon image on top of circle image
-        BufferedImage newImg = new BufferedImage(
-        		size, size,BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newImg = new BufferedImage(size, size,img.getType());
         Graphics2D graphic = newImg.createGraphics();
-        graphic.drawImage(circOpac, 0, 0, size, size, 0, 0, circOpac.getWidth(), circOpac.getHeight(), panel);
-        graphic.drawImage(imgOpac,10,10,(size-10),(size-10),0,0,imgOpac.getWidth(),imgOpac.getHeight(), panel);
+        graphic.drawImage(circOpac, 0, 0, size, size, 0, 0, circOpac.getWidth(), circOpac.getHeight(), null);
+        graphic.drawImage(imgOpac,10,10,size-10,size-10,0,0,imgOpac.getWidth(),imgOpac.getHeight(), null);
         graphic.dispose();
-        
-      //creates an ImageIcon
+		
+		//creates an ImageIcon
         ImageIcon icon = new ImageIcon(newImg);
-        
-        //scale and assign icon to button
-        Image scaledImg = icon.getImage();
-        scaledImg = scaledImg.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
-        icon = new ImageIcon(scaledImg);
         button.setIcon(icon);
         //make non-icon area of button invisible
         button.setContentAreaFilled(false);
