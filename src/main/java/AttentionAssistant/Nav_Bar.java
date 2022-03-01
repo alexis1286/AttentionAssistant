@@ -23,9 +23,11 @@ public class Nav_Bar{
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
 	JButton toRefresh;
+	JButton menuButton;
 	DecimalFormat df = new DecimalFormat("#.#"); 
 	private int mouseX;
 	private int mouseY;
+	private int count;
 		
 	/*
 	 * variables
@@ -39,6 +41,8 @@ public class Nav_Bar{
 	private float circleOpacity;
 	private boolean isVert;
 	private boolean isCollapsed;
+	private boolean settings_visible=true;
+	private boolean pm_visible=true;
 	private boolean pomo_visible;
 	private boolean ntb_visible;
 	private boolean htb_visible;
@@ -62,7 +66,6 @@ public class Nav_Bar{
 		this.circleOpacity = 0;
 		this.isVert = false;
 		this.isCollapsed = false;
-		
 		this.pomo_visible = false;
 		this.ntb_visible = false;
 		this.htb_visible = false;
@@ -87,7 +90,6 @@ public class Nav_Bar{
 		this.circleOpacity =set.getOpacityCircles();
 		this.isVert = set.getIsVertical();
 		this.isCollapsed = set.getIsCollapsed();
-		
 		this.pomo_visible = set.getTimerIsVisible();
 		this.ntb_visible = set.getNtbIsVisible();
 		this.htb_visible = set.getHtbIsVisible();
@@ -106,6 +108,7 @@ public class Nav_Bar{
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				counter = 1;
+				count = 0;
 				JFrame frame = new JFrame();
 				frame.setBounds(x_coord, y_coord, 1000, 1000);
 				//removes default title bar from frame 
@@ -126,7 +129,7 @@ public class Nav_Bar{
 		        panel.setLayout(cardLayout);
 		        
 		        //panel for buttons
-		        icon_panel = iconPanel(db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
+		        icon_panel = iconPanel(cardLayout,db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
 		        panel.add("iPanel", icon_panel);
 		        cardLayout.show(panel, "iPanel");
 		        frame.getContentPane().add(panel);
@@ -137,45 +140,36 @@ public class Nav_Bar{
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		JPanel new_icon_panel = new JPanel();
-		        		if(counter % 2 != 0) {
-		        			new_icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
-		        			panel.add("newIPanel",new_icon_panel);
-		        			cardLayout.show(panel, "newIPanel");
-		        			panel.remove(icon_panel);
-		        		}else {
-		        			icon_panel = iconPanel(db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
-		        			panel.add("iPanel",icon_panel);
-		        			cardLayout.show(panel, "iPanel");
-		        			panel.remove(new_icon_panel);
-		        		}
-		        		counter++;
-		        		panel.revalidate();
-		        		frame.revalidate();
-		        		frame.repaint();
-		        	}
-		        });
+		        		rebuildPanel(cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts,panel,frame);
+		        	}});
 			}
 		});
 	}
 	
-	private BoxLayout vertlayout(JPanel pan) {
-		BoxLayout bl;
-		bl = new BoxLayout(pan,BoxLayout.Y_AXIS);
-		return bl;
+	private void rebuildPanel(CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JPanel panel,JFrame frame) {
+		JPanel new_icon_panel = new JPanel();
+		if(counter % 2 != 0) {
+			new_icon_panel = iconPanel(cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+			panel.add("newIPanel",new_icon_panel);
+			cardLayout.show(panel, "newIPanel");
+			panel.remove(icon_panel);
+		}else {
+			icon_panel = iconPanel(cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+			panel.add("iPanel",icon_panel);
+			cardLayout.show(panel, "iPanel");
+			panel.remove(new_icon_panel);
+		}
+		counter++;
+		panel.revalidate();
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
 	}
-	
-	private BoxLayout horizlayout(JPanel pan) {
-		System.out.println(isVert);
-		BoxLayout bl;
-		bl = new BoxLayout(pan,BoxLayout.X_AXIS);
-		return bl;
-	}
-	
+
 	/*
 	 * create panel that houses active & visible feature icons
 	 */
-	private JPanel iconPanel(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
+	private JPanel iconPanel(CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
 		JPanel panel = new JPanel();
 		//displays buttons vertically if true, horizontally is false
 		if(isVert == true) {
@@ -184,107 +178,116 @@ public class Nav_Bar{
 			panel.setSize(size, size*9);
 		}else {
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT,1,0));
-			frame.setSize(size*9, size);
-			panel.setSize(size*9, size);
+			frame.setSize(size*11, size);
+			panel.setSize(size*11, size);
 		}
-        //panel.setLayout(layout);
-        
-        //displays only menu button until clicked if false
-        if(isCollapsed == false) {
-        	//displays all visible and active buttons
-        	JButton settingsButton = createButton("images/setting_button.png",panel);
-        	settingsButton.setFocusPainted(false);
-        	settingsButton.addActionListener(new ActionListener() {
+		
+		menuButton = createButton("images/menu_button.png");
+		menuButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//expand navbar
+        		settings_visible = !settings_visible;
+    	    	pm_visible = !pm_visible;
+	    		pomo_visible = !pomo_visible;
+	    		ntb_visible = !ntb_visible;
+	    		htb_visible = !htb_visible;
+	    		fts_visible = !fts_visible;
+	    		progress_visible = !progress_visible;
+        		toRefresh.doClick();
+        		System.out.println("clicked");
+        }});
+		JButton settingsButton = createButton("images/setting_button.png");
+		JButton pmButton = createButton("images/manager.png");
+		JButton pomoButton = createButton("images/timer.png");
+		JButton ntbButton = createButton("images/burner.png");
+		JButton htbButton = createButton("images/happy_button.png");
+		JButton ftsButton = createButton("images/thought_space.png");
+		JButton progressButton = createButton("images/progress.png");
+		
+		
+		if(isCollapsed == true) {
+	        panel.add(menuButton);
+	        if(count == 0) {
+	        	settings_visible = false;
+    	    	pm_visible = false;
+	    		pomo_visible = false;
+	    		ntb_visible = false;
+	    		htb_visible = false;
+	    		fts_visible = false;
+	    		progress_visible = false;
+	    		count++;
+	        }else {count--;}
+		}
+		
+		if(settings_visible == true) {
+	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
 	        		settings.open_settings(db, navbar, settings, observer, pm, pomo, ntb, htb, fts);
 	        }});
-        	settingsButton.addMouseListener(new MouseAdapter() {
-        		public void mouseReleased(MouseEvent e) {
-        			
-        		}});
-        	panel.add(settingsButton);
-        	
-        	
-        	JButton pmButton = createButton("images/manager.png",panel);
-        	pmButton.addActionListener(new ActionListener() {
+	    	settingsButton.addMouseListener(new MouseAdapter() {
+	    		public void mouseReleased(MouseEvent e) {
+	    			
+	    		}});
+	    	panel.add(settingsButton);
+		}
+		
+	    if(pm_visible == true) {
+	    	pmButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
 	        		pm.open_pm(db,observer);
 	        }});
-    		panel.add(pmButton);
-    		
-    		
-        	if(pomo_visible == true && pomodoro_active == true) {
-        		JButton pomoButton = createButton("images/timer.png",panel);
-        		pomoButton.addActionListener(new ActionListener() {
-    	        	public void actionPerformed(ActionEvent e) {
-    	        		//open pomo
-    	        		pomo.run_pomo(settings);
-    	        }});
-        		panel.add(pomoButton);
-        	
-        	
-        	}
-			if(ntb_visible == true && ntb_active == true) {
-				JButton ntbButton = createButton("images/burner.png",panel);
-				ntbButton.addActionListener(new ActionListener() {
-    	        	public void actionPerformed(ActionEvent e) {
-    	        		//open ntb
-    	        }});
-				panel.add(ntbButton);
-			
-			
-			}
-			if(htb_visible == true && htb_active == true) {
-				JButton htbButton = createButton("images/happy_button.png",panel);
-				htbButton.addActionListener(new ActionListener() {
-    	        	public void actionPerformed(ActionEvent e) {
-    	        		//open htb
-    	        		htb.open_htb();
-    	        }});
-				panel.add(htbButton);
-			
-			
-			}
-        	if(fts_visible == true && fts_active == true) {
-        		JButton ftsButton = createButton("images/thought_space.png",panel);
-        		ftsButton.addActionListener(new ActionListener() {
-    	        	public void actionPerformed(ActionEvent e) {
-    	        		//open fts
-    	        		fts.runFts(fts);
-    	        }});
-        		panel.add(ftsButton);
-        	
-        	
-        	}
-        	if(progress_visible == true) {
-        		JButton progressButton = createButton("images/progress.png",panel);
-        		progressButton.addActionListener(new ActionListener() {
-    	        	public void actionPerformed(ActionEvent e) {
-    	        		//open progress report
-    	        }});
-        		panel.add(progressButton);
-        	
-        	
-        	}
-        }else {
-        	JButton menuButton = createButton("images/menu_button.png",panel);
-        	menuButton.addActionListener(new ActionListener() {
+			panel.add(pmButton);
+	    }
+	    
+		if(pomo_visible == true && pomodoro_active == true) {
+			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        		//expand navbar
+	        		//open pomo
+	        		pomo.run_pomo(settings);
 	        }});
-        	panel.add(menuButton);
-        
-        
-        }
+			panel.add(pomoButton);
+		}
+		if(ntb_visible == true && ntb_active == true) {
+			ntbButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open ntb
+	        }});
+			panel.add(ntbButton);
+		}
+		if(htb_visible == true && htb_active == true) {
+			htbButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open htb
+	        		htb.open_htb();
+	        }});
+			panel.add(htbButton);
+		}
+		if(fts_visible == true && fts_active == true) {
+			ftsButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open fts
+	        		fts.runFts(fts);
+	        }});
+			panel.add(ftsButton);
+		}
+		if(progress_visible == true) {
+			progressButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//open progress report
+	        }});
+			panel.add(progressButton);
+		}
+		
         
         //sets background of panel to transparent
         panel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
         return panel;
 	}
 	
-	private JButton createButton(String imgFile,JPanel panel) {
+	
+	private JButton createButton(String imgFile) {
 		JButton button = new JButton();
 		BufferedImage img = null;
 		BufferedImage circle = null;
@@ -316,12 +319,12 @@ public class Nav_Bar{
         gcirc.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, circleOpac));
         gcirc.drawImage(circle, 0, 0, size, size, 0, 0, circle.getWidth(), circle.getHeight(), null);
         
-		
+		int m = (int)(size*(15.0f/100.0f));
 		// create new image of icon image on top of circle image
         BufferedImage newImg = new BufferedImage(size, size,img.getType());
         Graphics2D graphic = newImg.createGraphics();
         graphic.drawImage(circOpac, 0, 0, size, size, 0, 0, circOpac.getWidth(), circOpac.getHeight(), null);
-        graphic.drawImage(imgOpac,10,10,size-10,size-10,0,0,imgOpac.getWidth(),imgOpac.getHeight(), null);
+        graphic.drawImage(imgOpac,m,m,size-m,size-m,0,0,imgOpac.getWidth(),imgOpac.getHeight(), null);
         graphic.dispose();
 		
 		//creates an ImageIcon
