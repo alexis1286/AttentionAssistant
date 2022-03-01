@@ -43,8 +43,10 @@ public class OSEventsTracker {
 		try {
 			reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
 			String line = reader.readLine();
+			System.out.print("\nBlacklisted applications: "); //For demonstration purposes
 			while(line != null) {
 				String lcLine = line.toLowerCase();
+				System.out.println(lcLine); //For demonstration purposes
 				blacklist.add(lcLine);
 				line = reader.readLine();
 			}
@@ -52,8 +54,15 @@ public class OSEventsTracker {
 			for(String name : names) {
 				osEventsScore = compareCurrentProcesses(name, blacklist);
 				//Stops traversing the Set names once a match is found (User is determined off task)
-				if(osEventsScore == 0)
+				if(osEventsScore == 0) {
+					System.out.println("OS events score: " + osEventsScore); //For demonstration purposes
 					break;
+				}
+			}
+			//For demonstration purposes
+			if(osEventsScore == 100) {
+				System.out.println("app detected: none");
+				System.out.println("OS events score: " + osEventsScore);
 			}
 			reader.close();
 		} catch (IOException e) {
@@ -89,6 +98,7 @@ public class OSEventsTracker {
 		for(String line : blacklist) {
 			//Stops traversing the blacklist once a match is found (User is determined off task)
 			if(line.equals(processName)) {
+				System.out.println("app detected: " + processName); //For demonstration purposes
 				score = 0;
 				break;
 			}
