@@ -152,6 +152,7 @@ public class Nav_Bar{
 		        		counter++;
 		        		panel.revalidate();
 		        		frame.revalidate();
+		        		frame.repaint();
 		        	}
 		        });
 			}
@@ -176,12 +177,17 @@ public class Nav_Bar{
 	 */
 	private JPanel iconPanel(DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
 		JPanel panel = new JPanel();
-		BoxLayout layout;
 		//displays buttons vertically if true, horizontally is false
 		if(isVert == true) {
-			layout = vertlayout(panel);
-		}else {layout = horizlayout(panel);}
-        panel.setLayout(layout);
+			panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+			frame.setSize(size, size*9);
+			panel.setSize(size, size*9);
+		}else {
+			panel.setLayout(new FlowLayout(FlowLayout.LEFT,1,0));
+			frame.setSize(size*9, size);
+			panel.setSize(size*9, size);
+		}
+        //panel.setLayout(layout);
         
         //displays only menu button until clicked if false
         if(isCollapsed == false) {
@@ -280,7 +286,6 @@ public class Nav_Bar{
 	
 	private JButton createButton(String imgFile,JPanel panel) {
 		JButton button = new JButton();
-		
 		BufferedImage img = null;
 		BufferedImage circle = null;
 		try {
@@ -328,6 +333,7 @@ public class Nav_Bar{
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setRolloverEnabled(false);
+        button.setMargin(new Insets(0,0,0,0));
 		return button;
 	}
 	
