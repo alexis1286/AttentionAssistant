@@ -2500,6 +2500,7 @@ public class Settings {
 						settings.htbIsActive = settingsChanges.htbIsActive;
 						
 						navbar.refresh(settings);
+						pomodoro_timer.refresh(settings);
 						db.UpdateSettings(settings);
 					}
 				});
