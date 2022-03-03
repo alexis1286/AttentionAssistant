@@ -2525,6 +2525,7 @@ public class Settings {
 						}
 						
 						navbar.refresh(settings);
+						pomodoro_timer.refresh(settings);
 						db.UpdateSettings(settings);
 					}
 				});
