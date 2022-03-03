@@ -54,6 +54,15 @@ public class Priority_Manager {
 		return task;
 	}
 	
+	public ArrayList<Task> observableTasks() {
+		ArrayList<Task> list = new ArrayList<Task>();
+		for(int i=0;i<Task_List.size();i++) {
+			if(Task_List.get(i).getObservable()==true) {
+				list.add(Task_List.get(i));
+			}
+		}
+		return list;
+	}
 	
 	public void open_pm(DataBase db,Observer observer) {
 		EventQueue.invokeLater(new Runnable(){
