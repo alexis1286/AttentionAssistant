@@ -4,6 +4,7 @@
  */
 package AttentionAssistant;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -138,6 +139,13 @@ public class Task{
 	 */
 	public Date getDueDate() {
 		return this.dueDate;
+	}
+	
+	public String getStringDate(){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	    Date date = dueDate;
+		System.out.println(this.dueDate);
+		return formatter.format(dueDate);
 	}
 	
 	/**

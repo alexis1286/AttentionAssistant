@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -30,6 +31,7 @@ public class Priority_Manager {
 	int selectedTask;
 	int height = 700;
 	int width = 550;
+	int row;
 	
 	private ArrayList<Task> Task_List;
 	private Task working_task;
@@ -38,9 +40,7 @@ public class Priority_Manager {
 		this.Task_List = new ArrayList<Task>();
 		populateTaskList(db);
 		this.working_task = taskToObserve();
-		System.out.println(this.working_task);
 		observer.monitor(working_task);
-		//pomo.setActiveTask(working_task);
 		
 	}
 	
@@ -49,7 +49,11 @@ public class Priority_Manager {
 		//if active task is stored******************************************
 		//set task = to active task
 		//makes working_task 1st task in sorted list
-		task = Task_List.get(0);
+		if(Task_List.get(0).getObservable()==false) {
+			task = Task_List.get(0);
+		}else {
+			//make user add observable task**************************************************************************
+		}
 		
 		return task;
 	}
@@ -139,8 +143,11 @@ public class Priority_Manager {
 	
 	private void populateTaskList(DataBase db) {
 		for(int i=0; i<db.SelectAllTasks().size();i++) {
-			System.out.println(db.SelectAllTasks().get(i));
-			Task_List.add(db.SelectAllTasks().get(i));
+			if(db.SelectAllTasks().get(i).getStatus() != TaskStatus.CLOSED) {
+				System.out.println(db.SelectAllTasks().get(i));
+				Task_List.add(db.SelectAllTasks().get(i));
+			}
+			
 		}
 	}
 	
@@ -168,6 +175,7 @@ public class Priority_Manager {
 		model.addColumn("Priority");
 		model.addColumn("Due Date");
 		model.addColumn("Observable");
+		model.addColumn("ID");
 		
 		//set table visuals
         table.setFillsViewportHeight(true);
@@ -177,10 +185,12 @@ public class Priority_Manager {
         table.setGridColor(aa_purple);
         table.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
         
+        System.out.println(table.getColumnCount());
+        
         //iterates through each task in list
         for(int i=0;i<Task_List.size();i++) {
         	//iterate through table columns
-        	for(int j=0;j<model.getColumnCount();j++) {
+        	for(int j=0;j<6;j++) {
         		//set data for each column from the current task
         		if(j==0) {
         			table.setValueAt(Task_List.get(i).getTaskName(),i,j);
@@ -190,14 +200,17 @@ public class Priority_Manager {
         			//change to show icon*********************************************
         			table.setValueAt(Task_List.get(i).getPriority(),i,j);
         		}else if(j==3) {
-        			table.setValueAt(Task_List.get(i).getDueDate(),i,j);
+        			table.setValueAt(Task_List.get(i).getStringDate(),i,j);
         		}else if(j==4) {
         			//change to show icon*********************************************
         			table.setValueAt(Task_List.get(i).getObservable(),i,j);
+        		}else if(j==5) {
+        			table.setValueAt(Task_List.get(i).getTaskID(), i, j);
         		}
         	}
         }
         
+        table.removeColumn(table.getColumnModel().getColumn(5));
         //set table background color, font color, and border
         table.setBackground(Color.black);
         table.setForeground(Color.white);
@@ -229,6 +242,16 @@ public class Priority_Manager {
 		check_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//markComplete();
+        		row = table.getSelectedRow();
+        		int id = (int)table.getModel().getValueAt(row, 5);
+        		model.removeRow(row);
+        		for(int i=0;i<Task_List.size();i++) {
+        			if(Task_List.get(i).getTaskID()==id) {
+        				Task_List.remove(i);
+        				Task task = Task_List.get(i);
+        				db.UpdateTask(task);
+        			}
+        		}
         }});
 		
 		/**
@@ -316,11 +339,18 @@ public class Priority_Manager {
 	 * Delete task
 	 */
 	private void deleteTask(DataBase db,DefaultTableModel model,JTable table) {
+		int row = table.getSelectedRow();
+		int id = (int) table.getModel().getValueAt(row, 5);
 		//deletes task from database
-		db.DeleteTask(Task_List.get(table.getSelectedRow()).getTaskID());
+		db.DeleteTask(id);
 		//deletes task from table
 		model.removeRow(table.getSelectedRow());
-		Task_List.remove(table.getSelectedRow());
+		for(int i=0;i<Task_List.size();i++) {
+			if(Task_List.get(i).getTaskID() == id) {
+				Task_List.remove(i);
+			}
+		}
+		
 		//gets table to display changes
 		table.revalidate();
 	}
@@ -331,14 +361,15 @@ public class Priority_Manager {
 	 */
 	private void editTask(DataBase db,DefaultTableModel model,JTable table) {
 		//get task info and pass it to the task window
-		Task task = Task_List.get(table.getSelectedRow());
-		db.UpdateTask(task);
-		boolean isAnEdit = true;
-		taskWindow(task,isAnEdit,db,model,table);
-		db.DeleteTask(task.getTaskID());
-		Task_List.remove(task.getTaskID());
-		model.removeRow(table.getSelectedRow());
-		table.revalidate();
+		row = table.getSelectedRow();
+		int id = (int) table.getModel().getValueAt(row, 5);
+		for(int i=0;i<Task_List.size();i++) {
+			if(Task_List.get(i).getTaskID() == id) {
+				Task task = Task_List.get(i);
+				boolean isAnEdit = true;
+				taskWindow(task,isAnEdit,db,model,table);
+			}
+		}
 	}
 	
 	/*
@@ -437,9 +468,11 @@ public class Priority_Manager {
 		
 		//create check box for if task is complete
 		JCheckBox status = new JCheckBox("complete");
-		if(task.getStatus() == TaskStatus.CLOSED) {
-			status.setSelected(true);
-		}else {status.setSelected(false);}
+		if(isAnEdit == true) {
+			if(task.getStatus() == TaskStatus.CLOSED) {
+				status.setSelected(true);
+			}else {status.setSelected(false);}
+		}
 		
 		status.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		status.setForeground(aa_purple);
@@ -479,17 +512,37 @@ public class Priority_Manager {
         			new_task.setStatus(TaskStatus.CLOSED);
         		}else {new_task.setStatus(TaskStatus.OPEN);}
         		
-        		//adds task to database
-        		database.AddTask(new_task);
-        		//creates object v populated with the new tasks details
-        		Vector<Object> v = new Vector<Object>();
-        		v.add(new_task.getTaskName());
-        		v.add(new_task.getDescription());
-        		v.add(new_task.getPriority());
-        		v.add(new_task.getDueDate());
-        		v.add(new_task.getObservable());
-        		//add row and populate it with object v
-        		model.addRow(v);
+        		if(isAnEdit == true) {
+        			new_task.setTaskID(task.getTaskID());
+        			database.UpdateTask(new_task);
+        			for(int i=0;i<Task_List.size();i++) {
+        				if(Task_List.get(i).getTaskID() == new_task.getTaskID()) {
+        					Task_List.get(i).setTaskName(new_task.getTaskName());
+        					Task_List.get(i).setDescription(new_task.getDescription());
+        					Task_List.get(i).setPriority(new_task.getPriority());
+        					Task_List.get(i).setDueDate(new_task.getDueDate());
+        					Task_List.get(i).setObservable(new_task.getObservable());
+        				}
+        			}
+        			table.setValueAt(new_task.getTaskName(), row, 0);
+        			table.setValueAt(new_task.getDescription(), row, 1);
+        			table.setValueAt(new_task.getPriority(), row, 2);
+        			table.setValueAt(new_task.getDueDate(), row, 3);
+        			table.setValueAt(new_task.getObservable(), row, 4);
+        		}else{
+        			//adds task to database
+	        		database.AddTask(new_task);
+	        		//creates object v populated with the new tasks details
+	        		Vector<Object> v = new Vector<Object>();
+	        		v.add(new_task.getTaskName());
+	        		v.add(new_task.getDescription());
+	        		v.add(new_task.getPriority());
+	        		v.add(new_task.getDueDate());
+	        		v.add(new_task.getObservable());
+	        		//add row and populate it with object v
+	        		model.addRow(v);
+        		}
+        		
         		//gets table to display changes
         		table.revalidate();
         		task_window.dispose();
@@ -505,19 +558,6 @@ public class Priority_Manager {
 		cancel.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//close window without saving info
-        		if(isAnEdit == true) {
-        			database.AddTask(task);
-        			Vector<Object> v = new Vector<Object>();
-            		v.add(task.getTaskName());
-            		v.add(task.getDescription());
-            		v.add(task.getPriority());
-            		v.add(task.getDueDate());
-            		v.add(task.getObservable());
-            		//add row and populate it with object v
-            		model.addRow(v);
-            		//gets table to display changes
-            		table.revalidate();
-        		}
         		task_window.dispose();
         }});
 		
