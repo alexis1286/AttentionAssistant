@@ -42,7 +42,8 @@ public class Nav_Bar{
 	private boolean isVert;
 	private boolean isCollapsed;
 	private boolean settings_visible=true;
-	private boolean pm_visible=true;
+	private boolean pm_isActive=true;
+	private boolean pm_visible;
 	private boolean pomo_visible;
 	private boolean ntb_visible;
 	private boolean htb_visible;
@@ -52,6 +53,14 @@ public class Nav_Bar{
 	private boolean ntb_active;
 	private boolean htb_active;
 	private boolean fts_active;	
+	
+	private boolean settings_menu=true;
+	private boolean pm_menu=true;
+	private boolean pomo_menu=true;
+	private boolean ntb_menu=true;
+	private boolean htb_menu=true;
+	private boolean fts_menu=true;
+	private boolean progress_menu=true;
 	
 	/*
 	 * instantiating empty Nav_Bar object
@@ -66,6 +75,7 @@ public class Nav_Bar{
 		this.circleOpacity = 0;
 		this.isVert = false;
 		this.isCollapsed = false;
+		this.pm_visible = false;
 		this.pomo_visible = false;
 		this.ntb_visible = false;
 		this.htb_visible = false;
@@ -90,6 +100,7 @@ public class Nav_Bar{
 		this.circleOpacity =set.getOpacityCircles();
 		this.isVert = set.getIsVertical();
 		this.isCollapsed = set.getIsCollapsed();
+		this.pm_visible = set.getPmIsVisible();
 		this.pomo_visible = set.getTimerIsVisible();
 		this.ntb_visible = set.getNtbIsVisible();
 		this.htb_visible = set.getHtbIsVisible();
@@ -178,21 +189,21 @@ public class Nav_Bar{
 			panel.setSize(size, size*9);
 		}else {
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT,1,0));
-			frame.setSize(size*11, size);
-			panel.setSize(size*11, size);
+			frame.setSize(size*11, size*2);
+			panel.setSize(size*11, size*2);
 		}
 		
 		menuButton = createButton("images/menu_button.png");
 		menuButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//expand navbar
-        		settings_visible = !settings_visible;
-    	    	pm_visible = !pm_visible;
-	    		pomo_visible = !pomo_visible;
-	    		ntb_visible = !ntb_visible;
-	    		htb_visible = !htb_visible;
-	    		fts_visible = !fts_visible;
-	    		progress_visible = !progress_visible;
+        		settings_menu = !settings_menu;
+    	    	pm_menu = !pm_menu;
+	    		pomo_menu = !pomo_menu;
+	    		ntb_menu = !ntb_menu;
+	    		htb_menu = !htb_menu;
+	    		fts_menu = !fts_menu;
+	    		progress_menu = !progress_menu;
         		toRefresh.doClick();
         		System.out.println("clicked");
         }});
@@ -208,31 +219,27 @@ public class Nav_Bar{
 		if(isCollapsed == true) {
 	        panel.add(menuButton);
 	        if(count == 0) {
-	        	settings_visible = false;
-    	    	pm_visible = false;
-	    		pomo_visible = false;
-	    		ntb_visible = false;
-	    		htb_visible = false;
-	    		fts_visible = false;
-	    		progress_visible = false;
+	        	settings_menu = false;
+    	    	pm_menu = false;
+	    		pomo_menu = false;
+	    		ntb_menu = false;
+	    		htb_menu = false;
+	    		fts_menu = false;
+	    		progress_menu = false;
 	    		count++;
 	        }else {count--;}
 		}
 		
-		if(settings_visible == true) {
+		if(settings_visible == true && settings_menu == true) {
 	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
 	        		settings.open_settings(db, navbar, settings, observer, pm, pomo, ntb, htb, fts);
 	        }});
-	    	settingsButton.addMouseListener(new MouseAdapter() {
-	    		public void mouseReleased(MouseEvent e) {
-	    			
-	    		}});
 	    	panel.add(settingsButton);
 		}
 		
-	    if(pm_visible == true) {
+	    if(pm_visible == true && pm_isActive == true && pm_menu == true) {
 	    	pmButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
@@ -241,7 +248,7 @@ public class Nav_Bar{
 			panel.add(pmButton);
 	    }
 	    
-		if(pomo_visible == true && pomodoro_active == true) {
+		if(pomo_visible == true && pomodoro_active == true && pomo_menu == true) {
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
@@ -249,14 +256,14 @@ public class Nav_Bar{
 	        }});
 			panel.add(pomoButton);
 		}
-		if(ntb_visible == true && ntb_active == true) {
+		if(ntb_visible == true && ntb_active == true && ntb_menu == true) {
 			ntbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open ntb
 	        }});
 			panel.add(ntbButton);
 		}
-		if(htb_visible == true && htb_active == true) {
+		if(htb_visible == true && htb_active == true && htb_menu == true) {
 			htbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open htb
@@ -264,15 +271,16 @@ public class Nav_Bar{
 	        }});
 			panel.add(htbButton);
 		}
-		if(fts_visible == true && fts_active == true) {
+		if(fts_visible == true && fts_active == true && fts_menu == true) {
 			ftsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open fts
 	        		fts.runFts(fts);
+	        		System.out.println("fts clicked");
 	        }});
 			panel.add(ftsButton);
 		}
-		if(progress_visible == true) {
+		if(progress_visible == true && progress_menu == true) {
 			progressButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open progress report
@@ -408,6 +416,7 @@ public class Nav_Bar{
 		this.isVert = set.getIsVertical();
 		this.isCollapsed = set.getIsCollapsed();
 		
+		this.pm_visible = set.getPmIsVisible();
 		this.pomo_visible = set.getTimerIsVisible();
 		this.ntb_visible = set.getNtbIsVisible();
 		this.htb_visible = set.getHtbIsVisible();
