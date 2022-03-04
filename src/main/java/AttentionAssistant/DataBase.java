@@ -70,7 +70,7 @@ public class DataBase {
    			 "fk_userID INTEGER, " +
   			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
-   			 "dT_Executed DATE, " +
+//   			 "dT_Executed DATE, " +
 			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
     	/**
@@ -641,13 +641,13 @@ public class DataBase {
         public void AddHTB(Happy_Thought_Button hTB, User_Account user) {
     		sqlCon.enforceForeignKeys(true);
             ds.setConfig(sqlCon);
-        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
+//        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
-        			"(fk_userID, media_ID_Tag, flagged, dT_Executed) Values ( '" +
+        			"(fk_userID, media_ID_Tag, flagged) Values ( '" +
         			user.getUserID() + "', '" +
         			hTB.getMedia_ID_Tag() + "', '" +
-        			hTB.getFlagged() + "', '" +
-        			DateTime + "')";
+        			hTB.getFlagged() + "')";
+//        			DateTime + "')";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
@@ -667,11 +667,11 @@ public class DataBase {
             public void UpdateHTB(Happy_Thought_Button hTB) {
         		sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
-            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
+//            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
             	String query1 = "UPDATE happy_thought_button " +
             			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag() + 
             			"', flagged = '" + hTB.getFlagged() + 
-            			"', dT_Executed = '" + DateTime + 
+//            			"', dT_Executed = '" + DateTime + 
             			"' WHERE hTBID = '" + hTB.getHTBID() + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
@@ -722,15 +722,15 @@ public class DataBase {
             		    hTB1.setHTBID(rs.getInt("hTBID"));
             		    hTB1.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
             		    hTB1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
-            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
-            		    hTB1.setDT_Executed(date1);
+//            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
+//            		    hTB1.setDT_Executed(date1);
             		    System.out.println( "SelectHTB() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		}
-      			 catch ( ParseException p ) {
-      				 p.printStackTrace();
-      			 }
+//      			 catch ( ParseException p ) {
+//      				 p.printStackTrace();
+//      			 }
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
             	return hTB1;
@@ -772,17 +772,17 @@ public class DataBase {
             		    blankHTB.setHTBID(rs.getInt("hTBID"));
             		    blankHTB.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
             		    blankHTB.setFlagged(Boolean.valueOf(rs.getString("flagged")));
-            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
-            		    blankHTB.setDT_Executed(date1);
+//            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
+//            		    blankHTB.setDT_Executed(date1);
             		    hTBsOnList.add(blankHTB);
             		    }
             		    System.out.println( "SelectAllHTBs() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		}
-            		  catch ( ParseException p ) {
-            			p.printStackTrace();
-            		}
+//            		  catch ( ParseException p ) {
+//            			p.printStackTrace();
+//            		}
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
             	return hTBsOnList;
