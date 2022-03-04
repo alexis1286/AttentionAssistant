@@ -55,6 +55,7 @@ public class DataBase {
          */
     	String queryTask = "CREATE TABLE IF NOT EXISTS task ( " +
    			 "taskID INTEGER PRIMARY KEY, " +
+   			 "fk_userID INTEGER, " +
    			 "description TEXT, " +
    			 "observable BOOLEAN, " +
    			 "status TEXT, " + 
@@ -89,6 +90,7 @@ public class DataBase {
          */
     	String querySettings = "CREATE TABLE IF NOT EXISTS settings ( " +
    			 "settingsID INTEGER PRIMARY KEY, " +
+   			 "fk_userID INTEGER, " +
    			 "iconCircles INTEGER, " +
    			 "icons INTEGER, " +
    			 "opacityCircles INTEGER, " + 
@@ -119,6 +121,7 @@ public class DataBase {
    			 "ntbIsActive BOOLEAN, " +
    			 "isAutoLinked BOOLEAN, " +
    			 "htbIsActive BOOLEAN)";
+//			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
     	/**
     	 * Set up for Table user
@@ -518,6 +521,35 @@ public class DataBase {
 		sqlCon.enforceForeignKeys(false);
         ds.setConfig(sqlCon);
     }
+
+    /**
+     * Add a new task to the database.
+     * @param task
+     */
+    public void AddTask(Task task, int userID) {
+		sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+    	String query1 = "INSERT INTO task " +
+    			"(fk_userID, description, observable, status, name, dueDate, priority ) Values ( '" +
+    			userID + "', '" +
+    			task.getDescription() + "', '" +
+    			task.getObservable() + "', '" +
+    			task.getStatus().toString() + "', '" +
+    			task.getTaskName() + "', '" +
+    			DateTime + "', '" +
+    			task.getPriority() +"')";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    int rv = stmt.executeUpdate( query1 );
+    		    System.out.println( "AddTask() returned " + rv );
+    		} catch ( SQLException e ) {
+    		    //gets called when a user is passed in that isn't in the user table.
+    			e.printStackTrace();
+    		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
+    }
     
     /**
      * Update a task within the Database
@@ -612,6 +644,45 @@ public class DataBase {
         	ArrayList<Task> tasksOnList = new ArrayList<Task>();
         	Task blankTask = new Task();
         	String query1 = "SELECT * FROM task ORDER BY observable DESC, priority DESC, dueDate ASC";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    while (rs.next()){
+        		    blankTask = new Task();
+        		    blankTask.setTaskID(rs.getInt("taskID"));
+        		    blankTask.setDescription(rs.getString("description"));
+        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
+        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
+        		    blankTask.setTaskName(rs.getString("name"));
+        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+        		    blankTask.setDueDate(date1);
+        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+        		    tasksOnList.add(blankTask);
+        		    }
+        		    System.out.println( "SelectAllTasks() returned " + rs );
+        		} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
+        	return tasksOnList;
+        }
+
+        /**
+         * Grab all tasks within the Database
+         * 
+         * This will eventually have a parameter int to grab by user id
+         * @return ArrayList<Task>
+         */
+        public ArrayList<Task> SelectAllTasks(int userID){
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
+        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+        	Task blankTask = new Task();
+        	String query1 = "SELECT * FROM task WHERE fk_userID = '"+ userID+ "' ORDER BY observable DESC, priority DESC, dueDate ASC";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    ResultSet rs = stmt.executeQuery( query1 );
@@ -1004,6 +1075,58 @@ public class DataBase {
                     ds.setConfig(sqlCon);
                 	String query1 = "INSERT INTO settings " +
                 			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+                			settings.getIconCircles().getRGB() + "', '" +
+                			settings.getIcons().getRGB() + "', '" +
+                			settings.getOpacityCircles() + "', '" +
+                			settings.getOpacityIcons() + "', '" +
+                			settings.getIsCollapsed() + "', '" +
+                			settings.getXCoord() + "', '" +
+                			settings.getYCoord() + "', '" +
+                			settings.getIsVertical() + "', '" +
+                			settings.getIconSize() + "', '" +
+                			settings.getTimerIsVisible() + "', '" +
+                			settings.getPmIsVisible() + "', '" +
+                			settings.getFtsIsVisible() + "', '" +
+                			settings.getHtbIsVisible() + "', '" +
+                			settings.getNtbIsVisible() + "', '" +
+                			settings.getProgReportIsVisible() + "', '" +
+                			settings.getAvatarIsActive() + "', '" +
+                			settings.getTextIsActive() + "', '" +
+                			settings.getAudioIsActive() + "', '" +
+                			settings.getAvatarFilePath() + "', '" +
+                			settings.getAudioFilePath() + "', '" +
+                			settings.getAlwaysOnScreen() + "', '" +
+                			settings.getAvatarSize() + "', '" +
+                			settings.getPomodoroIsActive() + "', '" +
+                			settings.getWorkPeriod() + "', '" +
+                			settings.getBreakPeriod() + "', '" +
+                			settings.getTimeShowing() + "', '" +
+                			settings.getFtsIsActive() + "', '" +
+                			settings.getNtbIsActive() + "', '" +
+                			settings.getIsAutoLinked() + "', '" +
+                			settings.getHtbIsActive() +"')";
+                	try ( Connection conn = ds.getConnection();
+                		    Statement stmt = conn.createStatement(); ) {
+                		    int rv = stmt.executeUpdate( query1 );
+                		    System.out.println( "AddSettings() returned " + rv );
+                		} catch ( SQLException e ) {
+                		    e.printStackTrace();
+                		}
+            		sqlCon.enforceForeignKeys(false);
+                    ds.setConfig(sqlCon);
+                }
+
+                
+                /**
+                 * Add a new Settings to the database.
+                 * @param Settings, int
+                 */
+                public void AddSettings(Settings settings, int userID) {
+            		sqlCon.enforceForeignKeys(true);
+                    ds.setConfig(sqlCon);
+                	String query1 = "INSERT INTO settings " +
+                			"(fk_userID, iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+                			userID + "', '" +
                 			settings.getIconCircles().getRGB() + "', '" +
                 			settings.getIcons().getRGB() + "', '" +
                 			settings.getOpacityCircles() + "', '" +

@@ -318,10 +318,13 @@ public class Test_DataBase {
     @Order(12)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
+//    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
+//    	UpdatedUser.setUserID(1);
     	db.AddTask(nonDefaultTask);
     	db.AddTask(nonDefaultTask);
     	db.AddTask(nonDefaultTask);
     	db.AddTask(nonDefaultTask);
+//    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
     }
 
     @Test
@@ -383,6 +386,9 @@ public class Test_DataBase {
     @Order(16)
     @DisplayName("<DataBase> DatabaseSelectAllTasks")
     void DatabaseSelectAllTasks() {
+//    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
+//    	UpdatedUser.setUserID(1);
+
     	ArrayList<Task> test_task_List = new ArrayList<Task>();
     	ArrayList<Task> test_database_task_List = new ArrayList<Task>();
     	
@@ -408,6 +414,8 @@ public class Test_DataBase {
     	
     	test_database_task_List= db.SelectAllTasks();
     	
+//    	test_database_task_List= db.SelectAllTasks(UpdatedUser.getUserID());
+  
     	for (int i =0; i< test_database_task_List.size(); i++) {        
     		assertEquals(test_task_List.get(i).toString(), test_database_task_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_task_List.get(i).toString() + " but instead returned: " + test_database_task_List.get(i).toString());
         }
@@ -628,10 +636,13 @@ public class Test_DataBase {
     @Order(27)
     @DisplayName("<DataBase> DatabaseAddNewSettings")
     void DatabaseAddNewSettings() {
+    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
+    	UpdatedUser.setUserID(1);
         db.AddSettings(nonDefaultSettings);
         db.AddSettings(nonDefaultSettings);
         db.AddSettings(nonDefaultSettings);
         db.AddSettings(nonDefaultSettings);
+//        db.AddSettings(nonDefaultSettings, UpdatedUser.getUserID());
     }
     
     @Test
