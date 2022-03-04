@@ -59,7 +59,7 @@ public class DataBase {
    			 "observable BOOLEAN, " +
    			 "status TEXT, " + 
    			 "name TEXT, " +
-   			 "dueDate DATE, " +
+   			 "dueDate DATETIME, " +
    			 "priority BOOLEAN)";
     	
     	/**
@@ -81,7 +81,7 @@ public class DataBase {
    			 "fk_taskID INTEGER, " +
    			 "observerScore INTEGER, " +
    			 "threshold INTEGER, " +
-   			 "dT_Gathered DATE, " +
+   			 "dT_Gathered DATETIME, " +
    			 "CONSTRAINT fk_taskID FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\") ON DELETE CASCADE)";
 
         /**
@@ -143,8 +143,8 @@ public class DataBase {
    			 "linkedAccountID INTEGER PRIMARY KEY, " +
    			 "fk_parentID INTEGER, " +
    			 "fk_userID INTEGER, " +
-			 "CONSTRAINT fk_ParentID FOREIGN KEY (\"fk_ParentID\") REFERENCES \"parent\"(\"parentID\") ON DELETE CASCADE, " +
-   			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
+			 "CONSTRAINT fk_ParentID FOREIGN KEY (\"fk_parentID\") REFERENCES \"parent\"(\"parentID\") ON DELETE CASCADE, " +
+   			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
         /**
          * Set up for Table Notification_System
@@ -154,9 +154,21 @@ public class DataBase {
       			 "fk_userID INTEGER, " +
       			 "type TEXT, " +
       			 "ignored BOOLEAN, " +
-      			 "dT_Notification DATE, " +
-      			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_UserID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
+      			 "dT_Notification DATETIME, " +
+      			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
+    	String queryEventType= "CREATE TABLE IF NOT EXISTS event_Type ( " +
+    			"event_TypeID INTEGER PRIMARY KEY, " +
+    			"name TEXT) ";
+    	
+    	String queryEvent= "CREATE TABLE IF NOT EXISTS event ( " +
+    			"eventID INTEGER PRIMARY KEY, " +
+    			"fk_userID INTEGER, " +
+    			"fk_event_TypeID INTEGER, " +
+    			"dT_Executed DATETIME, "+
+    			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE, " +
+    			"CONSTRAINT fk_event_TypeID FOREIGN KEY (\"fk_event_TypeID\") REFERENCES \"event_Type\"(\"Event_TypeID\") ON DELETE CASCADE)";
+    			
 	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
    		int rv1 = stmt.executeUpdate(queryUser);
@@ -175,7 +187,10 @@ public class DataBase {
    		System.out.println( "CreateLinkedAccountsTable() returned " + rv7 );
    		int rv8 = stmt.executeUpdate(queryNotification_System);
    		System.out.println( "CreateNotificationTable() returned " + rv8 );
-   		
+   		int rv9 = stmt.executeUpdate(queryEventType);
+   		System.out.println( "CreateEventTypeTable() returned " + rv9 );
+   		int rv10 = stmt.executeUpdate(queryEvent);
+   		System.out.println( "CreateEventTable() returned " + rv10 );
        } catch ( SQLException e ) {
            e.printStackTrace();
        }
@@ -290,6 +305,9 @@ public class DataBase {
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    ResultSet rs = stmt.executeQuery( query1 );
+    		    if (rs.isClosed()) {
+    		    	return tempuser;
+    		    }
     		    tempuser.setUserID(rs.getInt("userID"));
     		    tempuser.setUsername(rs.getString("username"));
     		    tempuser.setPassword(rs.getString("password"));
@@ -427,6 +445,9 @@ public class DataBase {
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    ResultSet rs = stmt.executeQuery( query1 );
+    		    if (rs.isClosed()) {
+    		    	return tempparent;
+    		    }
     		    tempparent.setParentID(rs.getInt("parentID"));
     		    tempparent.setUsername(rs.getString("username"));
     		    tempparent.setPassword(rs.getString("password"));
@@ -1223,6 +1244,9 @@ public class DataBase {
    		try ( Connection conn = ds.getConnection();
 		    Statement stmt = conn.createStatement(); ) {
 		    ResultSet rs = stmt.executeQuery( query1 );
+		    if (rs.isClosed()) {
+		    	return userAccountList;
+		    }
 		    while (rs.next()){
     		blankUser = new User_Account();
     		blankUser = this.SelectUser_Account(rs.getInt("fk_userID"));
@@ -1415,5 +1439,155 @@ public class DataBase {
    /**
     ******* END OF NOTIFICATION SYSTEM CRUD *******
     */
+   
+   /**
+    ******* START OF EVENT TYPE ADD & SEARCH *******
+    */
 
+   /**
+    * Add a new EVENT_TYPE to the database.
+    * @param String
+    */
+   private void AddEventType(String Event_Name) {
+   	sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+   	String query1 = "INSERT INTO event_Type " +
+   			"(name) Values ( '" + Event_Name + "')";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "AddEventType() returned " + rv );
+   		} catch ( SQLException e ) {
+   		    //gets called when a task is passed in that isn't in the task table.
+   			e.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+
+   /**
+    * Search an EVENT_TYPE in the database.
+    * @param String
+    * @return int
+    */
+   private int SelectEventType(String Event_Name) {
+	int event_TypeID=0; 
+   	sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+		String query1 = "SELECT * FROM event_Type WHERE name = '" + Event_Name + "'";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    ResultSet rs = stmt.executeQuery( query1 );
+   		    if (rs.isClosed()) {
+   		    	return 0;
+   		    }
+   		    event_TypeID = rs.getInt("event_TypeID");
+   		    System.out.println( "SelectEventType() returned " + rs );
+   		} catch ( SQLException e ) {
+   			e.printStackTrace();
+   		}
+	sqlCon.enforceForeignKeys(false);
+	ds.setConfig(sqlCon);
+	return event_TypeID;
+   	}
+   
+   /**
+    * Primarily used for JUNIT testing, deletes the event_Type table
+    */
+   public void DeleteAllEventTypes() {
+	   	String query1 = "DROP TABLE IF EXISTS 'event_Type'";
+	   	try ( Connection conn = this.ds.getConnection();
+	   		    Statement stmt = conn.createStatement(); ) {
+			    int rv = stmt.executeUpdate( query1 );
+			    System.out.println( "DeleteAllEventTypes() returned " + rv );
+	   	} catch ( SQLException e ) {
+				e.printStackTrace();
+	   	}   
+	   }
+
+
+   /**
+    ******* END OF EVENT_TYPE ADD, SEARCH, & DROP *******
+    */
+   
+   /**
+    ******* START OF EVENT ADD, COUNT, & DROP *******
+    */
+   
+   /**
+    * Adds an event to the database
+    * @param User_Account, Date, String
+    */
+   public void AddEvent(User_Account user, Date dt_Executed, String Event_Name) {
+	   	sqlCon.enforceForeignKeys(true);
+	    ds.setConfig(sqlCon);
+        String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_Executed);
+	    int event_ID = this.SelectEventType(Event_Name);
+	   	if (event_ID== 0) {
+	   		this.AddEventType(Event_Name);
+	   		event_ID = this.SelectEventType(Event_Name);
+	   		}
+	    String query1 = "INSERT INTO event " +
+	   			"(fk_userID, fk_event_TypeID, dt_Executed) Values ( '" + 
+	    		user.getUserID() + "', '" +
+	   			event_ID + "', '" +
+	    		DateTime + "')";
+	   	try ( Connection conn = ds.getConnection();
+	   		    Statement stmt = conn.createStatement(); ) {
+	   		    int rv = stmt.executeUpdate( query1 );
+	   		    System.out.println( "AddEvent() returned " + rv );
+	   		} catch ( SQLException e ) {
+	   		    //gets called when a task is passed in that isn't in the task table.
+	   			e.printStackTrace();
+	   		}
+	   	sqlCon.enforceForeignKeys(false);
+	    ds.setConfig(sqlCon);
+	   }
+   
+   /**
+    * Counts the number of events that are within the Event Table
+    * @param User_Account, Date, Date, String
+    * @return int
+    */
+   public int CountEvents(User_Account user, Date dt_From, Date dt_Till, String Event_Name ){
+	   int count = 0;
+	   sqlCon.enforceForeignKeys(true);
+	   ds.setConfig(sqlCon);
+       String DateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_From);
+       String DateTill = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_Till);
+       int event_ID = this.SelectEventType(Event_Name);
+	   String query1 = "SELECT COUNT('eventID') AS counter FROM event WHERE fk_userID= '" + user.getUserID() + 
+			   "' AND fk_event_TypeID= '" + event_ID +
+			   "' AND dt_Executed BETWEEN '" + DateFrom +
+			   "' AND '" + DateTill + "'"; 
+	   	try ( Connection conn = ds.getConnection();
+	   		Statement stmt = conn.createStatement(); ) {
+   		    ResultSet rs = stmt.executeQuery( query1 );
+   		    count = rs.getInt("counter");
+   		    System.out.println( "CountEvents() returned " + rs );
+	   	}catch ( SQLException e ) {
+   		    //gets called when a task is passed in that isn't in the task table.
+   			e.printStackTrace();
+   		}
+	   return count;
+   }
+
+   /**
+    * Primarily used for JUNIT testing, deletes the event_Type table
+    */
+   public void DeleteAllEvents() {
+	   	String query1 = "DROP TABLE IF EXISTS 'event'";
+	   	try ( Connection conn = this.ds.getConnection();
+	   		    Statement stmt = conn.createStatement(); ) {
+			    int rv = stmt.executeUpdate( query1 );
+			    System.out.println( "DeleteAllEvents() returned " + rv );
+	   	} catch ( SQLException e ) {
+				e.printStackTrace();
+	   	}   
+	   }
+
+   /**
+    ******* END OF EVENT ADD, COUNT, & DROP *******
+    */
+   
 }

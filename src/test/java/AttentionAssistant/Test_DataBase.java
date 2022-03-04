@@ -153,6 +153,8 @@ public class Test_DataBase {
     db.DeleteAllSettings();
     db.DeleteAllLinkedAccounts();
     db.DeleteAllNotifications();
+    db.DeleteAllEventTypes();
+    db.DeleteAllEvents();
     }
 
     /**
@@ -859,9 +861,47 @@ public class Test_DataBase {
      ***************** END OF TEST NOTIFICATION SYSTEM CRUD *****************
      */
 
+    /**
+     ***************** START OF TEST EVENTS SYSTEM ADD & COUNT *****************
+     */
     
     @Test
     @Order(39)
+    @DisplayName("<DataBase> DatabaseAddEvents")
+    void DatabaseAddEvents() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	Date date1= new Date(1220227200L * 1000);
+     	Date date2= new Date(1220227205L * 1000);
+     	Date date3= new Date(1220227230L * 1000);
+     	db.AddEvent(UpdatedUser, date1, "TestEventType1");
+     	db.AddEvent(UpdatedUser, date2, "TestEventType2");
+     	db.AddEvent(UpdatedUser, date2, "TestEventType1");
+     	db.AddEvent(UpdatedUser, date3, "TestEventType1");
+     	
+
+    }
+
+    @Test
+    @Order(40)
+    @DisplayName("<DataBase> DatabaseCountEvents")
+    void DatabaseCountEvents() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	int test_CountOfEvents= 0;
+     	Date date1= new Date(1220227200L * 1000);
+     	Date date2= new Date(1220227205L * 1000);
+     	test_CountOfEvents = db.CountEvents(UpdatedUser, date1, date2, "TestEventType1");
+		assertEquals(2, test_CountOfEvents, "test_CountOfEvents should be set to 2 but instead returned: " + test_CountOfEvents);
+	
+    }
+
+    /**
+     ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
+     */
+
+    @Test
+    @Order(41)
     @DisplayName("<DataBase> DatabaseTestPlayGround")
     void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
