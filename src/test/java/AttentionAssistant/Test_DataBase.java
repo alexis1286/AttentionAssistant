@@ -155,6 +155,7 @@ public class Test_DataBase {
     db.DeleteAllNotifications();
     db.DeleteAllEventTypes();
     db.DeleteAllEvents();
+    db.DeleteAllFTS_Colors();
     }
 
     /**
@@ -900,8 +901,58 @@ public class Test_DataBase {
      ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
      */
 
+    /**
+     ***************** START OF TEST FTS_COLORS ADD, DELETE, SELECT ALL *****************
+     */
     @Test
     @Order(41)
+    @DisplayName("<DataBase> DatabaseAddFTS_Color")
+    void DatabaseAddFTS_Color() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	db.AddFTS_Color(Color.black, UpdatedUser);
+     	db.AddFTS_Color(Color.blue, UpdatedUser);
+     	db.AddFTS_Color(Color.red, UpdatedUser);
+     	db.AddFTS_Color(Color.yellow, UpdatedUser);
+     	UpdatedUser.setUserID(2);
+     	db.AddFTS_Color(Color.white, UpdatedUser);
+    }
+    
+    @Test
+    @Order(42)
+    @DisplayName("<DataBase> DatabaseDeleteFTS_Color")
+    void DatabaseDeleteFTS_Color() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+    	db.DeleteFTS_Color(Color.black, UpdatedUser);
+    	db.DeleteFTS_Color(Color.white, UpdatedUser);
+    }    
+    
+    @Test
+    @Order(43)
+    @DisplayName("<DataBase> DatabaseSelectAllFTS_Color")
+    void DatabaseSelectAllFTS_Color() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	ArrayList<Color> testColors = new ArrayList<Color>();
+     	ArrayList<Color> testDataBaseColors = new ArrayList<Color>();
+     	testColors.add(Color.blue);
+     	testColors.add(Color.red);
+     	testColors.add(Color.yellow);
+     	testDataBaseColors= db.SelectAllFTS_Color(UpdatedUser);
+
+     	for (int i =0; i< testDataBaseColors.size(); i++) {        
+    		assertEquals(testColors.get(i).toString(), testDataBaseColors.get(i).toString(), "testDataBaseColors " + i + " should be set to " + testColors.get(i).toString() + " but instead returned: " + testDataBaseColors.get(i).toString());
+        }
+
+    }
+
+    /**
+     ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
+     */
+    
+    @Test
+    @Order(44)
     @DisplayName("<DataBase> DatabaseTestPlayGround")
     void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);

@@ -169,7 +169,13 @@ public class DataBase {
     			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE, " +
     			"CONSTRAINT fk_event_TypeID FOREIGN KEY (\"fk_event_TypeID\") REFERENCES \"event_Type\"(\"Event_TypeID\") ON DELETE CASCADE)";
     			
-	try (Connection conn = this.ds.getConnection();
+    	String queryFTS_Color= "CREATE TABLE IF NOT EXISTS FTS_Color ( " +
+    			"ftsColorID INTEGER PRIMARY KEY, " +
+    			"fk_userID INTEGER, " +
+    			"color INTEGER, " +
+    			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE) "; 
+    	
+    	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
    		int rv1 = stmt.executeUpdate(queryUser);
    		System.out.println( "CreateUserTable() returned " + rv1 );
@@ -191,6 +197,8 @@ public class DataBase {
    		System.out.println( "CreateEventTypeTable() returned " + rv9 );
    		int rv10 = stmt.executeUpdate(queryEvent);
    		System.out.println( "CreateEventTable() returned " + rv10 );
+   		int rv11 = stmt.executeUpdate(queryFTS_Color);
+   		System.out.println( "CreateFTS_ColorTable() returned " + rv11 );
        } catch ( SQLException e ) {
            e.printStackTrace();
        }
@@ -1589,5 +1597,100 @@ public class DataBase {
    /**
     ******* END OF EVENT ADD, COUNT, & DROP *******
     */
+   
+   /**
+    ******* START OF FTS_COLOR Add, Delete, SelectAll, & Drop *******
+    */
+   
+   /**
+    * Add a new FTS_Color to the database.
+    * @param Color, User_Account
+    */
+   public void AddFTS_Color(Color color, User_Account user) {
+   	sqlCon.enforceForeignKeys(true);
+    ds.setConfig(sqlCon);
+   	String query1 = "INSERT INTO fts_Color " +
+   			"(fk_userID, color) Values ( '" +
+   			user.getUserID() + "', '" +
+   			color.getRGB() + "')";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "AddFTS_Color() returned " + rv );
+   		} catch ( SQLException e ) {
+   		    //gets called when a task is passed in that isn't in the task table.
+   			e.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+   
+   /**
+    * Delete a FTS_Color within the Database
+    *              * 
+    * @param Color, User_Account
+    */
+   public void DeleteFTS_Color(Color color, User_Account user) {
+	   sqlCon.enforceForeignKeys(true);
+	   ds.setConfig(sqlCon);
+   	   String query1 = "DELETE FROM fts_Color WHERE fk_userID = '" + user.getUserID() + 
+   			   "' AND color = '" + color.getRGB() + "'";
+   	   try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "DeleteFTS_Color() returned " + rv );
+   	   } catch ( SQLException e ) {
+   		    e.printStackTrace();
+   	   }
+   	   sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+   
+   /**
+    * Selects all FTS_Color within the Database
+    * 
+    * @param User_Account
+    * @return ArrayList<Color>
+    */
+   public ArrayList<Color> SelectAllFTS_Color(User_Account user){
+	   sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+	   ArrayList<Color> allColors = new ArrayList<Color>();
+	   String query1 = "SELECT * FROM fts_Color WHERE fk_userID = '" + user.getUserID() + "'";
+   		try ( Connection conn = ds.getConnection();
+		    Statement stmt = conn.createStatement(); ) {
+		    ResultSet rs = stmt.executeQuery( query1 );
+		    if (rs.isClosed()) {
+		    	return allColors;
+		    }
+		    while (rs.next()){
+    		allColors.add(new Color(rs.getInt("color")));
+		    }		    
+   		}catch ( SQLException e ) {
+			e.printStackTrace();
+		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);	   
+	   return allColors;
+   }
+
+   /**
+    * Primarily used for JUNIT testing, deletes the event_Type table
+    */
+   public void DeleteAllFTS_Colors() {
+	   String query1 = "DROP TABLE IF EXISTS 'fts_Color'";
+	   try ( Connection conn = this.ds.getConnection();
+	   		    Statement stmt = conn.createStatement(); ) {
+			    int rv = stmt.executeUpdate( query1 );
+			    System.out.println( "DeleteAllFTSColors() returned " + rv );
+	   } catch ( SQLException e ) {
+				e.printStackTrace();
+	   }   
+	   }
+   
+   /**
+    ******* END OF FTS_Color Add, Delete, SelectAll, & Drop *******
+    */
+
    
 }
