@@ -436,15 +436,15 @@ public class Test_DataBase {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
     db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
     Test_User_Account.setUserID(5);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
     db.DeleteUser_Account(5);
     Test_User_Account.setUserID(3);
-    db.AddHTB(nonDefaultHTB, Test_User_Account);
+    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
     }
     
     @Test
@@ -539,10 +539,10 @@ public class Test_DataBase {
     void DatabaseAddNewObserver() {
     	Task ForObserver= new Task(nonDefaultTask);
     	ForObserver.setTaskID(4);
-    	db.AddObserver(nonDefaultObserver, ForObserver);
-    	db.AddObserver(nonDefaultObserver, ForObserver);
-    	db.AddObserver(nonDefaultObserver, ForObserver);
-    	db.AddObserver(nonDefaultObserver, ForObserver);
+    	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
+    	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
+    	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
+    	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
     }
 
     @Test
@@ -788,15 +788,15 @@ public class Test_DataBase {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
     db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
     Test_User_Account.setUserID(5);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
     db.DeleteUser_Account(5);
     Test_User_Account.setUserID(3);
-    db.AddNotification(nonDefaultNotify, Test_User_Account);
+    db.AddNotification(nonDefaultNotify, Test_User_Account.getUserID());
     }
 
     @Test
@@ -886,10 +886,10 @@ public class Test_DataBase {
      	Date date1= new Date(1220227200L * 1000);
      	Date date2= new Date(1220227205L * 1000);
      	Date date3= new Date(1220227230L * 1000);
-     	db.AddEvent(UpdatedUser, date1, "TestEventType1");
-     	db.AddEvent(UpdatedUser, date2, "TestEventType2");
-     	db.AddEvent(UpdatedUser, date2, "TestEventType1");
-     	db.AddEvent(UpdatedUser, date3, "TestEventType1");
+     	db.AddEvent(UpdatedUser.getUserID(), date1, "TestEventType1");
+     	db.AddEvent(UpdatedUser.getUserID(), date2, "TestEventType2");
+     	db.AddEvent(UpdatedUser.getUserID(), date2, "TestEventType1");
+     	db.AddEvent(UpdatedUser.getUserID(), date3, "TestEventType1");
      	
 
     }
@@ -903,7 +903,7 @@ public class Test_DataBase {
      	int test_CountOfEvents= 0;
      	Date date1= new Date(1220227200L * 1000);
      	Date date2= new Date(1220227205L * 1000);
-     	test_CountOfEvents = db.CountEvents(UpdatedUser, date1, date2, "TestEventType1");
+     	test_CountOfEvents = db.CountEvents(UpdatedUser.getUserID(), date1, date2, "TestEventType1");
 		assertEquals(2, test_CountOfEvents, "test_CountOfEvents should be set to 2 but instead returned: " + test_CountOfEvents);
 	
     }
@@ -921,12 +921,12 @@ public class Test_DataBase {
     void DatabaseAddFTS_Color() {
     	User_Account UpdatedUser= new User_Account(nonDefaultUser);
      	UpdatedUser.setUserID(1);
-     	db.AddFTS_Color(Color.black, UpdatedUser);
-     	db.AddFTS_Color(Color.blue, UpdatedUser);
-     	db.AddFTS_Color(Color.red, UpdatedUser);
-     	db.AddFTS_Color(Color.yellow, UpdatedUser);
+     	db.AddFTS_Color(Color.black, UpdatedUser.getUserID());
+     	db.AddFTS_Color(Color.blue, UpdatedUser.getUserID());
+     	db.AddFTS_Color(Color.red, UpdatedUser.getUserID());
+     	db.AddFTS_Color(Color.yellow, UpdatedUser.getUserID());
      	UpdatedUser.setUserID(2);
-     	db.AddFTS_Color(Color.white, UpdatedUser);
+     	db.AddFTS_Color(Color.white, UpdatedUser.getUserID());
     }
     
     @Test
@@ -935,8 +935,8 @@ public class Test_DataBase {
     void DatabaseDeleteFTS_Color() {
     	User_Account UpdatedUser= new User_Account(nonDefaultUser);
      	UpdatedUser.setUserID(1);
-    	db.DeleteFTS_Color(Color.black, UpdatedUser);
-    	db.DeleteFTS_Color(Color.white, UpdatedUser);
+    	db.DeleteFTS_Color(Color.black, UpdatedUser.getUserID());
+    	db.DeleteFTS_Color(Color.white, UpdatedUser.getUserID());
     }    
     
     @Test
@@ -950,7 +950,7 @@ public class Test_DataBase {
      	testColors.add(Color.blue);
      	testColors.add(Color.red);
      	testColors.add(Color.yellow);
-     	testDataBaseColors= db.SelectAllFTS_Color(UpdatedUser);
+     	testDataBaseColors= db.SelectAllFTS_Color(UpdatedUser.getUserID());
 
      	for (int i =0; i< testDataBaseColors.size(); i++) {        
     		assertEquals(testColors.get(i).toString(), testDataBaseColors.get(i).toString(), "testDataBaseColors " + i + " should be set to " + testColors.get(i).toString() + " but instead returned: " + testDataBaseColors.get(i).toString());

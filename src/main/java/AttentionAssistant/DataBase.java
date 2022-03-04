@@ -738,13 +738,13 @@ public class DataBase {
          * Add a new Happy_Thought_Button to the database.
          * @param Happy_Thought_Button
          */
-        public void AddHTB(Happy_Thought_Button hTB, User_Account user) {
+        public void AddHTB(Happy_Thought_Button hTB, int userID) {
     		sqlCon.enforceForeignKeys(true);
             ds.setConfig(sqlCon);
 //        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
         			"(fk_userID, media_ID_Tag, flagged) Values ( '" +
-        			user.getUserID() + "', '" +
+        			userID + "', '" +
         			hTB.getMedia_ID_Tag() + "', '" +
         			hTB.getFlagged() + "')";
 //        			DateTime + "')";
@@ -902,13 +902,13 @@ public class DataBase {
              * Add a new Observer to the database.
              * @param Observer, Task
              */
-            public void AddObserver(Observer observer, Task task) {
+            public void AddObserver(Observer observer, int taskID) {
             	sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
             	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
             	String query1 = "INSERT INTO observer " +
             			"( fk_taskID, observerScore, threshold, dT_Gathered) Values ( '" +
-            			task.getTaskID() + "', '" +
+            			taskID + "', '" +
             			observer.getObserverScore() + "', '" +
             			observer.getThreshold() + "', '" +
             			DateTime + "')"; 
@@ -1418,13 +1418,13 @@ public class DataBase {
     * Add a new Notification_System to the database.
     * @param Notification_System, User_Account
     */
-   public void AddNotification(Notification_System notification, User_Account user) {
+   public void AddNotification(Notification_System notification, int userID) {
    	sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
    	String query1 = "INSERT INTO notification " +
    			"( fk_userID, type, ignored, dT_Notification) Values ( '" +
-   			user.getUserID() + "', '" +
+   			userID + "', '" +
    			notification.getType() + "', '" +
    			notification.getIgnored() + "', '" +
    			DateTime + "')"; 
@@ -1649,7 +1649,7 @@ public class DataBase {
     * Adds an event to the database
     * @param User_Account, Date, String
     */
-   public void AddEvent(User_Account user, Date dt_Executed, String Event_Name) {
+   public void AddEvent(int userID, Date dt_Executed, String Event_Name) {
 	   	sqlCon.enforceForeignKeys(true);
 	    ds.setConfig(sqlCon);
         String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_Executed);
@@ -1660,7 +1660,7 @@ public class DataBase {
 	   		}
 	    String query1 = "INSERT INTO event " +
 	   			"(fk_userID, fk_event_TypeID, dt_Executed) Values ( '" + 
-	    		user.getUserID() + "', '" +
+	    		userID + "', '" +
 	   			event_ID + "', '" +
 	    		DateTime + "')";
 	   	try ( Connection conn = ds.getConnection();
@@ -1680,14 +1680,14 @@ public class DataBase {
     * @param User_Account, Date, Date, String
     * @return int
     */
-   public int CountEvents(User_Account user, Date dt_From, Date dt_Till, String Event_Name ){
+   public int CountEvents(int userID, Date dt_From, Date dt_Till, String Event_Name ){
 	   int count = 0;
 	   sqlCon.enforceForeignKeys(true);
 	   ds.setConfig(sqlCon);
        String DateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_From);
        String DateTill = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dt_Till);
        int event_ID = this.SelectEventType(Event_Name);
-	   String query1 = "SELECT COUNT('eventID') AS counter FROM event WHERE fk_userID= '" + user.getUserID() + 
+	   String query1 = "SELECT COUNT('eventID') AS counter FROM event WHERE fk_userID= '" + userID + 
 			   "' AND fk_event_TypeID= '" + event_ID +
 			   "' AND dt_Executed BETWEEN '" + DateFrom +
 			   "' AND '" + DateTill + "'"; 
@@ -1729,12 +1729,12 @@ public class DataBase {
     * Add a new FTS_Color to the database.
     * @param Color, User_Account
     */
-   public void AddFTS_Color(Color color, User_Account user) {
+   public void AddFTS_Color(Color color, int userID) {
    	sqlCon.enforceForeignKeys(true);
     ds.setConfig(sqlCon);
    	String query1 = "INSERT INTO fts_Color " +
    			"(fk_userID, color) Values ( '" +
-   			user.getUserID() + "', '" +
+   			userID + "', '" +
    			color.getRGB() + "')";
    	try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
@@ -1753,10 +1753,10 @@ public class DataBase {
     *              * 
     * @param Color, User_Account
     */
-   public void DeleteFTS_Color(Color color, User_Account user) {
+   public void DeleteFTS_Color(Color color, int userID) {
 	   sqlCon.enforceForeignKeys(true);
 	   ds.setConfig(sqlCon);
-   	   String query1 = "DELETE FROM fts_Color WHERE fk_userID = '" + user.getUserID() + 
+   	   String query1 = "DELETE FROM fts_Color WHERE fk_userID = '" + userID + 
    			   "' AND color = '" + color.getRGB() + "'";
    	   try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
@@ -1775,11 +1775,11 @@ public class DataBase {
     * @param User_Account
     * @return ArrayList<Color>
     */
-   public ArrayList<Color> SelectAllFTS_Color(User_Account user){
+   public ArrayList<Color> SelectAllFTS_Color(int userID){
 	   sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
 	   ArrayList<Color> allColors = new ArrayList<Color>();
-	   String query1 = "SELECT * FROM fts_Color WHERE fk_userID = '" + user.getUserID() + "'";
+	   String query1 = "SELECT * FROM fts_Color WHERE fk_userID = '" + userID + "'";
    		try ( Connection conn = ds.getConnection();
 		    Statement stmt = conn.createStatement(); ) {
 		    ResultSet rs = stmt.executeQuery( query1 );
