@@ -17,15 +17,23 @@ public class OSEventsTracker {
 	Set<String> names;
 	//ArrayList used to store each line from the blacklist text file
 	ArrayList<String> blacklist;
+	//ArrayList used to store each line from the whitelist text file
+	ArrayList<String> whitelist;
+	
+	private int blProcessCount;
+	private int wlProcessCount;
 	private int osEventsScore;
 		
 	/**
 	 * ProcessHandling default Constructor
 	 */
 	public OSEventsTracker() {
-		this.osEventsScore = 100;
+		this.blProcessCount = 0;
+		this.wlProcessCount = 0;
+		this.osEventsScore = 50;
 		this.names = new HashSet<>();
 		this.blacklist = new ArrayList<String>();
+		this.whitelist = new ArrayList<String>();
 	}
 		
 	/**
@@ -39,32 +47,44 @@ public class OSEventsTracker {
 		//For each of the processes, add only the process name to the Set
 		processes.forEach(process -> names.add(processDetails(text(process.info().command()))));
 					
-		BufferedReader reader;
+		BufferedReader bl_reader, wl_reader;
 		try {
-			reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
-			String line = reader.readLine();
-			System.out.print("\nBlacklisted applications: "); //For demonstration purposes
-			while(line != null) {
-				String lcLine = line.toLowerCase();
+			
+			//Storing each line from the blacklist into an array list
+			bl_reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
+			String bline = bl_reader.readLine();
+			System.out.println("\n~ OS_EVENT_TRACKING - START ~"); //For demonstration purposes
+			System.out.println("Blacklisted applications: "); //For demonstration purposes
+			while(bline != null) {
+				String lcLine = bline.toLowerCase();
 				System.out.println(lcLine); //For demonstration purposes
 				blacklist.add(lcLine);
-				line = reader.readLine();
+				bline = bl_reader.readLine();
 			}
+
+			//Storing each line from the whitelist into an array list
+			wl_reader = new BufferedReader(new FileReader("src/main/resources/OSWhitelist.txt"));
+			String wline = wl_reader.readLine();
+			System.out.println("Whitelisted applications: "); //For demonstration purposes
+			while(wline != null) {
+				String lcLine = wline.toLowerCase();
+				System.out.println(lcLine); //For demonstration purposes
+				whitelist.add(lcLine);
+				wline = wl_reader.readLine();
+			}
+			
 			//Iterate over Set names until a process name is found on the blacklist
 			for(String name : names) {
-				osEventsScore = compareCurrentProcesses(name, blacklist);
-				//Stops traversing the Set names once a match is found (User is determined off task)
-				if(osEventsScore == 0) {
-					System.out.println("OS events score: " + osEventsScore); //For demonstration purposes
-					break;
-				}
+				compareCurrentProcesses(name);
 			}
-			//For demonstration purposes
-			if(osEventsScore == 100) {
-				System.out.println("app detected: none");
-				System.out.println("OS events score: " + osEventsScore);
-			}
-			reader.close();
+			System.out.println("Blacklist Count: " + blProcessCount); //For demonstration purposes
+			System.out.println("Whitelist Count: " + wlProcessCount); //For demonstration purposes
+			
+			osEventsScore += calculateOSEventsScore();
+			System.out.println("OS events score: " + osEventsScore); //For demonstration purposes
+			System.out.println("~ OS_EVENT_TRACKING - FINISH ~"); //For demonstration purposes
+			bl_reader.close();
+			wl_reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -88,22 +108,40 @@ public class OSEventsTracker {
 	}
 		
 	/**
-	 * Compares a process name to a list of blacklisted names read in from a file
+	 * Compares a process name to a list of whitelisted and blacklisted app names
 	 * @param processName Process name at current index of the Set
-	 * @param blacklist array list of the blacklist file
-	 * @return int osEventsScore
 	 */
-	public int compareCurrentProcesses(String processName, ArrayList<String> blacklist) {
-		int score = 100;
+	public void compareCurrentProcesses(String processName) {
 		for(String line : blacklist) {
-			//Stops traversing the blacklist once a match is found (User is determined off task)
 			if(line.equals(processName)) {
-				System.out.println("app detected: " + processName); //For demonstration purposes
-				score = 0;
-				break;
+				System.out.println("Blacklist application detected: " + processName); //For demonstration purposes
+				blProcessCount++;
 			}
 		}
-		return score;
+		for(String line : whitelist) {
+			if(line.equals(processName)) {
+				System.out.println("Whitelist application detected: " + processName); //For demonstration purposes
+				wlProcessCount++;
+			}
+		}
+	}
+	
+	/**
+	 * Calculates a weighted average score given the number of blacklisted and whitelisted
+	 * applications currently running
+	 * @return int total -> weighted average
+	 */
+	public int calculateOSEventsScore() { //Calculations may need further adjustment
+		int total = 0;
+		if(wlProcessCount >= 1 && blProcessCount == 0)
+			total = 50;
+		else if(wlProcessCount == 0 && blProcessCount >= 1)
+			total = -50;
+		else {
+			double temp = (((0.3 * wlProcessCount) - (0.7 * blProcessCount)) / (blProcessCount + wlProcessCount)) * 100;
+			total = (int)temp;
+		}
+		return total;
 	}
 		
 	/**
@@ -111,6 +149,8 @@ public class OSEventsTracker {
 	 * @return int
 	 */
 	public int getOSEventsScore() {
+		if(osEventsScore > 100) {osEventsScore = 100;}
+		else if(osEventsScore < 0) {osEventsScore = 0;}
 		return this.osEventsScore;
 	}
 		
