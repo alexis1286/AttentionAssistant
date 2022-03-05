@@ -20,17 +20,13 @@ public class OSEventsTracker {
 	//ArrayList used to store each line from the whitelist text file
 	ArrayList<String> whitelist;
 	
-	private int blProcessCount;
-	private int wlProcessCount;
 	private int osEventsScore;
 		
 	/**
 	 * ProcessHandling default Constructor
 	 */
 	public OSEventsTracker() {
-		this.blProcessCount = 0;
-		this.wlProcessCount = 0;
-		this.osEventsScore = 50;
+		this.osEventsScore = 100;
 		this.names = new HashSet<>();
 		this.blacklist = new ArrayList<String>();
 		this.whitelist = new ArrayList<String>();
@@ -73,14 +69,17 @@ public class OSEventsTracker {
 				wline = wl_reader.readLine();
 			}
 			
+			int blCount = 0;
+			int wlCount = 0;
 			//Iterate over Set names until a process name is found on the blacklist
 			for(String name : names) {
-				compareCurrentProcesses(name);
+				blCount += getBlacklistCount(name, blacklist);
+				wlCount += getWhitelistCount(name, whitelist);
 			}
-			System.out.println("Blacklist Count: " + blProcessCount); //For demonstration purposes
-			System.out.println("Whitelist Count: " + wlProcessCount); //For demonstration purposes
+			System.out.println("Blacklist Count: " + blCount); //For demonstration purposes
+			System.out.println("Whitelist Count: " + wlCount); //For demonstration purposes
 			
-			osEventsScore += calculateOSEventsScore();
+			osEventsScore = calculateOSEventsScore(blCount, wlCount);
 			System.out.println("OS events score: " + osEventsScore); //For demonstration purposes
 			System.out.println("~ OS_EVENT_TRACKING - FINISH ~"); //For demonstration purposes
 			bl_reader.close();
@@ -108,39 +107,63 @@ public class OSEventsTracker {
 	}
 		
 	/**
-	 * Compares a process name to a list of whitelisted and blacklisted app names and counts each occurance
+	 * Compares a process name to a list of blacklisted app names and counts each occurrence
 	 * @param processName Process name at current index of the Set
+	 * @param blist -> array list of each blacklisted app
+	 * @return int
 	 */
-	public void compareCurrentProcesses(String processName) {
-		for(String line : blacklist) {
+	public int getBlacklistCount(String processName, ArrayList<String> blist) {
+		int count = 0;
+		for(String line : blist) {
 			if(line.equals(processName)) {
 				System.out.println("Blacklist application detected: " + processName); //For demonstration purposes
-				blProcessCount++;
+				count++;
 			}
 		}
-		for(String line : whitelist) {
+		return count;
+	}
+	
+	/**
+	 * Compares a process name to a list of whitelisted app names and counts each occurrence
+	 * @param processName Process name at current index of the Set
+	 * @param wlist -> array list of each whitelisted app
+	 * @return int
+	 */
+	public int getWhitelistCount(String processName, ArrayList<String> wlist) {
+		int count = 0;
+		for(String line : wlist) {
 			if(line.equals(processName)) {
 				System.out.println("Whitelist application detected: " + processName); //For demonstration purposes
-				wlProcessCount++;
+				count++;
 			}
 		}
+		return count;
 	}
 	
 	/**
 	 * Calculates a weighted average score given the number of blacklisted and whitelisted
 	 * applications currently running
-	 * @return int total -> weighted average
+	 * @param blCount -> total blacklist app occurances
+	 * @param wlCount -> total whitelist app occurances
+	 * @return int total
 	 */
-	public int calculateOSEventsScore() { //Calculations may need further adjustment
+	public int calculateOSEventsScore(int blCount, int wlCount) { //Calculations may need further adjustment
 		int total = 0;
-		if(wlProcessCount >= 1 && blProcessCount == 0)
+		if(wlCount >= 1 && blCount == 0)
 			total = 50;
-		else if(wlProcessCount == 0 && blProcessCount >= 1)
+		else if((wlCount == 0 && blCount >= 1) || (wlCount == 0 && blCount == 0))
 			total = -50;
 		else {
-			double temp = (((0.3 * wlProcessCount) - (0.7 * blProcessCount)) / (blProcessCount + wlProcessCount)) * 100;
+			double temp = (((0.3 * wlCount) - (0.7 * blCount)) / (blCount + wlCount)) * 100;
 			total = (int)temp;
 		}
+		total = 50 + total;
+		
+		if(total > 100)
+			total = 100;
+		else if(total < 0)
+			total = 0;
+		
 		return total;
 	}
 		
@@ -149,8 +172,6 @@ public class OSEventsTracker {
 	 * @return int
 	 */
 	public int getOSEventsScore() {
-		if(osEventsScore > 100) {osEventsScore = 100;}
-		else if(osEventsScore < 0) {osEventsScore = 0;}
 		return this.osEventsScore;
 	}
 		
