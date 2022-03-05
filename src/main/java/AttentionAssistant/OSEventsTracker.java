@@ -108,7 +108,7 @@ public class OSEventsTracker {
 	}
 		
 	/**
-	 * Compares a process name to a list of whitelisted and blacklisted app names
+	 * Compares a process name to a list of whitelisted and blacklisted app names and counts each occurance
 	 * @param processName Process name at current index of the Set
 	 */
 	public void compareCurrentProcesses(String processName) {
