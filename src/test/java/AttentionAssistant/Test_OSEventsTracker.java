@@ -70,7 +70,7 @@ public class Test_OSEventsTracker {
 	void OSEventsCalculateOSEventsScore() {
 		int testTotal = 0;
 		testTotal = testEvent.calculateOSEventsScore(1, 2);
-		assertEquals(47, testTotal, "Expected: 47, Actual: " + testTotal);
+		assertEquals(57, testTotal, "Expected: 57, Actual: " + testTotal);
 		testTotal = testEvent.calculateOSEventsScore(0, 2);
 		assertEquals(100, testTotal, "Expected: 100, Actual: " + testTotal);
 		testTotal = testEvent.calculateOSEventsScore(1, 0);
