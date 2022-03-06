@@ -15,11 +15,16 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseInputListener;
+
 /**
  * This class checks the position every #DELAY milliseconds and 
  * informs all registered MouseMotionListeners about position updates.
  */
-public class MouseTracker {
+public class MouseTracker implements Runnable {
 	int mouseScore;
 	
 	/**
@@ -60,7 +65,17 @@ public class MouseTracker {
 	 * Start Tracking Mouse
 	 */
 	public void startTracking() {
-		//update mouseScore every second
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
  }
