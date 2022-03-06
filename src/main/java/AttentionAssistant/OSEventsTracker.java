@@ -145,26 +145,13 @@ public class OSEventsTracker {
 	 * applications currently running
 	 * @param blCount -> total blacklist app occurances
 	 * @param wlCount -> total whitelist app occurances
-	 * @return int total
+	 * @return int
 	 */
 	public int calculateOSEventsScore(int blCount, int wlCount) { //Calculations may need further adjustment
-		int total = 0;
-		if(wlCount >= 1 && blCount == 0)
-			total = 50;
-		else if((wlCount == 0 && blCount >= 1) || (wlCount == 0 && blCount == 0))
-			total = -50;
-		else {
-			double temp = (((0.3 * wlCount) - (0.7 * blCount)) / (blCount + wlCount)) * 100;
-			total = (int)temp;
-		}
-		total = 50 + total;
-		
-		if(total > 100)
-			total = 100;
-		else if(total < 0)
-			total = 0;
-		
-		return total;
+		if(wlCount == 0)
+			return 0;
+		float weight = 3.00f;
+		return (int)(blCount == 0 ? 100 : Math.min(100, (wlCount / (blCount * weight)) * 100));
 	}
 		
 	/**
