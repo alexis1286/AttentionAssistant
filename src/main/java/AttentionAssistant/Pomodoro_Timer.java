@@ -178,14 +178,29 @@ public class Pomodoro_Timer
 	
 	private JPanel timerPanel(JFrame frame) {
 		JPanel panel = new JPanel();
-		time.setBounds(130,80, 300, 300);
+		panel.setBackground(aa_grey);
+		
+		JMenuBar title_panel = new JMenuBar();
+		//title_panel.setLayout(new FlowLayout(FlowLayout.CENTER));	
+		//title_panel.setBackground(aa_grey);
+	
+
+		//JLabel title = new JLabel("Task");
+	//	title.setForeground(Color.white);
+	//	title.setFont(new Font("Serif", Font.BOLD, 20));
+		
+		
+		JPanel timerpanel = new JPanel();
+		timerpanel.setBackground(aa_grey);
+		
+		//time.setBounds(130,80, 300, 300);
 		time.setForeground(Color.white);
 		time.setFont(new Font("Dosis SemiBold",Font.BOLD,50));
-		time.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.add(time);
+		timerpanel.add(time);
 		
-		
-		startbut.setBounds(60,400, 120, 40);
+		JPanel buttonpanel = new JPanel();
+		buttonpanel.setBackground(aa_grey);
+		//startbut.setBounds(60,400, 120, 40);
 		startbut.setBorderPainted(false);
 		startbut.setBackground(aa_purple);
 		startbut.setForeground(Color.WHITE);
@@ -194,13 +209,13 @@ public class Pomodoro_Timer
         	public void actionPerformed(ActionEvent e) {
 
     		
-    			JButton buttonPressed = (JButton) e.getSource();
-    			if(lastButtonPressed == buttonPressed)
-    			{
-    				JFrame frame = new JFrame();
-    				JOptionPane.showMessageDialog(frame, "Please do not push the same button twice.");
-    			}
-    			else {
+//    			JButton buttonPressed = (JButton) e.getSource();
+//    			if(lastButtonPressed == buttonPressed)
+//    			{
+//    				JFrame frame = new JFrame();
+//    				JOptionPane.showMessageDialog(frame, "Please do not push the same button twice.");
+//    			}
+//    			else {
 
         			if(e.getSource()==startbut) {
         				
@@ -212,19 +227,17 @@ public class Pomodoro_Timer
         				}
         		
         			}	
-    			}
-    			lastButtonPressed = buttonPressed;
+//    			}
+//    			lastButtonPressed = buttonPressed;
     			//TODO reset to null as one of the reset functions
         }});
-		frame.add(startbut);
+		buttonpanel.add(startbut);
 
-		pausebut.setBounds(225,400, 120, 40);
+		//pausebut.setBounds(225,400, 120, 40);
 		pausebut.setBorderPainted(false);
 		pausebut.setBackground(aa_purple);
 		pausebut.setForeground(Color.WHITE);
 		pausebut.setFont(new Font("San Francisco", Font.BOLD, 15));
-		frame.add(pausebut);
-		
 		pausebut.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		JButton buttonPressed = (JButton) e.getSource();
@@ -253,8 +266,9 @@ public class Pomodoro_Timer
         		lastButtonPressed = buttonPressed;
         		
         }});
+		buttonpanel.add(pausebut);
 		
-		endbut.setBounds(385,400, 120, 40);
+		//endbut.setBounds(385,400, 120, 40);
 		endbut.setBorderPainted(false);
 		endbut.setBackground(aa_purple);
 		endbut.setForeground(Color.WHITE);
@@ -292,27 +306,37 @@ public class Pomodoro_Timer
     			
         		
         }});
-		frame.add(endbut);
+		buttonpanel.add(endbut);
 		
-		
-		c.setBounds(120,140, 300, 300);
+		JPanel timerwordpanel = new JPanel();
+		timerwordpanel.setBackground(aa_grey);
+		//c.setBounds(120,140, 300, 300);
 		c.setForeground(Color.white);
 		c.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		c.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.add(c);
+		//c.setHorizontalAlignment(SwingConstants.CENTER);
+		timerwordpanel.add(c);
 
-		b.setBounds(120,140, 300, 300);
+		//b.setBounds(120,140, 300, 300);
 		b.setForeground(Color.white);
 		b.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		b.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.add(b);
+		//b.setHorizontalAlignment(SwingConstants.CENTER);
+		timerwordpanel.add(b);
 		
 		c.setVisible(false);
 		b.setVisible(false);
 		
-		//set layout of panel so components display vertically
-		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-		panel.setBackground(aa_grey);
+		//FIX THIS
+		//title_panel.setLayout(new BoxLayout(title_panel, BoxLayout.Y_AXIS));
+		//title_panel.add(title);
+		//title_panel.add(Box.createRigidArea(new Dimension(200, 100)));
+		//buttonpanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//buttonpanel.setMaximumSize(new Dimension(400, 100));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.add(Box.createRigidArea(new Dimension(400,200)));
+		panel.add(title_panel);
+		panel.add(timerpanel);
+		panel.add(timerwordpanel);
+		panel.add(buttonpanel);
 		return panel;
 	}
 	
@@ -378,11 +402,7 @@ public class Pomodoro_Timer
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	public void MainTimer(JFrame frame) {
-
-		
-			
-		
-		t = new Timer(1000, new ActionListener() {
+	t = new Timer(1000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -540,54 +560,26 @@ public class Pomodoro_Timer
 			@Override
 			public void run() {
 				counter = 1;
-				JMenuBar title_panel = new JMenuBar();
-		        title_panel.setBorder(line);
-		        //aligns buttons in title panel from right -> left
-		        title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		        //makes title panel background grey
-		        title_panel.setBackground(aa_grey);
-		        //creates border and sets to purple
-		        title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-		        //creates label 
-		        JLabel title = new JLabel("Attention Assistant Pomodoro Timer");
-		        //makes font color white
-		        title.setForeground(Color.white);
-		        //sets font, size, and bold
-		        title.setFont(new Font("Serif", Font.BOLD, 14));
-		        
 				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
 				//sets window width and height
-				frame.setPreferredSize(new Dimension(width, height));
-				/*
-				 * allows drag and drop of frame
-				 */
-				title_panel.addMouseMotionListener(new MouseMotionAdapter() {
-					@Override
-					public void mouseDragged(MouseEvent e) {
-						frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
-					}
-				});
 				
-				title_panel.addMouseListener(new MouseAdapter(){
-					@Override 
-					public void mousePressed(MouseEvent e) {
-						mouseX = e.getX();
-						mouseY = e.getY();
-					}
-				});
-				 JPanel panel = new JPanel();
+		
+				JPanel panel = new JPanel();
+				//panel.setBounds(1000, 1000, width, height);
+				panel.setBackground(aa_grey);
 				//build title panel
 				JPanel titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
 				//build table panel
 				icon_panel = timerPanel(frame);
-				icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 			    panel.add("PT", icon_panel);
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
 				frame.getContentPane().add(panel,BorderLayout.CENTER);
-				panel.setBackground(aa_grey);
+				frame.setPreferredSize(new Dimension(width, height)); 
+
 				frame.pack();
 				frame.setVisible(true);
 				frame.setResizable(true);
@@ -606,7 +598,7 @@ public class Pomodoro_Timer
 	public void refresh(Settings settings){
 		int maintime;
 		int breaktime;
-		
+		//TODO stop the timer and reset everything 
 		maintime = settings.getWorkPeriod();
 		this.min = maintime;
 		initalmin = min;
