@@ -62,6 +62,7 @@ public class DataBase {
    			 "name TEXT, " +
    			 "dueDate DATETIME, " +
    			 "priority BOOLEAN)";
+//		 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
     	/**
     	 * Set up for Table HappyThoughtButton
@@ -222,8 +223,8 @@ public class DataBase {
         ds.setConfig(sqlCon);
     	String query1 = "INSERT INTO user " +
     			"( username, password ) Values ( '" +
-    			user.getUsername() + "', '" +
-    			user.getPassword() + "')";
+    			user.getUsername().replaceAll("'", "''") + "', '" +
+    			user.getPassword().replaceAll("'", "''") + "')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );
@@ -243,8 +244,8 @@ public class DataBase {
     	sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
 		String query1 = "UPDATE user " +
-				"SET username = '" + user.getUsername() +
-        		"', password = '" + user.getPassword() +
+				"SET username = '" + user.getUsername().replaceAll("'", "''") +
+        		"', password = '" + user.getPassword().replaceAll("'", "''") +
         		"' WHERE userID = '" + user.getUserID() + "'";
         try ( Connection conn = ds.getConnection();
         	Statement stmt = conn.createStatement(); ) {
@@ -312,7 +313,7 @@ public class DataBase {
     	User_Account tempuser= new User_Account();
     	sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
-    	String query1 = "SELECT * FROM user WHERE username = '"+ username + "' AND password = '" + password + "'";
+    	String query1 = "SELECT * FROM user WHERE username = '"+ username.replaceAll("'", "''") + "' AND password = '" + password.replaceAll("'", "''") + "'";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    ResultSet rs = stmt.executeQuery( query1 );
@@ -363,8 +364,8 @@ public class DataBase {
         ds.setConfig(sqlCon);
 		String query1 = "INSERT INTO parent " +
              "( username, password ) Values ( '" +
-             parent.getUsername() + "', '" +
-             parent.getPassword() + "')";
+             parent.getUsername().replaceAll("'", "''") + "', '" +
+             parent.getPassword().replaceAll("'", "''") + "')";
         try ( Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement(); ) {
              int rv = stmt.executeUpdate( query1 );
@@ -384,8 +385,8 @@ public class DataBase {
 		sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
 		String query1 = "UPDATE parent " +
-				"SET username = '" + parent.getUsername() +
-                "', password = '" + parent.getPassword() +
+				"SET username = '" + parent.getUsername().replaceAll("'", "''") +
+                "', password = '" + parent.getPassword().replaceAll("'", "''") +
                 "' WHERE parentID = '" + parent.getParentID() + "'";
         try ( Connection conn = ds.getConnection();
         		Statement stmt = conn.createStatement(); ) {
@@ -452,7 +453,7 @@ public class DataBase {
     	Parent_Account tempparent= new Parent_Account();
     	sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
-    	String query1 = "SELECT * FROM parent WHERE username = '"+ username + "' AND password = '" + password + "'";
+    	String query1 = "SELECT * FROM parent WHERE username = '"+ username.replaceAll("'", "''") + "' AND password = '" + password.replaceAll("'", "''") + "'";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    ResultSet rs = stmt.executeQuery( query1 );
@@ -504,10 +505,10 @@ public class DataBase {
     	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
     	String query1 = "INSERT INTO task " +
     			"( description, observable, status, name, dueDate, priority ) Values ( '" +
-    			task.getDescription() + "', '" +
+    			task.getDescription().replaceAll("'", "''") + "', '" +
     			task.getObservable() + "', '" +
-    			task.getStatus().toString() + "', '" +
-    			task.getTaskName() + "', '" +
+    			task.getStatus().toString().replaceAll("'", "''") + "', '" +
+    			task.getTaskName().replaceAll("'", "''") + "', '" +
     			DateTime + "', '" +
     			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
@@ -533,10 +534,10 @@ public class DataBase {
     	String query1 = "INSERT INTO task " +
     			"(fk_userID, description, observable, status, name, dueDate, priority ) Values ( '" +
     			userID + "', '" +
-    			task.getDescription() + "', '" +
+    			task.getDescription().replaceAll("'", "''") + "', '" +
     			task.getObservable() + "', '" +
-    			task.getStatus().toString() + "', '" +
-    			task.getTaskName() + "', '" +
+    			task.getStatus().toString().replaceAll("'", "''") + "', '" +
+    			task.getTaskName().replaceAll("'", "''") + "', '" +
     			DateTime + "', '" +
     			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
@@ -560,10 +561,10 @@ public class DataBase {
             ds.setConfig(sqlCon);
         	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
         	String query1 = "UPDATE task " +
-        			"SET description = '" + task.getDescription() + 
+        			"SET description = '" + task.getDescription().replaceAll("'", "''") + 
         			"', observable = '" + task.getObservable() + 
-        			"', status = '" + task.getStatus().toString() +
-        			"', name = '" + task.getTaskName() +
+        			"', status = '" + task.getStatus().toString().replaceAll("'", "''") +
+        			"', name = '" + task.getTaskName().replaceAll("'", "''") +
         			"', dueDate = '" + DateTime +
         			"', priority = '" + task.getPriority() +
         			"' WHERE taskID = '" + task.getTaskID() + "'";
@@ -745,7 +746,7 @@ public class DataBase {
         	String query1 = "INSERT INTO happy_thought_button " +
         			"(fk_userID, media_ID_Tag, flagged) Values ( '" +
         			userID + "', '" +
-        			hTB.getMedia_ID_Tag() + "', '" +
+        			hTB.getMedia_ID_Tag().replaceAll("'", "''") + "', '" +
         			hTB.getFlagged() + "')";
 //        			DateTime + "')";
         	try ( Connection conn = ds.getConnection();
@@ -769,7 +770,7 @@ public class DataBase {
                 ds.setConfig(sqlCon);
 //            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
             	String query1 = "UPDATE happy_thought_button " +
-            			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag() + 
+            			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag().replaceAll("'", "''") + 
             			"', flagged = '" + hTB.getFlagged() + 
 //            			"', dT_Executed = '" + DateTime + 
             			"' WHERE hTBID = '" + hTB.getHTBID() + "'";
@@ -1044,7 +1045,7 @@ public class DataBase {
                 		    blankObserver.setDTGathered(date1);
                 		    ObserversOnList.add(blankObserver);
                 		    }
-                		    System.out.println( "SelectAllTasks() returned " + rs );
+                		    System.out.println( "SelectAllObservers() returned " + rs );
                 		} catch ( SQLException e ) {
                 			e.printStackTrace();
                 		}
@@ -1093,8 +1094,8 @@ public class DataBase {
                 			settings.getAvatarIsActive() + "', '" +
                 			settings.getTextIsActive() + "', '" +
                 			settings.getAudioIsActive() + "', '" +
-                			settings.getAvatarFilePath() + "', '" +
-                			settings.getAudioFilePath() + "', '" +
+                			settings.getAvatarFilePath().replaceAll("'", "''") + "', '" +
+                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
                 			settings.getAlwaysOnScreen() + "', '" +
                 			settings.getAvatarSize() + "', '" +
                 			settings.getPomodoroIsActive() + "', '" +
@@ -1145,8 +1146,8 @@ public class DataBase {
                 			settings.getAvatarIsActive() + "', '" +
                 			settings.getTextIsActive() + "', '" +
                 			settings.getAudioIsActive() + "', '" +
-                			settings.getAvatarFilePath() + "', '" +
-                			settings.getAudioFilePath() + "', '" +
+                			settings.getAvatarFilePath().replaceAll("'", "''") + "', '" +
+                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
                 			settings.getAlwaysOnScreen() + "', '" +
                 			settings.getAvatarSize() + "', '" +
                 			settings.getPomodoroIsActive() + "', '" +
@@ -1195,8 +1196,8 @@ public class DataBase {
                     			"', avatarIsActive = '" + settings.getAvatarIsActive() + 
                     			"', textIsActive = '" + settings.getTextIsActive() + 
                     			"', audioIsActive = '" + settings.getAudioIsActive() + 
-                    			"', avatarFilePath = '" + settings.getAvatarFilePath() + 
-                    			"', audioFilePath = '" + settings.getAudioFilePath() + 
+                    			"', avatarFilePath = '" + settings.getAvatarFilePath().replaceAll("'", "''") + 
+                    			"', audioFilePath = '" + settings.getAudioFilePath().replaceAll("'", "''") + 
                     			"', alwaysOnScreen = '" + settings.getAlwaysOnScreen() + 
                     			"', avatarSize = '" + settings.getAvatarSize() + 
                     			"', pomodoroIsActive = '" + settings.getPomodoroIsActive() + 
@@ -1246,11 +1247,11 @@ public class DataBase {
                      * @param int
                      * @return Settings
                      */
-                    public Settings SelectSettings(int settingsID) {
+                    public Settings SelectSettings(int userID) {
                 		sqlCon.enforceForeignKeys(true);
                         ds.setConfig(sqlCon);
                     	Settings settings1 = new Settings();
-                    	String query1 = "SELECT * FROM settings WHERE settingsID = '" + settingsID + "'";
+                    	String query1 = "SELECT * FROM settings WHERE fk_userID = '" + userID + "'";
                     	try ( Connection conn = ds.getConnection();
                     		    Statement stmt = conn.createStatement(); ) {
                     		    ResultSet rs = stmt.executeQuery( query1 );
@@ -1425,7 +1426,7 @@ public class DataBase {
    	String query1 = "INSERT INTO notification " +
    			"( fk_userID, type, ignored, dT_Notification) Values ( '" +
    			userID + "', '" +
-   			notification.getType() + "', '" +
+   			notification.getType().replaceAll("'", "''") + "', '" +
    			notification.getIgnored() + "', '" +
    			DateTime + "')"; 
    	try ( Connection conn = ds.getConnection();
@@ -1450,7 +1451,7 @@ public class DataBase {
         ds.setConfig(sqlCon);
         String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
         String query1 = "UPDATE notification " +
-        "SET type = '" + notification.getType() + 
+        "SET type = '" + notification.getType().replaceAll("'", "''") + 
         "', ignored = '" + notification.getIgnored() + 
         "', dT_Notification = '" + DateTime + 
         "' WHERE notificationID = '" + notification.getNotificationID() + "'";
@@ -1583,7 +1584,7 @@ public class DataBase {
    	sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
    	String query1 = "INSERT INTO event_Type " +
-   			"(name) Values ( '" + Event_Name + "')";
+   			"(name) Values ( '" + Event_Name.replaceAll("'", "''") + "')";
    	try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
    		    int rv = stmt.executeUpdate( query1 );
@@ -1605,7 +1606,7 @@ public class DataBase {
 	int event_TypeID=0; 
    	sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
-		String query1 = "SELECT * FROM event_Type WHERE name = '" + Event_Name + "'";
+		String query1 = "SELECT * FROM event_Type WHERE name = '" + Event_Name.replaceAll("'", "''") + "'";
    	try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
    		    ResultSet rs = stmt.executeQuery( query1 );
@@ -1798,7 +1799,7 @@ public class DataBase {
    }
 
    /**
-    * Primarily used for JUNIT testing, deletes the event_Type table
+    * Primarily used for JUNIT testing, deletes the FTS_Colors table
     */
    public void DeleteAllFTS_Colors() {
 	   String query1 = "DROP TABLE IF EXISTS 'fts_Color'";

@@ -318,13 +318,12 @@ public class Test_DataBase {
     @Order(12)
     @DisplayName("<DataBase> DatabaseAddNewTask")
     void DatabaseAddNewTask() {
-//    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
-//    	UpdatedUser.setUserID(1);
-    	db.AddTask(nonDefaultTask);
-    	db.AddTask(nonDefaultTask);
-    	db.AddTask(nonDefaultTask);
-    	db.AddTask(nonDefaultTask);
-//    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
+    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
+    	UpdatedUser.setUserID(1);
+    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
+    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
+    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
+    	db.AddTask(nonDefaultTask, UpdatedUser.getUserID());
     }
 
     @Test
@@ -386,8 +385,8 @@ public class Test_DataBase {
     @Order(16)
     @DisplayName("<DataBase> DatabaseSelectAllTasks")
     void DatabaseSelectAllTasks() {
-//    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
-//    	UpdatedUser.setUserID(1);
+    	User_Account UpdatedUser = new User_Account(nonDefaultUser);
+    	UpdatedUser.setUserID(1);
 
     	ArrayList<Task> test_task_List = new ArrayList<Task>();
     	ArrayList<Task> test_database_task_List = new ArrayList<Task>();
@@ -412,9 +411,7 @@ public class Test_DataBase {
     	test_task_List.add(nonDefaultAddedTask);
     	test_task_List.add(UpdatedTask);
     	
-    	test_database_task_List= db.SelectAllTasks();
-    	
-//    	test_database_task_List= db.SelectAllTasks(UpdatedUser.getUserID());
+    	test_database_task_List= db.SelectAllTasks(UpdatedUser.getUserID());
   
     	for (int i =0; i< test_database_task_List.size(); i++) {        
     		assertEquals(test_task_List.get(i).toString(), test_database_task_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_task_List.get(i).toString() + " but instead returned: " + test_database_task_List.get(i).toString());
@@ -543,6 +540,7 @@ public class Test_DataBase {
     	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
     	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
     	db.AddObserver(nonDefaultObserver, ForObserver.getTaskID());
+    
     }
 
     @Test
@@ -638,11 +636,10 @@ public class Test_DataBase {
     void DatabaseAddNewSettings() {
     	User_Account UpdatedUser = new User_Account(nonDefaultUser);
     	UpdatedUser.setUserID(1);
-        db.AddSettings(nonDefaultSettings);
-        db.AddSettings(nonDefaultSettings);
-        db.AddSettings(nonDefaultSettings);
-        db.AddSettings(nonDefaultSettings);
-//        db.AddSettings(nonDefaultSettings, UpdatedUser.getUserID());
+        db.AddSettings(nonDefaultSettings, UpdatedUser.getUserID());
+        db.AddSettings(nonDefaultSettings, 2);
+        db.AddSettings(nonDefaultSettings, 3);
+        db.AddSettings(nonDefaultSettings, 4);
     }
     
     @Test
@@ -694,6 +691,14 @@ public class Test_DataBase {
         assertEquals("I am a selected Avatar File Path", selectedSettings2.getAvatarFilePath(), "selectedSettings2 Avatar File Path should be set to \"I am a selected Avatar File Path\" instead returned: " 
     			+ selectedSettings2.getAvatarFilePath());       
     }
+
+    /**
+    ***************** END OF TEST SETTINGS CRUD *****************
+    */
+    
+    /**
+    ***************** START OF TEST LINKING ACCOUNTS CRUD *****************
+    */
 
     @Test
     @Order(31)
@@ -774,7 +779,7 @@ public class Test_DataBase {
     }
     
     /**
-    ***************** END OF TEST SETTINGS CRUD *****************
+    ***************** END OF TEST LINKING ACCOUNTS CRUD *****************
     */
 
     /**
