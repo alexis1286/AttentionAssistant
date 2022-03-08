@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.apache.commons.lang3.StringUtils;
 
 public class InternetTracker {
 	
