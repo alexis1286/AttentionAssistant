@@ -24,8 +24,9 @@ import org.jnativehook.mouse.NativeMouseInputListener;
  * This class checks the position every #DELAY milliseconds and 
  * informs all registered MouseMotionListeners about position updates.
  */
-public class MouseTracker implements Runnable {
+public class MouseTracker implements Runnable, NativeMouseInputListener {
 	int mouseScore;
+	int currentMovementScore;
 	
 	/**
 	 * Instantiating empty MouseTracker object
@@ -67,15 +68,59 @@ public class MouseTracker implements Runnable {
 	public void startTracking() {
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
-			e.printStackTrace();
+		} catch (NativeHookException ex) {
+			System.err.println("There was a problem registering the native hook.");
+			System.err.println(ex.getMessage());
+			System.exit(1);
 		}
+		
+		// Construct the example object.
+		MouseTracker mouseTracker = new MouseTracker();
+
+		// Add the appropriate listeners.
+		GlobalScreen.addNativeMouseListener(mouseTracker);
+		GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void nativeMouseClicked(NativeMouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.paramString());
+		currentMovementScore++;
+	}
+
+	@Override
+	public void nativeMousePressed(NativeMouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.paramString());
+		currentMovementScore++;
+	}
+
+	@Override
+	public void nativeMouseReleased(NativeMouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.paramString());
+		currentMovementScore++;
+	}
+
+	@Override
+	public void nativeMouseMoved(NativeMouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.paramString());
+		currentMovementScore++;
+	}
+
+	@Override
+	public void nativeMouseDragged(NativeMouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.paramString());
+		currentMovementScore++;
 	}
 	
  }
