@@ -26,7 +26,8 @@ import org.jnativehook.mouse.NativeMouseInputListener;
  */
 public class MouseTracker implements Runnable, NativeMouseInputListener {
 	int mouseScore;
-	int currentMovementScore;
+	int currentMovementScore = 1;
+	int lastMovementScore = 1;
 	
 	/**
 	 * Instantiating empty MouseTracker object
@@ -51,6 +52,27 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	 * @return int
 	 */
 	public int getMouseScore() {
+		
+		//Calculating a tempt 100 point score
+		int temptScore = 100 * (currentMovementScore - lastMovementScore)/lastMovementScore;
+		
+		//Ensuring that the tempt score is not above 100
+		if(temptScore < 100) {
+			mouseScore = temptScore;
+		} else {
+			mouseScore = 100;
+		}
+		
+		//Updating the lastMovementScore to the currentMovementScore
+		//Reseting the lastMovementScore and currentMovementScore before they get to close to the int limit size
+		if(currentMovementScore < 1147483647) {
+			lastMovementScore = currentMovementScore;
+		} else {
+			lastMovementScore = 1;
+			currentMovementScore = 1;
+		}
+		
+		
 		return this.mouseScore;
 	}
 
@@ -93,20 +115,23 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		// TODO Auto-generated method stub
 		System.out.println(e.paramString());
 		currentMovementScore++;
+		System.out.println("current score = " + currentMovementScore);
 	}
 
 	@Override
 	public void nativeMousePressed(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println(e.paramString());
-		currentMovementScore++;
+		//currentMovementScore++;
+		System.out.println("current score = " + currentMovementScore);
 	}
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println(e.paramString());
-		currentMovementScore++;
+		//currentMovementScore++;
+		System.out.println("current score = " + currentMovementScore);
 	}
 
 	@Override
@@ -114,13 +139,15 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		// TODO Auto-generated method stub
 		System.out.println(e.paramString());
 		currentMovementScore++;
+		System.out.println("current score = " + currentMovementScore);
 	}
 
 	@Override
 	public void nativeMouseDragged(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println(e.paramString());
-		currentMovementScore++;
+		//currentMovementScore++;
+		System.out.println("current score = " + currentMovementScore);
 	}
 	
  }

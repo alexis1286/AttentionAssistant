@@ -29,6 +29,9 @@ public class AttentionAssistantDriver {
 		Observer testObserver = new Observer();
 		Task testTask = new Task();
 		
+		MouseTracker testMouse = new MouseTracker();
+		//testMouse.startTracking();
+		
 		testObserver.keywordsGenerator(testTask);
 		
 	  }
