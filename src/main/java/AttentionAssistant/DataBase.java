@@ -61,6 +61,8 @@ public class DataBase {
    			 "status TEXT, " + 
    			 "name TEXT, " +
    			 "dueDate DATETIME, " +
+   			 "completedDate DATETIME, " +
+   			 "addedDate DATETIME, " +
    			 "priority BOOLEAN)";
 //		 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
@@ -530,15 +532,18 @@ public class DataBase {
     public void AddTask(Task task, int userID) {
 		sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
+        Date dateAdded= new Date(System.currentTimeMillis());
     	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+    	String DateTimeAdded = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dateAdded);
     	String query1 = "INSERT INTO task " +
-    			"(fk_userID, description, observable, status, name, dueDate, priority ) Values ( '" +
+    			"(fk_userID, description, observable, status, name, dueDate, addedDate, priority ) Values ( '" +
     			userID + "', '" +
     			task.getDescription().replaceAll("'", "''") + "', '" +
     			task.getObservable() + "', '" +
     			task.getStatus().toString().replaceAll("'", "''") + "', '" +
     			task.getTaskName().replaceAll("'", "''") + "', '" +
-    			DateTime + "', '" +
+    			DateTime.replaceAll("'", "''") + "', '" +
+    			DateTimeAdded.replaceAll("'", "''") + "', '" +
     			task.getPriority() +"')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
@@ -1419,7 +1424,7 @@ public class DataBase {
     * Add a new Notification_System to the database.
     * @param Notification_System, User_Account
     */
-   public void AddNotification(Notification_System notification, int userID) {
+   public void AddNotification(Notification notification, int userID) {
    	sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
@@ -1446,7 +1451,7 @@ public class DataBase {
     * 
     * @param Notification_System
     */
-   public void UpdateNotification(Notification_System notification) {
+   public void UpdateNotification(Notification notification) {
 	    sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
         String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(notification.getDT_Notification());
@@ -1492,10 +1497,10 @@ public class DataBase {
     * @param int
     * @return Notification_System
     */
-   public Notification_System SelectNotification(int notificationID) {
+   public Notification SelectNotification(int notificationID) {
 		sqlCon.enforceForeignKeys(true);
 		ds.setConfig(sqlCon);
-		Notification_System notification1 = new Notification_System();
+		Notification notification1 = new Notification();
 		String query1 = "SELECT * FROM notification WHERE notificationID = '" + notificationID + "'";
 		try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
@@ -1538,17 +1543,17 @@ public class DataBase {
     * @param int
     * @return ArrayList<Notification_System>
     */
-   public ArrayList<Notification_System> SelectAllNotifications(int userID){
+   public ArrayList<Notification> SelectAllNotifications(int userID){
 		sqlCon.enforceForeignKeys(true);
        ds.setConfig(sqlCon);
-   	ArrayList<Notification_System> notificationsOnList = new ArrayList<Notification_System>();
-   	Notification_System blankNotification = new Notification_System();
+   	ArrayList<Notification> notificationsOnList = new ArrayList<Notification>();
+   	Notification blankNotification = new Notification();
    	String query1 = "SELECT * FROM notification WHERE fk_userID = '" + userID + "'";
    	try ( Connection conn = ds.getConnection();
    		    Statement stmt = conn.createStatement(); ) {
    		    ResultSet rs = stmt.executeQuery( query1 );
    		    while (rs.next()){
-   		    blankNotification = new Notification_System();
+   		    blankNotification = new Notification();
    		    blankNotification.setNotificationID(rs.getInt("notificationID"));
    		    blankNotification.setType(rs.getString("type"));
    		    blankNotification.setIgnored(Boolean.valueOf(rs.getString("ignored")));

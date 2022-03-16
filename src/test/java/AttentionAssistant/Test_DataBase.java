@@ -27,7 +27,7 @@ public class Test_DataBase {
 	Settings nonDefaultSettings;
 	User_Account nonDefaultUser;
 	Parent_Account nonDefaultParent;
-	Notification_System nonDefaultNotify;
+	Notification nonDefaultNotify;
 	DataBase db = new DataBase();
 	
 	
@@ -133,7 +133,7 @@ public class Test_DataBase {
 	boolean testIgnored= true;
 	Date testDT_Notification = new Date(1220227200L * 1000);
 
-	nonDefaultNotify= new Notification_System(testNotificationID, testType, testIgnored, testDT_Notification);
+	nonDefaultNotify= new Notification(testNotificationID, testType, testIgnored, testDT_Notification);
 
 	db.DatabaseSetUp();	
 	}
@@ -808,7 +808,7 @@ public class Test_DataBase {
     @Order(35)
     @DisplayName("<DataBase> DatabaseUpdateNotification_System")
     void DatabaseUpdateNotification() {
-    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	Notification UpdatedNotify= new Notification(nonDefaultNotify);
     	UpdatedNotify.setNotificationID(1);
     	UpdatedNotify.setType("I am a updated type");
     	UpdatedNotify.setIgnored(false);
@@ -819,7 +819,7 @@ public class Test_DataBase {
     @Order(36)
     @DisplayName("<DataBase> DatabaseDeleteNotification_System")
     void DatabaseDeleteNotification() {
-    	Notification_System DeletedNotify= new Notification_System(nonDefaultNotify);
+    	Notification DeletedNotify= new Notification(nonDefaultNotify);
     	DeletedNotify.setNotificationID(3);
     	DeletedNotify.setType("I am supposed to be deleted");
     	DeletedNotify.setIgnored(false);
@@ -831,12 +831,12 @@ public class Test_DataBase {
     @Order(37)
     @DisplayName("<DataBase> DatabaseSelectNotification")
     void DatabaseSelectNotification() {
-    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	Notification SelectedNotify= new Notification(nonDefaultNotify);
     	SelectedNotify.setNotificationID(2);
     	SelectedNotify.setType("I am a Selected Type");
     	SelectedNotify.setIgnored(true);
     	db.UpdateNotification(SelectedNotify);
-    	Notification_System selectedNotify2 = new Notification_System();
+    	Notification selectedNotify2 = new Notification();
     	selectedNotify2 = db.SelectNotification(2);
     	String String1 = "Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008";
         assertEquals(String1, selectedNotify2.toString(), "selectedHTB2 should be set to \"Notification ID= 2 Type= I am a Selected Type Ignored= true Date and Time of Notification= Sun Aug 31 20:00:00 EDT 2008\" but instead returned: " + selectedNotify2.toString());
@@ -846,20 +846,20 @@ public class Test_DataBase {
     @Order(38)
     @DisplayName("<DataBase> DatabaseSelectAllNotifications")
     void DatabaseSelectAllNotifications() {
-    	ArrayList<Notification_System> test_Notification_List = new ArrayList<Notification_System>();
-    	ArrayList<Notification_System> test_database_Notification_List = new ArrayList<Notification_System>();
+    	ArrayList<Notification> test_Notification_List = new ArrayList<Notification>();
+    	ArrayList<Notification> test_database_Notification_List = new ArrayList<Notification>();
     	
-    	Notification_System UpdatedNotify= new Notification_System(nonDefaultNotify);
+    	Notification UpdatedNotify= new Notification(nonDefaultNotify);
     	UpdatedNotify.setNotificationID(1);
     	UpdatedNotify.setType("I am a updated type");
     	UpdatedNotify.setIgnored(false);
     
-    	Notification_System SelectedNotify= new Notification_System(nonDefaultNotify);
+    	Notification SelectedNotify= new Notification(nonDefaultNotify);
     	SelectedNotify.setNotificationID(2);
     	SelectedNotify.setType("I am a Selected Type");
     	SelectedNotify.setIgnored(true);
     
-    	Notification_System DefaultNotify= new Notification_System(nonDefaultNotify);
+    	Notification DefaultNotify= new Notification(nonDefaultNotify);
     	DefaultNotify.setNotificationID(4);
 
     	test_Notification_List.add(UpdatedNotify);
