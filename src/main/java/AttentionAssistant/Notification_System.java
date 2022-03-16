@@ -6,126 +6,120 @@ package AttentionAssistant;
 
 import java.util.Date;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+ 
 public class Notification_System {
-
-	/** Variables */
-	private int notificationID;
-	private String type;
-	private boolean ignored;
-	private Date dT_Notification;
-	
-	/**
-	 * Instantiating empty Notification System object
-	 */
-	public Notification_System() {
-	this.notificationID = 0;
-	this.type = "";
-	this.ignored = false;
-	this.dT_Notification = null;
-	}
-
-	/**
-	 * Create a class Notification System with a specified
-	 * NotificationID, type, ignored, dT_Notificaiton
-	 * @param int, String, boolean, Date
-	 */
-	public Notification_System(int notificationID, String type, boolean ignored, Date dT_Notification) {
-		this.notificationID= notificationID;
-		this.type = type;
-		this.ignored = ignored;
-		this.dT_Notification= dT_Notification;
+	//observe runs monitoring every 3 minutes, allows for time tracking 
+	int timeDistracted=0; 
+	int timeFocused=0;
+	Settings settings;
+	private boolean isAudioActive;
+	private boolean isAvatarActive;
+	private String avatarPath;
+	private String audioPath;
+	private int avatarSize;
+	private boolean avatarAlwaysOn;
+	DataBase db;
+	 
+	public Notification_System(){
+		this.timeDistracted = 0;
+		this.timeFocused = 0;
+		this.settings = new Settings();
+		
+		this.isAudioActive = true;
+		this.isAvatarActive = true;
+		this.audioPath = "";
+		this.avatarPath = "avatarSelection/avatar_dino.png";
+		this.avatarSize = 100;
+		this.avatarAlwaysOn = false;
 	}
 	
-	/**
-	 * Instantiating copy constructor for Notification System object
-	 */
-	public Notification_System(Notification_System note) {
-		this.notificationID= note.notificationID;
-		this.type = note.type;
-		this.ignored = note.ignored;
-		this.dT_Notification= note.dT_Notification;
+	public Notification_System(Settings set,DataBase database){
+		this.timeDistracted = 0;
+		this.timeFocused = 0;
+		this.settings = set;
+		this.isAudioActive = set.getAudioIsActive();
+		this.isAvatarActive = set.getAvatarIsActive();
+		this.audioPath = set.getAudioFilePath();
+		this.avatarPath = set.getAvatarFilePath();
+		this.avatarSize = set.getAvatarSize();
+		this.avatarAlwaysOn = set.getAlwaysOnScreen();
+		this.db = database;
 	}
 	
-	/**
-	 * Start of Encapsulation
-	 * 
-	 * Get notificationID
-	 * @return int
-	 */
-	public int getNotificationID() {
-		return this.notificationID;
+	
+	private void displayNotif(String text, String type,int notifID) {
+		JFrame frame = new JFrame();
+		boolean isIgnored=false;
+		Date date = new Date();
+		if(isAudioActive == true) {
+			//audio for notification (based on type of notif?)
+			text = "DING! "+text;
+		}
+		if(isAvatarActive == true) {
+			//display text in speech bubble
+			String avatar = avatarPath;
+			//Display avatar
+			//string to place in text bubble
+			text = text+" (speech bubble)";
+		}else {
+			//display text in text bubble
+			text = text+" (text bubble)";
+		}
+		//display notification, return isIgnored
+		Notification notif = new Notification(1,type,isIgnored,date);
+		db.AddNotification(notif,notifID);
+		JOptionPane.showMessageDialog(frame, text);
 	}
 	
-	/**
-	 * Set notificationID
-	 * @param int
-	 */
-	public void setNotificationID(int notificationID) {
-		this.notificationID = notificationID;
+	
+	public void distracted(int notifID) {
+		String text = "User is distracted, guide back to task";
+		timeDistracted += 3;
+		displayNotif(text, "distracted",notifID);
 	}
 	
-	/**
-	 * Get type
-	 * @return String
-	 */
-	public String getType() {
-		return this.type;
+	
+	public void selfCare(int notifID) {
+		String text = "User needs a break";
+		timeFocused += 3;
+		displayNotif(text,"selfCare",notifID);
 	}
 	
-	/**
-	 * Set type
-	 * @param String
-	 */
-	public void setType(String type) {
-		this.type= type;
+	
+	public void allGood(int notifID) {
+		String text = "User is on task";
+		timeFocused += 3;
+		displayNotif(text,"encourage",notifID);
+		//add words of encouragement?
 	}
 	
-	/**
-	 * Get ignored
-	 * @return boolean
-	 */
-	public boolean getIgnored() {
-		return this.ignored;
+	
+	public void dueDateApproaching(Task task,int notifID) {
+		String text = "Due date approaching for task: " + task.getTaskName();
+		displayNotif(text,"dueDate",notifID);
 	}
 	
-	/**
-	 * Set ignored
-	 * @param boolean
-	 */
-	public void setIgnored(boolean ignored) {
-		this.ignored= ignored;
+	
+	public void taskCompleted(Task task,int notifID) {
+		String text = "Yay! You completed "+task.getTaskName()+", great job!";
+		displayNotif(text,"complete",notifID);
 	}
 	
-	/**
-	 * Get dT_Notification
-	 * @return Date
-	 */
-	public Date getDT_Notification() {
-		return this.dT_Notification;
+	
+	public void breakTime(int notifID) {
+		Task task = new Task();
+		//get non-observable task
+		String text = "It's time to take a break, why not work on "+task.getTaskName()+"?";
+		displayNotif(text,"break",notifID);
 	}
 	
-	/**
-	 * Set dT_Notification
-	 * @param Date
-	 */
-	public void setDT_Notification(Date dT_Notification) {
-		this.dT_Notification = dT_Notification;
+	
+	public void workTime(int notifID) {
+		Task activeTask = new Task();
+		//get active task
+		String text = "It's time to get back on task! "+activeTask.getTaskName()+" is your current goal.";
+		displayNotif(text,"work",notifID);
 	}
-	
-	 /** 
-	   * Display Notification System
-	   * @return String
-	   */
-	@Override
-	public String toString() {
-	 	String notifyString= new String();
-	 	notifyString = "Notification ID= " + this.notificationID +
-	 			" Type= " + this.type +
-	 			" Ignored= " + Boolean.toString(this.ignored) +
-	 			" Date and Time of Notification= " + this.dT_Notification.toString();
-	 			
-	 	return notifyString;
-	 	
-	 }
-	
 }
