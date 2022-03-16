@@ -12,6 +12,7 @@ public class AttentionAssistantDriver {
 	static Free_Thought_Space free_thought_space = new Free_Thought_Space();
 	
 	public static void main(String[] args) throws Exception {
+		int userID = 0;
 		//user login->userID(links db)
 		Nav_Bar navbar = new Nav_Bar(settings);
 		db.DatabaseSetUp();
@@ -20,7 +21,7 @@ public class AttentionAssistantDriver {
 		db.AddSettings(settings);
 		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
 		
-	   	 navbar.run_nav_bar(db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
+	   	 navbar.run_nav_bar(userID,db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
 		
 		/**
 		 * TEST CODE
