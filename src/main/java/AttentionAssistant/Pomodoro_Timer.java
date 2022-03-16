@@ -253,18 +253,15 @@ public class Pomodoro_Timer
     			}
     			else {
 
-        			if(e.getSource()==startbut) {
-        				MainTimerRunning = true;
-        				BreakTimerRunning = false;
+        			if(e.getSource()==startbut) {		
         				paused = false;
-        				if (c.isVisible()) {
+        				if (b.isVisible()  == true) {
         					t.start();
-        					getWorkBreakStatus();
+        		
         				}
         				else {
         				MainTimer();
-        				//getWorkBreakStatus();
-        			
+         	
         				}
         		
         			}	
@@ -454,8 +451,6 @@ public class Pomodoro_Timer
 			paused = false;
 			min = initalmin;
 			breakmin = initalbreak;
-			
-			//getWorkBreakStatus();
 		}
 	
 
