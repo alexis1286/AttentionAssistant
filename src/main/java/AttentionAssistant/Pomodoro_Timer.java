@@ -35,6 +35,7 @@ public class Pomodoro_Timer
 	int initalbreak = 0, initalmin = 0, breakmin =0,min= 0,sec=0;
 	private boolean MainTimerRunning;
 	private boolean BreakTimerRunning;
+	private boolean paused;
 	private boolean pomodoro_active;
 	private JButton lastButtonPressed;  
 	JButton toRefresh;
@@ -62,6 +63,7 @@ public class Pomodoro_Timer
 	public Pomodoro_Timer() {
 		this.MainTimerRunning = false;
 		this.BreakTimerRunning = false;
+		this.paused = false;
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
 	}
@@ -85,7 +87,8 @@ public class Pomodoro_Timer
 	
 	public enum Work_Break {
 		Work,
-		Break
+		Break,
+		Paused
 	}
 	public Work_Break getWorkBreakStatus(){
 		
@@ -99,9 +102,9 @@ public class Pomodoro_Timer
 			System.out.println("Work");
 			return Work_Break.Work;
 		}
-		else if (BreakTimerRunning == false && MainTimerRunning == false){
-			System.out.println("Null");
-			return null;	
+		else if (paused == true){
+			System.out.println("Paused");
+			return Work_Break.Paused;	
 		}
 		else {
 			System.out.println("Null");
@@ -253,17 +256,20 @@ public class Pomodoro_Timer
         			if(e.getSource()==startbut) {
         				MainTimerRunning = true;
         				BreakTimerRunning = false;
-        				if (b.isVisible()) {
+        				paused = false;
+        				if (c.isVisible()) {
         					t.start();
-     
+        					getWorkBreakStatus();
         				}
         				else {
-        				MainTimer(frame);
+        				MainTimer();
+        				//getWorkBreakStatus();
         			
         				}
         		
         			}	
     			}
+    			
     			lastButtonPressed = buttonPressed;
     			//TODO reset to null as one of the reset functions
         }});
@@ -284,6 +290,7 @@ public class Pomodoro_Timer
         		}
        		else {
        			if(e.getSource()==pausebut) {
+       				paused = true;
     				if(t == null) {
     					//TODO inital timer begin pressing pause gives error beacuse min != 0
     					JFrame frame = new JFrame();
@@ -298,13 +305,15 @@ public class Pomodoro_Timer
     					else if (MainTimerRunning  == true) {
     						MainTimerRunning = false;
     						getWorkBreakStatus();
+  
     					}
    
     				}
     				
     			}
        		}
-        		
+       			
+        		paused = false;
         		lastButtonPressed = buttonPressed;
         		
         }});
@@ -328,6 +337,7 @@ public class Pomodoro_Timer
    	    					//TODO inital timer begin pressing pause gives error beacuse min != 0
    	    					JFrame frame = new JFrame();
    	    					JOptionPane.showMessageDialog(frame, "Timer has not begun.");
+   	    					getWorkBreakStatus();
    	    				}
    	    				else {
    	    				t.stop();
@@ -339,6 +349,7 @@ public class Pomodoro_Timer
    	    				b.setVisible(false);
    	    				MainTimerRunning = false;
    	    				BreakTimerRunning = false;
+   	    				paused = false;
    	    				getWorkBreakStatus();
    	    				
    	    				}	
@@ -388,7 +399,7 @@ public class Pomodoro_Timer
 	/**
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
-	public void BreakTimer(JFrame frame) {
+	public void BreakTimer() {
 	
 		t = new Timer(1000, new ActionListener() {
 			
@@ -406,9 +417,8 @@ public class Pomodoro_Timer
 				if(breakmin == 0 && sec==0) {
 					t.stop();
 					b.setVisible(false);
-					MainTimer(frame);
-					min = initalmin;
-					
+					MainTimer();
+					min = initalmin;					
 				
 				}
 				
@@ -427,22 +437,25 @@ public class Pomodoro_Timer
 			}
 			
 		});
-
-		if(min == 0 || breakmin == 0) {
+		if(min == 0 && breakmin == 0) {
 			JFrame errorframe = new JFrame();
 			JOptionPane.showMessageDialog(errorframe, "You have not set your work and break peroids. Please go to settings to enable them.");
 			lastButtonPressed = null;
 			BreakTimerRunning = false;
 			MainTimerRunning = false;
 			b.setVisible(false);
-			getWorkBreakStatus();
+			//getWorkBreakStatus();
 			
 		}else {
 			t.start();
-			b.setVisible(false);
+			b.setVisible(true);
 			BreakTimerRunning = true;
 			MainTimerRunning = false;
-			getWorkBreakStatus();
+			paused = false;
+			min = initalmin;
+			breakmin = initalbreak;
+			
+			//getWorkBreakStatus();
 		}
 	
 
@@ -450,7 +463,7 @@ public class Pomodoro_Timer
 	/**
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
 	 */
-	public void MainTimer(JFrame frame) {
+	public void MainTimer() {
 	t = new Timer(1000, new ActionListener() {
 			
 			@Override
@@ -467,7 +480,8 @@ public class Pomodoro_Timer
 				time.setText(String.valueOf(ddminute+"m:"+ddsecond+"s"));
 				if(min == 0 && sec==0) {
 					MainTimerRunning = false;
-					BreakTimerRunning = true;
+					BreakTimerRunning = false;
+					paused = false;
 					getWorkBreakStatus();
 					t.stop();
 					c.setVisible(false);
@@ -535,7 +549,7 @@ public class Pomodoro_Timer
 											//TODO link priority manager so user can add new task
 									      //deploy priority manager to have user assign a new task
 										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
-											 frame.dispose();
+											System.exit(1);
 										 }else{ //none selected
 										     System.out.println("no option choosen");
 										 }
@@ -547,7 +561,11 @@ public class Pomodoro_Timer
 					
 					 }else if(initaltask==1){ //for no
 						 //break timer repeats; user has not finished inital task. 
-						BreakTimer(frame);
+						BreakTimer();
+						MainTimerRunning = false;
+						BreakTimerRunning = false;
+						paused = false;
+						getWorkBreakStatus();
 					 }else{ //none selected
 					     System.out.println("no option choosen");
 					 }
@@ -568,19 +586,21 @@ public class Pomodoro_Timer
 		});
 
 
-		if(min == 0 || breakmin == 0) {
+		if(min == 0 && breakmin == 0) {
 			JFrame errorframe = new JFrame();
 			JOptionPane.showMessageDialog(errorframe, "You have not set your work and break peroids. Please go to settings to enable them.");
 			lastButtonPressed = null;
 			c.setVisible(false);
 			BreakTimerRunning = false;
 			MainTimerRunning = false;
+			paused = false;
 			getWorkBreakStatus();
 		}else {
 			t.start();
 			c.setVisible(true);
 			BreakTimerRunning = false;
 			MainTimerRunning = true;
+			paused = false;
 			getWorkBreakStatus();
 			
 		}
@@ -669,7 +689,6 @@ public class Pomodoro_Timer
 		}
 		else {
 		toRefresh.doClick();
-		getWorkBreakStatus();
 		}
 	}
 
