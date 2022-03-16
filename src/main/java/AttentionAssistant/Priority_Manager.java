@@ -39,20 +39,17 @@ public class Priority_Manager {
 	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		populateTaskList(db);
-		this.working_task = taskToObserve();
+		this.working_task = taskToObserve(db);
 		observer.monitor(working_task);
 		
 	}
 	
-	private Task taskToObserve() {
-		Task task = new Task();
-		//if active task is stored******************************************
-		//set task = to active task
-		//makes working_task 1st task in sorted list
-		if(Task_List.get(0).getObservable()==false) {
-			task = Task_List.get(0);
-		}else {
-			//make user add observable task**************************************************************************
+	private Task taskToObserve(DataBase db) {
+		Task task = db.SelectAllTasks().get(0);
+		
+		while(task.getObservable()==false) {
+			firstTaskWindow(db);
+			task = db.SelectAllTasks().get(0);
 		}
 		
 		return task;
@@ -598,6 +595,188 @@ public class Priority_Manager {
 		task_window.add(buttons, BorderLayout.PAGE_END);
 		task_window.pack();
 	}
+	
+	
+	/*
+	 * Task Window
+	 * @param Description, Observable, Status
+	 * @return task
+	 */
+	public void firstTaskWindow(DataBase database) {
+		Task task = new Task();
+		//create task window
+		JFrame task_window = new JFrame("Add Task");
+		//pin to top of screen
+		task_window.setAlwaysOnTop(true);
+		//set window background to black
+		task_window.setBackground(Color.black);
+		//remove default title bar
+		task_window.setUndecorated(true);
+		task_window.setVisible(true);
+		
+		//makes custom title panel
+		JPanel title_panel = titlePanel(task_window);
+		
+		//creates panel for task information form
+		JPanel tpane = new JPanel();
+		tpane.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, aa_purple));
+		JPanel buttons = new JPanel();
+		buttons.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
+				
+		//sets up grid to line up labels with text areas
+		GridLayout grid = new GridLayout(0,2);
+		tpane.setLayout(grid);
+		
+		//sets up grid for check boxes
+		GridLayout grid2 = new GridLayout(0,3);
+		buttons.setLayout(grid2);
+		
+		//creates label for task name input
+		JLabel n = new JLabel("   Task: ");
+		n.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		n.setForeground(aa_purple);
+		
+		//creates text area for name input
+		JTextArea name = new JTextArea(task.getTaskName());
+		name.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		name.setBorder(new LineBorder(Color.black,5,false));
+		
+		//creates label for description input
+		JLabel d = new JLabel("   Descrition: (key words, separated by commas (,))");
+		d.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		d.setForeground(aa_purple);
+		
+		//creates text area for description input
+		JTextArea descrpt = new JTextArea(task.getDescription());
+		descrpt.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		descrpt.setBorder(new LineBorder(Color.black,5,false));
+		
+		//creates label for date input
+		JLabel dd = new JLabel("   Due Date: (mm/dd/yyyy)");
+		dd.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		dd.setForeground(aa_purple);
+		
+		//creates text area for date input
+		Format f = new SimpleDateFormat("MM/dd/yyyy");
+		String stringDate = "";
+		JTextArea date = new JTextArea(stringDate);
+		date.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		date.setBorder(new LineBorder(Color.black,5,false));
+		
+		//create check box for if task is to be observed
+		JCheckBox observe = new JCheckBox("observable");
+		observe.setSelected(task.getObservable());
+		observe.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		observe.setForeground(aa_purple);
+		observe.setContentAreaFilled(false);
+		observe.setFocusPainted(false);
+		
+		//create check box for if task is a priority task
+		JCheckBox priority = new JCheckBox("priority");
+		priority.setSelected(task.getPriority());
+		priority.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		priority.setForeground(aa_purple);
+		priority.setContentAreaFilled(false);
+		priority.setFocusPainted(false);
+		
+		//create check box for if task is complete
+		JCheckBox status = new JCheckBox("complete");
+		status.setSelected(false);
+		
+		status.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		status.setForeground(aa_purple);
+		status.setContentAreaFilled(false);
+		status.setFocusPainted(false);
+		
+		Task new_task = new Task();
+		//creates save button, adds task to database and table
+		JButton save = new JButton("add");
+		save.setBackground(aa_grey);
+		save.setForeground(Color.white);
+		save.setFocusPainted(false);
+		save.setBorder(new LineBorder(Color.black, 3, true));
+		save.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		save.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//create task from entered info
+        		String n = name.getText();
+        		new_task.setTaskName(n);
+        		String d = descrpt.getText();
+        		new_task.setDescription(d);
+        		String dd = date.getText();
+        		try {
+					Date due = new SimpleDateFormat("dd/MM/yyyy").parse(dd);
+					new_task.setDueDate(due);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        		if(observe.getSelectedObjects() != null) {
+        			new_task.setObservable(true);
+        		}else {new_task.setObservable(false);}
+        		if(priority.getSelectedObjects()!=null) {
+        			new_task.setPriority(true);
+        		}else {new_task.setPriority(false);}
+        		if(status.getSelectedObjects()!=null) {
+        			new_task.setStatus(TaskStatus.CLOSED);
+        		}else {new_task.setStatus(TaskStatus.OPEN);}
+        		
+    			//adds task to database
+        		database.AddTask(new_task);
+        		task_window.dispose();
+        }});
+		
+		//make cancel button, closes task window without adding
+		JButton cancel = new JButton("cancel");
+		cancel.setBackground(aa_grey);
+		cancel.setForeground(Color.white);
+		cancel.setFocusPainted(false);
+		cancel.setBorder(new LineBorder(Color.black,3,true));
+		cancel.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		cancel.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving info
+        		task_window.dispose();
+        }});
+		
+		//create blank button for spacing (visual only)
+		JButton blank = new JButton();
+		blank.setContentAreaFilled(false);
+		blank.setFocusPainted(false);
+		blank.setBorderPainted(false);
+		
+		//add components to task information panel
+		tpane.add(n);
+		tpane.add(name);
+		tpane.add(d);
+		tpane.add(descrpt);
+		tpane.add(dd);
+		tpane.add(date);
+		//add components to button panel
+		buttons.add(observe);
+		buttons.add(priority);
+		buttons.add(status);
+		buttons.add(blank);
+		buttons.add(save);
+		buttons.add(cancel);
+		
+		//sets location and dimensions of task window
+		int x = (int) ((screen.getWidth() - task_window.getWidth()) /2);
+		int y = (int) ((screen.getHeight() - task_window.getHeight()) /2);
+		task_window.setLocation(x, y);
+		
+		//sets background of panels
+		tpane.setBackground(Color.black);
+		buttons.setBackground(Color.black);
+		buttons.setForeground(Color.white);
+		
+		//add title panel, task information panel, and button panel to window
+		task_window.add(title_panel, BorderLayout.PAGE_START);
+		task_window.add(tpane, BorderLayout.CENTER);
+		task_window.add(buttons, BorderLayout.PAGE_END);
+		task_window.pack();
+	}
+	
 	
 	
 	//****************************************************************************************************************

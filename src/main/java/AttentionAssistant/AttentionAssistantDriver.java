@@ -21,8 +21,12 @@ public class AttentionAssistantDriver {
 		db.AddSettings(settings);
 		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
 		
-	   	 navbar.run_nav_bar(userID,db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
+		while(db.SelectAllTasks().get(0).getObservable() == false) {
+			priority_manager.firstTaskWindow(db);
+		}
 		
+		navbar.run_nav_bar(userID,db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
+	   	 
 		/**
 		 * TEST CODE
 		 * DELETE BEFORE PRODUCTION
