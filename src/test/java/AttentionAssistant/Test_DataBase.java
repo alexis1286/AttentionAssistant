@@ -62,8 +62,9 @@ public class Test_DataBase {
 	int testObserverScore= 100;
 	int testThreshold= 100;
 	Date testDT_Gathered= new Date(1220227200L * 1000);
+	int testEyeMovementScore= 100;
 
-	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
+	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeMovementScore);
 	
 	/**
 	 * Set up for nonDefault Settings 
@@ -416,6 +417,17 @@ public class Test_DataBase {
     	for (int i =0; i< test_database_task_List.size(); i++) {        
     		assertEquals(test_task_List.get(i).toString(), test_database_task_List.get(i).toString(), "test_database_task_List " + i + " should be set to " + test_task_List.get(i).toString() + " but instead returned: " + test_database_task_List.get(i).toString());
         }
+    }
+    
+    @Test
+    @Order(44)
+    @DisplayName("<DataBase> DatabaseGetUserIDFromTask")
+    void DatabaseGetUserIDFromTask() {
+    	Task testUserIDTask= new Task(nonDefaultTask);
+    	testUserIDTask.setTaskID(4);
+    	int testUserID= db.GetUserIDFromTask(testUserIDTask);
+    	assertEquals(1, testUserID, "testUserID should be set to 1, but instead returned: " + testUserID);
+
     }
     /**
     ***************** END OF TEST TASK CRUD *****************
