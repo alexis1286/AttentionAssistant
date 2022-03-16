@@ -84,6 +84,7 @@ public class DataBase {
    			 "observerID INTEGER PRIMARY KEY, " +
    			 "fk_taskID INTEGER, " +
    			 "observerScore INTEGER, " +
+   			 "defaultEyeScore INTEGER, " +
    			 "threshold INTEGER, " +
    			 "dT_Gathered DATETIME, " +
    			 "CONSTRAINT fk_taskID FOREIGN KEY (\"fk_taskID\") REFERENCES \"task\"(\"taskID\") ON DELETE CASCADE)";
@@ -733,6 +734,31 @@ public class DataBase {
         }
         
         /**
+         * Returns the userID from a specific tasak
+         * 
+         * @param task
+         * @return int
+         */
+        public int GetUserIDFromTask(Task task)
+        {
+        	int userID= 0;
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
+        	String query1 = "SELECT * FROM task WHERE taskID = '" + task.getTaskID() + "'";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    userID= rs.getInt("fk_userID");
+        		    System.out.println( "GetUserIDforTask() returned " + rs );
+        		} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);
+            return userID;
+        }
+        
+        /**
         ******* END OF TASK CRUD *******
         */
 
@@ -913,10 +939,11 @@ public class DataBase {
                 ds.setConfig(sqlCon);
             	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(observer.getDTGathered());
             	String query1 = "INSERT INTO observer " +
-            			"( fk_taskID, observerScore, threshold, dT_Gathered) Values ( '" +
+            			"( fk_taskID, observerScore, threshold, defaultEyeScore, dT_Gathered) Values ( '" +
             			taskID + "', '" +
             			observer.getObserverScore() + "', '" +
             			observer.getThreshold() + "', '" +
+            			observer.getDefaultEyeScore() + "', '" +
             			DateTime + "')"; 
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
@@ -943,6 +970,7 @@ public class DataBase {
                 			"SET observerScore = '" + observer.getObserverScore() + 
                 			"', threshold = '" + observer.getThreshold() + 
                 			"', dT_Gathered = '" + DateTime + 
+                			"', defaultEyeScore= '" + observer.getDefaultEyeScore() +
                 			"' WHERE observerID = '" + observer.getObserverID() + "'";
                 	try ( Connection conn = ds.getConnection();
                 		    Statement stmt = conn.createStatement(); ) {
@@ -992,6 +1020,7 @@ public class DataBase {
                 		    observer1.setObserverID(rs.getInt("observerID"));
                 		    observer1.setObserverScore(rs.getInt("observerScore"));
                 		    observer1.setThreshold(rs.getInt("threshold"));
+                		    observer1.setDefaultEyeScore(rs.getInt("defaultEyeScore"));
                 		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(rs.getString("dT_Gathered"));
                 		    observer1.setDTGathered(date1);
                 		    System.out.println( "SelectObserver() returned " + rs );
@@ -1046,6 +1075,7 @@ public class DataBase {
                 		    blankObserver.setObserverID(rs.getInt("observerID"));
                 		    blankObserver.setObserverScore(rs.getInt("observerScore"));
                 		    blankObserver.setThreshold(rs.getInt("threshold"));
+                		    blankObserver.setDefaultEyeScore(rs.getInt("defaultEyeScore"));
                 		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Gathered"));
                 		    blankObserver.setDTGathered(date1);
                 		    ObserversOnList.add(blankObserver);
