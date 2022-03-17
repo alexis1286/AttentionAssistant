@@ -1136,7 +1136,7 @@ public class DataBase {
                  */
 
 //                /**
-//                 * OLD CODE -Jmitchel2
+//                 * OLD CODE 3/16/2022 -Jmitchel2
 //                 * Add a new Settings to the database.
 //                 * @param Settings
 //                 */
