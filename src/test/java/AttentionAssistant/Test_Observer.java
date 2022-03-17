@@ -32,14 +32,15 @@ public class Test_Observer {
 	int testObserverScore= 100;
 	int testThreshold= 100;
 	Date testDT_Gathered= new Date(1220227200L * 1000);
+	int testEyeScore= 100;
 	
 	defaultObserver= new Observer();
-	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered);
+	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore);
 	copyObserver= new Observer(nonDefaultObserver);
 
 	//Task object creation
 	int testTaskID = 999;
-	String testDescription = "test of history paper";
+	String testDescription = "bear migration";
 	boolean testObservable = true;
 	TaskStatus testStatus = TaskStatus.OPEN;
 	String testName = "This is a test Name";
@@ -71,6 +72,10 @@ public class Test_Observer {
          */
         assertEquals(0 , defaultObserver.getThreshold(), 
         "Default constructor task.observable should be false. Returned: " + defaultObserver.getThreshold());
+        
+        assertEquals(0, defaultObserver.getDefaultEyeScore(),
+        "Default constructor task.defaultEyeScore should be 0. Returned: " + defaultObserver.getDefaultEyeScore());
+
  
     }
 
@@ -90,7 +95,7 @@ public class Test_Observer {
          *  Make sure the Observer ObserverScore is 100 for the Parameter constructor
          */
         assertEquals(100 , nonDefaultObserver.getObserverScore(), 
-        "Parameter constructor Observer.ObserverScore should be \"This is a test description\". Returned: " + nonDefaultObserver.getObserverScore());
+        "Parameter constructor Observer.ObserverScore should be 100. Returned: " + nonDefaultObserver.getObserverScore());
         
         /**
          *  Make sure the Observer Threshold is set to 100 for the Parameter constructor
@@ -104,6 +109,12 @@ public class Test_Observer {
         assertEquals(new Date(1220227200L * 1000) , nonDefaultObserver.getDTGathered(), 
         "Parameter constructor Observer.dt_Gathered should be Sun Aug 31 20:00:00 EDT 2008 Returned: " + nonDefaultObserver.getDTGathered());
 
+        /**
+         *  Make sure the Observer DefaultEyeScore is 100 for the Parameter constructor
+         */
+        assertEquals(100 , nonDefaultObserver.getDefaultEyeScore(), 
+        "Parameter constructor Observer.DefaultEyeScore should be 100. Returned: " + nonDefaultObserver.getDefaultEyeScore());
+        
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -135,6 +146,12 @@ public class Test_Observer {
          */
         assertEquals(new Date(1220227200L * 1000) , copyObserver.getDTGathered(), 
         "Copy constructor Observer.dt_Gathered should be Sun Aug 31 20:00:00 EDT 2008 Returned: " + copyObserver.getDTGathered());
+
+        /**
+         *  Make sure the Observer DefaultEyeScore is 100 for the Copy constructor
+         */
+        assertEquals(100 , copyObserver.getDefaultEyeScore(), 
+        "Parameter constructor Observer.DefaultEyeScore should be 100. Returned: " + copyObserver.getDefaultEyeScore());
 
     }
 
@@ -180,6 +197,17 @@ public class Test_Observer {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    @Test
+    @DisplayName("<Observer> SetObserverThreshold")
+    void observerSetDefaultEyeScore() {
+        copyObserver.setDefaultEyeScore(99);
+    	assertEquals(99, copyObserver.getDefaultEyeScore(), 
+    	"Copy constructor Observer.defaultEyeScore should be 99. Returned: " + Integer.toString(copyObserver.getDefaultEyeScore()));
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    
     @Test
     @DisplayName("<Observer> toString")
     void observerToString() {

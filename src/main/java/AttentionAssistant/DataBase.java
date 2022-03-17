@@ -74,6 +74,7 @@ public class DataBase {
    			 "fk_userID INTEGER, " +
   			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
+  			 "rating INTEGER, " +
 //   			 "dT_Executed DATE, " +
 			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
@@ -775,10 +776,11 @@ public class DataBase {
             ds.setConfig(sqlCon);
 //        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
         	String query1 = "INSERT INTO happy_thought_button " +
-        			"(fk_userID, media_ID_Tag, flagged) Values ( '" +
+        			"(fk_userID, media_ID_Tag, flagged, rating) Values ( '" +
         			userID + "', '" +
         			hTB.getMedia_ID_Tag().replaceAll("'", "''") + "', '" +
-        			hTB.getFlagged() + "')";
+        			hTB.getFlagged() + "', '" +
+        			hTB.getRating() + "')";
 //        			DateTime + "')";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
@@ -803,6 +805,7 @@ public class DataBase {
             	String query1 = "UPDATE happy_thought_button " +
             			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag().replaceAll("'", "''") + 
             			"', flagged = '" + hTB.getFlagged() + 
+            			"', rating = '" + hTB.getRating() +
 //            			"', dT_Executed = '" + DateTime + 
             			"' WHERE hTBID = '" + hTB.getHTBID() + "'";
             	try ( Connection conn = ds.getConnection();
@@ -854,6 +857,7 @@ public class DataBase {
             		    hTB1.setHTBID(rs.getInt("hTBID"));
             		    hTB1.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
             		    hTB1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    hTB1.setRating(rs.getInt("rating"));
 //            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
 //            		    hTB1.setDT_Executed(date1);
             		    System.out.println( "SelectHTB() returned " + rs );
@@ -904,6 +908,7 @@ public class DataBase {
             		    blankHTB.setHTBID(rs.getInt("hTBID"));
             		    blankHTB.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
             		    blankHTB.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    blankHTB.setRating(rs.getInt("rating"));
 //            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
 //            		    blankHTB.setDT_Executed(date1);
             		    hTBsOnList.add(blankHTB);

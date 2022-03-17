@@ -52,8 +52,9 @@ public class Test_DataBase {
 	String testMediaIDTag = "This is a test Media ID Tag";
 	boolean testHTBFlagged = true;
 	Date testDateHTB= new Date(1220227200L * 1000);
+	int testrating = 1;
 
-	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged, testDateHTB);
+	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged, testrating, testDateHTB);
 
 	/**
 	 * Set up for nonDefault Observer
@@ -465,6 +466,7 @@ public class Test_DataBase {
     	UpdatedHTB.setHTBID(1);
     	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
     	UpdatedHTB.setFlagged(false);
+    	UpdatedHTB.setRating(2);
     	db.UpdateHTB(UpdatedHTB);
     }
     
@@ -490,14 +492,16 @@ public class Test_DataBase {
     	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
     	SelectedHTB1.setFlagged(true);
     	SelectedHTB1.setDT_Executed(null);
+    	SelectedHTB1.setRating(1);
     	db.UpdateHTB(SelectedHTB1);
     	
     	Happy_Thought_Button selectedHTB2 = new Happy_Thought_Button();
     	selectedHTB2 = db.SelectHTB(2);
         
-    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Date Time Executed= null";
-        assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= null but instead returned: " + selectedHTB2.toString());
+    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Rating= 1 Date Time Executed= null";
+        assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Rating= 1 Date Time Executed= null but instead returned: " + selectedHTB2.toString());
         
+        assertEquals(1, selectedHTB2.getRating(), "SelectedHTB rating should be set to 1 but instead returned " + selectedHTB2.getRating());
     }
     
     @Test
@@ -512,12 +516,14 @@ public class Test_DataBase {
     	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
     	UpdatedHTB.setFlagged(false);
     	UpdatedHTB.setDT_Executed(null);
+    	UpdatedHTB.setRating(2);
     	
     	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
     	SelectedHTB1.setHTBID(2);
     	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
     	SelectedHTB1.setFlagged(true);
     	SelectedHTB1.setDT_Executed(null);
+    	SelectedHTB1.setRating(1);
     	
     	Happy_Thought_Button DefaultHTB= new Happy_Thought_Button(nonDefaultHTB);
     	DefaultHTB.setHTBID(4);
