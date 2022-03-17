@@ -128,6 +128,13 @@ public class Pomodoro_Timer
 	
 	}
 	
+	public ArrayList<Task> tasks(Priority_Manager pm) {
+		ArrayList<Task> list = new ArrayList<Task>();
+		list  =  pm.observableTasks();
+		
+		return list;
+	}
+	
 	private JPanel titlePanel(JFrame frame) {
 		JPanel panel = new JPanel();
 		//panel.setBorder(line);
@@ -203,31 +210,22 @@ public class Pomodoro_Timer
 		//returns panel
 		return panel;
 	}
+
 	
-	private JPanel timerPanel(JFrame frame) {
+	private JPanel timerPanel(JFrame frame, Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
-		
+
+		JLabel taskLabel=new JLabel(tasks(pm).get(0).getTaskName());
 		JPanel taskpanel = new JPanel();
 		taskpanel.setBackground(aa_grey);
-		//c.setBounds(120,140, 300, 300);
-		c.setForeground(Color.white);
-		c.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		//c.setHorizontalAlignment(SwingConstants.CENTER);
-		taskpanel.add(c);
-		//title_panel.setLayout(new FlowLayout(FlowLayout.CENTER));	
-		//title_panel.setBackground(aa_grey);
+		taskLabel.setForeground(Color.white);
+		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+		taskpanel.add(taskLabel);
 	
-
-		//JLabel title = new JLabel("Task");
-	//	title.setForeground(Color.white);
-	//	title.setFont(new Font("Serif", Font.BOLD, 20));
-		
 		
 		JPanel timerpanel = new JPanel();
 		timerpanel.setBackground(aa_grey);
-		
-		//time.setBounds(130,80, 300, 300);
 		time.setForeground(Color.white);
 		time.setFont(new Font("Dosis SemiBold",Font.BOLD,50));
 		timerpanel.add(time);
@@ -235,7 +233,6 @@ public class Pomodoro_Timer
 		JPanel buttonpanel = new JPanel();
 		
 		buttonpanel.setBackground(aa_grey);
-		//startbut.setBounds(60,400, 120, 40);
 		startbut.setBorderPainted(false);
 		startbut.setBackground(aa_purple);
 		startbut.setForeground(Color.WHITE);
@@ -272,7 +269,7 @@ public class Pomodoro_Timer
         }});
 		buttonpanel.add(startbut);
 
-		//pausebut.setBounds(225,400, 120, 40);
+
 		pausebut.setBorderPainted(false);
 		pausebut.setBackground(aa_purple);
 		pausebut.setForeground(Color.WHITE);
@@ -316,7 +313,7 @@ public class Pomodoro_Timer
         }});
 		buttonpanel.add(pausebut);
 		
-		//endbut.setBounds(385,400, 120, 40);
+
 		endbut.setBorderPainted(false);
 		endbut.setBackground(aa_purple);
 		endbut.setForeground(Color.WHITE);
@@ -340,8 +337,7 @@ public class Pomodoro_Timer
    	    				t.stop();
    	    				sec=min=0;
    	    				time.setText(String.valueOf("00m:00s"));
-//   	    				Maininput();
-//   	    				Breakinput(); //TODO redirect user back to settings to edit the timer input
+   	    				//TODO redirect user back to settings to edit the timer input
    	    				c.setVisible(false);
    	    				b.setVisible(false);
    	    				MainTimerRunning = false;
@@ -363,36 +359,28 @@ public class Pomodoro_Timer
 		
 		JPanel timerwordpanel = new JPanel();
 		timerwordpanel.setBackground(aa_grey);
-		//c.setBounds(120,140, 300, 300);
 		c.setForeground(Color.white);
-		c.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		//c.setHorizontalAlignment(SwingConstants.CENTER);
+		c.setFont(new Font("Dosis SemiBold",Font.BOLD,20));;
 		timerwordpanel.add(c);
-
-		//b.setBounds(120,140, 300, 300);
 		b.setForeground(Color.white);
 		b.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		//b.setHorizontalAlignment(SwingConstants.CENTER);
 		timerwordpanel.add(b);
 		
 		c.setVisible(false);
 		b.setVisible(false);
 		
-		//FIX THIS
-		//title_panel.setLayout(new BoxLayout(title_panel, BoxLayout.Y_AXIS));
-		//title_panel.add(title);
-		//title_panel.add(Box.createRigidArea(new Dimension(200, 100)));
-		//buttonpanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//buttonpanel.setMaximumSize(new Dimension(400, 100));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(Box.createRigidArea(new Dimension(400,200)));
 		
+		
+		panel.add(taskpanel);
 		panel.add(timerpanel);
 		panel.add(timerwordpanel);
 		panel.add(buttonpanel);
 		return panel;
 	}
-	
+
+
 	/**
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
@@ -514,7 +502,6 @@ public class Pomodoro_Timer
 								sec=min=0;
 								time.setText(String.valueOf("00m:00s"));
 								//Maininput(); //TODO this is going to need to redirect the user back to the setting
-								//TODO add refresh here
 								//Breakinput(); //this prompts the user for new work timespan allotments, will need to occur after new task is assigned
 								c.setVisible(false);
 								b.setVisible(false);
@@ -603,14 +590,14 @@ public class Pomodoro_Timer
 	
 	JPanel icon_panel;
 	int counter;
-	public void rebuildPanel( JPanel panel, JFrame frame) {
+	public void rebuildPanel( JPanel panel, JFrame frame, Priority_Manager pm) {
 		JPanel new_icon_panel = new JPanel();	
 		if(counter % 2 != 0) {
-			new_icon_panel = timerPanel( frame);
+			new_icon_panel = timerPanel( frame,pm);
 			panel.add("newIPanel",new_icon_panel);
 			panel.remove(icon_panel);
 		}else {
-			icon_panel = timerPanel(frame);
+			icon_panel = timerPanel(frame,pm);
 			panel.add("iPanel",panel);
 
 			panel.remove(new_icon_panel);
@@ -625,7 +612,7 @@ public class Pomodoro_Timer
 	/**
 	 * initializes the buttons and adds them to the frame, and initializes the labels that are used depending on what timer is running
 	 */
-	public void run_pomo(Settings settings) {
+	public void run_pomo(Settings settings, Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
@@ -635,8 +622,8 @@ public class Pomodoro_Timer
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
 				//sets window width and height
+			
 				
-		
 				JPanel panel = new JPanel();
 				//panel.setBounds(1000, 1000, width, height);
 				panel.setBackground(aa_grey);
@@ -644,7 +631,7 @@ public class Pomodoro_Timer
 				JPanel titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
 				//build table panel
-				icon_panel = timerPanel(frame);
+				icon_panel = timerPanel(frame,pm);
 				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 			    panel.add("PT", icon_panel);
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
@@ -658,10 +645,12 @@ public class Pomodoro_Timer
 				//Input(settings);
 				getWorkBreakStatus();
 			
+				
+				
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(panel, frame);
+		        		rebuildPanel(panel, frame, pm);
 		        	}});
 			}
 		});

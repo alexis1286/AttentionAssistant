@@ -1804,7 +1804,7 @@ public class Settings {
 	/**
 	 * RHS display for Pomodoro Timer
 	 */
-	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer) {
+	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer, Priority_Manager pm) {
 		
 		JPanel pomodoro_panel = new JPanel();
 		pomodoro_panel.setLayout(new BoxLayout(pomodoro_panel, BoxLayout.Y_AXIS));
@@ -1829,7 +1829,7 @@ public class Settings {
 		openPom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement chooseAvatar 
-				pomodoro_timer.run_pomo(settingsChanges);
+				pomodoro_timer.run_pomo(settingsChanges,pm);
 			}
 		});
 		
@@ -1862,8 +1862,8 @@ public class Settings {
 		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		workPeriod.setForeground(Color.white);
 		
-		Integer workMinutes[] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
-		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		Integer workMinutes[] = {1,15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		Integer breakMinutes[] = {1,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
 		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
@@ -2259,7 +2259,7 @@ public class Settings {
 				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db, observer);
-				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer);
+				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer, priority_manager );
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db);								
 				
 				/*

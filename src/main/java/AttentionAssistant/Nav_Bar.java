@@ -253,7 +253,7 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.run_pomo(settings);
+	        		pomo.run_pomo(settings, pm);
 	        }});
 			panel.add(pomoButton);
 		}
