@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.14.3'
     //Library used for mouse and keyboard tracking
     implementation 'com.1stleg:jnativehook:2.0.2'
+    //Library used for text-to-speech
+    implementation 'net.sf.sociaal:freetts:1.2.2'
 }
 //end of dependencies
 
