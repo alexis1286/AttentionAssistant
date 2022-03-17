@@ -57,6 +57,11 @@ public class Settings {
 	private int settingsID;
 	
 	/*
+	 * foreign key for database
+	 */
+	private int userID;
+	
+	/*
 	 * color of the circles below the icons of the navigation bar
 	 */
 	private Color iconCircles;
@@ -181,8 +186,9 @@ public class Settings {
 	/**
 	 * Instantiating empty Settings object
 	 */
-	public Settings() {
+	public Settings(int userID) {
 		this.settingsID = 1;
+		this.userID = userID;
 		this.iconCircles = aa_grey; 
 		this.icons = Color.white;
 		this.opacityCircles = 100; 
@@ -222,9 +228,9 @@ public class Settings {
 	 *
 	 * load settings from database for existing user 
 	 */
-	public Settings(DataBase db, int settingID) {
+	public Settings(DataBase db, int userID) {
 		
-		Settings loadSettings= db.SelectSettings(settingsID);
+		Settings loadSettings= db.SelectSettings(userID);
 		
 	}
 	
@@ -238,7 +244,7 @@ public class Settings {
 	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
 	 * 		  boolean, int, boolean, int, int, boolean, boolean, boolean, boolean, boolean
 	 */
-	public Settings(int settingsID, Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
+	public Settings(int settingsID, int userID, Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
 					int xCoord, int yCoord, boolean isVertical, int iconSize, boolean timerIsVisible, boolean pmIsVisible, 
 					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, 
 					boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, String avatarFilePath, String audioFilePath, 
@@ -246,6 +252,7 @@ public class Settings {
 					boolean ftsIsActive, boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive) {
 		
 		this.settingsID = settingsID;
+		this.userID = userID;
 		this.iconCircles = iconCircles;
 		this.icons = icons;
 		this.opacityCircles = opacityCircles; 
@@ -284,6 +291,7 @@ public class Settings {
 	 */
 	public Settings(Settings stgs) {
 		this.settingsID = stgs.settingsID;
+		this.userID = stgs.userID;
 		this.iconCircles = stgs.iconCircles;
 		this.icons = stgs.icons;
 		this.opacityCircles = stgs.opacityCircles; 
@@ -333,6 +341,23 @@ public class Settings {
 	 */
 	public void setSettingsID(int settingsID) {
 		this.settingsID = settingsID;
+	}
+	
+	/**
+	 * get userID
+	 * @return int
+	 * 
+	 */
+	public int getUserID() {
+		return this.userID;
+	}
+	
+	/**
+	 * set userID
+	 * @param int
+	 */
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 	
 	 /*
@@ -1102,14 +1127,14 @@ public class Settings {
 		avatarChoices.add(duck_avatar);
 		avatarChoices.add(pompom_avatar);
 		
-		JButton close_avatarWindow = new JButton("close");
+		JButton close_avatarWindow = new JButton("select");
 		close_avatarWindow.setForeground(Color.white);
 		close_avatarWindow.setFont(new Font("Serif", Font.BOLD, 16));
 		close_avatarWindow.setContentAreaFilled(true);
 		close_avatarWindow.setBorderPainted(false);
 		close_avatarWindow.setFocusPainted(false);
 		close_avatarWindow.setBackground(aa_purple);
-		close_avatarWindow.setMaximumSize(new Dimension(70,20));
+		close_avatarWindow.setMaximumSize(new Dimension(75,20));
 		close_avatarWindow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				/*
@@ -1939,7 +1964,7 @@ public class Settings {
 	/**
 	 * RHS display for Thought Management
 	 */
-	private void createThoughtPanel(JPanel card_panel, Settings settingsChanges, Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
+	private void createThoughtPanel(JPanel card_panel, Settings settingsChanges, Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space, DataBase db) {
 		
 		JPanel thought_panel = new JPanel();
 		thought_panel.setLayout(new BoxLayout(thought_panel, BoxLayout.Y_AXIS));
@@ -2072,7 +2097,7 @@ public class Settings {
 		openFTS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Free Thought Space
-				free_thought_space.runFts(free_thought_space);
+				free_thought_space.runFts(free_thought_space, db, settingsChanges.userID);
 			}
 		});
 		
@@ -2131,7 +2156,7 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(DataBase db,Nav_Bar navbar,Settings settings, Observer observer, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
+	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Observer observer, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -2140,7 +2165,7 @@ public class Settings {
 				 * instantiate a new settings object using the copy constructor 
 				 * so that it is a copy of the passed settings object. 
 				 */
-				Settings settingsChanges = new Settings(settings); 
+				Settings settingsChanges = new Settings(userID); 
 				
 				JFrame settings_frame = new JFrame("Attention Assistant Settings");
 				
@@ -2235,7 +2260,7 @@ public class Settings {
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db, observer);
 				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer);
-				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space);								
+				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db);								
 				
 				/*
 				 * buttons for bottom border
@@ -2461,6 +2486,7 @@ public class Settings {
 				apply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						settings.settingsID = settingsChanges.settingsID;
+						settings.userID = settingsChanges.userID; 
 						settings.iconCircles = settingsChanges.iconCircles;
 						settings.icons = settingsChanges.icons;
 						settings.opacityCircles = settingsChanges.opacityCircles; 

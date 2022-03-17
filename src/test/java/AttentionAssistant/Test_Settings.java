@@ -13,7 +13,8 @@ import java.awt.Color;
 
 public class Test_Settings {
 
-	Color aa_purple = new Color(137,31,191);
+	Color aa_grey = new Color(51,51,51);
+	int userID = 0; 
 	
 	/**
 	 * Objects used in test
@@ -25,6 +26,7 @@ public class Test_Settings {
 	@BeforeEach
 	void setup() {
 		int testSettingsID = 999;
+		int testUserID = 998; 
 		Color testIconCircles = Color.RED; 
 		Color testIcons = Color.YELLOW;
 		int testOpacityCircles = 75; 
@@ -56,9 +58,9 @@ public class Test_Settings {
 		boolean testIsAutoLinked = false; 
 		boolean testHtbIsActive = false; 
 		
-		defaultSettings = new Settings();
+		defaultSettings = new Settings(userID);
 		
-		nonDefaultSettings = new Settings(testSettingsID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+		nonDefaultSettings = new Settings(testSettingsID, testUserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
 										  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
 										  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
 										  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
@@ -73,15 +75,21 @@ public class Test_Settings {
 	@DisplayName("<Settings> Default Constructor")
 	void SettingsDefaultConstructor() {
 		/**
-		 * Make sure the Settings settingsID is set to 0 for the default constructor
+		 * Make sure the Settings settingsID is set to 1 for the default constructor
 		 */
-		assertEquals(0, defaultSettings.getSettingsID(), "Default constructor Settings.settingsID should be 0. Returned: "
-					+ Integer.toString(defaultSettings.getSettingsID())); 
+		assertEquals(1, defaultSettings.getSettingsID(), "Default constructor Settings.settingsID should be 1. Returned: "
+					+ Integer.toString(defaultSettings.getSettingsID()));
 		
 		/**
-		 * Make sure the Settings iconCircles are set to aa_purple for the default constructor
+		 * Make sure the Settings userID is set to 0 for the default constructor
 		 */
-		assertEquals(aa_purple, defaultSettings.getIconCircles(), "Default constructor Settings.iconCircles should be aa_purple. Returned: " 
+		assertEquals(0, defaultSettings.getUserID(), "Default constructor Settings.userID should be 0. Returned: "
+					+ Integer.toString(defaultSettings.getUserID())); 
+		
+		/**
+		 * Make sure the Settings iconCircles are set to aa_grey for the default constructor
+		 */
+		assertEquals(aa_grey, defaultSettings.getIconCircles(), "Default constructor Settings.iconCircles should be aa_grey. Returned: " 
 				    + Integer.toString(defaultSettings.getIconCircles().getRGB()));
 		
 		/**
@@ -188,7 +196,7 @@ public class Test_Settings {
 		/**
 		 * Make sure Settings avatarFilePath is set to "images/avatar_dino.png" for default constructor
 		 */
-		assertEquals("images/avatar_dino.png", defaultSettings.getAvatarFilePath(), "Default constructor Settings.avatarFilePath should be \"images/avatar_dino.png\". Returned: "
+		assertEquals("avatarSelection/avatar_dino.png", defaultSettings.getAvatarFilePath(), "Default constructor Settings.avatarFilePath should be \"images/avatar_dino.png\". Returned: "
 					+ defaultSettings.getAvatarFilePath()); 
 		 
 		/**
@@ -269,6 +277,12 @@ public class Test_Settings {
 		 */
 		assertEquals(999, nonDefaultSettings.getSettingsID(), "nonDefault constructor Settings.settingsID should be 999. Returned: "
 					+ Integer.toString(nonDefaultSettings.getSettingsID()));
+		
+		/**
+		 * Make sure the Settings userID is set to 998 for the nonDefault constructor
+		 */
+		assertEquals(998, nonDefaultSettings.getUserID(), "nonDefault constructor Settings.userID should be 998. Returned: "
+					+ Integer.toString(nonDefaultSettings.getUserID()));
 		
 		/**
 		 * Make sure the Settings iconCircles are set to Color.RED for the nonDefault constructor
@@ -462,6 +476,12 @@ public class Test_Settings {
 					+ Integer.toString(copySettings.getSettingsID()));
 		
 		/**
+		 * Make sure Settings UserID is set to 998 for copy constructor
+		 */
+		assertEquals(998, copySettings.getUserID(), "Copy constructor Settings.userID should be 998. Returned: " 
+					+ Integer.toString(copySettings.getUserID()));
+		
+		/**
 		 * Make sure the Settings iconCircles are set to Color.RED for the copy constructor
 		 */
 		assertEquals(Color.RED, copySettings.getIconCircles(), "Copy constructor Settings.iconCircles should be Color.Red. Returned: " 
@@ -653,6 +673,18 @@ public class Test_Settings {
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetUserID")
+	void SettingsSetUserID() {
+		
+		copySettings.setUserID(456);
+		assertEquals(456, copySettings.getUserID(), "copySettings.userID should be set to 456, but returned: "
+					+ Integer.toString(copySettings.getUserID())); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
 	@Test
 	@DisplayName("<Settings> SetIconCircles")
 	void SettingsSetIconCircles() {

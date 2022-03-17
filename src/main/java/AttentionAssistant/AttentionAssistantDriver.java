@@ -1,9 +1,7 @@
 package AttentionAssistant;
 
 public class AttentionAssistantDriver {
-	static DataBase db = new DataBase();
-	static Settings settings = new Settings();
-	
+	static DataBase db = new DataBase();	
 	static Observer observer = new Observer();
 	static Priority_Manager priority_manager;
 	static Pomodoro_Timer pomodoro_timer = new Pomodoro_Timer();
@@ -14,10 +12,13 @@ public class AttentionAssistantDriver {
 	public static void main(String[] args) throws Exception {
 		int userID = 0;
 		//user login->userID(links db)
+		Settings settings = new Settings(userID);
 		Nav_Bar navbar = new Nav_Bar(settings);
 		db.DatabaseSetUp();
 		//get settings
 		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
+		//db.AddSettings(settings, userID) will be called from during the registration process for a new user
+		//db.selectSettings(userID) will be called during the login process for a returning user
 		db.AddSettings(settings);
 		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
 		
