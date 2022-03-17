@@ -39,20 +39,24 @@ public class Priority_Manager {
 	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		populateTaskList(db);
-		this.working_task = taskToObserve(db);
-		observer.monitor(working_task);
-		
 	}
 	
-	private Task taskToObserve(DataBase db) {
-		Task task = db.SelectAllTasks().get(0);
+	public void taskToObserve(DataBase db,Observer observer) {
+		Task task = new Task();
 		
-		while(task.getObservable()==false) {
-			firstTaskWindow(db);
-			task = db.SelectAllTasks().get(0);
+		if(db.SelectAllTasks().size() == 0) {
+			task = firstTaskWindow(db);
 		}
-		
-		return task;
+		sendToObserver(task,observer);
+	}
+	
+	private void sendToObserver(Task task,Observer observer) {
+		try {
+			observer.monitor(task);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public ArrayList<Task> observableTasks() {
@@ -602,7 +606,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	public void firstTaskWindow(DataBase database) {
+	public Task firstTaskWindow(DataBase database) {
 		Task task = new Task();
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
@@ -775,6 +779,7 @@ public class Priority_Manager {
 		task_window.add(tpane, BorderLayout.CENTER);
 		task_window.add(buttons, BorderLayout.PAGE_END);
 		task_window.pack();
+		return task;
 	}
 	
 	

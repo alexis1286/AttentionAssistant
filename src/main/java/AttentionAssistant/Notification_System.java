@@ -22,10 +22,10 @@ public class Notification_System {
 	private boolean avatarAlwaysOn;
 	DataBase db;
 	 
-	public Notification_System(){
+	public Notification_System(int userID){
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
-		this.settings = new Settings();
+		this.settings = new Settings(userID);
 		
 		this.isAudioActive = true;
 		this.isAvatarActive = true;

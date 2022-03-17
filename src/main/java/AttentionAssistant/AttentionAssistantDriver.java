@@ -19,12 +19,8 @@ public class AttentionAssistantDriver {
 		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
 		//db.AddSettings(settings, userID) will be called from during the registration process for a new user
 		//db.selectSettings(userID) will be called during the login process for a returning user
-		db.AddSettings(settings);
+		db.AddSettings(settings, userID);
 		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
-		
-		while(db.SelectAllTasks().get(0).getObservable() == false) {
-			priority_manager.firstTaskWindow(db);
-		}
 		
 		navbar.run_nav_bar(userID,db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);
 	   	 

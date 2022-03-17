@@ -118,6 +118,7 @@ public class Nav_Bar{
 	public void run_nav_bar(int userID,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				pm.taskToObserve(db, observer);
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
