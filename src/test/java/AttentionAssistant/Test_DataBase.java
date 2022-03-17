@@ -70,6 +70,7 @@ public class Test_DataBase {
 	 * Set up for nonDefault Settings 
 	 */
 	int testSettingsID = 999;
+	int testuserID = 999;
 	Color testIconCircles = Color.RED; 
 	Color testIcons = Color.YELLOW;
 	int testOpacityCircles = 75; 
@@ -101,7 +102,7 @@ public class Test_DataBase {
 	boolean testIsAutoLinked = false; 
 	boolean testHtbIsActive = false; 
 
-	nonDefaultSettings = new Settings(testSettingsID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+	nonDefaultSettings = new Settings(testSettingsID, testuserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
 			  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
 			  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
 			  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
@@ -689,7 +690,7 @@ public class Test_DataBase {
     	selectedSettings.setAvatarFilePath("I am a selected Avatar File Path");
     	db.UpdateSettings(selectedSettings);
     	
-    	Settings selectedSettings2 = new Settings();
+    	Settings selectedSettings2 = new Settings(2);
     	selectedSettings2 = db.SelectSettings(2);
         
         assertEquals(2, selectedSettings2.getSettingsID(), "selectedSettings2 SettingsID should be set to 2 instead returned: " 

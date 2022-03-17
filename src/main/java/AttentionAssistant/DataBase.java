@@ -124,8 +124,8 @@ public class DataBase {
    			 "ftsIsActive BOOLEAN, " +
    			 "ntbIsActive BOOLEAN, " +
    			 "isAutoLinked BOOLEAN, " +
-   			 "htbIsActive BOOLEAN)";
-//			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
+   			 "htbIsActive BOOLEAN, " +
+			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
     	/**
     	 * Set up for Table user
@@ -1102,55 +1102,56 @@ public class DataBase {
                  * @author jmitchel2
                  */
 
-                /**
-                 * Add a new Settings to the database.
-                 * @param Settings
-                 */
-                public void AddSettings(Settings settings) {
-            		sqlCon.enforceForeignKeys(true);
-                    ds.setConfig(sqlCon);
-                	String query1 = "INSERT INTO settings " +
-                			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
-                			settings.getIconCircles().getRGB() + "', '" +
-                			settings.getIcons().getRGB() + "', '" +
-                			settings.getOpacityCircles() + "', '" +
-                			settings.getOpacityIcons() + "', '" +
-                			settings.getIsCollapsed() + "', '" +
-                			settings.getXCoord() + "', '" +
-                			settings.getYCoord() + "', '" +
-                			settings.getIsVertical() + "', '" +
-                			settings.getIconSize() + "', '" +
-                			settings.getTimerIsVisible() + "', '" +
-                			settings.getPmIsVisible() + "', '" +
-                			settings.getFtsIsVisible() + "', '" +
-                			settings.getHtbIsVisible() + "', '" +
-                			settings.getNtbIsVisible() + "', '" +
-                			settings.getProgReportIsVisible() + "', '" +
-                			settings.getAvatarIsActive() + "', '" +
-                			settings.getTextIsActive() + "', '" +
-                			settings.getAudioIsActive() + "', '" +
-                			settings.getAvatarFilePath().replaceAll("'", "''") + "', '" +
-                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
-                			settings.getAlwaysOnScreen() + "', '" +
-                			settings.getAvatarSize() + "', '" +
-                			settings.getPomodoroIsActive() + "', '" +
-                			settings.getWorkPeriod() + "', '" +
-                			settings.getBreakPeriod() + "', '" +
-                			settings.getTimeShowing() + "', '" +
-                			settings.getFtsIsActive() + "', '" +
-                			settings.getNtbIsActive() + "', '" +
-                			settings.getIsAutoLinked() + "', '" +
-                			settings.getHtbIsActive() +"')";
-                	try ( Connection conn = ds.getConnection();
-                		    Statement stmt = conn.createStatement(); ) {
-                		    int rv = stmt.executeUpdate( query1 );
-                		    System.out.println( "AddSettings() returned " + rv );
-                		} catch ( SQLException e ) {
-                		    e.printStackTrace();
-                		}
-            		sqlCon.enforceForeignKeys(false);
-                    ds.setConfig(sqlCon);
-                }
+//                /**
+//                 * OLD CODE -Jmitchel2
+//                 * Add a new Settings to the database.
+//                 * @param Settings
+//                 */
+//                public void AddSettings(Settings settings) {
+//            		sqlCon.enforceForeignKeys(true);
+//                    ds.setConfig(sqlCon);
+//                	String query1 = "INSERT INTO settings " +
+//                			"( iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+//                			settings.getIconCircles().getRGB() + "', '" +
+//                			settings.getIcons().getRGB() + "', '" +
+//                			settings.getOpacityCircles() + "', '" +
+//                			settings.getOpacityIcons() + "', '" +
+//                			settings.getIsCollapsed() + "', '" +
+//                			settings.getXCoord() + "', '" +
+//                			settings.getYCoord() + "', '" +
+//                			settings.getIsVertical() + "', '" +
+//                			settings.getIconSize() + "', '" +
+//                			settings.getTimerIsVisible() + "', '" +
+//                			settings.getPmIsVisible() + "', '" +
+//                			settings.getFtsIsVisible() + "', '" +
+//                			settings.getHtbIsVisible() + "', '" +
+//                			settings.getNtbIsVisible() + "', '" +
+//                			settings.getProgReportIsVisible() + "', '" +
+//                			settings.getAvatarIsActive() + "', '" +
+//                			settings.getTextIsActive() + "', '" +
+//                			settings.getAudioIsActive() + "', '" +
+//                			settings.getAvatarFilePath().replaceAll("'", "''") + "', '" +
+//                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
+//                			settings.getAlwaysOnScreen() + "', '" +
+//                			settings.getAvatarSize() + "', '" +
+//                			settings.getPomodoroIsActive() + "', '" +
+//                			settings.getWorkPeriod() + "', '" +
+//                			settings.getBreakPeriod() + "', '" +
+//                			settings.getTimeShowing() + "', '" +
+//                			settings.getFtsIsActive() + "', '" +
+//                			settings.getNtbIsActive() + "', '" +
+//                			settings.getIsAutoLinked() + "', '" +
+//                			settings.getHtbIsActive() +"')";
+//                	try ( Connection conn = ds.getConnection();
+//                		    Statement stmt = conn.createStatement(); ) {
+//                		    int rv = stmt.executeUpdate( query1 );
+//                		    System.out.println( "AddSettings() returned " + rv );
+//                		} catch ( SQLException e ) {
+//                		    e.printStackTrace();
+//                		}
+//            		sqlCon.enforceForeignKeys(false);
+//                    ds.setConfig(sqlCon);
+//                }
 
                 
                 /**
@@ -1285,7 +1286,7 @@ public class DataBase {
                     public Settings SelectSettings(int userID) {
                 		sqlCon.enforceForeignKeys(true);
                         ds.setConfig(sqlCon);
-                    	Settings settings1 = new Settings();
+                    	Settings settings1 = new Settings(userID);
                     	String query1 = "SELECT * FROM settings WHERE fk_userID = '" + userID + "'";
                     	try ( Connection conn = ds.getConnection();
                     		    Statement stmt = conn.createStatement(); ) {
