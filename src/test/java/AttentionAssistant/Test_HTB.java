@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test File for the Happy_Thought_Button functions.
  * @author jmitchel2
+ * @author krchr
  */
 
 public class Test_HTB {
@@ -28,11 +29,12 @@ public class Test_HTB {
 		int testHTBID = 999;
 		String testMediaIDTag = "This is a test Media ID Tag";
 		boolean testFlagged = true;
+		int testRating = 2;
 		Date testDateHTB= new Date(1220227200L * 1000);
 
 		defaultHTB= new Happy_Thought_Button();
 		
-		nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testFlagged, testDateHTB);
+		nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testFlagged, testRating, testDateHTB);
 		
 		copyHTB = new Happy_Thought_Button(nonDefaultHTB);
 
@@ -58,6 +60,12 @@ public class Test_HTB {
          */
         assertEquals(false, defaultHTB.getFlagged(), 
         "Default constructor HTB.flagged should be false. Returned: " + defaultHTB.getFlagged());
+        
+        /**
+         *  Make sure the Happy_Thought_Button Rating is 1 for the default constructor
+         */
+        assertEquals(1, defaultHTB.getRating(), 
+        "Default constructor HTB.rating should be 1. Returned: " + Integer.toString(defaultHTB.getRating()));
     
     }
 
@@ -83,6 +91,12 @@ public class Test_HTB {
          */
         assertEquals(true, nonDefaultHTB.getFlagged(), 
         "nonDefault constructor HTB.flagged should be false. Returned: " + nonDefaultHTB.getFlagged());
+        
+        /**
+         *  Make sure the Happy_Thought_Button Rating is 2 for the Parameter constructor
+         */
+        assertEquals(2, nonDefaultHTB.getRating(), 
+        "nonDefault constructor HTB.rating should be 2. Returned: " + Integer.toString(nonDefaultHTB.getRating()));
     
     }
 
@@ -109,6 +123,11 @@ public class Test_HTB {
         assertEquals(true, copyHTB.getFlagged(), 
         "copy constructor HTB.flagged should be false. Returned: " + copyHTB.getFlagged());
 
+        /**
+         *  Make sure the Happy_Thought_Button Rating is 2 for the copy constructor
+         */
+        assertEquals(2, copyHTB.getRating(), 
+        "copy constructor HTB.rating should be 2. Returned: " + Integer.toString(copyHTB.getRating()));
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -141,7 +160,16 @@ public class Test_HTB {
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @Test
-    @DisplayName("<HTB> SetFlagged")
+    @DisplayName("<HTB> SetRating")
+    void HTBSetRating() {
+    	
+    	copyHTB.setRating(0);
+    	assertEquals(0, copyHTB.getRating(), "copyHTB rating should be set to 0 but instead returned: " + Integer.toString(copyHTB.getRating()));
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<HTB> SetDT_Executed")
     void HTBSetDate() {
     	
     	copyHTB.setDT_Executed(new Date(1220227202L * 1000));
@@ -152,9 +180,9 @@ public class Test_HTB {
     @Test
     @DisplayName("<HTB> ToString")
     void HTBToString() {
-    String String1 = "Happy_Thought_Button ID= 999 Media_ID_Tag= This is a test Media ID Tag Flagged= true Date Time Executed= Sun Aug 31 20:00:00 EDT 2008";
+    String String1 = "Happy_Thought_Button ID= 999 Media_ID_Tag= This is a test Media ID Tag Flagged= true Rating= 2 Date Time Executed= Sun Aug 31 20:00:00 EDT 2008";
 
-    	assertEquals(String1, copyHTB.toString(), "copyHTB toString should be set to \"Happy_Thought_Button ID= 999 Media_ID_Tag= This is a test Media ID Tag Flagged= true\" but instead returned: " + copyHTB.toString());
+    	assertEquals(String1, copyHTB.toString(), "copyHTB toString should be set to \"Happy_Thought_Button ID= 999 Media_ID_Tag= This is a test Media ID Tag Flagged= true Rating= 2\" but instead returned: " + copyHTB.toString());
     }
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
