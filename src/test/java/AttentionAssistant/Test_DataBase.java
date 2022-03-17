@@ -337,6 +337,7 @@ public class Test_DataBase {
     	UpdatedTask.setTaskID(1);
     	UpdatedTask.setDescription("I am a updated description1");
     	UpdatedTask.setObservable(false);
+    	UpdatedTask.setStatus(TaskStatus.CLOSED);
     	UpdatedTask.setTaskName("I am an updated name1");
     	db.UpdateTask(UpdatedTask);
     
@@ -398,6 +399,7 @@ public class Test_DataBase {
     	SelectedTask1.setTaskID(2);
     	SelectedTask1.setDescription("I am a Selected description1");
     	SelectedTask1.setTaskName("I am an Selected name1");
+    	SelectedTask1.setStatus(TaskStatus.OVERDUE);
        	SelectedTask1.setObservable(true);
        	SelectedTask1.setPriority(true);
        	
@@ -405,10 +407,12 @@ public class Test_DataBase {
     	UpdatedTask.setTaskID(1);
     	UpdatedTask.setDescription("I am a updated description1");
     	UpdatedTask.setObservable(false);
+    	UpdatedTask.setStatus(TaskStatus.CLOSED);
     	UpdatedTask.setTaskName("I am an updated name1");
     	
     	Task nonDefaultAddedTask = new Task(nonDefaultTask); 
     	nonDefaultAddedTask.setTaskID(4);
+    	nonDefaultAddedTask.setStatus(TaskStatus.OVERDUE);
     	
     	test_task_List.add(SelectedTask1);
     	test_task_List.add(nonDefaultAddedTask);

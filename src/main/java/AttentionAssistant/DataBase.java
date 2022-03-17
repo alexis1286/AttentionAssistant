@@ -575,6 +575,24 @@ public class DataBase {
         			"', dueDate = '" + DateTime +
         			"', priority = '" + task.getPriority() +
         			"' WHERE taskID = '" + task.getTaskID() + "'";
+            //if the task is completed
+        	if (task.getStatus() == TaskStatus.CLOSED) {
+                Task previousTask = this.SelectTask(task.getTaskID());
+            //if the previousTask in the database was not completed
+                if (previousTask.getStatus() != TaskStatus.CLOSED) {
+                	Date dateCompleted= new Date(System.currentTimeMillis());
+                	String DateTimeCompleted= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dateCompleted);
+                	query1 = "UPDATE task " +
+                			"SET description = '" + task.getDescription().replaceAll("'", "''") + 
+                			"', observable = '" + task.getObservable() + 
+                			"', status = '" + task.getStatus().toString().replaceAll("'", "''") +
+                			"', name = '" + task.getTaskName().replaceAll("'", "''") +
+                			"', dueDate = '" + DateTime +
+                			"', completedDate = '" + DateTimeCompleted +
+                			"', priority = '" + task.getPriority() +
+                			"' WHERE taskID = '" + task.getTaskID() + "'";                	
+                }
+            }
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
@@ -689,6 +707,7 @@ public class DataBase {
     		sqlCon.enforceForeignKeys(true);
             ds.setConfig(sqlCon);
         	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+        	ArrayList<Task> overDueTasks = new ArrayList<Task>();
         	Task blankTask = new Task();
         	String query1 = "SELECT * FROM task WHERE fk_userID = '"+ userID+ "' ORDER BY observable DESC, priority DESC, dueDate ASC";
         	try ( Connection conn = ds.getConnection();
@@ -704,6 +723,11 @@ public class DataBase {
         		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
         		    blankTask.setDueDate(date1);
         		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+        		    Date datenow = new Date(System.currentTimeMillis());
+        		    if (blankTask.getDueDate().compareTo(datenow) < 0 && blankTask.getStatus() == TaskStatus.OPEN) {
+        		    	blankTask.setStatus(TaskStatus.OVERDUE);
+        		    	overDueTasks.add(blankTask);
+        		    }
         		    tasksOnList.add(blankTask);
         		    }
         		    System.out.println( "SelectAllTasks() returned " + rs );
@@ -715,6 +739,10 @@ public class DataBase {
         		}
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
+            for (int i=0; i < overDueTasks.size(); i++) {
+            	this.UpdateTask(overDueTasks.get(i));
+            }
+            
         	return tasksOnList;
         }
         
