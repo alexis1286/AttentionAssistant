@@ -216,7 +216,7 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 
-		JLabel taskLabel=new JLabel(tasks(pm).get(0).getTaskName());
+		JLabel taskLabel=new JLabel(tasks(pm).get(1).getTaskName());
 		JPanel taskpanel = new JPanel();
 		taskpanel.setBackground(aa_grey);
 		taskLabel.setForeground(Color.white);
@@ -257,7 +257,7 @@ public class Pomodoro_Timer
         		
         				}
         				else {
-        				MainTimer();
+        				MainTimer(pm);
          	
         				}
         		
@@ -384,7 +384,7 @@ public class Pomodoro_Timer
 	/**
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
-	public void BreakTimer() {
+	public void BreakTimer(Priority_Manager pm) {
 	
 		t = new Timer(1000, new ActionListener() {
 			
@@ -402,7 +402,7 @@ public class Pomodoro_Timer
 				if(breakmin == 0 && sec==0) {
 					t.stop();
 					b.setVisible(false);
-					MainTimer();
+					MainTimer(pm);
 					min = initalmin;					
 				
 				}
@@ -446,7 +446,44 @@ public class Pomodoro_Timer
 	/**
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
 	 */
-	public void MainTimer() {
+	
+	public void TaskDropDown(Priority_Manager pm) {
+		   JFrame jFrame = new JFrame();
+		   
+		   String[] array = new String[tasks(pm).size()];
+		   
+		   for(int i=0; i< tasks(pm).size(); i++) {
+			 array[i] = tasks(pm).get(i).getTaskName();
+		   }
+	        JComboBox<String> jComboBox = new JComboBox<>(array);
+	        jComboBox.setBounds(80, 50, 200, 20);
+
+	        JButton jButton = new JButton("Done");
+	        jButton.setBounds(120, 100, 90, 20);
+
+	        JLabel jLabel = new JLabel();
+	        jLabel.setBounds(90, 100, 400, 100);
+
+	        jFrame.add(jButton);
+	        jFrame.add(jComboBox);
+	        jFrame.add(jLabel);
+	        
+	        jFrame.setLayout(null);
+	        jFrame.setSize(350, 250);
+	        jFrame.setVisible(true);
+	        
+	        
+	        jButton.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                String selectedFruit = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
+	                jLabel.setText(selectedFruit);
+	            }
+	        });
+
+
+	}
+	public void MainTimer(Priority_Manager pm) {
 	t = new Timer(1000, new ActionListener() {
 			
 			@Override
@@ -526,10 +563,7 @@ public class Pomodoro_Timer
 										
 								
 										 if(NonewTaskInt==0){  //for yes
-											 JFrame frame = new JFrame();
-											JOptionPane.showMessageDialog(frame, "Please create a new task.");
-											//TODO link priority manager so user can add new task
-									      //deploy priority manager to have user assign a new task
+											 TaskDropDown(pm);
 										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
 											System.exit(1);
 										 }else{ //none selected
@@ -543,7 +577,7 @@ public class Pomodoro_Timer
 					
 					 }else if(initaltask==1){ //for no
 						 //break timer repeats; user has not finished inital task. 
-						BreakTimer();
+						BreakTimer(pm);
 						MainTimerRunning = false;
 						BreakTimerRunning = false;
 						paused = false;
@@ -644,9 +678,8 @@ public class Pomodoro_Timer
 				frame.setLocationRelativeTo(null);
 				//Input(settings);
 				getWorkBreakStatus();
-			
-				
-				
+		
+				TaskDropDown(pm);
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
