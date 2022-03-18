@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
  
 public class Notification_System {
 	//observe runs monitoring every 3 minutes, allows for time tracking 
+	private int userID;
+	
 	int timeDistracted=0; 
 	int timeFocused=0;
 	Settings settings;
@@ -26,7 +28,7 @@ public class Notification_System {
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
 		this.settings = new Settings(userID);
-		
+		this.userID = userID;
 		this.isAudioActive = true;
 		this.isAvatarActive = true;
 		this.audioPath = "";
@@ -49,7 +51,7 @@ public class Notification_System {
 	}
 	
 	
-	private void displayNotif(String text, String type,int notifID) {
+	private void displayNotif(String text, String type) {
 		JFrame frame = new JFrame();
 		boolean isIgnored=false;
 		Date date = new Date();
@@ -69,15 +71,32 @@ public class Notification_System {
 		}
 		//display notification, return isIgnored
 		Notification notif = new Notification(1,type,isIgnored,date);
-		db.AddNotification(notif,notifID);
+		db.AddNotification(notif,userID);
 		JOptionPane.showMessageDialog(frame, text);
 	}
 	
 	
-	public void distracted(int notifID) {
+	public void resumePomo() {
+		//on-task & null
+		String text = "You're working but your timer is paused!";
+		timeFocused += 3;
+		displayNotif(text,"resume");
+	}
+	
+	
+	public void isNull() {
+		//if off-task & null OR off-task & in break period
+		String text = "we are paused...";
+		displayNotif(text,"paused");
+	}
+	
+	
+	public void distracted() {
+		//in work period & off-task
+		
 		String text = "User is distracted, guide back to task";
 		timeDistracted += 3;
-		displayNotif(text, "distracted",notifID);
+		displayNotif(text, "distracted");
 		
 		/* This will say whatever is in String text */
 		//AudioHandler tts = new AudioHandler();
@@ -86,45 +105,57 @@ public class Notification_System {
 	}
 	
 	
-	public void selfCare(int notifID) {
+	public void selfCare() {
+		//on-task for too long with no break
+		
 		String text = "User needs a break";
 		timeFocused += 3;
-		displayNotif(text,"selfCare",notifID);
+		displayNotif(text,"selfCare");
 	}
 	
 	
-	public void allGood(int notifID) {
+	public void allGood() {
+		//in work period & on-task
+		
 		String text = "User is on task";
 		timeFocused += 3;
-		displayNotif(text,"encourage",notifID);
+		displayNotif(text,"encourage");
 		//add words of encouragement?
 	}
 	
 	
-	public void dueDateApproaching(Task task,int notifID) {
+	public void dueDateApproaching(Task task) {
+		//due date happening soon
+		
 		String text = "Due date approaching for task: " + task.getTaskName();
-		displayNotif(text,"dueDate",notifID);
+		displayNotif(text,"dueDate");
 	}
 	
 	
-	public void taskCompleted(Task task,int notifID) {
+	public void taskCompleted(Task task) {
+		//task is completed
+		
 		String text = "Yay! You completed "+task.getTaskName()+", great job!";
-		displayNotif(text,"complete",notifID);
+		displayNotif(text,"complete");
 	}
 	
 	
-	public void breakTime(int notifID) {
+	public void breakTime() {
+		//break period start
+		
 		Task task = new Task();
 		//get non-observable task
 		String text = "It's time to take a break, why not work on "+task.getTaskName()+"?";
-		displayNotif(text,"break",notifID);
+		displayNotif(text,"break");
 	}
 	
 	
-	public void workTime(int notifID) {
+	public void workTime() {
+		//work period start
+		
 		Task activeTask = new Task();
 		//get active task
 		String text = "It's time to get back on task! "+activeTask.getTaskName()+" is your current goal.";
-		displayNotif(text,"work",notifID);
+		displayNotif(text,"work");
 	}
 }
