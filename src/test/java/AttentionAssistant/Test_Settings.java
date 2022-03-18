@@ -42,30 +42,44 @@ public class Test_Settings {
 		boolean testHtbIsVisible = false; 
 		boolean testNtbIsVisible = false; 
 		boolean testProgReportIsVisible = false; 
+		boolean testTimerVisibilityIsLocked = true;
+		boolean testPmVisibilityIsLocked = true;
+		boolean testFtsVisibilityIsLocked = true;
+		boolean testHtbVisibilityIsLocked = true;
+		boolean testNtbVisibilityIsLocked = true;
+		boolean testProgReportVisibilityIsLocked = true;
 		boolean testAvatarIsActive = true; 
 		boolean testTextIsActive = false; 
 		boolean testAudioIsActive = true;
+		boolean testTextToSpeech = true; 
 		String testAvatarFilePath = "images/avatar_cat1.png"; 
-		String testAudioFilePath = "test";
 		boolean testAlwaysOnScreen = true; 
 		int testAvatarSize = 75; 
 		boolean testPomodoroIsActive = false; 
+		boolean testPomodoroIsLocked = true;
 		int testWorkPeriod = 33; 
+		boolean testWorkPeriodIsLocked = true;
 		int testBreakPeriod = 23; 
+		boolean testBreakPeriodIsLocked = true;
 		boolean testTimeShowing = false; 
 		boolean testFtsIsActive = false; 
 		boolean testNtbIsActive = false; 
 		boolean testIsAutoLinked = false; 
 		boolean testHtbIsActive = false; 
+		boolean testFtsIsLocked = true;
+		boolean testNtbIsLocked = true;
+		boolean testHtbIsLocked = true;
 		
 		defaultSettings = new Settings(userID);
 		
-		nonDefaultSettings = new Settings(testSettingsID, testUserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
-										  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
-										  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
-										  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
-										  testPomodoroIsActive, testWorkPeriod, testBreakPeriod, testTimeShowing, testFtsIsActive, 
-										  testNtbIsActive, testIsAutoLinked, testHtbIsActive);
+		nonDefaultSettings = new Settings(testSettingsID, testUserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, 
+										  testXCoord, testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
+										  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testTimerVisibilityIsLocked, testPmVisibilityIsLocked, 
+										  testFtsVisibilityIsLocked, testHtbVisibilityIsLocked, testNtbVisibilityIsLocked, testProgReportVisibilityIsLocked, 
+										  testAvatarIsActive, testTextIsActive, testAudioIsActive, testTextToSpeech, testAvatarFilePath, testAlwaysOnScreen, 
+										  testAvatarSize, testPomodoroIsActive, testPomodoroIsLocked, testWorkPeriod, testWorkPeriodIsLocked, testBreakPeriod, 
+										  testBreakPeriodIsLocked, testTimeShowing, testFtsIsActive, testNtbIsActive, testIsAutoLinked, testHtbIsActive, 
+										  testFtsIsLocked, testNtbIsLocked, testHtbIsLocked);
 		
 		copySettings = new Settings(nonDefaultSettings);
 		
@@ -177,6 +191,42 @@ public class Test_Settings {
 					+ defaultSettings.getProgReportIsVisible());
 		
 		/**
+		 * Make sure Settings timerVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getTimerVisibilityIsLocked(), "Default constructor Settings.timerVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getTimerVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings pmVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getPmVisibilityIsLocked(), "Default constructor Settings.pmVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getPmVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ftsVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getFtsVisibilityIsLocked(), "Default constructor Settings.ftsVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getFtsVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings htbVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getHtbVisibilityIsLocked(), "Default constructor Settings.htbVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getHtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ntbVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getNtbVisibilityIsLocked(), "Default constructor Settings.ntbVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getNtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings progReportVisibilityIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getProgReportVisibilityIsLocked(), "Default constructor Settings.progReportVisibilityIsLocked should be false. Returned: "
+					+ defaultSettings.getProgReportVisibilityIsLocked());
+		
+		/**
 		 * Make sure Settings avatarIsActive is set to false for default constructor 
 		 */
 		assertEquals(false, defaultSettings.getAvatarIsActive(), "Default constructor Settings.avatarIsActive should be false. Returned: "
@@ -187,6 +237,7 @@ public class Test_Settings {
 		 */
 		assertEquals(true, defaultSettings.getTextIsActive(), "Default constructor Settings.textIsActive should be true. Returned: "
 					+ defaultSettings.getTextIsActive());
+		
 		/**
 		 * Make sure Settings audioIsActive is set to false for default constructor 
 		 */
@@ -194,16 +245,16 @@ public class Test_Settings {
 					+ defaultSettings.getAudioIsActive());
 		
 		/**
+		 * Make sure Settings textToSpeech is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getTextToSpeech(), "Default constructor Settings.textToSpeech should be false. Returned: "
+					+ defaultSettings.getTextToSpeech());
+		
+		/**
 		 * Make sure Settings avatarFilePath is set to "images/avatar_dino.png" for default constructor
 		 */
 		assertEquals("avatarSelection/avatar_dino.png", defaultSettings.getAvatarFilePath(), "Default constructor Settings.avatarFilePath should be \"images/avatar_dino.png\". Returned: "
 					+ defaultSettings.getAvatarFilePath()); 
-		 
-		/**
-		 * Make sure Settings audioFilePath is set to "" for default constructor
-		 */
-		assertEquals("", defaultSettings.getAudioFilePath(), "Default constructor Settings.audioFilePath should be \"\". Returned: "
-					+ defaultSettings.getAudioFilePath()); 
 		
 		/**
 		 * Make sure alwaysOnScreen is set to false for default constructor
@@ -224,16 +275,34 @@ public class Test_Settings {
 					+ defaultSettings.getPomodoroIsActive());
 		
 		/**
+		 * Make sure Settings pomodoroIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getPomodoroIsLocked(), "Default constructor Settings.pomodoroIsLocked should be false. Returned: "
+					+ defaultSettings.getPomodoroIsLocked());
+		
+		/**
 		 * Make sure Settings workPeriod is set to 45 for default constructor 
 		 */
 		assertEquals(45, defaultSettings.getWorkPeriod(), "Default constructor Settings.workPeriod should be 45. Returned: "
 					+ Integer.toString(defaultSettings.getWorkPeriod()));
 		
 		/**
+		 * Make sure Settings workPeriodIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getWorkPeriodIsLocked(), "Default constructor Settings.workPeriodIsLocked should be false. Returned: "
+					+ defaultSettings.getWorkPeriodIsLocked());
+		
+		/**
 		 * Make sure Settings breakPeriod is set to 15 for default constructor 
 		 */
 		assertEquals(15, defaultSettings.getBreakPeriod(), "Default constructor Settings.breakPeriod should be 15. Returned: "
 					+ Integer.toString(defaultSettings.getBreakPeriod()));
+		
+		/**
+		 * Make sure Settings breakPeriodIsLocked is set to false for default constructor 
+		 */
+		assertEquals(false, defaultSettings.getBreakPeriodIsLocked(), "Default constructor Settings.breakPeriodIsLocked should be false. Returned: "
+					+ defaultSettings.getBreakPeriodIsLocked());
 		
 		/**
 		 * Make sure Settings timeShowing is set to true for default constructor
@@ -264,6 +333,24 @@ public class Test_Settings {
 		 */
 		assertEquals(true, defaultSettings.getHtbIsActive(), "Default constructor Settings.htbIsActive should be true. Returned: "
 					+ defaultSettings.getHtbIsActive());
+		
+		/**
+		 * Make sure Settings ftsIsLocked is set to false for default constructor
+		 */
+		assertEquals(false, defaultSettings.getFtsIsLocked(), "Default constructor Settings.ftsIsLocked should be false. Returned: "
+					+ defaultSettings.getFtsIsLocked());
+		
+		/**
+		 * Make sure Settings ntbIsLocked is set to false for default constructor
+		 */
+		assertEquals(false, defaultSettings.getNtbIsLocked(), "Default constructor Settings.ntbIsLocked should be false. Returned: "
+					+ defaultSettings.getNtbIsLocked());
+		
+		/**
+		 * Make sure Settings htbIsLocked is set to false for default constructor
+		 */
+		assertEquals(false, defaultSettings.getHtbIsLocked(), "Default constructor Settings.htbIsLocked should be false. Returned: "
+					+ defaultSettings.getHtbIsLocked());
 		
 	}
 	
@@ -375,6 +462,42 @@ public class Test_Settings {
 					+ nonDefaultSettings.getProgReportIsVisible());
 		
 		/**
+		 * Make sure Settings timerVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getTimerVisibilityIsLocked(), "nonDefault constructor Settings.timerVisibilityIsLocked should be ture. Returned: "
+					+ nonDefaultSettings.getTimerVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings pmVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getPmVisibilityIsLocked(), "nonDefault constructor Settings.pmVisibilityIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getPmVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ftsVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getFtsVisibilityIsLocked(), "nonDefault constructor Settings.ftsVisibilityIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getFtsVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings htbVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getHtbVisibilityIsLocked(), "nonDefault constructor Settings.htbVisibilityIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getHtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ntbVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getNtbVisibilityIsLocked(), "nonDefault constructor Settings.ntbVisibilityIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getNtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings progReportVisibilityIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getProgReportVisibilityIsLocked(), "nonDefault constructor Settings.progReportVisibilityIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getProgReportVisibilityIsLocked());
+		
+		/**
 		 * Make sure Settings avatarIsActive is set to true for nonDefault constructor 
 		 */
 		assertEquals(true, nonDefaultSettings.getAvatarIsActive(), "nonDefault constructor Settings.avatarIsActive should be true. Returned: "
@@ -385,6 +508,7 @@ public class Test_Settings {
 		 */
 		assertEquals(false, nonDefaultSettings.getTextIsActive(), "nonDefault constructor Settings.textIsActive should be false. Returned: "
 					+ nonDefaultSettings.getTextIsActive());
+		
 		/**
 		 * Make sure Settings audioIsActive is set to true for nonDefault constructor 
 		 */
@@ -392,16 +516,16 @@ public class Test_Settings {
 					+ nonDefaultSettings.getAudioIsActive());
 		
 		/**
+		 * Make sure Settings textToSpeech is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getTextToSpeech(), "nonDefault constructor Settings.textToSpeech should be true. Returned: "
+					+ nonDefaultSettings.getTextToSpeech());
+		
+		/**
 		 * Make sure Settings avatarFilePath is set to "images/avatar_cat1.png" for nonDefault constructor
 		 */
 		assertEquals("images/avatar_cat1.png", nonDefaultSettings.getAvatarFilePath(), "nonDefault constructor Settings.avatarFilePath should be \"images/avatar_cat1.png\". Returned: "
 					+ nonDefaultSettings.getAvatarFilePath()); 
-		 
-		/**
-		 * Make sure Settings audioFilePath is set to "test" for nonDefault constructor
-		 */
-		assertEquals("test", nonDefaultSettings.getAudioFilePath(), "nonDefault constructor Settings.audioFilePath should be \"test\". Returned: "
-					+ nonDefaultSettings.getAudioFilePath()); 
 		
 		/**
 		 * Make sure alwaysOnScreen is set to true for nonDefault constructor
@@ -422,16 +546,34 @@ public class Test_Settings {
 					+ nonDefaultSettings.getPomodoroIsActive());
 		
 		/**
+		 * Make sure Settings pomodoroIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getPomodoroIsLocked(), "nonDefault constructor Settings.pomodoroIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getPomodoroIsLocked());
+		
+		/**
 		 * Make sure Settings workPeriod is set to 33 for nonDefault constructor 
 		 */
 		assertEquals(33, nonDefaultSettings.getWorkPeriod(), "nonDefault constructor Settings.workPeriod should be 33. Returned: "
 					+ Integer.toString(nonDefaultSettings.getWorkPeriod()));
 		
 		/**
+		 * Make sure Settings workPeriodIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getWorkPeriodIsLocked(), "nonDefault constructor Settings.workPeriodIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getWorkPeriodIsLocked());
+		
+		/**
 		 * Make sure Settings breakPeriod is set to 23 for nonDefault constructor 
 		 */
 		assertEquals(23, nonDefaultSettings.getBreakPeriod(), "nonDefault constructor Settings.breakPeriod should be 23. Returned: "
 					+ Integer.toString(nonDefaultSettings.getBreakPeriod()));
+		
+		/**
+		 * Make sure Settings breakPeriodIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getBreakPeriodIsLocked(), "nonDefault constructor Settings.breakPeriodIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getBreakPeriodIsLocked());
 		
 		/**
 		 * Make sure Settings timeShowing is set to false for nonDefault constructor
@@ -462,6 +604,24 @@ public class Test_Settings {
 		 */
 		assertEquals(false, nonDefaultSettings.getHtbIsActive(), "nonDefault constructor Settings.htbIsActive should be false. Returned: "
 					+ nonDefaultSettings.getHtbIsActive());
+		
+		/**
+		 * Make sure Settings ftsIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getFtsIsLocked(), "nonDefault constructor Settings.ftsIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getFtsIsLocked());
+		
+		/**
+		 * Make sure Settings ntbIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getNtbIsLocked(), "nonDefault constructor Settings.ntbIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getNtbIsLocked());
+		
+		/**
+		 * Make sure Settings htbIsLocked is set to true for nonDefault constructor 
+		 */
+		assertEquals(true, nonDefaultSettings.getHtbIsLocked(), "nonDefault constructor Settings.htbIsLocked should be true. Returned: "
+					+ nonDefaultSettings.getHtbIsLocked());
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -572,6 +732,42 @@ public class Test_Settings {
 					+ copySettings.getProgReportIsVisible());
 		
 		/**
+		 * Make sure Settings timerVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getTimerVisibilityIsLocked(), "Copy constructor Settings.timerVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getTimerVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings pmVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getPmVisibilityIsLocked(), "Copy constructor Settings.pmVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getPmVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ftsVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getFtsVisibilityIsLocked(), "Copy constructor Settings.ftsVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getFtsVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings htbVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getHtbVisibilityIsLocked(), "Copy constructor Settings.htbVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getHtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings ntbVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getNtbVisibilityIsLocked(), "Copy constructor Settings.ntbVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getNtbVisibilityIsLocked());
+		
+		/**
+		 * Make sure Settings progReportVisibilityIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getProgReportVisibilityIsLocked(), "Copy constructor Settings.progReportVisibilityIsLocked should be true. Returned: "
+					+ copySettings.getProgReportVisibilityIsLocked());
+		
+		/**
 		 * Make sure Settings avatarIsActive is set to true for copy constructor 
 		 */
 		assertEquals(true, copySettings.getAvatarIsActive(), "Copy constructor Settings.avatarIsActive should be true. Returned: "
@@ -582,6 +778,7 @@ public class Test_Settings {
 		 */
 		assertEquals(false, copySettings.getTextIsActive(), "Copy constructor Settings.textIsActive should be false. Returned: "
 					+ copySettings.getTextIsActive());
+		
 		/**
 		 * Make sure Settings audioIsActive is set to true for copy constructor 
 		 */
@@ -589,17 +786,17 @@ public class Test_Settings {
 					+ copySettings.getAudioIsActive());
 		
 		/**
+		 * Make sure Settings textToSpeech is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getTextToSpeech(), "Copy constructor Settings.textToSpeech should be true. Returned: "
+					+ copySettings.getTextToSpeech());
+		
+		/**
 		 * Make sure Settings avatarFilePath is set to "images/avatar_cat1.png" for copy constructor
 		 */
 		assertEquals("images/avatar_cat1.png", copySettings.getAvatarFilePath(), "Copy constructor Settings.avatarFilePath should be \"images/avatar_cat1.png\". Returned: "
 					+ copySettings.getAvatarFilePath()); 
-		 
-		/**
-		 * Make sure Settings audioFilePath is set to "test" for copy constructor
-		 */
-		assertEquals("test", copySettings.getAudioFilePath(), "Copy constructor Settings.audioFilePath should be \"test\". Returned: "
-					+ copySettings.getAudioFilePath()); 
-		
+
 		/**
 		 * Make sure alwaysOnScreen is set to true for copy constructor
 		 */
@@ -619,16 +816,34 @@ public class Test_Settings {
 					+ copySettings.getPomodoroIsActive());
 		
 		/**
+		 * Make sure Settings pomodoroIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getPomodoroIsLocked(), "Copy constructor Settings.pomodoroIsLocked should be true. Returned: "
+					+ copySettings.getPomodoroIsLocked());
+		
+		/**
 		 * Make sure Settings workPeriod is set to 33 for copy constructor 
 		 */
 		assertEquals(33, copySettings.getWorkPeriod(), "Copy constructor Settings.workPeriod should be 33. Returned: "
 					+ Integer.toString(copySettings.getWorkPeriod()));
 		
 		/**
+		 * Make sure Settings workPeriodIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getWorkPeriodIsLocked(), "Copy constructor Settings.workPeriodIsLocked should be true. Returned: "
+					+ copySettings.getWorkPeriodIsLocked());
+		
+		/**
 		 * Make sure Settings breakPeriod is set to 23 for copy constructor 
 		 */
 		assertEquals(23, copySettings.getBreakPeriod(), "Copy constructor Settings.breakPeriod should be 23. Returned: "
 					+ Integer.toString(copySettings.getBreakPeriod()));
+		
+		/**
+		 * Make sure Settings breakPeriodIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getBreakPeriodIsLocked(), "Copy constructor Settings.breakPeriodIsLocked should be true. Returned: "
+					+ copySettings.getBreakPeriodIsLocked());
 		
 		/**
 		 * Make sure Settings timeShowing is set to false for copy constructor
@@ -659,6 +874,24 @@ public class Test_Settings {
 		 */
 		assertEquals(false, copySettings.getHtbIsActive(), "Copy constructor Settings.htbIsActive should be false. Returned: "
 					+ copySettings.getHtbIsActive());
+		
+		/**
+		 * Make sure Settings ftsIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getFtsIsLocked(), "Copy constructor Settings.ftsIsLocked should be true. Returned: "
+					+ copySettings.getFtsIsLocked());
+		
+		/**
+		 * Make sure Settings ntbIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getNtbIsLocked(), "Copy constructor Settings.ntbIsLocked should be true. Returned: "
+					+ copySettings.getNtbIsLocked());
+		
+		/**
+		 * Make sure Settings htbIsLocked is set to true for copy constructor 
+		 */
+		assertEquals(true, copySettings.getHtbIsLocked(), "Copy constructor Settings.htbIsLocked should be true. Returned: "
+					+ copySettings.getHtbIsLocked());
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -842,7 +1075,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetProgReportIsVisible")
-	void SettingsProgReportIsVisible() {
+	void SettingsSetProgReportIsVisible() {
 		
 		copySettings.setProgReportIsVisible(true);
 		assertEquals(true, copySettings.getProgReportIsVisible(), "copySettings.progReportIsVisible should be set to true, but returned: "
@@ -852,8 +1085,74 @@ public class Test_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
 	@Test
+	@DisplayName("<Settings> SetTimerVisibilityIsLocked")
+	void SettingsSetTimerVisibilityIsLocked() {
+		
+		copySettings.setTimerVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getTimerVisibilityIsLocked(), "copySettings.timerVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getTimerVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetPmVisibilityIsLocked")
+	void SettingsSetPmVisibilityIsLocked() {
+		
+		copySettings.setPmVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getPmVisibilityIsLocked(), "copySettings.pmVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getPmVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetFtsVisibilityIsLocked")
+	void SettingsSetFtsVisibilityIsLocked() {
+		
+		copySettings.setFtsVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getFtsVisibilityIsLocked(), "copySettings.ftsVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getFtsVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetHtbVisibilityIsLocked")
+	void SettingsSetHtbVisibilityIsLocked() {
+		
+		copySettings.setHtbVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getHtbVisibilityIsLocked(), "copySettings.htbVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getHtbVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetNtbVisibilityIsLocked")
+	void SettingsSetNtbVisibilityIsLocked() {
+		
+		copySettings.setNtbVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getNtbVisibilityIsLocked(), "copySettings.ntbVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getNtbVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetProgReportVisibilityIsLocked")
+	void SettingsSetProgReportVisibilityIsLocked() {
+		
+		copySettings.setProgReportVisibilityIsLocked(false);
+		assertEquals(false, copySettings.getProgReportVisibilityIsLocked(), "copySettings.progReportVisibilityIsLocked should be set to false, but returned: "
+					+ copySettings.getProgReportVisibilityIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
 	@DisplayName("<Settings> SetAvatarIsActive")
-	void SettingsAvatarIsActive() {
+	void SettingsSetAvatarIsActive() {
 		
 		copySettings.setAvatarIsActive(false);
 		assertEquals(false, copySettings.getAvatarIsActive(), "copySettings.avatarIsActive should be set to false, but returned: "
@@ -864,7 +1163,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetTextIsActive")
-	void SettingsTextIsActive() {
+	void SettingsSetTextIsActive() {
 		
 		copySettings.setTextIsActive(true);
 		assertEquals(true, copySettings.getTextIsActive(), "copySettings.textIsActive should be set to true, but returned: "
@@ -875,7 +1174,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetAudioIsActive")
-	void SettingsAudioIsActive() {
+	void SettingsSetAudioIsActive() {
 		
 		copySettings.setAudioIsActive(false);
 		assertEquals(false, copySettings.getAudioIsActive(), "copySettings.audioIsActive should be set to false, but returned: "
@@ -885,8 +1184,19 @@ public class Test_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
 	@Test
+	@DisplayName("<Settings> SetTextToSpeech")
+	void SettingsSetTextToSpeech() {
+		
+		copySettings.setTextToSpeech(false);
+		assertEquals(false, copySettings.getTextToSpeech(), "copySettings.textToSpeech should be set to false, but returned: "
+					+ copySettings.getTextToSpeech()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
 	@DisplayName("<Settings> SetAvatarFilePath")
-	void SettingsAvatarFilePath() {
+	void SettingsSetAvatarFilePath() {
 		
 		copySettings.setAvatarFilePath("images/avatar_duck.png");
 		assertEquals("images/avatar_duck.png", copySettings.getAvatarFilePath(), "copySettings.avatarFilePath should be set to \"images/avatar_duck.png\", but returned: "
@@ -896,19 +1206,8 @@ public class Test_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
 	@Test
-	@DisplayName("<Settings> SetAudioFilePath")
-	void SettingsAudioFilePath() {
-		
-		copySettings.setAudioFilePath("testtesttest");
-		assertEquals("testtesttest", copySettings.getAudioFilePath(), "copySettings.audioFilePath should be set to \"testtesttest\", but returned: "
-					+ copySettings.getAudioFilePath()); 
-	}
-	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	
-	@Test
 	@DisplayName("<Settings> SetAlwaysOnScreen")
-	void SettingsAlwaysOnScreen() {
+	void SettingsSetAlwaysOnScreen() {
 		
 		copySettings.setAlwaysOnScreen(false);
 		assertEquals(false, copySettings.getAlwaysOnScreen(), "copySettings.alwaysOnScreen should be set to false, but returned: "
@@ -930,11 +1229,22 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetPomodoroIsActive")
-	void SettingsPomodoroIsActive() {
+	void SettingsSetPomodoroIsActive() {
 		
 		copySettings.setPomodoroIsActive(true);
 		assertEquals(true, copySettings.getPomodoroIsActive(), "copySettings.pomodoroIsActive should be set to true, but returned: "
 					+ copySettings.getPomodoroIsActive()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetPomodoroIsLocked")
+	void SettingsSetPomodoroIsLocked() {
+		
+		copySettings.setPomodoroIsLocked(false);
+		assertEquals(false, copySettings.getPomodoroIsLocked(), "copySettings.pomodoroIsLocked should be set to false, but returned: "
+					+ copySettings.getPomodoroIsLocked()); 
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -946,6 +1256,17 @@ public class Test_Settings {
 		copySettings.setWorkPeriod(75);
 		assertEquals(75, copySettings.getWorkPeriod(), "copySettings.workPeriod should be set to 75, but returned: "
 					+ Integer.toString(copySettings.getWorkPeriod())); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetWorkPeriodIsLocked")
+	void SettingsSetWorkPeriodIsLocked() {
+		
+		copySettings.setWorkPeriodIsLocked(false);
+		assertEquals(false, copySettings.getWorkPeriodIsLocked(), "copySettings.workPeriodIsLocked should be set to false, but returned: "
+					+ copySettings.getWorkPeriodIsLocked()); 
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -962,8 +1283,19 @@ public class Test_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
 	@Test
+	@DisplayName("<Settings> SetBreakPeriodIsLocked")
+	void SettingsSetBreakPeriodIsLocked() {
+		
+		copySettings.setBreakPeriodIsLocked(false);
+		assertEquals(false, copySettings.getBreakPeriodIsLocked(), "copySettings.breakPeriodIsLocked should be set to false, but returned: "
+					+ copySettings.getBreakPeriodIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
 	@DisplayName("<Settings> SetTimeShowing")
-	void SettingsTimeShowing() {
+	void SettingsSetTimeShowing() {
 		
 		copySettings.setTimeShowing(true);
 		assertEquals(true, copySettings.getTimeShowing(), "copySettings.timeShowing should be set to true, but returned: "
@@ -974,7 +1306,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetFtsIsActive")
-	void SettingsFtsIsActive() {
+	void SettingsSetFtsIsActive() {
 		
 		copySettings.setFtsIsActive(true);
 		assertEquals(true, copySettings.getFtsIsActive(), "copySettings.ftsIsActive should be set to true, but returned: "
@@ -985,7 +1317,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetNtbIsActive")
-	void SettingsNtbIsActive() {
+	void SettingsSetNtbIsActive() {
 		
 		copySettings.setNtbIsActive(true);
 		assertEquals(true, copySettings.getNtbIsActive(), "copySettings.ntbIsActive should be set to true, but returned: "
@@ -996,7 +1328,7 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetIsAutoLinked")
-	void SettingsIsAutoLinked() {
+	void SettingsSetIsAutoLinked() {
 		
 		copySettings.setIsAutoLinked(true);
 		assertEquals(true, copySettings.getIsAutoLinked(), "copySettings.isAutoLinked should be set to true, but returned: "
@@ -1007,10 +1339,43 @@ public class Test_Settings {
 	
 	@Test
 	@DisplayName("<Settings> SetHtbIsActive")
-	void SettingsHtbIsActive() {
+	void SettingsSetHtbIsActive() {
 		
 		copySettings.setHtbIsActive(true);
 		assertEquals(true, copySettings.getHtbIsActive(), "copySettings.htbIsActive should be set to true, but returned: "
 					+ copySettings.getHtbIsActive()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetFtsIsLocked")
+	void SettingsSetFtsIsLocked() {
+		
+		copySettings.setFtsIsLocked(true);
+		assertEquals(true, copySettings.getFtsIsLocked(), "copySettings.ftsIsLocked should be set to true, but returned: "
+					+ copySettings.getFtsIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetNtbIsLocked")
+	void SettingsSetNtbIsLocked() {
+		
+		copySettings.setNtbIsLocked(true);
+		assertEquals(true, copySettings.getNtbIsLocked(), "copySettings.ntbIsLocked should be set to true, but returned: "
+					+ copySettings.getNtbIsLocked()); 
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	@Test
+	@DisplayName("<Settings> SetHtbIsLocked")
+	void SettingsSetHtbIsLocked() {
+		
+		copySettings.setHtbIsLocked(true);
+		assertEquals(true, copySettings.getHtbIsLocked(), "copySettings.htbIsLocked should be set to true, but returned: "
+					+ copySettings.getHtbIsLocked()); 
 	}
 }

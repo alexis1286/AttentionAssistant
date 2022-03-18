@@ -19,7 +19,7 @@ public class AttentionAssistantDriver {
 		//this db.AddSettings(settings) call is temporary for testing purposes until user class is created
 		//db.AddSettings(settings, userID) will be called from during the registration process for a new user
 		//db.selectSettings(userID) will be called during the login process for a returning user
-		db.AddSettings(settings, userID);
+		//db.AddSettings(settings, userID); ***I commented this out temporarily after updating settings to allow the navBar and Database classes time to get updated for changes to audio notifications and parent portal booleans***
 		priority_manager = new Priority_Manager(db,observer, pomodoro_timer);
 		
 		navbar.run_nav_bar(userID,db,navbar,settings,observer,priority_manager,pomodoro_timer,negative_thought_burner,happy_thought_button,free_thought_space);

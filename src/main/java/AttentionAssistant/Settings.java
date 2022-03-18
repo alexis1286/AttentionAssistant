@@ -117,6 +117,16 @@ public class Settings {
 	private boolean progReportIsVisible; 
 	
 	/*
+	 * sets parent overrides for features visible in the navigation bar
+	 */
+	private boolean timerVisibilityIsLocked;
+	private boolean pmVisibilityIsLocked;
+	private boolean ftsVisibilityIsLocked;
+	private boolean htbVisibilityIsLocked;
+	private boolean ntbVisibilityIsLocked;
+	private boolean progReportVisibilityIsLocked;
+	
+	/*
 	 * determines if avatar is used for notifications
 	 */
 	private boolean avatarIsActive; 
@@ -137,9 +147,9 @@ public class Settings {
 	private String avatarFilePath; 
 	
 	/*
-	 * file path for audio file
+	 * determines if user has notification read aloud to them
 	 */
-	private String audioFilePath;
+	private boolean textToSpeech;
 	
 	/*
 	 * determines if avatar is always on screen
@@ -157,14 +167,29 @@ public class Settings {
 	private boolean pomodoroIsActive; 
 	
 	/*
+	 * determines parent override for active pomodoro timer
+	 */
+	private boolean pomodoroIsLocked;
+	
+	/*
 	 * work period for pomodoro timer
 	 */
 	private int workPeriod; 
 	
 	/*
+	 * parent override for work period
+	 */
+	private boolean workPeriodIsLocked;
+	
+	/*
 	 * break period for the Pomodoro Timer
 	 */
 	private int breakPeriod; 
+	
+	/*
+	 * parent override for break period
+	 */
+	private boolean breakPeriodIsLocked;
 	
 	/*
 	 * determines if times remaining on timer shows
@@ -177,6 +202,13 @@ public class Settings {
 	private boolean ftsIsActive; 
 	private boolean ntbIsActive; 
 	private boolean htbIsActive; 
+	
+	/*
+	 * determines parent overrides for active thought management features
+	 */
+	private boolean ftsIsLocked;
+	private boolean ntbIsLocked;
+	private boolean htbIsLocked;
 	
 	/*
 	 * determines if HTB is linked to NTB
@@ -204,21 +236,33 @@ public class Settings {
 		this.htbIsVisible = true; 
 		this.ntbIsVisible = true; 
 		this.progReportIsVisible = true; 
+		this.timerVisibilityIsLocked = false;
+		this.pmVisibilityIsLocked = false;
+		this.ftsVisibilityIsLocked = false;
+		this.htbVisibilityIsLocked = false;
+		this.ntbVisibilityIsLocked = false;
+		this.progReportVisibilityIsLocked = false;
 		this.avatarIsActive = false; 
 		this.textIsActive = true; 
 		this.audioIsActive = false;
+		this.textToSpeech = false; 
 		this.avatarFilePath = "avatarSelection/avatar_dino.png"; 
-		this.audioFilePath = "";
 		this.alwaysOnScreen = false; 
 		this.avatarSize = 100; 
 		this.pomodoroIsActive = true; 
+		this.pomodoroIsLocked = false;
 		this.workPeriod = 45; 
+		this.workPeriodIsLocked = false;
 		this.breakPeriod = 15; 
+		this.breakPeriodIsLocked = false;
 		this.timeShowing = true; 
 		this.ftsIsActive = true; 
 		this.ntbIsActive = true; 
 		this.isAutoLinked = true; 
 		this.htbIsActive = true; 
+		this.ftsIsLocked = false;
+		this.ntbIsLocked = false;
+		this.htbIsLocked = false;
 	}
 	
 	/**
@@ -240,16 +284,19 @@ public class Settings {
 	 * Written as a placeholder for testing, once database is set up this
 	 * constructor can be deleted
 	 * 
-	 * @param int, Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
-	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, String, String, 
-	 * 		  boolean, int, boolean, int, int, boolean, boolean, boolean, boolean, boolean
+	 * @param int, int, Color, Color, int, int, boolean, int, int, boolean, int, boolean, boolean,
+	 * 		  boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, 
+	 * 		  boolean, boolean, boolean, boolean, boolean, String, boolean, int, boolean, boolean, int, boolean, 
+	 * 		  int, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean
 	 */
 	public Settings(int settingsID, int userID, Color iconCircles, Color icons,	int opacityCircles, int opacityIcons, boolean isCollapsed, 
 					int xCoord, int yCoord, boolean isVertical, int iconSize, boolean timerIsVisible, boolean pmIsVisible, 
-					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, 
-					boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, String avatarFilePath, String audioFilePath, 
-					boolean alwaysOnScreen, int avatarSize, boolean pomodoroIsActive, int workPeriod, int breakPeriod, boolean timeShowing, 
-					boolean ftsIsActive, boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive) {
+					boolean ftsIsVisible, boolean htbIsVisible, boolean ntbIsVisible, boolean progReportIsVisible, boolean timerVisibilityIsLocked,
+					boolean pmVisibilityIsLocked, boolean ftsVisibilityIsLocked, boolean htbVisibilityIsLocked, boolean ntbVisibilityIsLocked,
+					boolean progReportVisibilityIsLocked, boolean avatarIsActive, boolean textIsActive, boolean audioIsActive, boolean textToSpeech, 
+					String avatarFilePath, boolean alwaysOnScreen, int avatarSize, boolean pomodoroIsActive, boolean pomodoroIsLocked, int workPeriod, 
+					boolean workPeriodIsLocked, int breakPeriod, boolean breakPeriodIsLocked, boolean timeShowing, boolean ftsIsActive, 
+					boolean ntbIsActive, boolean isAutoLinked, boolean htbIsActive, boolean ftsIsLocked, boolean ntbIsLocked, boolean htbIsLocked) {
 		
 		this.settingsID = settingsID;
 		this.userID = userID;
@@ -267,22 +314,34 @@ public class Settings {
 		this.ftsIsVisible = ftsIsVisible; 
 		this.htbIsVisible = htbIsVisible;
 		this.ntbIsVisible = ntbIsVisible; 
-		this.progReportIsVisible = progReportIsVisible; 
+		this.progReportIsVisible = progReportIsVisible;
+		this.timerVisibilityIsLocked = timerVisibilityIsLocked;
+		this.pmVisibilityIsLocked = pmVisibilityIsLocked;
+		this.ftsVisibilityIsLocked = ftsVisibilityIsLocked;
+		this.htbVisibilityIsLocked = htbVisibilityIsLocked;
+		this.ntbVisibilityIsLocked = ntbVisibilityIsLocked;
+		this.progReportVisibilityIsLocked = progReportVisibilityIsLocked;
 		this.avatarIsActive = avatarIsActive; 
 		this.textIsActive = textIsActive; 
 		this.audioIsActive = audioIsActive;
+		this.textToSpeech = textToSpeech;
 		this.avatarFilePath = avatarFilePath; 
-		this.audioFilePath = audioFilePath;
 		this.alwaysOnScreen = alwaysOnScreen; 
 		this.avatarSize = avatarSize; 
 		this.pomodoroIsActive = pomodoroIsActive; 
+		this.pomodoroIsLocked = pomodoroIsLocked;
 		this.workPeriod = workPeriod; 
+		this.workPeriodIsLocked = workPeriodIsLocked;
 		this.breakPeriod = breakPeriod; 
+		this.breakPeriodIsLocked = breakPeriodIsLocked;
 		this.timeShowing = timeShowing; 
 		this.ftsIsActive = ftsIsActive; 
 		this.ntbIsActive = ntbIsActive; 
 		this.isAutoLinked = isAutoLinked; 
 		this.htbIsActive = htbIsActive;
+		this.ftsIsLocked = ftsIsLocked;
+		this.ntbIsLocked = ntbIsLocked;
+		this.htbIsLocked = htbIsLocked;
 	}
 	
 	/**
@@ -307,21 +366,33 @@ public class Settings {
 		this.htbIsVisible = stgs.htbIsVisible;
 		this.ntbIsVisible = stgs.ntbIsVisible; 
 		this.progReportIsVisible = stgs.progReportIsVisible; 
+		this.timerVisibilityIsLocked = stgs.timerVisibilityIsLocked;
+		this.pmVisibilityIsLocked = stgs.pmVisibilityIsLocked;
+		this.ftsVisibilityIsLocked = stgs.ftsVisibilityIsLocked;
+		this.htbVisibilityIsLocked = stgs.htbVisibilityIsLocked;
+		this.ntbVisibilityIsLocked = stgs.ntbVisibilityIsLocked;
+		this.progReportVisibilityIsLocked = stgs.progReportVisibilityIsLocked;
 		this.avatarIsActive = stgs.avatarIsActive; 
 		this.textIsActive = stgs.textIsActive; 
 		this.audioIsActive = stgs.audioIsActive;
+		this.textToSpeech = stgs.textToSpeech;
 		this.avatarFilePath = stgs.avatarFilePath; 
-		this.audioFilePath = stgs.audioFilePath;
 		this.alwaysOnScreen = stgs.alwaysOnScreen; 
 		this.avatarSize = stgs.avatarSize; 
 		this.pomodoroIsActive = stgs.pomodoroIsActive; 
+		this.pomodoroIsLocked = stgs.pomodoroIsLocked;
 		this.workPeriod = stgs.workPeriod; 
+		this.workPeriodIsLocked = stgs.workPeriodIsLocked;
 		this.breakPeriod = stgs.breakPeriod; 
+		this.breakPeriodIsLocked = stgs.breakPeriodIsLocked;
 		this.timeShowing = stgs.timeShowing; 
 		this.ftsIsActive = stgs.ftsIsActive; 
 		this.ntbIsActive = stgs.ntbIsActive; 
 		this.isAutoLinked = stgs.isAutoLinked; 
 		this.htbIsActive = stgs.htbIsActive;
+		this.ftsIsLocked = stgs.ftsIsLocked;
+		this.ntbIsLocked = stgs.ntbIsLocked;
+		this.htbIsLocked = stgs.htbIsLocked;
 	}
 	
 	/**
@@ -600,6 +671,102 @@ public class Settings {
 		this.progReportIsVisible = progReportIsVisible;
 	}
 	
+	/*
+	 * get timerVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getTimerVisibilityIsLocked() {
+		return this.timerVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set timerVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setTimerVisibilityIsLocked(boolean timerVisibilityIsLocked) {
+		this.timerVisibilityIsLocked = timerVisibilityIsLocked;
+	}
+	
+	/*
+	 * get pmVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getPmVisibilityIsLocked() {
+		return this.pmVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set pmVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setPmVisibilityIsLocked(boolean pmVisibilityIsLocked) {
+		this.pmVisibilityIsLocked = pmVisibilityIsLocked;
+	}
+	
+	/*
+	 * get ftsVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getFtsVisibilityIsLocked() {
+		return this.ftsVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set ftsVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setFtsVisibilityIsLocked(boolean ftsVisibilityIsLocked) {
+		this.ftsVisibilityIsLocked = ftsVisibilityIsLocked;
+	}
+	
+	/*
+	 * get htbVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getHtbVisibilityIsLocked() {
+		return this.htbVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set ftsVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setHtbVisibilityIsLocked(boolean htbVisibilityIsLocked) {
+		this.htbVisibilityIsLocked = htbVisibilityIsLocked;
+	}
+
+	/*
+	 * get ntbVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getNtbVisibilityIsLocked() {
+		return this.ntbVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set ftsVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setNtbVisibilityIsLocked(boolean ntbVisibilityIsLocked) {
+		this.ntbVisibilityIsLocked = ntbVisibilityIsLocked;
+	}
+	
+	/*
+	 * get probReportVisibilityIsLocked
+	 * @return boolean
+	 */
+	public boolean getProgReportVisibilityIsLocked() {
+		return this.progReportVisibilityIsLocked; 
+	}
+	
+	/*
+	 * set ftsVisibilityIsLocked
+	 * @param boolean
+	 */
+	public void setProgReportVisibilityIsLocked(boolean progReportVisibilityIsLocked) {
+		this.progReportVisibilityIsLocked = progReportVisibilityIsLocked;
+	}
+	
 	/**
 	 * get avatarIsActive
 	 * @return boolean
@@ -649,6 +816,22 @@ public class Settings {
 	}
 	
 	/**
+	 * get textToSpeech
+	 * @return boolean
+	 */
+	public boolean getTextToSpeech() {
+		return this.textToSpeech;
+	}
+	
+	/**
+	 * set textToSpeech
+	 * @param boolean
+	 */
+	public void setTextToSpeech(boolean textToSpeech) {
+		this.textToSpeech = textToSpeech;
+	}
+	
+	/**
 	 * get avatarFilePath
 	 * @return String
 	 */
@@ -662,22 +845,6 @@ public class Settings {
 	 */
 	public void setAvatarFilePath(String avatarFilePath) {
 		this.avatarFilePath = avatarFilePath;
-	}
-	
-	/**
-	 * get adudioFilePath
-	 * @return String
-	 */
-	public String getAudioFilePath() {
-		return this.audioFilePath;
-	}
-	
-	/**
-	 * set audioFilePath
-	 * @param String
-	 */
-	public void setAudioFilePath(String audioFilePath) {
-		this.audioFilePath = audioFilePath;
 	}
 	
 	/**
@@ -730,6 +897,22 @@ public class Settings {
 	}
 	
 	/**
+	 * get pomodoroIsLocked
+	 * @return boolean
+	 */
+	public boolean getPomodoroIsLocked() {
+		return this.pomodoroIsLocked;
+	}
+	
+	/**
+	 * set pomodoroIsLocked
+	 * @param boolean
+	 */
+	public void setPomodoroIsLocked(boolean pomodoroIsLocked) {
+		this.pomodoroIsLocked = pomodoroIsLocked;
+	}
+	
+	/**
 	 * get workPeriod
 	 * @return int 
 	 */
@@ -746,6 +929,22 @@ public class Settings {
 	}
 	
 	/**
+	 * get workPeriodIsLocked
+	 * @return boolean 
+	 */
+	public boolean getWorkPeriodIsLocked() {
+		return this.workPeriodIsLocked;
+	}
+	
+	/**
+	 * set workPeriodIsLocked
+	 * @param boolean
+	 */
+	public void setWorkPeriodIsLocked(boolean workPeriodIsLocked) {
+		this.workPeriodIsLocked = workPeriodIsLocked;
+	}
+	
+	/**
 	 * get breakPeriod
 	 * @return int
 	 */
@@ -759,6 +958,22 @@ public class Settings {
 	 */
 	public void setBreakPeriod(int breakPeriod) {
 		this.breakPeriod = breakPeriod;
+	}
+	
+	/**
+	 * get breakPeriodIsLocked
+	 * @return boolean 
+	 */
+	public boolean getBreakPeriodIsLocked() {
+		return this.breakPeriodIsLocked;
+	}
+	
+	/**
+	 * set breakPeriodIsLocked
+	 * @param boolean
+	 */
+	public void setBreakPeriodIsLocked(boolean breakPeriodIsLocked) {
+		this.breakPeriodIsLocked = breakPeriodIsLocked;
 	}
 	
 	/**
@@ -839,6 +1054,54 @@ public class Settings {
 	 */
 	public void setHtbIsActive(boolean htbIsActive) {
 		this.htbIsActive = htbIsActive;
+	}
+	
+	/**
+	 * get ftsIsLocked
+	 * @return boolean
+	 */
+	public boolean getFtsIsLocked() {
+		return this.ftsIsLocked;
+	}
+	
+	/**
+	 * set ftsIsLocked
+	 * @param boolean
+	 */
+	public void setFtsIsLocked(boolean ftsIsLocked) {
+		this.ftsIsLocked = ftsIsLocked;
+	}
+	
+	/**
+	 * get ntbIsLocked
+	 * @return boolean
+	 */
+	public boolean getNtbIsLocked() {
+		return this.ntbIsLocked;
+	}
+	
+	/**
+	 * set ntbIsLocked
+	 * @param boolean
+	 */
+	public void setNtbIsLocked(boolean ntbIsLocked) {
+		this.ntbIsLocked = ntbIsLocked;
+	}
+	
+	/**
+	 * get htbIsLocked
+	 * @return boolean
+	 */
+	public boolean getHtbIsLocked() {
+		return this.htbIsLocked;
+	}
+	
+	/**
+	 * set htbIsLocked
+	 * @param boolean
+	 */
+	public void setHtbIsLocked(boolean htbIsLocked) {
+		this.htbIsLocked = htbIsLocked;
 	}
 	
 	/**
@@ -2502,21 +2765,33 @@ public class Settings {
 						settings.htbIsVisible = settingsChanges.htbIsVisible;
 						settings.ntbIsVisible = settingsChanges.ntbIsVisible; 
 						settings.progReportIsVisible = settingsChanges.progReportIsVisible; 
+						settings.timerVisibilityIsLocked = settingsChanges.timerVisibilityIsLocked;
+						settings.pmVisibilityIsLocked = settingsChanges.pmVisibilityIsLocked;
+						settings.ftsVisibilityIsLocked = settingsChanges.ftsVisibilityIsLocked;
+						settings.htbVisibilityIsLocked = settingsChanges.htbVisibilityIsLocked;
+						settings.ntbVisibilityIsLocked = settingsChanges.ntbVisibilityIsLocked;
+						settings.progReportVisibilityIsLocked = settingsChanges.progReportVisibilityIsLocked;
 						settings.avatarIsActive = settingsChanges.avatarIsActive; 
 						settings.textIsActive = settingsChanges.textIsActive; 
 						settings.audioIsActive = settingsChanges.audioIsActive;
+						settings.textToSpeech = settingsChanges.textToSpeech;
 						settings.avatarFilePath = settingsChanges.avatarFilePath; 
-						settings.audioFilePath = settingsChanges.audioFilePath;
 						settings.alwaysOnScreen = settingsChanges.alwaysOnScreen; 
 						settings.avatarSize = settingsChanges.avatarSize; 
 						settings.pomodoroIsActive = settingsChanges.pomodoroIsActive; 
+						settings.pomodoroIsLocked = settingsChanges.pomodoroIsLocked;
 						settings.workPeriod = settingsChanges.workPeriod; 
+						settings.workPeriodIsLocked = settingsChanges.workPeriodIsLocked;
 						settings.breakPeriod = settingsChanges.breakPeriod; 
+						settings.breakPeriodIsLocked = settingsChanges.breakPeriodIsLocked;
 						settings.timeShowing = settingsChanges.timeShowing; 
 						settings.ftsIsActive = settingsChanges.ftsIsActive; 
 						settings.ntbIsActive = settingsChanges.ntbIsActive; 
 						settings.isAutoLinked = settingsChanges.isAutoLinked; 
 						settings.htbIsActive = settingsChanges.htbIsActive;
+						settings.ftsIsLocked = settingsChanges.ftsIsLocked;
+						settings.ntbIsLocked = settingsChanges.ntbIsLocked;
+						settings.htbIsLocked = settingsChanges.htbIsLocked;
 						
 						if(settings.ftsIsActive == false) {
 							ftsVisibleBox.setEnabled(false);
