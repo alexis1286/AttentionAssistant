@@ -71,7 +71,8 @@ public class Pomodoro_Timer
 	public enum Work_Break {
 		Work,
 		Break,
-		Paused
+		Null,
+		Other
 	}
 	public Work_Break getWorkBreakStatus(){
 		
@@ -87,11 +88,11 @@ public class Pomodoro_Timer
 		}
 		else if (paused == true){
 			System.out.println("Paused");
-			return Work_Break.Paused;	
+			return Work_Break.Null;	
 		}
 		else {
-			System.out.println("Null");
-			return null;
+			System.out.println("other");
+			return Work_Break.Other;
 		}
 
 	}
@@ -232,20 +233,23 @@ public class Pomodoro_Timer
     			
     			}
     			else {
-
+    				
         			if(e.getSource()==startbut) {		
         				paused = false;
-        				if (b.isVisible()  == true) {
-        					t.start();
-        		
+        			
+        					if (b.isVisible()  == true) {
+            					t.start();
+            		
+            				}
+            				else {
+            				MainTimer(pm);
+             	
+            				}
         				}
-        				else {
-        				MainTimer(pm);
-         	
-        				}
+        			
         		
         			}	
-    			}
+    			
     			
     			lastButtonPressed = buttonPressed;
     			//TODO reset to null as one of the reset functions
@@ -311,21 +315,22 @@ public class Pomodoro_Timer
    					if(e.getSource()==endbut) {
    	        		
    	        			if(t == null) {
-   	    					//TODO inital timer begin pressing pause gives error beacuse min != 0
    	    					JFrame frame = new JFrame();
    	    					JOptionPane.showMessageDialog(frame, "Timer has not begun.");
    	    					getWorkBreakStatus();
    	    				}
    	    				else {
    	    				t.stop();
-   	    				sec=min=0;
-   	    				time.setText(String.valueOf("00m:00s"));
-   	    				//TODO redirect user back to settings to edit the timer input
+   	    				sec= 0;
+   	    				min=0;
+   	    				breakmin =0;
    	    				c.setVisible(false);
    	    				b.setVisible(false);
    	    				MainTimerRunning = false;
    	    				BreakTimerRunning = false;
    	    				paused = false;
+   	    				time.setText(String.valueOf("00m:00s"));
+   	    		   	    lastButtonPressed = null;
    	    				getWorkBreakStatus();
    	    				
    	    				}	
@@ -465,7 +470,7 @@ public class Pomodoro_Timer
 	            public void actionPerformed(ActionEvent e) {
 	                String selectedFruit = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
 	                jLabel.setText(selectedFruit);
-	                //	TODO add thing to make a new active task
+	                //	TODO add lexis function to make a set new active task
 	            }
 	        });
 
@@ -531,7 +536,7 @@ public class Pomodoro_Timer
 								c.setVisible(false);
 								b.setVisible(false);
 							
-								//TODO open the priority manager/do drop down
+								TaskDropDown(pm);
 							 
 							 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
 								 //(ask the user to assign a new task via priority manager)
@@ -664,7 +669,6 @@ public class Pomodoro_Timer
 		min = 0;
 		breakmin =0;
 		sec =0;
-		//TODO stop the timer and reset everything 
 		min = settings.getWorkPeriod();
 		initalmin = min;
 		breakmin = settings.getBreakPeriod();
