@@ -1459,7 +1459,7 @@ public class Settings {
 		header_panel.setBackground(aa_grey);
 		
 		JLabel overlayOptions = new JLabel("Overlay Options:");
-		overlayOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
+		overlayOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
 		overlayOptions.setForeground(Color.white);
 		
 		header_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -1777,7 +1777,7 @@ public class Settings {
 		JPanel optionsAndDisplay = new JPanel();
 		optionsAndDisplay.setLayout(new FlowLayout(FlowLayout.LEFT));
 		optionsAndDisplay.setBackground(aa_grey);
-		optionsAndDisplay.setMaximumSize(new Dimension(400, 130));
+		optionsAndDisplay.setMaximumSize(new Dimension(400, 110));
 		
 		JPanel optionsRadioButtons = new JPanel();
 		optionsRadioButtons.setLayout(new BoxLayout(optionsRadioButtons, BoxLayout.Y_AXIS));
@@ -1787,17 +1787,15 @@ public class Settings {
 		avatarDisplay.setLayout(new BoxLayout(avatarDisplay, BoxLayout.Y_AXIS));
 		
 		JLabel notificationOptions = new JLabel("Notification Options:");
-		notificationOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
+		notificationOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
 		notificationOptions.setForeground(Color.white);
 		
 		JRadioButton avatarRB = new JRadioButton("Avatar", settingsChanges.avatarIsActive);
 		JRadioButton textRB = new JRadioButton("Text", settingsChanges.textIsActive);
-		JRadioButton audioRB = new JRadioButton("Audio", settingsChanges.audioIsActive);
 		
 		ButtonGroup notificationsOptions = new ButtonGroup();
 		notificationsOptions.add(avatarRB);
 		notificationsOptions.add(textRB);
-		notificationsOptions.add(audioRB);
 		
 		/*
 		 * avatar Selection details
@@ -1812,7 +1810,6 @@ public class Settings {
 				
 				if(settingsChanges.avatarIsActive == true) {
 					settingsChanges.textIsActive = false;
-					settingsChanges.audioIsActive = false;
 				} 
 			}
 		});
@@ -1830,25 +1827,6 @@ public class Settings {
 				
 				if(settingsChanges.textIsActive == true) {
 					settingsChanges.avatarIsActive = false;
-					settingsChanges.audioIsActive = false;
-				}
-			}
-		});
-		
-		/*
-		 * audio selection details
-		 */
-		audioRB.setFont(new Font("Serif", Font.BOLD, 16));
-		audioRB.setForeground(Color.white);
-		audioRB.setContentAreaFilled(false);
-		audioRB.setFocusPainted(false);
-		audioRB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				settingsChanges.audioIsActive = audioRB.isSelected(); 
-				
-				if(settingsChanges.audioIsActive == true) {
-					settingsChanges.avatarIsActive = false;
-					settingsChanges.textIsActive = false;
 				}
 			}
 		});
@@ -1857,12 +1835,7 @@ public class Settings {
 		optionsRadioButtons.add(notificationOptions);
 		optionsRadioButtons.add(avatarRB);
 		optionsRadioButtons.add(textRB);
-		optionsRadioButtons.add(audioRB);
 				
-		/*
-		 * displaying sample avatar selection as a placeholder 
-		 * will be updated to link directly to the choose button as the action listener
-		 */
 		BufferedImage avatar = null;
 		try {
 			//will pass string for file path 
@@ -1880,6 +1853,54 @@ public class Settings {
 		avatarDisplay.add(displayAvatar);
 		optionsAndDisplay.add(optionsRadioButtons);
 		optionsAndDisplay.add(avatarDisplay);
+		
+		JPanel audioCheckBoxes = new JPanel();
+		GridLayout grid = new GridLayout(0,1);
+		audioCheckBoxes.setLayout(grid);
+		audioCheckBoxes.setBackground(aa_grey);
+		audioCheckBoxes.setMaximumSize(new Dimension(350, 120));
+		
+		JLabel audioOptions = new JLabel("Audio Notification Options:");
+		audioOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		audioOptions.setForeground(Color.white);
+		
+		JCheckBox notificationSounds = new JCheckBox("Notification Sounds", settingsChanges.audioIsActive);
+		notificationSounds.setFont(new Font("Serif", Font.BOLD, 16));
+		notificationSounds.setForeground(Color.white);
+		notificationSounds.setContentAreaFilled(false);
+		notificationSounds.setFocusPainted(false);
+		notificationSounds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.audioIsActive = notificationSounds.isSelected(); 
+			}
+		});
+		
+		JCheckBox readNotifications = new JCheckBox("Text-to-Speech Notifications", settingsChanges.textToSpeech);
+		readNotifications.setFont(new Font("Serif", Font.BOLD, 16));
+		readNotifications.setForeground(Color.white);
+		readNotifications.setContentAreaFilled(false);
+		readNotifications.setFocusPainted(false);
+		readNotifications.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.textToSpeech = readNotifications.isSelected(); 
+			}
+		});
+		
+		audioCheckBoxes.add(audioOptions);
+		audioCheckBoxes.add(notificationSounds);
+		audioCheckBoxes.add(readNotifications);
+		
+		JPanel avatarOptionsHeader = new JPanel();
+		avatarOptionsHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		avatarOptionsHeader.setBackground(aa_grey);
+		avatarOptionsHeader.setMaximumSize(new Dimension(500, 40));
+		
+		JLabel avatarOptions = new JLabel("Avatar Options:");
+		avatarOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		avatarOptions.setForeground(Color.white);
+		
+		avatarOptionsHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		avatarOptionsHeader.add(avatarOptions);
 		
 		JPanel avatarSizeOptions = new JPanel();
 		avatarSizeOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -1907,43 +1928,6 @@ public class Settings {
 		avatarSizeOptions.add(Box.createRigidArea(new Dimension(15, 0)));
 		avatarSizeOptions.add(avatarSize);
 		avatarSizeOptions.add(avatarSizeSlider);
-		
-		JPanel voice = new JPanel();
-		voice.setLayout(new FlowLayout(FlowLayout.LEFT));
-		voice.setBackground(aa_grey);
-		voice.setMaximumSize(new Dimension(500, 35));
-		
-		JLabel voiceSelection = new JLabel("Audio Selection:");
-		voiceSelection.setFont(new Font("Serif", Font.BOLD, 16));
-		voiceSelection.setForeground(Color.white);
-		
-		JButton chooseVoice = new JButton("Choose");
-		chooseVoice.setMaximumSize(new Dimension(70,20));
-		chooseVoice.setBackground(Color.GRAY);
-		chooseVoice.setForeground(Color.WHITE);
-		chooseVoice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				/*
-				 * needs to point to dedicated pre-loaded file where audio selections will be
-				 * leave commented out until if/when audio is an option
-				 * 
-				 *  JFileChooser audioDirectory = new JFileChooser(settingsChanges.audioFilePath);
-					audioDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("MP3 AUDIO", "mp3");
-					audioDirectory.setFileFilter(fileFilter);
-					int returnVal = audioDirectory.showDialog(null, "Select audio file");
-					
-					if(returnVal == JFileChooser.APPROVE_OPTION) {
-						File audioFile = audioDirectory.getSelectedFile();
-						settingsChanges.audioFilePath = audioFile.getAbsolutePath();
-					}
-				 */
-			}
-		});
-		
-		voice.add(Box.createRigidArea(new Dimension(15, 0)));
-		voice.add(voiceSelection);
-		voice.add(chooseVoice);
 		
 		JPanel avLabelAndBox = new JPanel();
 		avLabelAndBox.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -1997,10 +1981,11 @@ public class Settings {
 		 */
 		notifications_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		notifications_panel.add(optionsAndDisplay);
+		notifications_panel.add(audioCheckBoxes);
+		notifications_panel.add(avatarOptionsHeader);
 		notifications_panel.add(avatarSizeOptions);
 		notifications_panel.add(avatarSelectionOptions);
 		notifications_panel.add(avLabelAndBox);
-		notifications_panel.add(voice);
 		notifications_panel.add(Box.createRigidArea(new Dimension(0, 100)));
 		
 		//add notifications panel to card_panel
@@ -2016,8 +2001,8 @@ public class Settings {
 		pm_panel.setLayout(new BoxLayout(pm_panel, BoxLayout.Y_AXIS));
 		pm_panel.setBackground(aa_grey);
 		
-		JLabel managerOptions = new JLabel("Manager Options:"); 
-		managerOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
+		JLabel managerOptions = new JLabel("Priority Manager Options:"); 
+		managerOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
 		managerOptions.setForeground(Color.white);
 		
 		JButton openPM = new JButton("Open Priority Manager");
@@ -2078,8 +2063,8 @@ public class Settings {
 		pomodoro_header.setBackground(aa_grey);
 		pomodoro_header.setMaximumSize(new Dimension(400, 25));
 		
-		JLabel pomHeader = new JLabel("Pomodoro Timer:");
-		pomHeader.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
+		JLabel pomHeader = new JLabel("Pomodoro Timer Options:");
+		pomHeader.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
 		pomHeader.setForeground(Color.white);
 		
 		pomodoro_header.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -2233,6 +2218,18 @@ public class Settings {
 		thought_panel.setLayout(new BoxLayout(thought_panel, BoxLayout.Y_AXIS));
 		thought_panel.setBackground(aa_grey);
 		
+		JPanel tmHeader = new JPanel();
+		tmHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		tmHeader.setBackground(aa_grey);
+		tmHeader.setMaximumSize(new Dimension(400, 35));
+		
+		JLabel thoughtManagement = new JLabel("Thought Management Options:"); 
+		thoughtManagement.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		thoughtManagement.setForeground(Color.white);
+		
+		tmHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		tmHeader.add(thoughtManagement);
+		
 		JPanel ftsHeader = new JPanel();
 		ftsHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
 		ftsHeader.setBackground(aa_grey);
@@ -2249,7 +2246,7 @@ public class Settings {
 		GridLayout grid = new GridLayout(0,1);
 		checkBoxes.setLayout(grid);
 		checkBoxes.setBackground(aa_grey);
-		checkBoxes.setMaximumSize(new Dimension(350, 150));
+		checkBoxes.setMaximumSize(new Dimension(350, 160));
 		
 		JCheckBox ftsBox = new JCheckBox("Free Thought Space", settingsChanges.ftsIsActive);
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
@@ -2261,7 +2258,6 @@ public class Settings {
 				settingsChanges.ftsIsActive = ftsBox.isSelected(); 
 			}
 		});
-		
 		
 		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", settingsChanges.isAutoLinked);
 		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 16));
@@ -2334,9 +2330,9 @@ public class Settings {
 				JFileChooser happyThoughtsDirectory = new JFileChooser();
 				happyThoughtsDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				//what file types will we accept? add them here
-				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("JPEG and PNG Images", "png", "jpeg");
+				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("JPEG and GIF Images", "gif", "jpeg");
 				happyThoughtsDirectory.setFileFilter(fileFilter);
-				int returnVal = happyThoughtsDirectory.showDialog(null, "Select Your New Avatar");
+				int returnVal = happyThoughtsDirectory.showDialog(null, "Upload New Media");
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					File happyThoughtFile = happyThoughtsDirectory.getSelectedFile();
 					//settingsChanges.happyThoughtsDirectory = happyThoughtFile.getAbsolutePath();
@@ -2400,6 +2396,7 @@ public class Settings {
 		ntbButtonPanel.add(openNTB);
 
 		thought_panel.add(Box.createRigidArea(new Dimension(25, 10)));
+		thought_panel.add(tmHeader);
 		thought_panel.add(ftsHeader);
 		thought_panel.add(checkBoxes);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
