@@ -12,17 +12,26 @@ import org.junit.jupiter.api.Test;
  */
 public class Test_AudioHandler {
 
-	AudioHandler tts;
+	AudioHandler handler;
+	static String testAudioPath;
 	
 	@BeforeEach
 	void setup() {
-		tts = new AudioHandler();
+		handler = new AudioHandler();
+		testAudioPath = "src/test/resources/TestAudioSounds/";
+	}
+	
+	@Test
+	@DisplayName("<AudioHandler> AudioPlayer")
+	void AudioHandlerAudioPlayer() {
+		String testSoundPath = testAudioPath + "testSound.wav";
+		handler.AudioPlayer(testSoundPath);
 	}
 	
 	@Test
 	@DisplayName("<AudioHandler> notificationTTS")
 	void AudioHandlerNotificationTTS() {
-		String text = "I'm a robot, I'm stuck inside your computer... please help me";
-		tts.notificationTTS(text);
+		String text = "I am robot";
+		handler.notificationTTS(text);
 	}
 }
