@@ -25,7 +25,7 @@ public class Test_AudioHandler {
 	void AudioHandlerAudioPlayer() {
 		String testSoundPath = testAudioPath + "testSound.wav";
 		handler.AudioPlayer(testSoundPath);
-		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(2L, TimeUnit.SECONDS);
+		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(3L, TimeUnit.SECONDS);
 		while (System.nanoTime()< endTime){}
 	}
 	

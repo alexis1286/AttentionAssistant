@@ -15,6 +15,12 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.Voice;
 
+/**
+ * AudioHandler handles all sounds to be played for notifications 
+ * as well as Text-To-Speech for notifications
+ * 
+ * @author ehols001
+ */
 public class AudioHandler {
 	
 	static String audioPath;
@@ -23,6 +29,11 @@ public class AudioHandler {
 		audioPath = "src/main/resources/AudioSounds/";
 	}
 	
+	/**
+	 * Plays the audio clip from the file path passed in.
+	 * 16-bit wav files supported, mp3 not supported
+	 * @param soundFilePath -> the file path for the sound being used
+	 */
 	public void AudioPlayer(String soundFilePath) {
 		Clip clip;
 		AudioInputStream audioStream;
@@ -50,49 +61,72 @@ public class AudioHandler {
 	 ***************************************************************************/
 	
 	/**
-	 * Still need to create and add in all these .wav files
+	 * Play audio for resuming the pomodoro timer notification
 	 */
-	
 	public void resumePomoAudio() {
 		String soundPath = audioPath + "resumePomo.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for pomodoro timer status is null notification
+	 */
 	public void pomoIsNullAudio() {
 		String soundPath = audioPath + "pomoIsNull.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the distracted notification
+	 */
 	public void distractedAudio() {
 		String soundPath = audioPath + "distracted.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the self care notification
+	 */
 	public void selfCareAudio() {
 		String soundPath = audioPath + "selfCare.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the all good notification
+	 */
 	public void allGoodAudio() {
 		String soundPath = audioPath + "allGood.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the due date approaching notification
+	 */
 	public void dueDateApproachingAudio() {
 		String soundPath = audioPath + "dueDateApproaching.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the task completed notification
+	 */
 	public void taskCompletedAudio() {
 		String soundPath = audioPath + "taskCompleted.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the break timer notification
+	 */
 	public void breakTimeAudio() {
 		String soundPath = audioPath + "breakTime.wav";
 		AudioPlayer(soundPath);
 	}
 	
+	/**
+	 * Play audio for the work timer notification
+	 */
 	public void workTimeAudio() {
 		String soundPath = audioPath + "workTime.wav";
 		AudioPlayer(soundPath);
