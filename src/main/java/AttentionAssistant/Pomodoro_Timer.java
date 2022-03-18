@@ -67,23 +67,6 @@ public class Pomodoro_Timer
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
 	}
-	public boolean GetMainTimerStatus() {
-		if (MainTimerRunning == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public boolean GetBreakTimerStatus() {
-		if(BreakTimerRunning == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 	
 	public enum Work_Break {
 		Work,
@@ -711,6 +694,7 @@ public class Pomodoro_Timer
 			panel.remove(icon_panel);
 	
 		}else {
+			panel.remove(icon_panel);
 			icon_panel = timerPanel(frame,pm);
 			panel.add("iPanel",icon_panel);
 			panel.remove(new_icon_panel);
