@@ -2086,7 +2086,7 @@ public class Settings {
 		pomToggle.setBackground(aa_grey);
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox toggleTimer = new JCheckBox("Timer Active", settingsChanges.pomodoroIsActive);
+		JCheckBox toggleTimer = new JCheckBox("<html><cente>Timer <i><u>Active</u></i></center></html>", settingsChanges.pomodoroIsActive);
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
 		toggleTimer.setForeground(Color.white);
 		toggleTimer.setContentAreaFilled(false);
@@ -2230,25 +2230,13 @@ public class Settings {
 		tmHeader.add(Box.createRigidArea(new Dimension(15, 0)));
 		tmHeader.add(thoughtManagement);
 		
-		JPanel ftsHeader = new JPanel();
-		ftsHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
-		ftsHeader.setBackground(aa_grey);
-		ftsHeader.setMaximumSize(new Dimension(400, 35));
-		
-		JLabel activeHeader = new JLabel("Active:"); 
-		activeHeader.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
-		activeHeader.setForeground(Color.white);
-		
-		ftsHeader.add(Box.createRigidArea(new Dimension(15, 0)));
-		ftsHeader.add(activeHeader);
-		
 		JPanel checkBoxes = new JPanel();
 		GridLayout grid = new GridLayout(0,1);
 		checkBoxes.setLayout(grid);
 		checkBoxes.setBackground(aa_grey);
 		checkBoxes.setMaximumSize(new Dimension(350, 160));
 		
-		JCheckBox ftsBox = new JCheckBox("Free Thought Space", settingsChanges.ftsIsActive);
+		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought Space <i><u>Active</u></i></center></html>", settingsChanges.ftsIsActive);
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
@@ -2270,7 +2258,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox ntbBox = new JCheckBox("Negative Thought Burner", settingsChanges.ntbIsActive);
+		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought Burner <i><u>Active</u></i></center></html>", settingsChanges.ntbIsActive);
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
@@ -2287,7 +2275,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox htbBox = new JCheckBox("Happy Thought Button", settingsChanges.htbIsActive);
+		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought Button <i><u>Active</u></i></center></html>", settingsChanges.htbIsActive);
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
@@ -2397,7 +2385,6 @@ public class Settings {
 
 		thought_panel.add(Box.createRigidArea(new Dimension(25, 10)));
 		thought_panel.add(tmHeader);
-		thought_panel.add(ftsHeader);
 		thought_panel.add(checkBoxes);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		thought_panel.add(htbUploadPanel);
