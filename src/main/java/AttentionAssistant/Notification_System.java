@@ -78,6 +78,11 @@ public class Notification_System {
 		String text = "User is distracted, guide back to task";
 		timeDistracted += 3;
 		displayNotif(text, "distracted",notifID);
+		
+		/* This will say whatever is in String text */
+		//AudioHandler tts = new AudioHandler();
+		//if(isAudioActive == true)
+			//tts.notificationTTS(text);
 	}
 	
 	
