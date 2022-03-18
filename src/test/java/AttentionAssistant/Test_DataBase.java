@@ -71,7 +71,7 @@ public class Test_DataBase {
 	 * Set up for nonDefault Settings 
 	 */
 	int testSettingsID = 999;
-	int testuserID = 999;
+	int testfkUserID = 999;
 	Color testIconCircles = Color.RED; 
 	Color testIcons = Color.YELLOW;
 	int testOpacityCircles = 75; 
@@ -91,7 +91,7 @@ public class Test_DataBase {
 	boolean testTextIsActive = false; 
 	boolean testAudioIsActive = true;
 	String testAvatarFilePath = "images/avatar_cat1.png"; 
-	String testAudioFilePath = "test";
+//	String testAudioFilePath = "test";
 	boolean testAlwaysOnScreen = true; 
 	int testAvatarSize = 75; 
 	boolean testPomodoroIsActive = false; 
@@ -102,13 +102,26 @@ public class Test_DataBase {
 	boolean testNtbIsActive = false; 
 	boolean testIsAutoLinked = false; 
 	boolean testHtbIsActive = false; 
+	boolean testTimerIsVisibleLock = false; 
+	boolean testPmIsVisibleLock = false; 
+	boolean testFtsIsVisibleLock = false;
+	boolean testHtbIsVisibleLock = false; 
+	boolean testNtbIsVisibleLock = false; 
+	boolean testProgReportIsVisibleLock = false; 
+	boolean testTextToSpeech = false; 
+	boolean testPomoIsLocked = false; 
+	boolean testWorkIsLocked = false; 
+	boolean testBreakIsLocked = false; 
+	boolean testFtsIsLocked = false; 
+	boolean testNtbIsLocked = false; 
+	boolean testHtbIsLocked = false; 
 
-	nonDefaultSettings = new Settings(testSettingsID, testuserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
+	nonDefaultSettings = new Settings(testSettingsID, testfkUserID, testIconCircles, testIcons, testOpacityCircles, testOpacityIcons, testIsCollapsed, testXCoord, 
 			  testYCoord, testIsVertical, testIconSize, testTimerIsVisible, testPmIsVisible, testFtsIsVisible, 
-			  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testAvatarIsActive, testTextIsActive, 
-			  testAudioIsActive, testAvatarFilePath, testAudioFilePath, testAlwaysOnScreen, testAvatarSize, 
-			  testPomodoroIsActive, testWorkPeriod, testBreakPeriod, testTimeShowing, testFtsIsActive, 
-			  testNtbIsActive, testIsAutoLinked, testHtbIsActive);
+			  testHtbIsVisible, testNtbIsVisible, testProgReportIsVisible, testTimerIsVisibleLock, testPmIsVisibleLock, testFtsIsVisibleLock, testHtbIsVisibleLock, testNtbIsVisibleLock, testProgReportIsVisibleLock, testAvatarIsActive, testTextIsActive, 
+			  testAudioIsActive, testTextToSpeech, testAvatarFilePath, testAlwaysOnScreen, testAvatarSize, 
+			  testPomodoroIsActive, testPomoIsLocked, testWorkPeriod, testWorkIsLocked, testBreakPeriod, testBreakIsLocked, testTimeShowing, testFtsIsActive, 
+			  testNtbIsActive, testIsAutoLinked, testHtbIsActive, testFtsIsLocked, testNtbIsLocked, testHtbIsLocked);
 	
 	/**
 	 * Set up for nonDefault User_Account 
@@ -662,6 +675,7 @@ public class Test_DataBase {
         db.AddSettings(nonDefaultSettings, UpdatedUser.getUserID());
         db.AddSettings(nonDefaultSettings, 2);
         db.AddSettings(nonDefaultSettings, 3);
+        db.AddSettings(nonDefaultSettings, 4);
         db.AddSettings(nonDefaultSettings, 4);
     }
     

@@ -1,4 +1,4 @@
-package AttentionAssistant;
+	package AttentionAssistant;
 
 import java.awt.Color;
 import java.sql.Connection;
@@ -115,7 +115,7 @@ public class DataBase {
    			 "textIsActive BOOLEAN, " +
    			 "audioIsActive BOOLEAN, " +
    			 "avatarFilePath TEXT, " +
-   			 "audioFilePath TEXT, " +
+//   			 "audioFilePath TEXT, " +
    			 "alwaysOnScreen BOOLEAN, " +
    			 "avatarSize INTEGER, " +
    			 "pomodoroIsActive BOOLEAN, " +
@@ -126,6 +126,19 @@ public class DataBase {
    			 "ntbIsActive BOOLEAN, " +
    			 "isAutoLinked BOOLEAN, " +
    			 "htbIsActive BOOLEAN, " +
+   			 "timerVisibilityIsLocked BOOLEAN, " +
+   			 "pmVisibilityIsLocked BOOLEAN, " +
+   			 "htbVisibilityIsLocked BOOLEAN, " +
+   			 "ftsVisibilityIsLocked BOOLEAN, " +
+   			 "ntbVisibilityIsLocked BOOLEAN, " +
+   			 "progReportVisibilityIsLocked BOOLEAN, " +
+   			 "textToSpeech BOOLEAN, " +
+   			 "pomodoroIsLocked BOOLEAN, " +
+   			 "workPeriodIsLocked BOOLEAN, " +
+   			 "breakPeriodIsLocked BOOLEAN, " +
+   			 "ftsIsLocked BOOLEAN, " +
+   			 "ntbIsLocked BOOLEAN, " +
+   			 "htbIsLocked BOOLEAN, " +
 			 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
     	/**
@@ -1195,7 +1208,7 @@ public class DataBase {
             		sqlCon.enforceForeignKeys(true);
                     ds.setConfig(sqlCon);
                 	String query1 = "INSERT INTO settings " +
-                			"(fk_userID, iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, audioFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive) Values ( '" +
+                			"(fk_userID, iconCircles, icons, opacityCircles, opacityIcons, isCollapsed, xCoord, yCoord, isVertical, iconSize, timerIsVisible, pmIsVisible, ftsIsVisible, htbIsVisible, ntbIsVisible, progReportIsVisible, avatarIsActive, textIsActive, audioIsActive, avatarFilePath, alwaysOnScreen, avatarSize, pomodoroIsActive, workPeriod, breakPeriod, timeShowing, ftsIsActive, ntbIsActive, isAutoLinked, htbIsActive, timerVisibilityIsLocked, pmVisibilityIsLocked, htbVisibilityIsLocked, ftsVisibilityIsLocked, ntbVisibilityIsLocked, progReportVisibilityIsLocked, textToSpeech, pomodoroIsLocked, workPeriodIsLocked, breakPeriodIsLocked, ftsIsLocked, ntbIsLocked, htbIsLocked) Values ( '" +
                 			userID + "', '" +
                 			settings.getIconCircles().getRGB() + "', '" +
                 			settings.getIcons().getRGB() + "', '" +
@@ -1216,7 +1229,7 @@ public class DataBase {
                 			settings.getTextIsActive() + "', '" +
                 			settings.getAudioIsActive() + "', '" +
                 			settings.getAvatarFilePath().replaceAll("'", "''") + "', '" +
-                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
+//                			settings.getAudioFilePath().replaceAll("'", "''") + "', '" +
                 			settings.getAlwaysOnScreen() + "', '" +
                 			settings.getAvatarSize() + "', '" +
                 			settings.getPomodoroIsActive() + "', '" +
@@ -1226,7 +1239,20 @@ public class DataBase {
                 			settings.getFtsIsActive() + "', '" +
                 			settings.getNtbIsActive() + "', '" +
                 			settings.getIsAutoLinked() + "', '" +
-                			settings.getHtbIsActive() +"')";
+                			settings.getHtbIsActive() +"', '" +
+                			settings.getTimerVisibilityIsLocked() + "', '" +
+                			settings.getPmVisibilityIsLocked() + "', '" +
+                			settings.getHtbVisibilityIsLocked() + "', '" +
+                			settings.getFtsVisibilityIsLocked() + "', '" +
+                			settings.getNtbVisibilityIsLocked() + "', '" +
+                			settings.getProgReportVisibilityIsLocked() + "', '" +
+                			settings.getTextToSpeech() + "', '" +
+                			settings.getPomodoroIsLocked() + "', '" +
+                			settings.getWorkPeriodIsLocked() + "', '" +
+                			settings.getBreakPeriodIsLocked() + "', '" +
+                			settings.getFtsIsLocked() + "', '" +
+                			settings.getNtbIsLocked() + "', '" +
+                			settings.getHtbIsLocked() + "')"; 
                 	try ( Connection conn = ds.getConnection();
                 		    Statement stmt = conn.createStatement(); ) {
                 		    int rv = stmt.executeUpdate( query1 );
@@ -1266,7 +1292,7 @@ public class DataBase {
                     			"', textIsActive = '" + settings.getTextIsActive() + 
                     			"', audioIsActive = '" + settings.getAudioIsActive() + 
                     			"', avatarFilePath = '" + settings.getAvatarFilePath().replaceAll("'", "''") + 
-                    			"', audioFilePath = '" + settings.getAudioFilePath().replaceAll("'", "''") + 
+//                    			"', audioFilePath = '" + settings.getAudioFilePath().replaceAll("'", "''") + 
                     			"', alwaysOnScreen = '" + settings.getAlwaysOnScreen() + 
                     			"', avatarSize = '" + settings.getAvatarSize() + 
                     			"', pomodoroIsActive = '" + settings.getPomodoroIsActive() + 
@@ -1277,6 +1303,19 @@ public class DataBase {
                     			"', ntbIsActive = '" + settings.getNtbIsActive() + 
                     			"', isAutoLinked = '" + settings.getIsAutoLinked() + 
                     			"', htbIsActive = '" + settings.getHtbIsActive() + 
+                    			"', timerVisibilityIsLocked = '" + settings.getTimerVisibilityIsLocked() + 
+                    			"', pmVisibilityIsLocked = '" + settings.getPmVisibilityIsLocked() + 
+                    			"', htbVisibilityIsLocked = '" + settings.getHtbVisibilityIsLocked() +
+                    			"', ftsVisibilityIsLocked = '" + settings.getFtsVisibilityIsLocked() +
+                    			"', ntbVisibilityIsLocked = '" + settings.getNtbVisibilityIsLocked() + 
+                    			"', progReportVisibilityIsLocked = '" + settings.getProgReportVisibilityIsLocked() + 
+                    			"', textToSpeech = '" + settings.getTextToSpeech() + 
+                    			"', pomodoroIsLocked = '" + settings.getPomodoroIsLocked() + 
+                    			"', workPeriodIsLocked = '" + settings.getWorkPeriodIsLocked() + 
+                    			"', breakPeriodIsLocked = '" + settings.getBreakPeriodIsLocked() + 
+                    			"', ftsIsLocked = '" + settings.getFtsIsLocked() + 
+                    			"', ntbIsLocked = '" + settings.getNtbIsLocked() + 
+                    			"', htbIsLocked = '" + settings.getHtbIsLocked() + 
                     			"' WHERE settingsID = '" + settings.getSettingsID() + "'";
                     	try ( Connection conn = ds.getConnection();
                     		    Statement stmt = conn.createStatement(); ) {
@@ -1344,7 +1383,7 @@ public class DataBase {
                     		    settings1.setTextIsActive(Boolean.valueOf(rs.getString("textIsActive")));
                     		    settings1.setAudioIsActive(Boolean.valueOf(rs.getString("audioIsActive")));
                     		    settings1.setAvatarFilePath(rs.getString("avatarFilePath"));
-                    		    settings1.setAudioFilePath(rs.getString("audioFilePath"));
+//                    		    settings1.setAudioFilePath(rs.getString("audioFilePath"));
                     		    settings1.setAlwaysOnScreen(Boolean.valueOf(rs.getString("alwaysOnScreen")));
                     		    settings1.setAvatarSize(rs.getInt("avatarSize"));
                     		    settings1.setPomodoroIsActive(Boolean.valueOf(rs.getString("pomodoroIsActive")));
@@ -1354,7 +1393,20 @@ public class DataBase {
                     		    settings1.setFtsIsActive(Boolean.valueOf(rs.getString("ftsIsActive")));
                     		    settings1.setNtbIsActive(Boolean.valueOf(rs.getString("ntbIsActive")));
                     		    settings1.setIsAutoLinked(Boolean.valueOf(rs.getString("isAutoLinked")));
-                    		    settings1.setHtbIsActive(Boolean.valueOf(rs.getString("htbIsActive")));                   		    
+                    		    settings1.setHtbIsActive(Boolean.valueOf(rs.getString("htbIsActive")));
+                    		    settings1.setTimerVisibilityIsLocked(Boolean.valueOf(rs.getString("timerVisibilityIsLocked")));
+                    		    settings1.setPmVisibilityIsLocked(Boolean.valueOf(rs.getString("pmVisibilityIsLocked")));
+                    		    settings1.setHtbVisibilityIsLocked(Boolean.valueOf(rs.getString("htbVisibilityIsLocked")));
+                    		    settings1.setFtsVisibilityIsLocked(Boolean.valueOf(rs.getString("ftsVisibilityIsLocked")));
+                    		    settings1.setNtbVisibilityIsLocked(Boolean.valueOf(rs.getString("ntbVisibilityIsLocked")));
+                    		    settings1.setProgReportVisibilityIsLocked(Boolean.valueOf(rs.getString("progReportVisibilityIsLocked")));
+                    		    settings1.setTextToSpeech(Boolean.valueOf(rs.getString("textToSpeech")));
+                    		    settings1.setPomodoroIsLocked(Boolean.valueOf(rs.getString("pomodoroIsLocked")));
+                    		    settings1.setWorkPeriodIsLocked(Boolean.valueOf(rs.getString("workPeriodIsLocked")));
+                    		    settings1.setBreakPeriodIsLocked(Boolean.valueOf(rs.getString("breakPeriodIsLocked")));
+                    		    settings1.setFtsIsLocked(Boolean.valueOf(rs.getString("ftsIsLocked")));
+                    		    settings1.setNtbIsLocked(Boolean.valueOf(rs.getString("ntbIsLocked")));
+                    		    settings1.setHtbIsLocked(Boolean.valueOf(rs.getString("htbIsLocked")));
                     		    System.out.println( "SelectSettings() returned " + rs );
                     		} catch ( SQLException e ) {
                     			e.printStackTrace();
