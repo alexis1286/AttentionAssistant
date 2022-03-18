@@ -2,8 +2,6 @@
  * Tracks the internet Usage to determine if user is on topic while searching the internet 
  */
 
-//To be implemented by Paul
-
 package AttentionAssistant;
 
 import java.io.File;
