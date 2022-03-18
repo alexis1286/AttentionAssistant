@@ -7,17 +7,11 @@ import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
 import java.io.IOException;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 /**
  * Class that contains information whenever Happy_Thought_Button
@@ -33,13 +27,15 @@ public class Happy_Thought_Button {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	JButton toRefresh;
+	ArrayList<String> happyMedia = new ArrayList<String>();
 	private int height = 400; 
 	private int width = 625; 
 	private int mouseX;
 	private int mouseY;
+	JButton dislikeMedia;
+	JButton likeMedia;
+	JButton flagMedia;
 	int current = 0; 
-	JLabel displayHT;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
@@ -227,46 +223,55 @@ public class Happy_Thought_Button {
 	 * 
 	 * @author krchr
 	 */
-	public void getHappyMedia(ArrayList<String> happyMedia) {
+	public void getHappyMedia() {
 		
-		happyMedia.add("happyThoughtMedia/231582875_f219808478_o.jpg");
-		happyMedia.add("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/angel-balashev-qZE61XvCMPQ-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/bailey-burton-o5UlVmTwVz8-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/bob-brewer-urEw5S62mlg-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/bobby-mc-leod-jPJ8BPrGMuU-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/dipanjan-pal-CbXmfl2t_SQ-unsplash.jpg");
 		happyMedia.add("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
-		happyMedia.add("happyThoughtMedia/josh-gordon-fzHmP6z8OQ4-unsplash.jpg");
+		happyMedia.add("happyThoughtMedia/78nF.gif");
+		happyMedia.add("happyThoughtMedia/231582875_f219808478_o.jpg");
+		happyMedia.add("happyThoughtMedia/jVo.gif");
+		happyMedia.add("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
+		happyMedia.add("happyThoughtMedia/PB35.gif");
+		happyMedia.add("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
+		happyMedia.add("happyThoughtMedia/QHa.gif");
 		happyMedia.add("happyThoughtMedia/max-lissenden-snYLMKphCf4-unsplash.jpg");
+		happyMedia.add("happyThoughtMedia/Z2QS.gif");
 		happyMedia.add("happyThoughtMedia/rod-long-ogWhdXOl5qY-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/sanjoy-saha-jdTmQz0lvpo-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/sascha-bosshard-umRejISHZbo-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/shche_-team-yt9k70OO6XM-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/tom-briskey-AddAnDkkovM-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/uliana-kopanytsia-7SfBWchOVpw-unsplash.jpg");
+		happyMedia.add("happyThoughtMedia/4OKm.gif");
 		happyMedia.add("happyThoughtMedia/yusuf-onuk-uzZgdFKisng-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/yusuf-onuk-zI3Fr9YlQAI-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/zetong-li-NAP14GEjvh8-unsplash.jpg");
 	}
 	
 	/*
 	 * create new Graphics for each image
 	 * @author krchr
 	 */
-	public JPanel generateNewMedia(String filepath) {
+	public JPanel generateNewJPG(String filepath) {
 		JPanel mediaPanel = new JPanel() {
 			@Override
 			public void paint(Graphics g) {
 				try {
-					g.drawImage(ImageIO.read(new File(filepath)), 0, 0, width, height, this);
+					g.drawImage(ImageIO.read(new File(filepath)), 0, 0, 480, 360, this);
 				}catch (IOException f) {
 					f.printStackTrace();
 					System.exit(1);
 				}
 			}
 		};
+		return mediaPanel;
+	}
+	
+	public JPanel generateNewGIF(String filepath) {
+		JPanel mediaPanel = new JPanel();
+		mediaPanel.setLayout(new BoxLayout(mediaPanel, BoxLayout.X_AXIS)); 
+		mediaPanel.setBackground(Color.black);
+		mediaPanel.setMaximumSize(new Dimension(480, 360));
+		
+		JLabel label = new JLabel();
+		label.setMaximumSize(new Dimension(480, 360));
+		ImageIcon imageIcon = new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(420, 300, Image.SCALE_FAST));
+		label.setIcon(imageIcon);
+		mediaPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+		mediaPanel.add(label);
+		
 		return mediaPanel;
 	}
 	
@@ -340,10 +345,9 @@ public class Happy_Thought_Button {
 		return title_panel;
 	}
 	
-	public JPanel generateCenterPanel() {
+	public JPanel generateCenterPanel(CardLayout cardLayout, JPanel middle_panel) {
 		
-		ArrayList<String> happyMedia = new ArrayList<String>();
-		getHappyMedia(happyMedia);
+		getHappyMedia();
 		
 		BufferedImage leftScroll = null;
 		BufferedImage rightScroll = null;
@@ -360,12 +364,10 @@ public class Happy_Thought_Button {
 		center_panel.setBackground(Color.black);
 		center_panel.setMaximumSize(new Dimension(500, 460));
 		
-		CardLayout cardLayout = new CardLayout();
-		JPanel middle_panel = new JPanel(); 
 		middle_panel.setBackground(Color.black);
 		middle_panel.setMaximumSize(new Dimension(480, 360));
 		middle_panel.setLayout(cardLayout);
-		populateMiddlePanel(happyMedia, middle_panel, cardLayout); 
+		populateMiddlePanel(middle_panel, cardLayout); 
 			
 		JPanel left_panel = new JPanel();
 		left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.Y_AXIS));
@@ -380,11 +382,26 @@ public class Happy_Thought_Button {
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//scroll image to left	
+				
+				//temporary for borders until connected to database, adjust to reflect stored value in database later
+				dislikeMedia.setBorderPainted(false);
+				likeMedia.setBorderPainted(false);
+				
 				current--; 
 				if(current >= 0) {
-					populateMiddlePanel(happyMedia, middle_panel, cardLayout); 
+					populateMiddlePanel(middle_panel, cardLayout); 
 				}else if(current < 0){
-					System.out.println("Can't scroll left anymore, sorry!");
+					
+					UIManager.put("Button.foreground", aa_purple);
+					UIManager.put("Button.background", aa_grey);
+					UIManager.put("OptionPane.background", Color.black);
+					UIManager.put("Panel.setOpaque", true);
+					UIManager.put("Panel.background", aa_grey);
+					UIManager.put("TextField.selectionBackground", Color.WHITE);
+					UIManager.put("OptionPane.messageForeground", Color.WHITE);
+					
+					JFrame frame = new JFrame();
+					JOptionPane.showMessageDialog(frame, "Scroll right to see more Happy Thoughts!");
 					current++;
 				}
 			}
@@ -406,12 +423,27 @@ public class Happy_Thought_Button {
 		right.setFocusPainted(false); 
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				current++;
 				//scroll image to the right
-				if(current < happyMedia.size() - 1) {
-					populateMiddlePanel(happyMedia, middle_panel, cardLayout); 
-				}else if(current > happyMedia.size()-1) {
-					System.out.println("Can't scroll right anymore, sorry!");
+				
+				//temporary for borders until connected to database, adjust to reflect stored value in database later
+				dislikeMedia.setBorderPainted(false);
+				likeMedia.setBorderPainted(false);
+				
+				current++;
+				if(current < happyMedia.size()) {
+					populateMiddlePanel(middle_panel, cardLayout); 
+				}else if(current > happyMedia.size()) {
+					
+					UIManager.put("Button.foreground", aa_purple);
+					UIManager.put("Button.background", aa_grey);
+					UIManager.put("OptionPane.background", Color.black);
+					UIManager.put("Panel.setOpaque", true);
+					UIManager.put("Panel.background", aa_grey);
+					UIManager.put("TextField.selectionBackground", Color.WHITE);
+					UIManager.put("OptionPane.messageForeground", Color.WHITE);
+					
+					JFrame frame = new JFrame();
+					JOptionPane.showMessageDialog(frame, "Scroll left to see more Happy Thoughts!");
 					current--;
 				}
 			}
@@ -428,20 +460,27 @@ public class Happy_Thought_Button {
 		return center_panel;
 	}
 	
-	public void populateMiddlePanel(ArrayList<String> happyMedia, JPanel middle_panel, CardLayout cardLayout) {
+	public void populateMiddlePanel(JPanel middle_panel, CardLayout cardLayout) {
 		
-		JPanel media_panel = new JPanel(new BoxLayout(middle_panel, BoxLayout.Y_AXIS));
+		JPanel media_panel = new JPanel();
+		media_panel.setLayout(new BoxLayout(media_panel, BoxLayout.Y_AXIS));
 		media_panel.setBackground(Color.black);
 		media_panel.setMaximumSize(new Dimension(480, 360));
-		media_panel = generateNewMedia(happyMedia.get(current));
+		
+		String fileName = happyMedia.get(current);
+		String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+		
+		if(fileExtension.equals("jpg")) {
+			media_panel = generateNewJPG(fileName);
+		}else if(fileExtension.equals("gif")) {
+			media_panel = generateNewGIF(fileName);
+		}
 		
 		middle_panel.add("Media", media_panel); 
 		cardLayout.show(middle_panel, "Media"); 
-		
-		//return middle_panel; 
 	}
 	
-	public JPanel generateBottomPanel() {
+	public JPanel generateBottomPanel(JPanel middle_panel, CardLayout cardLayout) {
 		
 		BufferedImage flag = null;
 		BufferedImage thUp = null;
@@ -464,7 +503,7 @@ public class Happy_Thought_Button {
 		Image thumbUp_img = thUp.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
 		Icon thumbsUp = new ImageIcon(thumbUp_img);
 		
-		JButton likeMedia = new JButton(thumbsUp);
+		likeMedia = new JButton(thumbsUp);
 		likeMedia.setBorderPainted(false);
 		likeMedia.setContentAreaFilled(false);
 		likeMedia.setFocusPainted(false);
@@ -472,33 +511,69 @@ public class Happy_Thought_Button {
 		likeMedia.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//like media actions 
+        		if(likeMedia.isBorderPainted() == false) {
+        			dislikeMedia.setBorderPainted(false); 
+        			likeMedia.setBorderPainted(true);
+        			likeMedia.setBorder(new LineBorder(Color.GREEN));
+        		}else if(likeMedia.isBorderPainted() == true) {
+        			likeMedia.setBorderPainted(false);
+        		}
         	}
         });
 		
 		Image thumbDwn_img = thDwn.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
 		Icon thumbsDown = new ImageIcon(thumbDwn_img);
 		
-		JButton dislikeMedia = new JButton(thumbsDown);
+		dislikeMedia = new JButton(thumbsDown);
 		dislikeMedia.setBorderPainted(false);
 		dislikeMedia.setContentAreaFilled(false);
 		dislikeMedia.setFocusPainted(false);
 		dislikeMedia.setMaximumSize(new Dimension(35, 35)); 
 		dislikeMedia.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//dislike media actions 
+        		//dislike media actions
+        		if(dislikeMedia.isBorderPainted() == false) {
+        			likeMedia.setBorderPainted(false); 
+        			dislikeMedia.setBorderPainted(true);
+        			dislikeMedia.setBorder(new LineBorder(Color.RED));
+        		}else if(dislikeMedia.isBorderPainted() == true) {
+        			dislikeMedia.setBorderPainted(false);
+        		}
         	}
         });
 		
 		Image flag_img = flag.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		Icon flagIcon = new ImageIcon(flag_img);
 		
-		JButton flagMedia = new JButton(flagIcon);
+		flagMedia = new JButton(flagIcon);
 		flagMedia.setBorderPainted(false);
 		flagMedia.setContentAreaFilled(false);
 		flagMedia.setFocusPainted(false);
 		flagMedia.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//flag media actions 
+        		UIManager.put("Button.foreground", aa_purple);
+				UIManager.put("Button.background", aa_grey);
+				UIManager.put("OptionPane.background", Color.black);
+				UIManager.put("Panel.setOpaque", true);
+				UIManager.put("Panel.background", aa_grey);
+				UIManager.put("TextField.selectionBackground", Color.WHITE);
+				UIManager.put("OptionPane.messageForeground", Color.WHITE);
+        		
+        		JFrame flagFrame = new JFrame();
+        		JOptionPane.showMessageDialog(flagFrame,"Media has been flagged! It will no longer appear in the Happy Thought Button.","Alert",JOptionPane.WARNING_MESSAGE);
+        		
+        		//current++;
+				//scroll image to the right
+				if(current < happyMedia.size() - 1) {
+					current++;
+					populateMiddlePanel(middle_panel, cardLayout); 
+					happyMedia.remove(current - 1);
+				}else if(current == happyMedia.size() - 1) {
+					current--;
+					populateMiddlePanel(middle_panel, cardLayout); 
+					happyMedia.remove(current + 1);
+				}
         	}
         });
 		
@@ -506,7 +581,7 @@ public class Happy_Thought_Button {
 		bottom_panel.add(likeMedia); 
 		bottom_panel.add(Box.createRigidArea(new Dimension(50, 0)));
 		bottom_panel.add(dislikeMedia); 
-		bottom_panel.add(Box.createRigidArea(new Dimension(155, 0))); 	
+		bottom_panel.add(Box.createRigidArea(new Dimension(145, 0))); 	
 		bottom_panel.add(flagMedia);
 		
 		return bottom_panel; 
@@ -533,14 +608,16 @@ public class Happy_Thought_Button {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				CardLayout cardLayout = new CardLayout();
+				JPanel middle_panel = new JPanel(); 
 				
 				JFrame htb_frame = new JFrame("Happy Thought Button");
 				htb_frame.setUndecorated(true);
 				htb_frame.setPreferredSize(new Dimension(width, height));
 							
 				JMenuBar title_panel = generateTitlePanel(htb_frame);				
-				JPanel center_panel = generateCenterPanel();
-				JPanel bottom_panel = generateBottomPanel();
+				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel);
+				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout);
 				JPanel media_viewer = generateMediaViewer(title_panel, center_panel, bottom_panel);
 			
 				/*

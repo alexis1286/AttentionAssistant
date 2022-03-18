@@ -253,14 +253,14 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.run_pomo(settings, pm);
+	        		pomo.run_pomo(settings,pm);
 	        }});
 			panel.add(pomoButton);
 		}
 		if(ntb_visible == true && ntb_active == true && ntb_menu == true) {
 			ntbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        		//open ntb
+	        		ntb.run_ntb();
 	        }});
 			panel.add(ntbButton);
 		}

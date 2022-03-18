@@ -67,28 +67,12 @@ public class Pomodoro_Timer
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
 	}
-	public boolean GetMainTimerStatus() {
-		if (MainTimerRunning == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public boolean GetBreakTimerStatus() {
-		if(BreakTimerRunning == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 	
 	public enum Work_Break {
 		Work,
 		Break,
-		Paused
+		Null,
+		Other
 	}
 	public Work_Break getWorkBreakStatus(){
 		
@@ -104,11 +88,11 @@ public class Pomodoro_Timer
 		}
 		else if (paused == true){
 			System.out.println("Paused");
-			return Work_Break.Paused;	
+			return Work_Break.Null;	
 		}
 		else {
-			System.out.println("Null");
-			return null;
+			System.out.println("other");
+			return Work_Break.Other;
 		}
 
 	}
@@ -215,8 +199,8 @@ public class Pomodoro_Timer
 	private JPanel timerPanel(JFrame frame, Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
-
-		JLabel taskLabel=new JLabel(tasks(pm).get(1).getTaskName());
+	
+		JLabel taskLabel=new JLabel(tasks(pm).get(0).getTaskName());
 		JPanel taskpanel = new JPanel();
 		taskpanel.setBackground(aa_grey);
 		taskLabel.setForeground(Color.white);
@@ -249,20 +233,23 @@ public class Pomodoro_Timer
     			
     			}
     			else {
-
+    				
         			if(e.getSource()==startbut) {		
         				paused = false;
-        				if (b.isVisible()  == true) {
-        					t.start();
-        		
+        			
+        					if (b.isVisible()  == true) {
+            					t.start();
+            		
+            				}
+            				else {
+            				MainTimer(pm);
+             	
+            				}
         				}
-        				else {
-        				MainTimer(pm);
-         	
-        				}
+        			
         		
         			}	
-    			}
+    			
     			
     			lastButtonPressed = buttonPressed;
     			//TODO reset to null as one of the reset functions
@@ -328,21 +315,22 @@ public class Pomodoro_Timer
    					if(e.getSource()==endbut) {
    	        		
    	        			if(t == null) {
-   	    					//TODO inital timer begin pressing pause gives error beacuse min != 0
    	    					JFrame frame = new JFrame();
    	    					JOptionPane.showMessageDialog(frame, "Timer has not begun.");
    	    					getWorkBreakStatus();
    	    				}
    	    				else {
    	    				t.stop();
-   	    				sec=min=0;
-   	    				time.setText(String.valueOf("00m:00s"));
-   	    				//TODO redirect user back to settings to edit the timer input
+   	    				sec= 0;
+   	    				min=0;
+   	    				breakmin =0;
    	    				c.setVisible(false);
    	    				b.setVisible(false);
    	    				MainTimerRunning = false;
    	    				BreakTimerRunning = false;
    	    				paused = false;
+   	    				time.setText(String.valueOf("00m:00s"));
+   	    		   	    lastButtonPressed = null;
    	    				getWorkBreakStatus();
    	    				
    	    				}	
@@ -377,6 +365,10 @@ public class Pomodoro_Timer
 		panel.add(timerpanel);
 		panel.add(timerwordpanel);
 		panel.add(buttonpanel);
+		
+		if(min == 0 && breakmin == 0) {
+			lastButtonPressed = null; 	
+		}
 		return panel;
 	}
 
@@ -478,6 +470,7 @@ public class Pomodoro_Timer
 	            public void actionPerformed(ActionEvent e) {
 	                String selectedFruit = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
 	                jLabel.setText(selectedFruit);
+	                //	TODO add lexis function to make a set new active task
 	            }
 	        });
 
@@ -543,7 +536,7 @@ public class Pomodoro_Timer
 								c.setVisible(false);
 								b.setVisible(false);
 							
-								//TODO open the priority manager/do drop down
+								TaskDropDown(pm);
 							 
 							 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
 								 //(ask the user to assign a new task via priority manager)
@@ -622,30 +615,13 @@ public class Pomodoro_Timer
 		}
 	}
 	
-	JPanel icon_panel;
-	int counter;
-	public void rebuildPanel( JPanel panel, JFrame frame, Priority_Manager pm) {
-		JPanel new_icon_panel = new JPanel();	
-		if(counter % 2 != 0) {
-			new_icon_panel = timerPanel( frame,pm);
-			panel.add("newIPanel",new_icon_panel);
-			panel.remove(icon_panel);
-		}else {
-			icon_panel = timerPanel(frame,pm);
-			panel.add("iPanel",panel);
-
-			panel.remove(new_icon_panel);
-		}
-		counter++;
-		panel.revalidate();
-		panel.repaint();
-		frame.revalidate();
-		frame.repaint();
-	}
 	
+
 	/**
 	 * initializes the buttons and adds them to the frame, and initializes the labels that are used depending on what timer is running
 	 */
+	JPanel icon_panel = new JPanel();
+	int counter;
 	public void run_pomo(Settings settings, Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
@@ -679,7 +655,7 @@ public class Pomodoro_Timer
 				//Input(settings);
 				getWorkBreakStatus();
 		
-				TaskDropDown(pm);
+				
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
@@ -690,23 +666,49 @@ public class Pomodoro_Timer
 	}
 	
 	public void refresh(Settings settings){
-		int maintime;
-		int breaktime;
-		//TODO stop the timer and reset everything 
-		maintime = settings.getWorkPeriod();
-		this.min = maintime;
+		min = 0;
+		breakmin =0;
+		sec =0;
+		min = settings.getWorkPeriod();
 		initalmin = min;
-		breaktime = settings.getBreakPeriod();
-		this.breakmin = breaktime;
+		breakmin = settings.getBreakPeriod();
 		initalbreak = breakmin;
 		this.pomodoro_active = settings.getPomodoroIsActive();
-		
-		if (counter == 0 ) {
-			//do nothing
+   	    MainTimerRunning = false;
+   	    BreakTimerRunning = false;
+   	    paused = false;	
+   	    
+		if(this.t != null) {
+			t.stop();
+			time.setText(String.valueOf("00m:00s"));
+			c.setVisible(false);
+	   	    b.setVisible(false);
+	   	    lastButtonPressed = null;
 		}
-		else {
-		toRefresh.doClick();
+		
+		if (counter != 0 ) {
+			toRefresh.doClick();
 		}
 	}
+	public void rebuildPanel( JPanel panel, JFrame frame, Priority_Manager pm) {
+		JPanel new_icon_panel = new JPanel();	
+		if(counter % 2 != 0) {
+			new_icon_panel = timerPanel(frame,pm);
+			panel.add("newIPanel",new_icon_panel);
+			panel.remove(icon_panel);
+	
+		}else {
+			panel.remove(icon_panel);
+			icon_panel = timerPanel(frame,pm);
+			panel.add("iPanel",icon_panel);
+			panel.remove(new_icon_panel);
+		}
+		counter++;
+		panel.revalidate();
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+	}
+	
 
 }
