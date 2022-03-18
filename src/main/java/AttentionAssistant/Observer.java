@@ -153,7 +153,11 @@ public class Observer{
 	 * send the appropriate notification
 	 * @throws IOException 
 	 */
-	protected void monitor(Task activeTask) throws IOException {			
+	protected void monitor(Task activeTask
+//			,DataBase db
+//			,Notification_System notification_System
+//			,PomodoroTimer pTimer
+			) throws IOException {			
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
 			
 			System.out.println("Task Description: " + activeTask.getDescription());
@@ -183,34 +187,27 @@ public class Observer{
 			
 			//Set up for Eye-movement-tracker profile
 			//this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
-
-			System.out.println("\nMouse Tracker: 0 (notImplemented yet)" + 
+			
+			System.out.println("\nMouse Tracker: " + mouseTracker.getMouseScore() + 
 			//this will eventually be changed to eyeMovementTracker.getWeightedEyeMovementScore()
  					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
- 					"\nkeyBoardTracker: 0 (not Implemented yet)" + 
+ 					"\nkeyBoardTracker: " + keyBoardTracker.getKeyBoardScore() + 
     				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
  					"\ninternetTracker (for " + uri1 + "): " + internetTracker.getInternetScore() +
 					"\ninternetTracker (for " + uri2 + "): " + internetTracker2.getInternetScore());
 
-			//(insert some timer here in while loop) So we grab all scores at once.
 			/**
-			{
+			//calculation of the observer score
 			this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
-			eyeMovementTracker.getEyeMovementScore(),
+			//this will eventually be changed to eyeMovementTracker.getWeightedEyeMovementScore()
+ 			eyeMovementTracker.getEyeMovementScore(),
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
 			internetTracker.getInternetScore())
-			}
+			//set the Date and Time the score was Gathered
+			this.setDTGathered(new Date(System.currentTimeMillis()));
 			*/
-			
-			
-			/**
-			 * Calculate the overall observerScore
-			 */
-			
-			/**
-			observerScore = calculateObserverScore(mouseMovementsScore, eyeMovementScore, 
-					keyBoardScore, osEventsScore, internetScore);
+
 			
 			/**
 			 * Check if user is focused on task when they should be working or
@@ -218,33 +215,47 @@ public class Observer{
 			 */
 			
 			/**
-			if(observerScore >= threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK ) {
-				/**
-				 * NO ACTION
-				 * User is doing what they should be doing
-				 */
-			/**
-			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
-				/**
-				 * NO ACTION
-				 * User is doing what they should be doing
-				 */
-			/**
-			} else if (observerScore < threshold && pTimer.getWorkBreakStatus() == Work_Break.WORK) {
-				/**
-				 * TAKE ACTION
-				 * User should be working but is not
-				 * NEED TO IMPLEMENT - Send a message through the Avatar
-				 */
-			/**
-			} else {
-				/**
-				 * TAKE ACTION
-				 * User is hyperforcusing
-				 * NEED TO IMPLEMENT - Send a message through the Avatar
-				 */
+			//pomo is on work timer
+			if(pTimer.getWorkBreakStatus() == Work_Break.WORK) {
+				//on task
+				if(this.observerScore >= this.threshold){
+					notifiation_System.allGood();
+				}
+				//off task
+				else{
+					notification_System.distracted();
+				}
 			}
-
+			//pomo is on break timer
+			else if (pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
+				//on task
+				if(this.observerScore >= this.threshold){
+					notification_System.selfCare();
+				}
+				//off task
+				else{
+					notification_System.isNull();
+				}
+			}
+			//pomo is null/paused
+			else{
+				//on task
+				if(this.observerScore >= this.threhold){
+					notification_System.resumePomo();
+				}
+				//off task
+				else{
+					notification_System.isNull();
+				}
+			}
+			*/
+			//Write to Database
+			/**
+			 * db.add(this, activeTask.getTaskID());
+			 */
+			}
+	
+	
 	/**
 	 * Returns an ArrayList with keywords based on the task's description
 	 * @param activeTask - task that's used to generate keywords
