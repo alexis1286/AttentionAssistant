@@ -2734,8 +2734,15 @@ public class Settings {
 					public void actionPerformed(ActionEvent e) {
 						settings.settingsID = settingsChanges.settingsID;
 						settings.userID = settingsChanges.userID; 
-						settings.iconCircles = settingsChanges.iconCircles;
-						settings.icons = settingsChanges.icons;
+						
+						if(settingsChanges.iconCircles != null) {
+							settings.iconCircles = settingsChanges.iconCircles;
+						}
+						
+						if(settingsChanges.icons != null) {
+							settings.icons = settingsChanges.icons;
+						}
+						
 						settings.opacityCircles = settingsChanges.opacityCircles; 
 						settings.opacityIcons = settingsChanges.opacityIcons; 
 						settings.isCollapsed = settingsChanges.isCollapsed; 
