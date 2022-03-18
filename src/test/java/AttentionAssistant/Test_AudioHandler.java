@@ -1,7 +1,6 @@
 package AttentionAssistant;
 
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +25,8 @@ public class Test_AudioHandler {
 	void AudioHandlerAudioPlayer() {
 		String testSoundPath = testAudioPath + "testSound.wav";
 		handler.AudioPlayer(testSoundPath);
+		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(2L, TimeUnit.SECONDS);
+		while (System.nanoTime()< endTime){}
 	}
 	
 	@Test
