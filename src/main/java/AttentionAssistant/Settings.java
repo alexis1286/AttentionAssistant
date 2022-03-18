@@ -1862,8 +1862,8 @@ public class Settings {
 		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		workPeriod.setForeground(Color.white);
 		
-		Integer workMinutes[] = {1,15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
-		Integer breakMinutes[] = {1,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		Integer workMinutes[] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
 		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
