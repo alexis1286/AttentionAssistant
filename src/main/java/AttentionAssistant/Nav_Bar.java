@@ -230,6 +230,7 @@ public class Nav_Bar{
 	    		count++;
 	        }else {count--;}
 		}else {
+			panel.remove(menuButton);
 			settings_menu = true;
 	    	pm_menu = true;
     		pomo_menu = true;
@@ -436,6 +437,7 @@ public class Nav_Bar{
 		this.ntb_active = set.getNtbIsActive();
 		this.htb_active = set.getHtbIsActive();
 		this.fts_active = set.getFtsIsActive();
+		count=0;
 		toRefresh.doClick();
 	}
 }
