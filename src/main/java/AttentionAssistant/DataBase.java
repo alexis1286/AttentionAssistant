@@ -914,7 +914,7 @@ public class DataBase {
             }
             
             /**
-             * Mainly used for JUNIT testing, deletes the happy_thought_button table at the beginning of testing to remove all test data.
+             * Mainly used for JUNIT testing, deletes the Media table & happy_thought_button Table at the beginning of testing to remove all test data.
              * 
              */
             public void DeleteAllMedia(){
@@ -926,11 +926,20 @@ public class DataBase {
             	} catch ( SQLException e ) {
         			e.printStackTrace();
             }
+            	//This can be commented out once everyone's database is updated
+            	String query2 = "DROP TABLE IF EXISTS 'happy_thought_button'";
+            	try ( Connection conn = this.ds.getConnection();
+            		    Statement stmt = conn.createStatement(); ) {
+        		    int rv = stmt.executeUpdate( query2 );
+        		    System.out.println( "DeleteAllHappyThoughtButtons() returned " + rv );
+            	} catch ( SQLException e ) {
+        			e.printStackTrace();
+            }
             	
             }
             
             /**
-             * Grab all Happy_Thought_Buttons within the Database
+             * Grab all Media within the Database
              * 
              * @param int
              * @return ArrayList<Media>
@@ -967,7 +976,7 @@ public class DataBase {
             }
 
             /**
-             ******* END OF HTB CRUD *******
+             ******* END OF MEDIA CRUD *******
              */
 
              /**

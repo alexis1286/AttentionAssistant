@@ -46,7 +46,7 @@ public class Test_DataBase {
 	nonDefaultTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDateTask, testPriority);
 	
 	/**
-	 * Set up for nonDefault HTB
+	 * Set up for nonDefault Media
 	 */
 	int testMediaID = 999;
 	String testMediaIDTag = "This is a test Media ID Tag";
@@ -460,7 +460,7 @@ public class Test_DataBase {
     @Test
     @Order(17)
     @DisplayName("<DataBase> DatabaseAddNewMedia")
-    void DatabaseAddHTB() {
+    void DatabaseAddMedia() {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
     db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
@@ -477,8 +477,8 @@ public class Test_DataBase {
     
     @Test
     @Order(18)
-    @DisplayName("<DataBase> DatabaseUpdateHTB")
-    void DatabaseUpdateHTB() {
+    @DisplayName("<DataBase> DatabaseUpdateMedia")
+    void DatabaseUpdateMedia() {
     	Media UpdatedMedia= new Media(nonDefaultMedia);
     	UpdatedMedia.setMediaID(1);
     	UpdatedMedia.setMedia_ID_Tag("I am a updated Media_ID_Tag");
@@ -489,8 +489,8 @@ public class Test_DataBase {
     
     @Test
     @Order(19)
-    @DisplayName("<DataBase> DatabaseDeleteHTB")
-    void DatabaseDeleteHTB() {
+    @DisplayName("<DataBase> DatabaseDeleteMedia")
+    void DatabaseDeleteMedia() {
     	Media DeletedMedia= new Media(nonDefaultMedia);
     	DeletedMedia.setMediaID(3);
     	DeletedMedia.setMedia_ID_Tag("I am supposed to be deleted");
@@ -502,8 +502,8 @@ public class Test_DataBase {
 
     @Test
     @Order(20)
-    @DisplayName("<DataBase> DatabaseSelectHTB")
-    void DatabaseSelectHTB() {
+    @DisplayName("<DataBase> DatabaseSelectMedia")
+    void DatabaseSelectMedia() {
     	Media SelectedMedia1= new Media(nonDefaultMedia);
     	SelectedMedia1.setMediaID(2);
     	SelectedMedia1.setMedia_ID_Tag("I am a Selected Media ID Tag");
@@ -523,8 +523,8 @@ public class Test_DataBase {
     
     @Test
     @Order(21)
-    @DisplayName("<DataBase> DatabaseSelectAllHTBs")
-    void DatabaseSelectAllHTBs() {
+    @DisplayName("<DataBase> DatabaseSelectAllMedias")
+    void DatabaseSelectAllMedias() {
     	ArrayList<Media> test_media_List = new ArrayList<Media>();
     	ArrayList<Media> test_database_media_List = new ArrayList<Media>();
 
@@ -560,7 +560,7 @@ public class Test_DataBase {
     
     
     /**
-    ***************** END OF TEST HTB CRUD *****************
+    ***************** END OF TEST MEDIA CRUD *****************
     */
 
     /**
