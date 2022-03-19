@@ -22,7 +22,7 @@ public class Test_DataBase {
 	 */
 
 	Task nonDefaultTask;
-	Happy_Thought_Button nonDefaultHTB;
+	Media nonDefaultMedia;
 	Observer nonDefaultObserver;
 	Settings nonDefaultSettings;
 	User_Account nonDefaultUser;
@@ -48,13 +48,13 @@ public class Test_DataBase {
 	/**
 	 * Set up for nonDefault HTB
 	 */
-	int testHTBID = 999;
+	int testMediaID = 999;
 	String testMediaIDTag = "This is a test Media ID Tag";
 	boolean testHTBFlagged = true;
 	Date testDateHTB= new Date(1220227200L * 1000);
 	int testrating = 1;
 
-	nonDefaultHTB = new Happy_Thought_Button(testHTBID, testMediaIDTag, testHTBFlagged, testrating, testDateHTB);
+	nonDefaultMedia = new Media(testMediaID, testMediaIDTag, testHTBFlagged, testrating, testDateHTB);
 
 	/**
 	 * Set up for nonDefault Observer
@@ -164,7 +164,7 @@ public class Test_DataBase {
     db.DeleteAllUser_Accounts();
     db.DeleteAllParent_Accounts();
     db.DeleteAllTasks();
-    db.DeleteAllHTBs();
+    db.DeleteAllMedia();
     db.DeleteAllObservers();
     db.DeleteAllSettings();
     db.DeleteAllLinkedAccounts();
@@ -453,69 +453,69 @@ public class Test_DataBase {
     */
 
     /**
-    ***************** START OF TEST HTB CRUD *****************
+    ***************** START OF TEST MEDIA CRUD *****************
     * @author jmitchel2
     */
     
     @Test
     @Order(17)
-    @DisplayName("<DataBase> DatabaseAddNewHTB")
+    @DisplayName("<DataBase> DatabaseAddNewMedia")
     void DatabaseAddHTB() {
     User_Account Test_User_Account= new User_Account(nonDefaultUser);
     db.AddUser_Account(Test_User_Account);
     Test_User_Account.setUserID(1);
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
     Test_User_Account.setUserID(5);
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
     db.DeleteUser_Account(5);
     Test_User_Account.setUserID(3);
-    db.AddHTB(nonDefaultHTB, Test_User_Account.getUserID());
+    db.AddMedia(nonDefaultMedia, Test_User_Account.getUserID());
     }
     
     @Test
     @Order(18)
     @DisplayName("<DataBase> DatabaseUpdateHTB")
     void DatabaseUpdateHTB() {
-    	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
-    	UpdatedHTB.setHTBID(1);
-    	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
-    	UpdatedHTB.setFlagged(false);
-    	UpdatedHTB.setRating(2);
-    	db.UpdateHTB(UpdatedHTB);
+    	Media UpdatedMedia= new Media(nonDefaultMedia);
+    	UpdatedMedia.setMediaID(1);
+    	UpdatedMedia.setMedia_ID_Tag("I am a updated Media_ID_Tag");
+    	UpdatedMedia.setFlagged(false);
+    	UpdatedMedia.setRating(2);
+    	db.UpdateMedia(UpdatedMedia);
     }
     
     @Test
     @Order(19)
     @DisplayName("<DataBase> DatabaseDeleteHTB")
     void DatabaseDeleteHTB() {
-    	Happy_Thought_Button DeletedHTB= new Happy_Thought_Button(nonDefaultHTB);
-    	DeletedHTB.setHTBID(3);
-    	DeletedHTB.setMedia_ID_Tag("I am supposed to be deleted");
-    	DeletedHTB.setFlagged(false);
-    	db.UpdateHTB(DeletedHTB);
+    	Media DeletedMedia= new Media(nonDefaultMedia);
+    	DeletedMedia.setMediaID(3);
+    	DeletedMedia.setMedia_ID_Tag("I am supposed to be deleted");
+    	DeletedMedia.setFlagged(false);
+    	db.UpdateMedia(DeletedMedia);
     	
-    	db.DeleteHTB(3);
+    	db.DeleteMedia(3);
     }
 
     @Test
     @Order(20)
     @DisplayName("<DataBase> DatabaseSelectHTB")
     void DatabaseSelectHTB() {
-    	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
-    	SelectedHTB1.setHTBID(2);
-    	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
-    	SelectedHTB1.setFlagged(true);
-    	SelectedHTB1.setDT_Executed(null);
-    	SelectedHTB1.setRating(1);
-    	db.UpdateHTB(SelectedHTB1);
+    	Media SelectedMedia1= new Media(nonDefaultMedia);
+    	SelectedMedia1.setMediaID(2);
+    	SelectedMedia1.setMedia_ID_Tag("I am a Selected Media ID Tag");
+    	SelectedMedia1.setFlagged(true);
+    	SelectedMedia1.setDT_Executed(null);
+    	SelectedMedia1.setRating(1);
+    	db.UpdateMedia(SelectedMedia1);
     	
-    	Happy_Thought_Button selectedHTB2 = new Happy_Thought_Button();
-    	selectedHTB2 = db.SelectHTB(2);
+    	Media selectedHTB2 = new Media();
+    	selectedHTB2 = db.SelectMedia(2);
         
-    	String String1 = "Happy_Thought_Button ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Rating= 1 Date Time Executed= null";
+    	String String1 = "Media ID= 2 Media_ID_Tag= I am a Selected Media ID Tag Flagged= true Rating= 1 Date Time Executed= null";
         assertEquals(String1, selectedHTB2.toString(), "selectedHTB2 should be set to Happy_Thought_Button ID= 2 Media_ID_Tag= This is a test Media ID Tag Flagged= true Rating= 1 Date Time Executed= null but instead returned: " + selectedHTB2.toString());
         
         assertEquals(1, selectedHTB2.getRating(), "SelectedHTB rating should be set to 1 but instead returned " + selectedHTB2.getRating());
@@ -525,35 +525,35 @@ public class Test_DataBase {
     @Order(21)
     @DisplayName("<DataBase> DatabaseSelectAllHTBs")
     void DatabaseSelectAllHTBs() {
-    	ArrayList<Happy_Thought_Button> test_HTB_List = new ArrayList<Happy_Thought_Button>();
-    	ArrayList<Happy_Thought_Button> test_database_HTB_List = new ArrayList<Happy_Thought_Button>();
+    	ArrayList<Media> test_media_List = new ArrayList<Media>();
+    	ArrayList<Media> test_database_media_List = new ArrayList<Media>();
 
-    	Happy_Thought_Button UpdatedHTB= new Happy_Thought_Button(nonDefaultHTB);
-    	UpdatedHTB.setHTBID(1);
+    	Media UpdatedHTB= new Media(nonDefaultMedia);
+    	UpdatedHTB.setMediaID(1);
     	UpdatedHTB.setMedia_ID_Tag("I am a updated Media_ID_Tag");
     	UpdatedHTB.setFlagged(false);
     	UpdatedHTB.setDT_Executed(null);
     	UpdatedHTB.setRating(2);
     	
-    	Happy_Thought_Button SelectedHTB1= new Happy_Thought_Button(nonDefaultHTB);
-    	SelectedHTB1.setHTBID(2);
+    	Media SelectedHTB1= new Media(nonDefaultMedia);
+    	SelectedHTB1.setMediaID(2);
     	SelectedHTB1.setMedia_ID_Tag("I am a Selected Media ID Tag");
     	SelectedHTB1.setFlagged(true);
     	SelectedHTB1.setDT_Executed(null);
     	SelectedHTB1.setRating(1);
     	
-    	Happy_Thought_Button DefaultHTB= new Happy_Thought_Button(nonDefaultHTB);
-    	DefaultHTB.setHTBID(4);
+    	Media DefaultHTB= new Media(nonDefaultMedia);
+    	DefaultHTB.setMediaID(4);
     	DefaultHTB.setDT_Executed(null);
     	
-    	test_HTB_List.add(UpdatedHTB);
-    	test_HTB_List.add(SelectedHTB1);
-    	test_HTB_List.add(DefaultHTB);
+    	test_media_List.add(UpdatedHTB);
+    	test_media_List.add(SelectedHTB1);
+    	test_media_List.add(DefaultHTB);
     	
-    	test_database_HTB_List= db.SelectAllHTBs(1);
+    	test_database_media_List= db.SelectAllMedias(1);
  
-    	for (int i =0; i< test_database_HTB_List.size(); i++) {        
-    		assertEquals(test_HTB_List.get(i).toString(), test_database_HTB_List.get(i).toString(), "test_database_HTB_List " + i + " should be set to " + test_HTB_List.get(i).toString() + " but instead returned: " + test_database_HTB_List.get(i).toString());
+    	for (int i =0; i< test_database_media_List.size(); i++) {        
+    		assertEquals(test_media_List.get(i).toString(), test_database_media_List.get(i).toString(), "test_database_HTB_List " + i + " should be set to " + test_media_List.get(i).toString() + " but instead returned: " + test_database_media_List.get(i).toString());
         }
         
     }

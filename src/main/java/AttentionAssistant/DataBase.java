@@ -69,8 +69,8 @@ public class DataBase {
     	/**
     	 * Set up for Table HappyThoughtButton
     	 */
-    	String queryHappyThoughtButton = "CREATE TABLE IF NOT EXISTS happy_thought_button ( " +
-   			 "hTBID INTEGER PRIMARY KEY, " +
+    	String queryMedia = "CREATE TABLE IF NOT EXISTS media ( " +
+   			 "media_ID INTEGER PRIMARY KEY, " +
    			 "fk_userID INTEGER, " +
   			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
@@ -204,8 +204,8 @@ public class DataBase {
    		System.out.println( "CreateParentTable() returned " + rv2 );
 		int rv3 = stmt.executeUpdate(queryTask);
    		System.out.println( "CreateTaskTable() returned " + rv3 );
-   		int rv4 = stmt.executeUpdate(queryHappyThoughtButton);
-   		System.out.println( "CreateHTBTable() returned " + rv4 );
+   		int rv4 = stmt.executeUpdate(queryMedia);
+   		System.out.println( "CreateMediaTable() returned " + rv4 );
    		int rv5 = stmt.executeUpdate(queryObserver);
    		System.out.println( "CreateObserverTable() returned " + rv5 );
    		int rv6 = stmt.executeUpdate(querySettings);
@@ -805,28 +805,28 @@ public class DataBase {
         */
 
         /**
-        ******* START OF HTB CRUD *******
+        ******* START OF MEDIA CRUD *******
         * @author jmitchel2
         */
         /**
-         * Add a new Happy_Thought_Button to the database.
-         * @param Happy_Thought_Button
+         * Add a new media to the database.
+         * @param Media
          */
-        public void AddHTB(Happy_Thought_Button hTB, int userID) {
+        public void AddMedia(Media media, int userID) {
     		sqlCon.enforceForeignKeys(true);
             ds.setConfig(sqlCon);
 //        	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
-        	String query1 = "INSERT INTO happy_thought_button " +
+        	String query1 = "INSERT INTO media " +
         			"(fk_userID, media_ID_Tag, flagged, rating) Values ( '" +
         			userID + "', '" +
-        			hTB.getMedia_ID_Tag().replaceAll("'", "''") + "', '" +
-        			hTB.getFlagged() + "', '" +
-        			hTB.getRating() + "')";
+        			media.getMedia_ID_Tag().replaceAll("'", "''") + "', '" +
+        			media.getFlagged() + "', '" +
+        			media.getRating() + "')";
 //        			DateTime + "')";
         	try ( Connection conn = ds.getConnection();
         		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
-        		    System.out.println( "AddhTB() returned " + rv );
+        		    System.out.println( "AddMedia() returned " + rv );
         		} catch ( SQLException e ) {
         		    //gets called when a user is passed in that isn't in the user table.
         			e.printStackTrace();
@@ -835,24 +835,24 @@ public class DataBase {
             ds.setConfig(sqlCon);
         }
         /**
-         * Update a Happy_Thought_Button within the Database
+         * Update a Media within the Database
          * 
-         * @param Happy_Thought_Button
+         * @param Media
          */
-            public void UpdateHTB(Happy_Thought_Button hTB) {
+            public void UpdateMedia(Media media) {
         		sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
 //            	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(hTB.getDT_Executed());
-            	String query1 = "UPDATE happy_thought_button " +
-            			"SET media_ID_Tag = '" + hTB.getMedia_ID_Tag().replaceAll("'", "''") + 
-            			"', flagged = '" + hTB.getFlagged() + 
-            			"', rating = '" + hTB.getRating() +
+            	String query1 = "UPDATE media " +
+            			"SET media_ID_Tag = '" + media.getMedia_ID_Tag().replaceAll("'", "''") + 
+            			"', flagged = '" + media.getFlagged() + 
+            			"', rating = '" + media.getRating() +
 //            			"', dT_Executed = '" + DateTime + 
-            			"' WHERE hTBID = '" + hTB.getHTBID() + "'";
+            			"' WHERE media_ID = '" + media.getMediaID() + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
             		    int rv = stmt.executeUpdate( query1 );
-            		    System.out.println( "UpdateHTB() returned " + rv );
+            		    System.out.println( "UpdateMedia() returned " + rv );
             		} catch ( SQLException e ) {
             		    //I have no idea how to get inside of this statement without the DB not connecting.
             			e.printStackTrace();
@@ -862,18 +862,18 @@ public class DataBase {
             	
             }   
             /**
-             * Delete a Happy_Thought_Button within the Database
+             * Delete a Media within the Database
              *              * 
              * @param int
              */
-            public void DeleteHTB(int hTBID) {
+            public void DeleteMedia(int mediaID) {
         		sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
-            	String query1 = "DELETE FROM happy_thought_button WHERE hTBID = '" + hTBID + "'";
+            	String query1 = "DELETE FROM media WHERE media_ID = '" + mediaID + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
             		    int rv = stmt.executeUpdate( query1 );
-            		    System.out.println( "DeleteHTB() returned " + rv );
+            		    System.out.println( "DeleteMedia() returned " + rv );
             		} catch ( SQLException e ) {
             		    e.printStackTrace();
             		}
@@ -882,26 +882,26 @@ public class DataBase {
             	
             }    	
             /**
-             * Select a Happy_Thought_Button within the database using the hTBID
+             * Select a Media within the database using the mediaID
              *              * 
              * @param int
-             * @return Happy_Thought_Button
+             * @return Media
              */
-            public Happy_Thought_Button SelectHTB(int hTBID) {
+            public Media SelectMedia(int mediaID) {
         		sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
-            	Happy_Thought_Button hTB1 = new Happy_Thought_Button();
-            	String query1 = "SELECT * FROM happy_thought_button WHERE hTBID = '" + hTBID + "'";
+            	Media media1 = new Media();
+            	String query1 = "SELECT * FROM media WHERE media_ID = '" + mediaID + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
             		    ResultSet rs = stmt.executeQuery( query1 );
-            		    hTB1.setHTBID(rs.getInt("hTBID"));
-            		    hTB1.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
-            		    hTB1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
-            		    hTB1.setRating(rs.getInt("rating"));
+            		    media1.setMediaID(rs.getInt("media_ID"));
+            		    media1.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
+            		    media1.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    media1.setRating(rs.getInt("rating"));
 //            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
 //            		    hTB1.setDT_Executed(date1);
-            		    System.out.println( "SelectHTB() returned " + rs );
+            		    System.out.println( "SelectMedia() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		}
@@ -910,19 +910,19 @@ public class DataBase {
 //      			 }
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
-            	return hTB1;
+            	return media1;
             }
             
             /**
              * Mainly used for JUNIT testing, deletes the happy_thought_button table at the beginning of testing to remove all test data.
              * 
              */
-            public void DeleteAllHTBs(){
-            	String query1 = "DROP TABLE IF EXISTS 'happy_thought_button'";
+            public void DeleteAllMedia(){
+            	String query1 = "DROP TABLE IF EXISTS 'media'";
             	try ( Connection conn = this.ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
         		    int rv = stmt.executeUpdate( query1 );
-        		    System.out.println( "DeleteAllHTBs() returned " + rv );
+        		    System.out.println( "DeleteAllMedias() returned " + rv );
             	} catch ( SQLException e ) {
         			e.printStackTrace();
             }
@@ -933,28 +933,28 @@ public class DataBase {
              * Grab all Happy_Thought_Buttons within the Database
              * 
              * @param int
-             * @return ArrayList<Happy_Thought_Button>
+             * @return ArrayList<Media>
              */
-            public ArrayList<Happy_Thought_Button> SelectAllHTBs(int userID){
+            public ArrayList<Media> SelectAllMedias(int userID){
         		sqlCon.enforceForeignKeys(true);
                 ds.setConfig(sqlCon);
-            	ArrayList<Happy_Thought_Button> hTBsOnList = new ArrayList<Happy_Thought_Button>();
-            	Happy_Thought_Button blankHTB = new Happy_Thought_Button();
-            	String query1 = "SELECT * FROM happy_thought_button WHERE fk_userID = '" + userID + "'";
+            	ArrayList<Media> MediasOnList = new ArrayList<Media>();
+            	Media blankmedia = new Media();
+            	String query1 = "SELECT * FROM media WHERE fk_userID = '" + userID + "'";
             	try ( Connection conn = ds.getConnection();
             		    Statement stmt = conn.createStatement(); ) {
             		    ResultSet rs = stmt.executeQuery( query1 );
             		    while (rs.next()){
-            		    blankHTB = new Happy_Thought_Button();
-            		    blankHTB.setHTBID(rs.getInt("hTBID"));
-            		    blankHTB.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
-            		    blankHTB.setFlagged(Boolean.valueOf(rs.getString("flagged")));
-            		    blankHTB.setRating(rs.getInt("rating"));
+            		    	blankmedia = new Media();
+            		    	blankmedia.setMediaID(rs.getInt("media_ID"));
+            		    	blankmedia.setMedia_ID_Tag(rs.getString("media_ID_Tag"));
+            		    	blankmedia.setFlagged(Boolean.valueOf(rs.getString("flagged")));
+            		    	blankmedia.setRating(rs.getInt("rating"));
 //            		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Executed"));
 //            		    blankHTB.setDT_Executed(date1);
-            		    hTBsOnList.add(blankHTB);
+            		    	MediasOnList.add(blankmedia);
             		    }
-            		    System.out.println( "SelectAllHTBs() returned " + rs );
+            		    System.out.println( "SelectAllMedias() returned " + rs );
             		} catch ( SQLException e ) {
             			e.printStackTrace();
             		}
@@ -963,7 +963,7 @@ public class DataBase {
 //            		}
         		sqlCon.enforceForeignKeys(false);
                 ds.setConfig(sqlCon);
-            	return hTBsOnList;
+            	return MediasOnList;
             }
 
             /**
