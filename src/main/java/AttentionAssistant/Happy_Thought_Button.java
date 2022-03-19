@@ -27,7 +27,7 @@ public class Happy_Thought_Button {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	ArrayList<String> happyMedia = new ArrayList<String>();
+	private ArrayList<String> happyMedia = new ArrayList<String>();
 	private int height = 400; 
 	private int width = 625; 
 	private int mouseX;
@@ -42,89 +42,33 @@ public class Happy_Thought_Button {
 	
 	
 	/**
-	 * If the media is flagged by the user or not
+	 * List of all Media objects held in the database 
 	 */
-	private boolean flagged;
-	
-	/**
-	 * Records rating of media by the user
-	 * 0 = thumbs down
-	 * 1 = unrated
-	 * 2 = thumbs up
-	 */
-	
-	private int rating;
-	
+	private ArrayList<Media> Media_List; 
 	
 	/**
 	 * Instantiating empty Happy_Thought_Button object
-	 * @author jmitchel2
-	 */
-	public Happy_Thought_Button() {
-		this.flagged = false;
-		this.rating = 1;
-	}
-
-	/**
-	 * Create a class Happy_Thought_Button with a specified
-	 * hTB_ID, media_ID_Tage, flagged
-	 * @author jmitchel2
-	 * @author krchr
-	 * @param int, String, boolean
-	 */
-	public Happy_Thought_Button(boolean flagged, int rating) {
-		this.flagged = flagged;
-		this.rating = rating;
-	}
-	
-	/**
-	 * Instantiating copy constructor for Happy_Thought_Button object
-	 */
-	public Happy_Thought_Button(Happy_Thought_Button hTB) {
-		this.flagged = hTB.flagged;
-		this.rating = hTB.rating;
-	}
-	
-	/**
-	 * Start of Encapsulation
 	 * 
-	 * Get hTB_ID
-	 * @author jmitchel2
-	 * @author krchr
-	 * @return int
 	 */
-	
+	public Happy_Thought_Button(DataBase db) {
+		this.Media_List = new ArrayList<Media>();
+	}
 
+	
 	/**
-	 * Get flagged
-	 * @return boolean
+	 * Get Media_List
+	 * @return ArrayList
 	 */
-	public boolean getFlagged() {
-		return this.flagged;
+	public ArrayList<Media> getMediaList() {
+		return this.Media_List;
 	}
 	
 	/**
-	 * Set flagged
-	 * @param boolean
+	 * Set Media_List
+	 * @param ArrayList
 	 */
-	public void setFlagged(boolean flagged) {
-		this.flagged= flagged;
-	}
-	
-	/**
-	 * Get rating
-	 * @return int
-	 */
-	public int getRating() {
-		return this.rating;
-	}
-	
-	/**
-	 * Set rating
-	 * @param int
-	 */
-	public void setRating(int rating) {
-		this.rating= rating;
+	public void setMediaList(ArrayList<Media> mediaList) {
+		this.Media_List = mediaList;
 	}
 	
 	/**
@@ -134,21 +78,10 @@ public class Happy_Thought_Button {
 	 * 
 	 * @author krchr
 	 */
-	public void getHappyMedia() {
-		
-		happyMedia.add("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
-		happyMedia.add("happyThoughtMedia/78nF.gif");
-		happyMedia.add("happyThoughtMedia/231582875_f219808478_o.jpg");
-		happyMedia.add("happyThoughtMedia/jVo.gif");
-		happyMedia.add("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/PB35.gif");
-		happyMedia.add("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/QHa.gif");
-		happyMedia.add("happyThoughtMedia/max-lissenden-snYLMKphCf4-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/Z2QS.gif");
-		happyMedia.add("happyThoughtMedia/rod-long-ogWhdXOl5qY-unsplash.jpg");
-		happyMedia.add("happyThoughtMedia/4OKm.gif");
-		happyMedia.add("happyThoughtMedia/yusuf-onuk-uzZgdFKisng-unsplash.jpg");
+	public void getHappyMedia(Happy_Thought_Button htb) {
+		for(Media media : htb.Media_List) {
+			happyMedia.add(media.getMedia_ID_Tag()); 
+		}
 	}
 	
 	/*
@@ -177,6 +110,7 @@ public class Happy_Thought_Button {
 		mediaPanel.setMaximumSize(new Dimension(480, 360));
 		
 		JLabel label = new JLabel();
+		label.setBackground(Color.black);
 		label.setMaximumSize(new Dimension(480, 360));
 		ImageIcon imageIcon = new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(420, 300, Image.SCALE_FAST));
 		label.setIcon(imageIcon);
@@ -256,9 +190,9 @@ public class Happy_Thought_Button {
 		return title_panel;
 	}
 	
-	public JPanel generateCenterPanel(CardLayout cardLayout, JPanel middle_panel) {
+	public JPanel generateCenterPanel(CardLayout cardLayout, JPanel middle_panel, Happy_Thought_Button htb) {
 		
-		getHappyMedia();
+		getHappyMedia(htb);
 		
 		BufferedImage leftScroll = null;
 		BufferedImage rightScroll = null;
@@ -293,11 +227,6 @@ public class Happy_Thought_Button {
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//scroll image to left	
-				
-				//temporary for borders until connected to database, adjust to reflect stored value in database later
-				dislikeMedia.setBorderPainted(false);
-				likeMedia.setBorderPainted(false);
-				
 				current--; 
 				if(current >= 0) {
 					populateMiddlePanel(middle_panel, cardLayout); 
@@ -335,11 +264,6 @@ public class Happy_Thought_Button {
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//scroll image to the right
-				
-				//temporary for borders until connected to database, adjust to reflect stored value in database later
-				dislikeMedia.setBorderPainted(false);
-				likeMedia.setBorderPainted(false);
-				
 				current++;
 				if(current < happyMedia.size()) {
 					populateMiddlePanel(middle_panel, cardLayout); 
@@ -391,7 +315,7 @@ public class Happy_Thought_Button {
 		cardLayout.show(middle_panel, "Media"); 
 	}
 	
-	public JPanel generateBottomPanel(JPanel middle_panel, CardLayout cardLayout) {
+	public JPanel generateBottomPanel(JPanel middle_panel, CardLayout cardLayout, Happy_Thought_Button htb, DataBase db) {
 		
 		BufferedImage flag = null;
 		BufferedImage thUp = null;
@@ -426,8 +350,20 @@ public class Happy_Thought_Button {
         			dislikeMedia.setBorderPainted(false); 
         			likeMedia.setBorderPainted(true);
         			likeMedia.setBorder(new LineBorder(Color.GREEN));
+        			for(Media media : htb.Media_List) {
+            			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+            				media.setRating(2); 
+            				db.UpdateMedia(media);
+            			}
+            		}
         		}else if(likeMedia.isBorderPainted() == true) {
         			likeMedia.setBorderPainted(false);
+        			for(Media media : htb.Media_List) {
+            			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+            				media.setRating(1); 
+            				db.UpdateMedia(media);
+            			}
+            		}
         		}
         	}
         });
@@ -447,8 +383,20 @@ public class Happy_Thought_Button {
         			likeMedia.setBorderPainted(false); 
         			dislikeMedia.setBorderPainted(true);
         			dislikeMedia.setBorder(new LineBorder(Color.RED));
+        			for(Media media : htb.Media_List) {
+            			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+            				media.setRating(0); 
+            				db.UpdateMedia(media);
+            			}
+            		}
         		}else if(dislikeMedia.isBorderPainted() == true) {
         			dislikeMedia.setBorderPainted(false);
+        			for(Media media : htb.Media_List) {
+            			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+            				media.setRating(1); 
+            				db.UpdateMedia(media);
+            			}
+            		}
         		}
         	}
         });
@@ -474,8 +422,17 @@ public class Happy_Thought_Button {
         		JFrame flagFrame = new JFrame();
         		JOptionPane.showMessageDialog(flagFrame,"Media has been flagged! It will no longer appear in the Happy Thought Button.","Alert",JOptionPane.WARNING_MESSAGE);
         		
-        		//current++;
-				//scroll image to the right
+        		for(Media media : htb.Media_List) {
+        			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+        				media.setFlagged(true); 
+        				db.UpdateMedia(media);
+        			}
+        		}
+        		
+				/**
+				 * flip to next image once current media is flagged
+				 * unless its last image, then flip to previous
+				 */
 				if(current < happyMedia.size() - 1) {
 					current++;
 					populateMiddlePanel(middle_panel, cardLayout); 
@@ -515,10 +472,13 @@ public class Happy_Thought_Button {
 	 * creates/displays HTB GUI
 	 * @author krchr
 	 */
-	public void open_htb() {
+	public void open_htb(DataBase db, Happy_Thought_Button htb, int userID) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				
+				htb.setMediaList(db.SelectAllMedias(userID)); 
+				
 				CardLayout cardLayout = new CardLayout();
 				JPanel middle_panel = new JPanel(); 
 				
@@ -527,8 +487,8 @@ public class Happy_Thought_Button {
 				htb_frame.setPreferredSize(new Dimension(width, height));
 							
 				JMenuBar title_panel = generateTitlePanel(htb_frame);				
-				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel);
-				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout);
+				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel, htb);
+				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout, htb, db);
 				JPanel media_viewer = generateMediaViewer(title_panel, center_panel, bottom_panel);
 			
 				/*
@@ -544,7 +504,4 @@ public class Happy_Thought_Button {
 			}
 		});
 	}
-
-
-
 }

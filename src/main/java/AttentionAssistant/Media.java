@@ -1,6 +1,5 @@
 package AttentionAssistant;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -52,6 +51,17 @@ public class Media {
 		this.rating = 1;
 		this.dT_Executed= null;
 	}
+	
+	/**
+	 * Instantiating a Media object with a passed in filename
+	 */
+	public Media(String filename) {
+		this.media_ID= 0;
+		this.media_ID_Tag = filename;
+		this.flagged = false;
+		this.rating = 1;
+		this.dT_Executed= null;
+	}
 
 	/**
 	 * Create a class Media with a specified
@@ -60,8 +70,8 @@ public class Media {
 	 * @author krchr
 	 * @param int, String, boolean, boolean
 	 */
-	public Media(int hTB_ID, String media_ID_Tag, boolean flagged, int rating, Date dT_Executed) {
-		this.media_ID= hTB_ID;
+	public Media(int media_ID, String media_ID_Tag, boolean flagged, int rating, Date dT_Executed) {
+		this.media_ID= media_ID;
 		this.media_ID_Tag= media_ID_Tag;
 		this.flagged = flagged;
 		this.rating = rating;
