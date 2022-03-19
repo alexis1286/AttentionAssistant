@@ -1,19 +1,4 @@
 package AttentionAssistant;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -26,8 +11,8 @@ import org.jnativehook.mouse.NativeMouseInputListener;
  */
 public class MouseTracker implements Runnable, NativeMouseInputListener {
 	int mouseScore;
-	int currentMovementScore = 1;
-	int lastMovementScore = 1;
+	int currentMovementScore = 1; //Internal Scores.  Mean nothing outside this function
+	int lastMovementScore = 1; //Internal Scores.  Mean nothing outside this function
 	
 	/**
 	 * Instantiating empty MouseTracker object
@@ -57,10 +42,12 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		int temptScore = 100 * (currentMovementScore - lastMovementScore)/lastMovementScore;
 		
 		//Ensuring that the tempt score is not above 100
-		if(temptScore < 100) {
+		if(temptScore < 100 && temptScore > 0) {
 			mouseScore = temptScore;
-		} else {
+		} else if (temptScore >= 100) {
 			mouseScore = 100;
+		} else {
+			mouseScore = 0;
 		}
 		
 		//Updating the lastMovementScore to the currentMovementScore
@@ -71,8 +58,6 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 			lastMovementScore = 1;
 			currentMovementScore = 1;
 		}
-		
-		
 		return this.mouseScore;
 	}
 
@@ -104,36 +89,44 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 	}
 
+	/**
+	 * /function required for multithreading
+	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		this.startTracking();
 	}
 
+	//Ignored for the most part
 	@Override
 	public void nativeMouseClicked(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.paramString());
-		currentMovementScore++;
-		System.out.println("current score = " + currentMovementScore);
+		//System.out.println(e.paramString());
+		//currentMovementScore++;
+		//System.out.println("current score = " + currentMovementScore);
 	}
 
+	//Ignored for the most part
 	@Override
 	public void nativeMousePressed(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.paramString());
+		//System.out.println(e.paramString());
 		//currentMovementScore++;
-		System.out.println("current score = " + currentMovementScore);
+		//System.out.println("current score = " + currentMovementScore);
 	}
 
+	//Ignored for the most part
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.paramString());
+		//System.out.println(e.paramString());
 		//currentMovementScore++;
-		System.out.println("current score = " + currentMovementScore);
+		//System.out.println("current score = " + currentMovementScore);
 	}
 
+	/**
+	 * method that captures all mouse movements
+	 */
 	@Override
 	public void nativeMouseMoved(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
@@ -142,12 +135,13 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		System.out.println("current score = " + currentMovementScore);
 	}
 
+	//Ignored for the most part
 	@Override
 	public void nativeMouseDragged(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.paramString());
+		//System.out.println(e.paramString());
 		//currentMovementScore++;
-		System.out.println("current score = " + currentMovementScore);
+		//System.out.println("current score = " + currentMovementScore);
 	}
 	
  }
