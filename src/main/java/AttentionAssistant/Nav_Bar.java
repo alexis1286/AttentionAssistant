@@ -229,6 +229,14 @@ public class Nav_Bar{
 	    		progress_menu = false;
 	    		count++;
 	        }else {count--;}
+		}else {
+			settings_menu = true;
+	    	pm_menu = true;
+    		pomo_menu = true;
+    		ntb_menu = true;
+    		htb_menu = true;
+    		fts_menu = true;
+    		progress_menu = true;
 		}
 		
 		if(settings_visible == true && settings_menu == true) {
