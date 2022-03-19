@@ -268,7 +268,7 @@ public class Nav_Bar{
 			htbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open htb
-	        		htb.open_htb(db, htb, userID);
+	        		htb.open_htb(db, userID);
 	        }});
 			panel.add(htbButton);
 		}

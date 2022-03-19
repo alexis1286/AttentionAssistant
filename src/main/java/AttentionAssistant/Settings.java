@@ -2363,7 +2363,7 @@ public class Settings {
 		openHTB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Happy Thought Button 
-				happy_thought_button.open_htb(db, happy_thought_button, settingsChanges.userID);
+				happy_thought_button.open_htb(db, settingsChanges.userID);
 			}
 		});
 		

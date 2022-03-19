@@ -27,7 +27,6 @@ public class Happy_Thought_Button {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	private ArrayList<String> happyMedia = new ArrayList<String>();
 	private int height = 400; 
 	private int width = 625; 
 	private int mouseX;
@@ -78,9 +77,11 @@ public class Happy_Thought_Button {
 	 * 
 	 * @author krchr
 	 */
-	public void getHappyMedia(Happy_Thought_Button htb) {
+	public void getHappyMedia(Happy_Thought_Button htb, ArrayList<String> happyMedia) {		
 		for(Media media : htb.Media_List) {
-			happyMedia.add(media.getMedia_ID_Tag()); 
+			if(media.getFlagged() != true){
+				happyMedia.add(media.getMedia_ID_Tag());
+			}
 		}
 	}
 	
@@ -190,9 +191,9 @@ public class Happy_Thought_Button {
 		return title_panel;
 	}
 	
-	public JPanel generateCenterPanel(CardLayout cardLayout, JPanel middle_panel, Happy_Thought_Button htb) {
+	public JPanel generateCenterPanel(CardLayout cardLayout, JPanel middle_panel, Happy_Thought_Button htb, ArrayList<String> happyMedia) {
 		
-		getHappyMedia(htb);
+		getHappyMedia(htb, happyMedia);
 		
 		BufferedImage leftScroll = null;
 		BufferedImage rightScroll = null;
@@ -212,7 +213,7 @@ public class Happy_Thought_Button {
 		middle_panel.setBackground(Color.black);
 		middle_panel.setMaximumSize(new Dimension(480, 360));
 		middle_panel.setLayout(cardLayout);
-		populateMiddlePanel(middle_panel, cardLayout); 
+		populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
 			
 		JPanel left_panel = new JPanel();
 		left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.Y_AXIS));
@@ -232,7 +233,7 @@ public class Happy_Thought_Button {
 				//scroll image to left	
 				current--; 
 				if(current >= 0) {
-					populateMiddlePanel(middle_panel, cardLayout); 
+					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
 				}else if(current < 0){
 					UIManager.put("Button.foreground", aa_purple);
 					UIManager.put("Button.background", aa_grey);
@@ -271,8 +272,8 @@ public class Happy_Thought_Button {
 				//scroll image to the right
 				current++;
 				if(current < happyMedia.size()) {
-					populateMiddlePanel(middle_panel, cardLayout); 
-				}else if(current > happyMedia.size()) {
+					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
+				}else if(current >= happyMedia.size()) {
 					
 					UIManager.put("Button.foreground", aa_purple);
 					UIManager.put("Button.background", aa_grey);
@@ -300,7 +301,7 @@ public class Happy_Thought_Button {
 		return center_panel;
 	}
 	
-	public void populateMiddlePanel(JPanel middle_panel, CardLayout cardLayout) {
+	public void populateMiddlePanel(JPanel middle_panel, CardLayout cardLayout, ArrayList<String> happyMedia) {
 		
 		JPanel media_panel = new JPanel();
 		media_panel.setLayout(new BoxLayout(media_panel, BoxLayout.Y_AXIS));
@@ -320,7 +321,7 @@ public class Happy_Thought_Button {
 		cardLayout.show(middle_panel, "Media"); 
 	}
 	
-	public JPanel generateBottomPanel(JPanel middle_panel, CardLayout cardLayout, Happy_Thought_Button htb, DataBase db) {
+	public JPanel generateBottomPanel(JPanel middle_panel, CardLayout cardLayout, Happy_Thought_Button htb, DataBase db, ArrayList<String> happyMedia) {
 		
 		BufferedImage flag = null;
 		BufferedImage thUp = null;
@@ -427,7 +428,7 @@ public class Happy_Thought_Button {
         		JOptionPane.showMessageDialog(flagFrame,"Media has been flagged! It will no longer appear in the Happy Thought Button.","Alert",JOptionPane.WARNING_MESSAGE);
         		
         		for(Media media : htb.Media_List) {
-        			if(media.getMedia_ID_Tag() == happyMedia.get(current)) {
+        			if(media.getMedia_ID_Tag().equals(happyMedia.get(current))) {
         				media.setFlagged(true); 
         				db.UpdateMedia(media);
         			}
@@ -439,11 +440,11 @@ public class Happy_Thought_Button {
 				 */
 				if(current < happyMedia.size() - 1) {
 					current++;
-					populateMiddlePanel(middle_panel, cardLayout); 
+					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
 					happyMedia.remove(current - 1);
-				}else if(current == happyMedia.size() - 1) {
+				}else if(current >= happyMedia.size() - 1) {
 					current--;
-					populateMiddlePanel(middle_panel, cardLayout); 
+					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
 					happyMedia.remove(current + 1);
 				}
         	}
@@ -476,11 +477,13 @@ public class Happy_Thought_Button {
 	 * creates/displays HTB GUI
 	 * @author krchr
 	 */
-	public void open_htb(DataBase db, Happy_Thought_Button htb, int userID) {
+	public void open_htb(DataBase db, int userID) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				
+				ArrayList<String> happyMedia = new ArrayList<String>();
+				Happy_Thought_Button htb = new Happy_Thought_Button(db); 
 				htb.setMediaList(db.SelectAllMedias(userID)); 
 				
 				CardLayout cardLayout = new CardLayout();
@@ -491,8 +494,8 @@ public class Happy_Thought_Button {
 				htb_frame.setPreferredSize(new Dimension(width, height));
 							
 				JMenuBar title_panel = generateTitlePanel(htb_frame);				
-				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel, htb);
-				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout, htb, db);
+				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel, htb, happyMedia);
+				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout, htb, db, happyMedia);
 				JPanel media_viewer = generateMediaViewer(title_panel, center_panel, bottom_panel);
 			
 				/*
