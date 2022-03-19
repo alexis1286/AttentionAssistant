@@ -226,12 +226,14 @@ public class Happy_Thought_Button {
 		left.setFocusPainted(false); 
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//reset thumbs up/down
+				dislikeMedia.setBorderPainted(false);
+				likeMedia.setBorderPainted(false);
 				//scroll image to left	
 				current--; 
 				if(current >= 0) {
 					populateMiddlePanel(middle_panel, cardLayout); 
 				}else if(current < 0){
-					
 					UIManager.put("Button.foreground", aa_purple);
 					UIManager.put("Button.background", aa_grey);
 					UIManager.put("OptionPane.background", Color.black);
@@ -263,6 +265,9 @@ public class Happy_Thought_Button {
 		right.setFocusPainted(false); 
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//reset thumbs up/down
+				dislikeMedia.setBorderPainted(false);
+				likeMedia.setBorderPainted(false);
 				//scroll image to the right
 				current++;
 				if(current < happyMedia.size()) {
@@ -337,8 +342,10 @@ public class Happy_Thought_Button {
 		
 		Image thumbUp_img = thUp.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
 		Icon thumbsUp = new ImageIcon(thumbUp_img);
+		Image thumbDwn_img = thDwn.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+		Icon thumbsDown = new ImageIcon(thumbDwn_img);
 		
-		likeMedia = new JButton(thumbsUp);
+		likeMedia = new JButton(thumbsUp);		
 		likeMedia.setBorderPainted(false);
 		likeMedia.setContentAreaFilled(false);
 		likeMedia.setFocusPainted(false);
@@ -367,9 +374,6 @@ public class Happy_Thought_Button {
         		}
         	}
         });
-		
-		Image thumbDwn_img = thDwn.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-		Icon thumbsDown = new ImageIcon(thumbDwn_img);
 		
 		dislikeMedia = new JButton(thumbsDown);
 		dislikeMedia.setBorderPainted(false);

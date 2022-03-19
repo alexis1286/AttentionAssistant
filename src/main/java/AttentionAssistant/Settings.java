@@ -2313,18 +2313,20 @@ public class Settings {
 		upload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				/*
-				 * NEEDS TO BE UPDATED when HTB is implemented
+				 * Upload JPGs of GIFs
 				 */
-				JFileChooser happyThoughtsDirectory = new JFileChooser();
+				JFileChooser happyThoughtsDirectory = new JFileChooser(new File(System.getProperty("user.home"), "Pictures"));
 				happyThoughtsDirectory.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				happyThoughtsDirectory.setAcceptAllFileFilterUsed(false);
 				//what file types will we accept? add them here
-				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("JPEG and GIF Images", "gif", "jpeg");
+				FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("JPG and GIF Images Only", "gif", "jpg");
 				happyThoughtsDirectory.setFileFilter(fileFilter);
 				int returnVal = happyThoughtsDirectory.showDialog(null, "Upload New Media");
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					File happyThoughtFile = happyThoughtsDirectory.getSelectedFile();
-					//settingsChanges.happyThoughtsDirectory = happyThoughtFile.getAbsolutePath();
-					//ask how happy thought media will be stored and implement that storage here 
+					String filePath = happyThoughtFile.getAbsolutePath();
+					Media newMedia = new Media(filePath);
+					db.AddMedia(newMedia, settingsChanges.userID);
 				}
 			}
 		});
@@ -2720,11 +2722,26 @@ public class Settings {
 				/*
 				 * buttons for bottom border
 				 */
+				JButton accountManagment = new JButton("Account Management");
+				accountManagment.setForeground(Color.white);
+				accountManagment.setFont(new Font("Serif", Font.BOLD, 16));
+				accountManagment.setContentAreaFilled(true);
+				accountManagment.setBorderPainted(false);
+				accountManagment.setFocusPainted(false);
+				accountManagment.setBackground(aa_purple);
+				accountManagment.setMaximumSize(new Dimension(190, 25));
+				accountManagment.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//open Account Management
+					}
+				});
+				
 				JButton apply = new JButton("apply");
 				apply.setForeground(Color.white);
 				apply.setFont(new Font("Serif", Font.BOLD, 16));
 				apply.setContentAreaFilled(true);
-				apply.setBorderPainted(false);
+				apply.setBorderPainted(true);
+				apply.setBorder(new LineBorder(Color.GRAY));
 				apply.setFocusPainted(false);
 				apply.setBackground(aa_grey);
 				apply.setMaximumSize(new Dimension(75,25));
@@ -2827,7 +2844,8 @@ public class Settings {
 				cancel.setForeground(Color.white);
 				cancel.setFont(new Font("Serif", Font.BOLD, 16));
 				cancel.setContentAreaFilled(true);
-				cancel.setBorderPainted(false);
+				cancel.setBorderPainted(true);
+				cancel.setBorder(new LineBorder(Color.GRAY));
 				cancel.setFocusPainted(false);
 				cancel.setBackground(aa_grey);
 				cancel.setMaximumSize(new Dimension(80,25));
@@ -2876,9 +2894,11 @@ public class Settings {
 				 */
 				JPanel bottomButtons = new JPanel();
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
-				bottomButtons.add(Box.createRigidArea(new Dimension(345, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(160, 0)));
+				bottomButtons.add(accountManagment);
+				bottomButtons.add(Box.createRigidArea(new Dimension(40, 0)));
 				bottomButtons.add(apply);
-				bottomButtons.add(Box.createRigidArea(new Dimension(30, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(6, 0)));
 				bottomButtons.add(cancel);
 				bottomButtons.setBackground(Color.black);
 				
