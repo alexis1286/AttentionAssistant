@@ -64,13 +64,16 @@ public class AttentionAssistantDriver {
 		 * TEST CODE
 		 * DELETE BEFORE PRODUCTION
 		 */
-		Observer testObserver = new Observer();
-		Task testTask = new Task();
+		//Observer testObserver = new Observer();
+		//Task testTask = new Task();
 		
-		MouseTracker testMouse = new MouseTracker();
+		//MouseTracker testMouse = new MouseTracker();
 		//testMouse.startTracking();
 		
-		testObserver.keywordsGenerator(testTask);
+		//testObserver.keywordsGenerator(testTask);
+		
+		//KeyBoardTracker testKeyboard = new KeyBoardTracker();
+		//testKeyboard.startTracking(null);
 		
 	  }
 }

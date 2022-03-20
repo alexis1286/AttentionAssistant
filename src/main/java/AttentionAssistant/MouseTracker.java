@@ -130,7 +130,7 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	@Override
 	public void nativeMouseMoved(NativeMouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.paramString());
+		//System.out.println(e.paramString());
 		currentMovementScore++;
 		System.out.println("current score = " + currentMovementScore);
 	}
