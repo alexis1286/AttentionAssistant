@@ -394,11 +394,28 @@ public class Pomodoro_Timer
 				if(breakmin == 0 && sec==0) {
 					t.stop();
 					b.setVisible(false);
-					MainTimer(pm);
-					min = initalmin;					
+					
+					 Object[] options = {"Begin Timer"};
+					 int breaktimertask = JOptionPane.showOptionDialog(null,
+					             "Break is up! Time to begin your work again!",
+					             "Break Timer is up!",
+					             JOptionPane.YES_NO_CANCEL_OPTION,
+					             JOptionPane.DEFAULT_OPTION,
+					             null,
+					             options,
+					             options[0]);  
+
+					 System.out.println(breaktimertask);  
+
+					
+
+					 if(breaktimertask==0){  //clicking this button will begin timer
+						 MainTimer(pm);
+							min = initalmin;	
+					 }
+					 }
 				
-				}
-				
+
 				
 				if(sec == -1) {
 					sec =59;
@@ -557,6 +574,7 @@ public class Pomodoro_Timer
 								
 										 if(NonewTaskInt==0){  //for yes
 											 TaskDropDown(pm);
+											 lastButtonPressed = null;
 										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
 											System.exit(1);
 										 }else{ //none selected
@@ -572,8 +590,9 @@ public class Pomodoro_Timer
 						 //break timer repeats; user has not finished inital task. 
 						BreakTimer(pm);
 						MainTimerRunning = false;
-						BreakTimerRunning = false;
+						BreakTimerRunning = true;
 						paused = false;
+						lastButtonPressed = null;
 						getWorkBreakStatus();
 					 }else{ //none selected
 					     System.out.println("no option choosen");
