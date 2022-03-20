@@ -497,7 +497,7 @@ public class Priority_Manager {
         		new_task.setDescription(d);
         		String dd = date.getText();
         		try {
-					Date due = new SimpleDateFormat("dd/MM/yyyy").parse(dd);
+					Date due = new SimpleDateFormat("MM/dd/yyyy").parse(dd);
 					new_task.setDueDate(due);
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
@@ -528,7 +528,7 @@ public class Priority_Manager {
         			table.setValueAt(new_task.getTaskName(), row, 0);
         			table.setValueAt(new_task.getDescription(), row, 1);
         			table.setValueAt(new_task.getPriority(), row, 2);
-        			table.setValueAt(new_task.getDueDate(), row, 3);
+        			table.setValueAt(new_task.getStringDate(), row, 3);
         			table.setValueAt(new_task.getObservable(), row, 4);
         		}else{
         			//adds task to database
@@ -538,7 +538,7 @@ public class Priority_Manager {
 	        		v.add(new_task.getTaskName());
 	        		v.add(new_task.getDescription());
 	        		v.add(new_task.getPriority());
-	        		v.add(new_task.getDueDate());
+	        		v.add(new_task.getStringDate());
 	        		v.add(new_task.getObservable());
 	        		//add row and populate it with object v
 	        		model.addRow(v);
@@ -609,7 +609,7 @@ public class Priority_Manager {
 	public Task firstTaskWindow(DataBase database) {
 		Task task = new Task();
 		//create task window
-		JFrame task_window = new JFrame("Add Task");
+		JFrame task_window = new JFrame("Add an Observable Task");
 		//pin to top of screen
 		task_window.setAlwaysOnTop(true);
 		//set window background to black
@@ -669,7 +669,7 @@ public class Priority_Manager {
 		
 		//create check box for if task is to be observed
 		JCheckBox observe = new JCheckBox("observable");
-		observe.setSelected(task.getObservable());
+		observe.setSelected(true);
 		observe.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		observe.setForeground(aa_purple);
 		observe.setContentAreaFilled(false);
@@ -709,7 +709,7 @@ public class Priority_Manager {
         		new_task.setDescription(d);
         		String dd = date.getText();
         		try {
-					Date due = new SimpleDateFormat("dd/MM/yyyy").parse(dd);
+					Date due = new SimpleDateFormat("MM/dd/yyyy").parse(dd);
 					new_task.setDueDate(due);
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block

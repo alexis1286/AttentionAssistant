@@ -142,10 +142,9 @@ public class Task{
 	}
 	
 	public String getStringDate(){
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-	    Date date = dueDate;
-		System.out.println(this.dueDate);
-		return formatter.format(dueDate);
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+	    String date = formatter.format(dueDate);
+		return date;
 	}
 	
 	/**
