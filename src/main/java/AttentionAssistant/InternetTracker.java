@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.sqlite.SQLiteDataSource;
@@ -109,18 +110,35 @@ public class InternetTracker {
 		latestUrls = getLatestBrowserHistory(previousLastVisit);
 		
 		if(latestUrls.size() != 0) {
-			int urlNumber = 0; //For demo purposes
+			int nullUrls = 0; //For demo purposes
+			int urlCount = 0;
 			int combinedScore = 0;
 			String text = "";
 			for(int i = 0; i < latestUrls.size(); i++) {
-				text = parseFromOrigin(latestUrls.get(i)).toLowerCase();
-				urlNumber = i; //For demo purposes
-				System.out.println("\nURL #" + (urlNumber + 1)); //For demo purposes
-				combinedScore += calculatePageScore(keywords, text);
+				if(parseFromOrigin(latestUrls.get(i)) == null) {
+					//Do nothing, go to next URL
+					
+					/*
+					 * For demo purposes
+					 */
+					nullUrls += 1;
+					urlCount += 1;
+					System.out.println("\nURL #" + urlCount);
+					System.out.println("This URL is either not found or private");
+				}
+				else {
+					urlCount += 1;
+					text = parseFromOrigin(latestUrls.get(i)).toLowerCase();
+					System.out.println("\nURL #" + urlCount); //For demo purposes
+					combinedScore += calculatePageScore(keywords, text);
+				}
 			}
-			this.internetScore = combinedScore / latestUrls.size();
+			urlCount -= nullUrls; //For demo purposes
+			this.internetScore = combinedScore / urlCount;
 		}
-		//NEED TO ADD IN WHAT TO DO WHEN NO URLS HAVE BEEN ACCESSED SINCE LAST RUN
+		else {
+			//NEED TO ADD IN WHAT TO DO WHEN NO URLS HAVE BEEN ACCESSED SINCE LAST RUN
+		}
 		tempHistory.delete();
 	}
 	
@@ -182,12 +200,16 @@ public class InternetTracker {
 	 * @throws IOException
 	 * @author ehols001
 	 */
-	public String parseFromOrigin(String uri) throws IOException { //NEED TO ADD A CHECK FOR HTTP ERROR 404, THROWS ERROR FOR PRIVATE URLS
+	public String parseFromOrigin(String uri) throws IOException {
 		String text = "";
 		if (uri.startsWith("http")) {
-			Document webpage = Jsoup.connect(uri).get();
-			text = webpage.body().text();
-			return text;
+			try {
+				Document webpage = Jsoup.connect(uri).get();
+				text = webpage.body().text();
+				return text;
+			} catch (HttpStatusException e) {
+				return null;
+			}
 		}
 		else {
 			File input = new File(uri);
