@@ -202,10 +202,8 @@ public class Observer{
 			if(previousLastVisit == 0) {
 				previousLastVisit = internetTracker.getInitialTimestamp();
 			}
-			else {
-				previousLastVisit = internetTracker.getLatestTimestamp();
-			}
 			internetTracker.startTracking(keyWords, previousLastVisit);
+			previousLastVisit = internetTracker.getLatestTimestamp();
 			
 			//Set up for Eye-movement-tracker profile
 			//this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
