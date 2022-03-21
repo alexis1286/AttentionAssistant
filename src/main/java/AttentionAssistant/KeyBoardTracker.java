@@ -1,5 +1,7 @@
 package AttentionAssistant;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +14,9 @@ import org.jnativehook.keyboard.NativeKeyListener;
 //To be implemented by Paul
 
 public class KeyBoardTracker implements Runnable, NativeKeyListener {
-	
-int keyBoardScore;
+
+	int keyBoardScore;
+
 	
 	/**
  	 * Instantiating empty KeyBoardTracker object
@@ -63,6 +66,8 @@ int keyBoardScore;
 			System.err.println(ey.getMessage());
 			System.exit(1);
 		}
+		
+		GlobalScreen.addNativeKeyListener(this);
 	}
 
 	@Override
@@ -76,13 +81,19 @@ int keyBoardScore;
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		System.out.println("Same Something!");
 		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		
 		try {
-			FileWriter keyBoardPresses = new FileWriter("KeyBoardPresses.txt");
-			keyBoardPresses.write(NativeKeyEvent.getKeyText(e.getKeyCode()));
-			keyBoardPresses.close();
+			File outPutFile = new File("KeyBoardPresses.txt");
+			if(!outPutFile.exists()) {
+				outPutFile.createNewFile();
+			}
+			FileWriter keyBoardPresses = new FileWriter(outPutFile.getName(),true);
+			BufferedWriter bufferFile = new BufferedWriter(keyBoardPresses);
+			bufferFile.append(NativeKeyEvent.getKeyText(e.getKeyCode()));
+			bufferFile.close();
 		} catch (IOException e1) {
 			System.out.println("An error occurred.");
-			e1.printStackTrace();
+		    e1.printStackTrace();
 		}
 	}
 
