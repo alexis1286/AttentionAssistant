@@ -1,36 +1,58 @@
-/**
- * Tracks the internet Usage to determine if user is on topic while searching the internet 
- */
-
 package AttentionAssistant;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.sqlite.SQLiteDataSource;
 
+/**
+ * Tracks the internet Usage to determine if user is on topic while searching the internet 
+ */
 public class InternetTracker {
 	
 	int internetScore;
+	File tempHistory;
+	long latestTimestamp;
 	
 	/**
 	 * Instantiating empty InternetTracker object
-	 * @author jmitchel2
+	 * @author jmitchel2, ehols001
 	 */
-	public InternetTracker(){
+	public InternetTracker() {
 		this.internetScore = 100;
+		this.tempHistory = new File(System.getProperty("user.home") + "\\AppData\\Local\\Temp\\tempHistory");
+		this.latestTimestamp = 0;
 	}
 	
 	/**
 	 * Create a class InternetTracker with a specified
-	 * internetScore
-	 * @param int 
+	 * internetScore, tempHistory, latestTimestamp
+	 * @param int, File, long 
 	 */
-	public InternetTracker(int internetScore) {
+	public InternetTracker(int internetScore, File tempHistory, long latestTimestamp) {
 		this.internetScore = internetScore;
+		this.tempHistory = tempHistory;
+		this.latestTimestamp = latestTimestamp;
 	}
+	
+	/**
+	 * Copy constructor for InternetTracker
+	 * @param InternetTracker object
+	 */
+	public InternetTracker(InternetTracker it) {
+		this.internetScore = it.internetScore;
+		this.tempHistory = it.tempHistory;
+		this.latestTimestamp = it.latestTimestamp;
+	}
+	
 	/**
 	 * Start of Encapsulation
 	 * 
@@ -50,17 +72,56 @@ public class InternetTracker {
 	}
 	
 	/**
+	 * Set the latest timestamp
+	 * @param long
+	 */
+	public void setLatestTimestamp(long timestamp) {
+    	this.latestTimestamp = timestamp;
+	}
+	
+	/**
+	 * Get the latest timestamp
+	 * @return long
+	 */
+	public long getLatestTimestamp() {
+		return this.latestTimestamp;
+	}
+	
+	/**
+	 * Get the absolute path of the temp history
+	 * @return File
+	 */
+	public File getTempHistory() {
+		return this.tempHistory;
+	}
+	
+	/**
 	 * Starts tracking relevance of Internet activity 
 	 * 
 	 * @param ArrayList<String>
+	 * @param long previousLastVisit -> timestamp from the lastest browser history url
 	 * @author ehols001
 	 */
-	public void startTracking(ArrayList<String> keywords, String uri) throws IOException {
-		//Can substitute out what's being stored in uri with whatever method we decide on for getting the url
+	public void startTracking(ArrayList<String> keywords, long previousLastVisit) throws IOException {
+		createHistoryCopy();
 		
-		String text = parseFromOrigin(uri).toLowerCase();
-		System.out.println("\n" + uri + ":");
-		calculateInternetScore(keywords, text);
+		ArrayList<String> latestUrls = new ArrayList<String>();
+		latestUrls = getLatestBrowserHistory(previousLastVisit);
+		
+		if(latestUrls.size() != 0) {
+			int urlNumber = 0; //For demo purposes
+			int combinedScore = 0;
+			String text = "";
+			for(int i = 0; i < latestUrls.size(); i++) {
+				text = parseFromOrigin(latestUrls.get(i)).toLowerCase();
+				urlNumber = i; //For demo purposes
+				System.out.println("\nURL #" + (urlNumber + 1)); //For demo purposes
+				combinedScore += calculatePageScore(keywords, text);
+			}
+			this.internetScore = combinedScore / latestUrls.size();
+		}
+		//NEED TO ADD IN WHAT TO DO WHEN NO URLS HAVE BEEN ACCESSED SINCE LAST RUN
+		tempHistory.delete();
 	}
 	
 	/**
@@ -69,42 +130,47 @@ public class InternetTracker {
 	 * 
 	 * @param ArrayList<String> keywords
 	 * @param String text - text from a web page
+	 * @return int -> internet score for the given text from a single url
 	 * @author ehols001, jmitchel2
 	 */
-	public void calculateInternetScore(ArrayList<String> keywords, String text) {
+	public int calculatePageScore(ArrayList<String> keywords, String text) {
 		//declaration
 		double keywordsAppear=0;
 		double calculatedScore=0;
+		
 		//Split the text on a page by each space
 		String[] wordsOnAPage = text.split("\\s+");
+		
 		//turn each word into only A-Z characters
-		for(int i = 0; i < wordsOnAPage.length; i++)
-		{
+		for(int i = 0; i < wordsOnAPage.length; i++) {
 			wordsOnAPage[i] = wordsOnAPage[i].replaceAll("[^A-Za-z]", "");
 		}
+		
 		//search keywords for the words on a page.
-		for(String keyword : keywords) 
-		{
-			for (int j=0; j < wordsOnAPage.length; j++) 
-			{
-				if (wordsOnAPage[j].equals(keyword)) 
-				{
-				keywordsAppear= keywordsAppear + 1;
+		for(String keyword : keywords) {
+			for (int j=0; j < wordsOnAPage.length; j++) {
+				if (wordsOnAPage[j].equals(keyword)) {
+					keywordsAppear = keywordsAppear + 1;
 				}
 			}
 		}
 		
 		System.out.println("Keywords on a Page= " + keywordsAppear);
 		System.out.println("Total Words On a Page= " + wordsOnAPage.length);
+		
 		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
 		System.out.println("Total Calculated Score= " +calculatedScore);
+		
+		int pageScore = 0;
 		//If calculatedScore is greater than 100
 		if (calculatedScore > 100) {
-			this.internetScore= 100;
+			pageScore = 100;
 		}
-		else{
-			this.internetScore = (int)calculatedScore;
+		else {
+			pageScore = (int)calculatedScore;
 		}
+		
+		return pageScore;
 	}
 	
 	/**
@@ -116,7 +182,7 @@ public class InternetTracker {
 	 * @throws IOException
 	 * @author ehols001
 	 */
-	public String parseFromOrigin(String uri) throws IOException {
+	public String parseFromOrigin(String uri) throws IOException { //NEED TO ADD A CHECK FOR HTTP ERROR 404, THROWS ERROR FOR PRIVATE URLS
 		String text = "";
 		if (uri.startsWith("http")) {
 			Document webpage = Jsoup.connect(uri).get();
@@ -129,6 +195,81 @@ public class InternetTracker {
 			text = localpage.body().text();
 			return text;
 		}
+	}
+	
+	/**
+	 * Creates a copy of the chrome browser history in a different location.
+	 * This is necessary to allow read access while chrome is open.
+	 * 
+	 * @author ehols001
+	 */
+	public void createHistoryCopy() {
+		File source = new File(System.getProperty("user.home") 
+				+ "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\History");
+		try {
+			FileUtils.copyFile(source, tempHistory);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Retrieves a timestamp from the lastest browser history url used to
+	 * determine which urls were accessed after monitoring of the task started
+	 * 
+	 * @return long -> timestamp to match chrome's timestamp format
+	 * @author ehols001
+	 */
+	public long getInitialTimestamp() {
+		long initial = 0;
+		createHistoryCopy();
+		SQLiteDataSource ds = new SQLiteDataSource();
+		String history = "jdbc:sqlite:" + tempHistory.toString();
+		ds.setUrl(history);
+		
+		String query = "SELECT MAX(last_visit_time) AS MaxVisit FROM urls";
+    	try (Connection conn = ds.getConnection(); 
+    			Statement stmt = conn.createStatement();) {
+    		    ResultSet rs = stmt.executeQuery(query);
+    		    while (rs.next()) {
+    		    	initial = rs.getLong("MaxVisit");
+    		    }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+		tempHistory.delete();
+		return initial;
+	}
+	
+	/**
+	 * Retrieves the latest urls visited from the user's chrome browser history
+	 * 
+	 * @param long previousLastVisit -> timestamp from the lastest browser history url
+	 * @return ArrayList<String> -> list of urls accessed since previous latest visit
+	 * @author ehols001
+	 */
+	public ArrayList<String> getLatestBrowserHistory(long previousLastVisit) {
+		SQLiteDataSource ds = new SQLiteDataSource();
+		String history = "jdbc:sqlite:" + tempHistory.toString();
+		ds.setUrl(history);
+		
+		long timestamp = 0;
+		ArrayList<String> latestUrls = new ArrayList<String>();
+    	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + previousLastVisit;
+    	try (Connection conn = ds.getConnection(); 
+    			Statement stmt = conn.createStatement();) {
+    		    ResultSet rs = stmt.executeQuery(query);
+    		    while (rs.next()) {
+    		    	latestUrls.add(rs.getString("url"));
+    		    	timestamp = rs.getLong("last_visit_time");
+    		    	if(this.latestTimestamp <= timestamp)
+    		    		setLatestTimestamp(timestamp);
+    		    }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return latestUrls;
 	}
 	
 }
