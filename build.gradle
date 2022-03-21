@@ -34,6 +34,8 @@ dependencies {
     implementation 'com.1stleg:jnativehook:2.0.2'
     //Library used for text-to-speech
     implementation 'net.sf.sociaal:freetts:1.2.2'
+    //Library needed for access to chrome browser history
+    implementation 'commons-io:commons-io:2.11.0'
 }
 //end of dependencies
 
