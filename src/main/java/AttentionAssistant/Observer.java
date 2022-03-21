@@ -25,11 +25,12 @@ public class Observer{
 	private int threshold; //used to determine if user is on task
 	private Date dT_Gathered; //The Date and Time that an observer Score is generated
 	private int defaultEyeScore; //The EyeMovement Tracker Default Score (used for eyeMovement Tracker Profile)
+	private long previousLastVisit; //The time that the latest url was visited, from the last time internetTracker.startTracking was run  
 
 
 	/**
 	 * Instantiating empty Observer object
-	 * @author jmitchel2 PaulFracz
+	 * @author jmitchel2, PaulFracz, ehols001
 	 */
 	public Observer() {
 		this.observer_ID= 0;
@@ -37,19 +38,21 @@ public class Observer{
 		this.threshold= 0;
 		this.dT_Gathered= null;
 		this.defaultEyeScore=0;
+		this.previousLastVisit = 0;
 	}
 	
 	/**
 	 * Create a class Observer with a specified
-	 * observer_ID, observerScore, threshold, dT_Gathered
-	 * @param int, int, int, Date 
+	 * observer_ID, observerScore, threshold, dT_Gathered, previousLastVisit
+	 * @param int, int, int, Date, long 
 	 */
-	public Observer(int observer_ID,int observerScore, int threshold, Date dT_Gathered, int defaultEyeScore) {
+	public Observer(int observer_ID,int observerScore, int threshold, Date dT_Gathered, int defaultEyeScore, long previousLastVisit) {
 		this.observer_ID= observer_ID;
 		this.observerScore= observerScore;
 		this.threshold = threshold;
 		this.dT_Gathered = dT_Gathered;
 		this.defaultEyeScore = defaultEyeScore;
+		this.previousLastVisit = previousLastVisit;
 	}
 
 	/**
@@ -62,6 +65,7 @@ public class Observer{
 		this.threshold = observer.threshold;
 		this.dT_Gathered= observer.dT_Gathered;
 		this.defaultEyeScore= observer.defaultEyeScore;
+		this.previousLastVisit = observer.previousLastVisit;
 	}
 
 	
@@ -148,6 +152,22 @@ public class Observer{
 	}
 	
 	/**
+	 * Get previousLastVisit
+	 * @return long
+	 */
+	public long getPreviousLastVisit() {
+		return this.previousLastVisit;
+	}
+	
+	/**
+	 * Set previousLastVisit
+	 * @param long
+	 */
+	public void setPreviousLastVisit(long previousLastVisit) {
+		this.previousLastVisit = previousLastVisit;
+	}
+	
+	/**
 	 * Main monitoring function
 	 * Will calculate the observerScore and
 	 * send the appropriate notification
@@ -172,18 +192,20 @@ public class Observer{
 			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
-			InternetTracker internetTracker2= new InternetTracker();
 			
-			String uri1 = "https://en.wikipedia.org/wiki/Final_Fantasy";		
-			String uri2 = "https://www.biologicaldiversity.org/species/mammals/polar_bear/natural_history.html#:~:text=MIGRATION%3A%20Some%20polar%20bears%20make,the%20nearest%20land%2D%20or%20icefall.";
- 
 			//Start tracking Objects
 			mouseTracker.startTracking();
 			eyeMovementTracker.startTracking();  
 			keyBoardTracker.startTracking(keyWords);
 			osEventsTracker.startTracking();
-			internetTracker.startTracking(keyWords, uri1);
-			internetTracker2.startTracking(keyWords, uri2);
+			
+			if(previousLastVisit == 0) {
+				previousLastVisit = internetTracker.getInitialTimestamp();
+			}
+			else {
+				previousLastVisit = internetTracker.getLatestTimestamp();
+			}
+			internetTracker.startTracking(keyWords, previousLastVisit);
 			
 			//Set up for Eye-movement-tracker profile
 			//this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
@@ -193,8 +215,7 @@ public class Observer{
  					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
  					"\nkeyBoardTracker: " + keyBoardTracker.getKeyBoardScore() + 
     				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
- 					"\ninternetTracker (for " + uri1 + "): " + internetTracker.getInternetScore() +
-					"\ninternetTracker (for " + uri2 + "): " + internetTracker2.getInternetScore());
+ 					"\ninternetTracker: " + internetTracker.getInternetScore());
 
 			/**
 			//calculation of the observer score
