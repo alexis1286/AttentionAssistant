@@ -20,7 +20,7 @@ public class User_Account{
 		this.userID= 0;
 		this.username= "";
 		this.password= "";
-		this.username= "";
+		this.name= "";
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class User_Account{
 	}
 	
 	/**
-	 * Get password
+	 * Get name
 	 * @return String
 	 */
 	public String getName() {
@@ -102,7 +102,7 @@ public class User_Account{
 	}
 	
 	/**
-	 * set password
+	 * set name
 	 * @param String
 	 */
 	public void setName(String name) {
