@@ -165,7 +165,7 @@ public class Test_InternetTracker {
 		 * value you want to you use as a marker (make sure to keep the 'L' at the end of the value).
 		 * GetLatestBrowserHistory will return all urls accessed since the last_visit_time you supply.
 		 */
-		long sinceThisTimestamp = 13292372327397263L;
+		long sinceThisTimestamp = 13292449140327000L;
 		
 		ArrayList<String> testLatestUrls = new ArrayList<String>();
 		testLatestUrls = testDefaultIT.getLatestBrowserHistory(sinceThisTimestamp);
@@ -194,7 +194,8 @@ public class Test_InternetTracker {
 		 * value you want to you use as a marker (make sure to keep the 'L' at the end of the value).
 		 * startTracking will calculate an internetScore based off of all urls accessed since the last_visit_time you supply.
 		 */
-		long sinceThisTimestamp = 13292372327397263L;
+		long sinceThisTimestamp = 13292449769967000L;
+		//long sinceThisTimestamp = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 		try {
 			testDefaultIT.startTracking(testKeywords, sinceThisTimestamp);
 		} catch (IOException e) {

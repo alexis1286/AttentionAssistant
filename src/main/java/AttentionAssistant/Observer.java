@@ -193,15 +193,16 @@ public class Observer{
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
 			
+			if(previousLastVisit == 0) {
+				previousLastVisit = internetTracker.getInitialTimestamp();
+			}
+			
 			//Start tracking Objects
 			mouseTracker.startTracking();
 			eyeMovementTracker.startTracking();  
 			keyBoardTracker.startTracking(keyWords);
 			osEventsTracker.startTracking();
 			
-			if(previousLastVisit == 0) {
-				previousLastVisit = internetTracker.getInitialTimestamp();
-			}
 			internetTracker.startTracking(keyWords, previousLastVisit);
 			previousLastVisit = internetTracker.getLatestTimestamp();
 			
