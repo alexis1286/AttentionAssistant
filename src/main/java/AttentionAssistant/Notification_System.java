@@ -19,7 +19,6 @@ public class Notification_System {
 	private boolean isAudioActive;
 	private boolean isAvatarActive;
 	private String avatarPath;
-	private String audioPath;
 	private int avatarSize;
 	private boolean avatarAlwaysOn;
 	DataBase db;
@@ -31,7 +30,6 @@ public class Notification_System {
 		this.userID = userID;
 		this.isAudioActive = true;
 		this.isAvatarActive = true;
-		this.audioPath = "";
 		this.avatarPath = "avatarSelection/avatar_dino.png";
 		this.avatarSize = 100;
 		this.avatarAlwaysOn = false;
@@ -43,7 +41,6 @@ public class Notification_System {
 		this.settings = set;
 		this.isAudioActive = set.getAudioIsActive();
 		this.isAvatarActive = set.getAvatarIsActive();
-		this.audioPath = set.getAudioFilePath();
 		this.avatarPath = set.getAvatarFilePath();
 		this.avatarSize = set.getAvatarSize();
 		this.avatarAlwaysOn = set.getAlwaysOnScreen();
