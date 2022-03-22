@@ -12,12 +12,15 @@ public class User_Account{
 	private String username;
 	// password for User Account
 	private String password;
+	// name for User Account
+	private String name;
 	
 	//Instantiating empty User_Account Object
 	public User_Account() {
 		this.userID= 0;
 		this.username= "";
 		this.password= "";
+		this.username= "";
 	}
 	
 	/**
@@ -25,10 +28,11 @@ public class User_Account{
 	 * userID, username, password
 	 * @param int, String, String
 	 */
-	public User_Account(int userID, String username, String password) {
+	public User_Account(int userID, String username, String password,String name) {
 		this.userID= userID;
 		this.username= username;
 		this.password= password;
+		this.name= name;
 	}
 	
 	//Copy constructor for User_Account
@@ -36,6 +40,7 @@ public class User_Account{
 		this.userID= user.userID;
 		this.username= user.username;
 		this.password= user.password;
+		this.name= user.name;
 	}
 	
 	/**
@@ -88,6 +93,22 @@ public class User_Account{
 		this.password = password;
 	}
 	
+	/**
+	 * Get password
+	 * @return String
+	 */
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
+	 * set password
+	 * @param String
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	 /** 
 	   * Display User_Account
 	   * @return String
@@ -97,7 +118,8 @@ public class User_Account{
 	 	String UserString= new String();
 	 	UserString = "User ID= " + this.userID +
 	 			" Username= " + this.username +
-	 			" Password= " + this.password; 
+	 			" Password= " + this.password +
+	 			" Name= " + this.name; 
 	 	return UserString;	 	
 	 }
 

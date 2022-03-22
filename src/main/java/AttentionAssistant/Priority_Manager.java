@@ -69,7 +69,7 @@ public class Priority_Manager {
 		return list;
 	}
 	
-	public void open_pm(DataBase db,Observer observer) {
+	public void open_pm(DataBase db) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {

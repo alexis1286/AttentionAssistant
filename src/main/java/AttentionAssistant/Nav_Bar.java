@@ -253,7 +253,7 @@ public class Nav_Bar{
 	    	pmButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
-	        		pm.open_pm(db,observer);
+	        		pm.open_pm(db);
 	        }});
 			panel.add(pmButton);
 	    }
