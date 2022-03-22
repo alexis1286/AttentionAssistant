@@ -2011,7 +2011,7 @@ public class Settings {
 		openPM.setForeground(Color.WHITE);
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				priority_manager.open_pm(db);//actually remove "observer" from settings(talk to kendall)*************
+				priority_manager.open_pm(db);
 			}
 		});
 		
