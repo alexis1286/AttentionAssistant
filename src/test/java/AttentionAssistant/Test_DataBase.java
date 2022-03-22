@@ -130,8 +130,9 @@ public class Test_DataBase {
 	int testUserID= 999;
 	String testUserUsername= "TestUser123";
 	String testUserPassword= "TestPass123";
-
-	nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword);
+	String testUserName= "TestName123";
+	
+	nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword, testUserName);
 	
 	/**
 	 * Set up for nonDefault Parent_Account 
@@ -226,7 +227,7 @@ public class Test_DataBase {
     	User_Account SelectedUser2 = new User_Account();
     	SelectedUser2 = db.SelectUser_Account(2);
         
-        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123";
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123";
         assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
     }
 	
@@ -242,8 +243,8 @@ public class Test_DataBase {
     	User_Account SelectedUser2 = new User_Account();
     	SelectedUser2 = db.SearchUser_Account(SelectedUser.getUsername(), SelectedUser.getPassword());
         
-        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123";
-        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123\" but instead returned: " + SelectedUser2.toString());
     }
     
     /**

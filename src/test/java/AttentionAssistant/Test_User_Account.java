@@ -15,9 +15,10 @@ public class Test_User_Account {
 		int testUserID= 999;
 		String testUserUsername= "TestUser123";
 		String testUserPassword= "TestPass123";
+		String testUserName= "TestName123";
 		
 		defaultUser= new User_Account();
-		nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword);
+		nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword, testUserName);
 		copyUser= new User_Account(nonDefaultUser);
 	}
 
@@ -131,9 +132,9 @@ public class Test_User_Account {
     @Test
     @DisplayName("<User_Account> toString")
     void UserToString() {
-        String String1 = "User ID= 999 Username= TestUser123 Password= TestPass123";
+        String String1 = "User ID= 999 Username= TestUser123 Password= TestPass123 Name= TestName123";
         
-        assertEquals(String1, nonDefaultUser.toString(), "String1 should be set to \"User ID= 999 Username= TestUser123 Password= TestPass123\" but instead returned: " + nonDefaultUser.toString());
+        assertEquals(String1, nonDefaultUser.toString(), "String1 should be set to \"User ID= 999 Username= TestUser123 Password= TestPass123 Name= TestName123\" but instead returned: " + nonDefaultUser.toString());
     }    	
 
 }

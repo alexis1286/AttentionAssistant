@@ -147,7 +147,8 @@ public class DataBase {
     	String queryUser = "CREATE TABLE IF NOT EXISTS user ( " +
       		 "userID INTEGER PRIMARY KEY, " +
    			 "username TEXT, " +
-   			 "password TEXT)";
+   			 "password TEXT, " +
+   			 "nickname TEXT)";
 
     	/**
     	 * Set up for Table parent
@@ -239,9 +240,10 @@ public class DataBase {
     	sqlCon.enforceForeignKeys(true);
         ds.setConfig(sqlCon);
     	String query1 = "INSERT INTO user " +
-    			"( username, password ) Values ( '" +
+    			"( username, password, nickname ) Values ( '" +
     			user.getUsername().replaceAll("'", "''") + "', '" +
-    			user.getPassword().replaceAll("'", "''") + "')";
+    			user.getPassword().replaceAll("'", "''") + "', '" +
+    			user.getName().replaceAll("'", "''") + "')";
     	try ( Connection conn = ds.getConnection();
     		    Statement stmt = conn.createStatement(); ) {
     		    int rv = stmt.executeUpdate( query1 );
@@ -263,6 +265,7 @@ public class DataBase {
 		String query1 = "UPDATE user " +
 				"SET username = '" + user.getUsername().replaceAll("'", "''") +
         		"', password = '" + user.getPassword().replaceAll("'", "''") +
+        		"', nickname = '" + user.getName().replaceAll("'", "''") +
         		"' WHERE userID = '" + user.getUserID() + "'";
         try ( Connection conn = ds.getConnection();
         	Statement stmt = conn.createStatement(); ) {
@@ -311,6 +314,7 @@ public class DataBase {
             user1.setUserID(rs.getInt("userID"));
             user1.setUsername(rs.getString("username"));
             user1.setPassword(rs.getString("password"));
+            user1.setName(rs.getString("nickname"));
             System.out.println( "SelectUser_Account() returned " + rs );
         	} catch ( SQLException e ) {
             e.printStackTrace();
@@ -340,6 +344,7 @@ public class DataBase {
     		    tempuser.setUserID(rs.getInt("userID"));
     		    tempuser.setUsername(rs.getString("username"));
     		    tempuser.setPassword(rs.getString("password"));
+    		    tempuser.setName(rs.getString("nickname"));
     		    System.out.println( "SearchUser_Account() returned " + rs );
     		} catch ( SQLException e ) {
     		    e.printStackTrace();
