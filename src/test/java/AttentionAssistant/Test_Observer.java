@@ -33,10 +33,9 @@ public class Test_Observer {
 	int testThreshold= 100;
 	Date testDT_Gathered= new Date(1220227200L * 1000);
 	int testEyeScore= 100;
-	long testPreviousLastVisit = 1220227200L;
 	
 	defaultObserver= new Observer();
-	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore, testPreviousLastVisit);
+	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore);
 	copyObserver= new Observer(nonDefaultObserver);
 
 	//Task object creation
@@ -76,9 +75,6 @@ public class Test_Observer {
         
         assertEquals(0, defaultObserver.getDefaultEyeScore(),
         "Default constructor task.defaultEyeScore should be 0. Returned: " + defaultObserver.getDefaultEyeScore());
-
-        assertEquals(0, defaultObserver.getPreviousLastVisit(),
-                "Expected: 0 | Actual: " + defaultObserver.getPreviousLastVisit());
  
     }
 
@@ -118,9 +114,6 @@ public class Test_Observer {
         assertEquals(100 , nonDefaultObserver.getDefaultEyeScore(), 
         "Parameter constructor Observer.DefaultEyeScore should be 100. Returned: " + nonDefaultObserver.getDefaultEyeScore());
         
-        assertEquals(1220227200L, nonDefaultObserver.getPreviousLastVisit(),
-                "Expected: 1220227200L | Actual: " + nonDefaultObserver.getPreviousLastVisit());
-        
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -158,9 +151,6 @@ public class Test_Observer {
          */
         assertEquals(100 , copyObserver.getDefaultEyeScore(), 
         "Parameter constructor Observer.DefaultEyeScore should be 100. Returned: " + copyObserver.getDefaultEyeScore());
-        
-        assertEquals(nonDefaultObserver.getPreviousLastVisit(), copyObserver.getPreviousLastVisit(),
-                "Expected: " + nonDefaultObserver.getPreviousLastVisit() + " | Actual: " + copyObserver.getPreviousLastVisit());
 
     }
 
@@ -214,16 +204,6 @@ public class Test_Observer {
     	"Copy constructor Observer.defaultEyeScore should be 99. Returned: " + Integer.toString(copyObserver.getDefaultEyeScore()));
     }
     
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    @Test
-    @DisplayName("<Observer> SetObserverPreviousLastVisit")
-    void observerSetPreviousLastVisit() {
-        copyObserver.setPreviousLastVisit(0);
-    	assertEquals(0, copyObserver.getPreviousLastVisit(), 
-    	"Expected: 0 | Actual: " + copyObserver.getPreviousLastVisit());
-    }
-
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     
     @Test

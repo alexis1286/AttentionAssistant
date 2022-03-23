@@ -64,9 +64,8 @@ public class Test_DataBase {
 	int testThreshold= 100;
 	Date testDT_Gathered= new Date(1220227200L * 1000);
 	int testEyeMovementScore= 100;
-	long testPreviousLastVisit = 0;
 	
-	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeMovementScore, testPreviousLastVisit);
+	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeMovementScore);
 	
 	/**
 	 * Set up for nonDefault Settings 
