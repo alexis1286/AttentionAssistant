@@ -30,6 +30,44 @@ public class AudioHandler {
 	}
 	
 	/**
+	 * Plays a notification sound based on the notification type
+	 * @param type -> type of notification
+	 */
+	public void playNotificationType(String type) {
+		switch(type) {
+			case "resume":
+				resumePomoAudio();
+				break;
+			case "paused":
+				pomoIsNullAudio();
+				break;
+			case "distracted":
+				distractedAudio();
+				break;
+			case "selfCare":
+				selfCareAudio();
+				break;
+			case "encourage":
+				allGoodAudio();
+				break;
+			case "dueDate":
+				dueDateApproachingAudio();
+				break;
+			case "complete":
+				taskCompletedAudio();
+				break;
+			case "break":
+				breakTimeAudio();
+				break;
+			case "work":
+				workTimeAudio();
+				break;
+			default:
+				defaultAudio();
+		}
+	}
+	
+	/**
 	 * Plays the audio clip from the file path passed in.
 	 * 16-bit wav files supported, mp3 not supported
 	 * @param soundFilePath -> the file path for the sound being used
@@ -129,6 +167,14 @@ public class AudioHandler {
 	 */
 	public void workTimeAudio() {
 		String soundPath = audioPath + "workTime.wav";
+		AudioPlayer(soundPath);
+	}
+	
+	/**
+	 * Play the default audio sound
+	 */
+	public void defaultAudio() {
+		String soundPath = audioPath + "default.wav";
 		AudioPlayer(soundPath);
 	}
 	
