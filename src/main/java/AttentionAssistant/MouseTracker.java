@@ -62,11 +62,20 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	}
 
 	/**
-	 * Set internetScore
+	 * Set MouseScore
 	 * @param int
 	 */
 	public void setMouseScore(int mouseScore) {
 		this.mouseScore = mouseScore;
+	}
+	
+	/** 
+	 * return Default MouseScore
+	 * @return int
+	 */
+	
+	public int getDefaultMouseScore() {
+		return this.mouseScore;
 	}
 	
 	/**

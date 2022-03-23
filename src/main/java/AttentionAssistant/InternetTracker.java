@@ -21,7 +21,6 @@ public class InternetTracker {
 	
 	int internetScore;
 	File tempHistory;
-	long latestTimestamp;
 	
 	/**
 	 * Instantiating empty InternetTracker object
@@ -30,18 +29,16 @@ public class InternetTracker {
 	public InternetTracker() {
 		this.internetScore = 100;
 		this.tempHistory = new File(System.getProperty("user.home") + "\\AppData\\Local\\Temp\\tempHistory");
-		this.latestTimestamp = 0;
 	}
 	
 	/**
 	 * Create a class InternetTracker with a specified
-	 * internetScore, tempHistory, latestTimestamp
-	 * @param int, File, long 
+	 * internetScore, tempHistory
+	 * @param int, File
 	 */
-	public InternetTracker(int internetScore, File tempHistory, long latestTimestamp) {
+	public InternetTracker(int internetScore, File tempHistory) {
 		this.internetScore = internetScore;
 		this.tempHistory = tempHistory;
-		this.latestTimestamp = latestTimestamp;
 	}
 	
 	/**
@@ -51,7 +48,6 @@ public class InternetTracker {
 	public InternetTracker(InternetTracker it) {
 		this.internetScore = it.internetScore;
 		this.tempHistory = it.tempHistory;
-		this.latestTimestamp = it.latestTimestamp;
 	}
 	
 	/**
@@ -73,22 +69,6 @@ public class InternetTracker {
 	}
 	
 	/**
-	 * Set the latest timestamp
-	 * @param long
-	 */
-	public void setLatestTimestamp(long timestamp) {
-    	this.latestTimestamp = timestamp;
-	}
-	
-	/**
-	 * Get the latest timestamp
-	 * @return long
-	 */
-	public long getLatestTimestamp() {
-		return this.latestTimestamp;
-	}
-	
-	/**
 	 * Get the absolute path of the temp history
 	 * @return File
 	 */
@@ -100,14 +80,14 @@ public class InternetTracker {
 	 * Starts tracking relevance of Internet activity 
 	 * 
 	 * @param ArrayList<String>
-	 * @param long previousLastVisit -> timestamp from the lastest browser history url
+	 * @param long startTime -> timestamp of when the Observer monitor function begins
 	 * @author ehols001
 	 */
-	public void startTracking(ArrayList<String> keywords, long previousLastVisit) throws IOException {
+	public void startTracking(ArrayList<String> keywords, long startTime) throws IOException {
 		createHistoryCopy();
 		
 		ArrayList<String> latestUrls = new ArrayList<String>();
-		latestUrls = getLatestBrowserHistory(previousLastVisit);
+		latestUrls = getLatestBrowserHistory(startTime);
 		
 		if(latestUrls.size() != 0) {
 			int nullUrls = 0; //For demo purposes
@@ -236,58 +216,33 @@ public class InternetTracker {
 	}
 	
 	/**
-	 * Retrieves a timestamp from the lastest browser history url used to
-	 * determine which urls were accessed after monitoring of the task started
-	 * 
-	 * @return long -> timestamp to match chrome's timestamp format
-	 * @author ehols001
-	 */
-	public long getInitialTimestamp() {
-		long initial = 0;
-		createHistoryCopy();
-		SQLiteDataSource ds = new SQLiteDataSource();
-		String history = "jdbc:sqlite:" + tempHistory.toString();
-		ds.setUrl(history);
-		
-		String query = "SELECT MAX(last_visit_time) AS MaxVisit FROM urls";
-    	try (Connection conn = ds.getConnection(); 
-    			Statement stmt = conn.createStatement();) {
-    		    ResultSet rs = stmt.executeQuery(query);
-    		    while (rs.next()) {
-    		    	initial = rs.getLong("MaxVisit");
-    		    }
-    	} catch (SQLException e) {
-    		e.printStackTrace();
-    	}
-    	
-		tempHistory.delete();
-		return initial;
-	}
-	
-	/**
 	 * Retrieves the latest urls visited from the user's chrome browser history
 	 * 
-	 * @param long previousLastVisit -> timestamp from the lastest browser history url
+	 * @param long startTime -> timestamp of when the Observer monitor function begins
 	 * @return ArrayList<String> -> list of urls accessed since previous latest visit
 	 * @author ehols001
 	 */
-	public ArrayList<String> getLatestBrowserHistory(long previousLastVisit) {
+	public ArrayList<String> getLatestBrowserHistory(long startTime) {
 		SQLiteDataSource ds = new SQLiteDataSource();
 		String history = "jdbc:sqlite:" + tempHistory.toString();
 		ds.setUrl(history);
 		
-		long timestamp = 0;
 		ArrayList<String> latestUrls = new ArrayList<String>();
-    	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + previousLastVisit;
+    	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + startTime;
     	try (Connection conn = ds.getConnection(); 
     			Statement stmt = conn.createStatement();) {
     		    ResultSet rs = stmt.executeQuery(query);
     		    while (rs.next()) {
     		    	latestUrls.add(rs.getString("url"));
-    		    	timestamp = rs.getLong("last_visit_time");
-    		    	if(this.latestTimestamp <= timestamp)
-    		    		setLatestTimestamp(timestamp);
     		    }
+    		    
+    		    /*
+    		     * For demo purposes
+    		     */
+    			for(int i = 0; i < latestUrls.size(); i++) {
+    				System.out.println(latestUrls.get(i));
+    			}
+    			
     	} catch (SQLException e) {
     		e.printStackTrace();
     	}
