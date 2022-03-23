@@ -117,7 +117,7 @@ public class InternetTracker {
 			this.internetScore = combinedScore / urlCount;
 		}
 		else {
-			//NEED TO ADD IN WHAT TO DO WHEN NO URLS HAVE BEEN ACCESSED SINCE LAST RUN
+			this.internetScore = -1;
 		}
 		tempHistory.delete();
 	}
