@@ -53,8 +53,10 @@ public class Notification_System {
 		boolean isIgnored=false;
 		Date date = new Date();
 		if(isAudioActive == true) {
-			//audio for notification (based on type of notif?)
-			text = "DING! "+text;
+			//audio for notification (based on type of notif)
+			AudioHandler audio = new AudioHandler();
+			audio.playNotificationType(type);
+			audio.notificationTTS(text);
 		}
 		if(isAvatarActive == true) {
 			//display text in speech bubble
@@ -94,11 +96,6 @@ public class Notification_System {
 		String text = "User is distracted, guide back to task";
 		timeDistracted += 3;
 		displayNotif(text, "distracted");
-		
-		/* This will say whatever is in String text */
-		//AudioHandler tts = new AudioHandler();
-		//if(isAudioActive == true)
-			//tts.notificationTTS(text);
 	}
 	
 	
