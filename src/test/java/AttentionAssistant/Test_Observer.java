@@ -29,7 +29,7 @@ public class Test_Observer {
 	Notification_System notificationSystem;
 	
 	@BeforeEach
-	void setup() {
+	void setup() throws IOException {
 		db= new DataBase();
 		db.DatabaseSetUp();
 		
@@ -57,7 +57,7 @@ public class Test_Observer {
 	
 		pomodoro = new Pomodoro_Timer();
 	
-		notificationSystem= new Notification_System(1);
+		notificationSystem= new Notification_System(1, db);
 	
 	}
 	
