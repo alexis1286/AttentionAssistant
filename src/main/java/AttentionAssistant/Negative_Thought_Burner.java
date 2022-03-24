@@ -1,6 +1,7 @@
 package AttentionAssistant;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -24,8 +25,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class Negative_Thought_Burner {
@@ -36,97 +42,142 @@ public class Negative_Thought_Burner {
 	private int mouseY;
 	int height = 600;
 	int width = 600;
-
-
-	private JPanel titlePanel(JFrame frame) {
-		JPanel panel = new JPanel();
-		//panel.setBorder(line);
-		//aligns buttons in title panel from right -> left
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-		//makes title panel background grey
-		panel.setBackground(aa_grey);
-		//creates border and sets to purple
-		panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-		//creates label 
-		JLabel title = new JLabel("Negative Thought Burner");
-		//makes font color white
-		title.setForeground(Color.white);
-		//sets font, size, and bold
-		title.setFont(new Font("Serif", Font.BOLD, 18));
+	JFrame frame;
+	JPanel WelcomePanel;
+	CardLayout card;
+	JPanel cardPane;
+	 
+	private JMenuBar titlePanel(JFrame frame) {
+		JMenuBar title_panel = new JMenuBar();
+		title_panel.setBorder(line);
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 		
-		//reads in images for the close and guide buttons
-		BufferedImage ci = null;
-		BufferedImage gi = null;
-		try {
-			ci = ImageIO.read(new File("images/exit_circle.png"));
-			gi = ImageIO.read(new File("images/guide.png"));
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
 		/*
 		 * allows drag and drop of frame
 		 */
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
 			}
 		});
 		
-		panel.addMouseListener(new MouseAdapter(){
+		title_panel.addMouseListener(new MouseAdapter(){
 			@Override 
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
 			}
 		});
+
+		JLabel title = new JLabel("Negative Thought Burner");
+		title.setForeground(Color.white);
+		title.setBounds(0,0,200,200);
+		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
 		
-		//creates close button with close icon and no background
+		/*
+		 * create icons to use as buttons for title bar
+		 */
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+		BufferedImage exit = null;
+		
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+			exit = ImageIO.read(new File("images/AA_exit.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
 		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 		Icon close = new ImageIcon(c_img);
+		
 		JButton close_window = new JButton(close);
 		close_window.setBorderPainted(false);
 		close_window.setContentAreaFilled(false);
 		close_window.setFocusPainted(false);
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//close window without saving info
+        		//close window without saving 
         		frame.dispose();
+        	
         }});
 		
-		//create guide button with guide icon and no background
 		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		Icon guideIcon = new ImageIcon(g_img);
+		
 		JButton guide = new JButton(guideIcon);
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
 		
-		//adds title JLabel, empty space, then guide button and close button
-		panel.add(title);
-		panel.add(Box.createRigidArea(new Dimension(275, 0)));
-		panel.add(guide);
-		panel.add(close_window);
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
 		
 		//returns panel
-		return panel;
+		return title_panel;
+		
 	}
 
-	private JPanel thoughtPanel(JFrame frame) {
+	private JPanel welcomepage(CardLayout card, JFrame frame) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
-	
+		panel.setLayout(null);
+		JButton burnbut=new JButton("Burn!");
+		JLabel burn1 = new JLabel("Something bugging you?");
+		JLabel burn2 = new JLabel("Watch it burn away!");
+
+		burn1.setBounds(240, 50, 280, 100);
+		burn1.setForeground(Color.WHITE);
+		burn1.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+		panel.add(burn1);
 		
-	
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(Box.createRigidArea(new Dimension(400,200)));
+		
+		burn2.setBounds(260, 80, 280, 100);
+		burn2.setForeground(Color.WHITE);
+		burn2.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+		panel.add(burn2);
 		
 		
 		
-		//panel.add(buttonpanel);
-	
+		JTextArea firstnametext = new JTextArea(500, 250);
+		firstnametext.setBorder(BorderFactory.createLineBorder(Color.RED));
+		//firstnametext.setBounds(100, 200, 500, 250);
+	    firstnametext.setBackground(new Color(237,221,246));
+        firstnametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+        firstnametext.setLineWrap(true);
+        firstnametext.setWrapStyleWord(true);
+        panel.add(firstnametext);
+        
+        
+        JScrollPane scroll = new JScrollPane(firstnametext,
+	                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        panel.add(scroll);
+
+        burnbut.setBounds(300, 480, 97, 35);
+        burnbut.setHorizontalTextPosition(SwingConstants.CENTER);
+		 burnbut.setVerticalTextPosition(SwingConstants.CENTER);
+		 burnbut.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
+		 burnbut.setBorderPainted(false);
+		 burnbut.setBackground(Color.WHITE);
+		 burnbut.setForeground(aa_purple);
+		 burnbut.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	//burn thought 
+	        	
+	        }});
+		 panel.add(burnbut);
+		 
+        
+        //TODO if autolink is enabled in settings it opens right into htb 
 		return panel;
 	}
 	JPanel icon_panel;
@@ -136,32 +187,46 @@ public class Negative_Thought_Burner {
 			public void run() {
 		
 				
-				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
-				//sets window width and height
-			
-				
-				JPanel panel = new JPanel();
-				//panel.setBounds(1000, 1000, width, height);
-				panel.setBackground(aa_grey);
-				//build title panel
-				JPanel titlePanel = titlePanel(frame);
-				titlePanel.setBorder(line);
-				//build table panel
-				icon_panel = thoughtPanel(frame);
-				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
-			    panel.add("PT", icon_panel);
-				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
-				frame.getContentPane().add(panel,BorderLayout.CENTER);
-				frame.setPreferredSize(new Dimension(width, height)); 
-
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				// TODO add title panel frame.setUndecorated(true);
+				frame.setTitle("The Attention Assistant");
+		        frame.setBackground(aa_grey);
+		        frame.setPreferredSize(new Dimension(700, 600)); 
+		        //makes frame and contents visible
+		    
+		        
+		        JMenuBar titlePanel = titlePanel(frame);
+		        
+		        card = new CardLayout();
+		        WelcomePanel = new JPanel();
+		        cardPane = new JPanel();
+		        
+		        WelcomePanel = welcomepage(card,frame);
+		    	
+		    	
+		    	cardPane.setLayout(card);
+		        cardPane.setBounds(300, 50, 700, 600);
+		    	cardPane.add(WelcomePanel, "Welcome Panel");
+		        
+		            
+		        
+		        cardPane.addMouseListener(new MouseAdapter(){
+					@Override 
+					public void mousePressed(MouseEvent e) {
+						mouseX = e.getX();
+						mouseY = e.getY();
+					}
+				});
+		    	frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+		        frame.getContentPane().add(cardPane);
+		        frame.setPreferredSize(new Dimension(700, 600)); 
 				frame.pack();
 				frame.setVisible(true);
-				frame.setResizable(true);
+				frame.setResizable(false);
 				frame.setLocationRelativeTo(null);
-				//Input(settings);
-			
+
 				
 			}
 		});

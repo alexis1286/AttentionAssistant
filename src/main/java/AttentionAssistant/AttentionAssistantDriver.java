@@ -48,7 +48,7 @@ public class AttentionAssistantDriver {
 	public static String userinput = "";
 	
 	static JFrame frame;
-    static JPanel WelcomePanel;
+	static JPanel WelcomePanel;
 	static JPanel LoginPanel;
 	static JPanel RegisterPanel;
 	static JPanel ForgotPanel;
@@ -355,17 +355,17 @@ public class AttentionAssistantDriver {
 		    JButton backButton = new JButton("Back");
 		    JButton loginButton = new JButton("Login");
 		    
-		    BufferedImage dino = null;
+		    BufferedImage cat3 = null;
 		    try {
 				
-				dino = ImageIO.read(new File("avatarSelection/avatar_dino.png"));
+		    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
 			
 			}catch(Exception e) {
 				e.printStackTrace();
 				System.exit(1);
 			}
 		    
-		    JLabel dinopic = new JLabel(new ImageIcon(dino));
+		    JLabel dinopic = new JLabel(new ImageIcon(cat3));
 		    dinopic.setBounds(100, 182, 127, 150);
 		    panel.add(dinopic);
 		
@@ -580,7 +580,8 @@ public class AttentionAssistantDriver {
 	        backButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
 	        backButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        	card.first(cardPane);
+		        card.previous(cardPane);
+	        	card.previous(cardPane);
 	        }});
 	        panel.add(backButton);
 	        
@@ -1054,10 +1055,12 @@ public class AttentionAssistantDriver {
 	        JMenuBar titlePanel = titlePanel(frame);
 	        
 	        card = new CardLayout();
+	        WelcomePanel = new JPanel();
 	        LoginPanel = new JPanel();
 	        RegisterPanel = new JPanel();
 	        ForgotPanel = new JPanel();
 	        cardPane = new JPanel();
+	        
 	        LoginPanel = loginpage(card,frame);
 	        RegisterPanel = Registerpage(card,frame);
 	        WelcomePanel = welcomepage(card,frame);
