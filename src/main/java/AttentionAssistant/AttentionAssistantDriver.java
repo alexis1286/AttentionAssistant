@@ -142,13 +142,33 @@ public class AttentionAssistantDriver {
 			return panel;
 			
 		}
-		private static JPanel initializepage(CardLayout card, JFrame frame) {
+		private static JPanel loginpage(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
 			panel.setLayout(null);
 
 			
-			JLabel loglbl = new JLabel("LOGIN");
+			BufferedImage cat2 = null;
+			 BufferedImage cat3 = null;
+			    try {
+			    	cat2 = ImageIO.read(new File("avatarSelection/avatar_cat2.png"));
+			    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+				
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			    
+			    JLabel catpic = new JLabel(new ImageIcon(cat2));
+			    catpic.setBounds(500, 50, 138, 150);
+			    panel.add(catpic);
+			    
+			    JLabel cat2pic = new JLabel(new ImageIcon(cat3));
+			    cat2pic.setBounds(60, 50, 132, 150);
+			    panel.add(cat2pic);
+			
+			
+			JLabel loglbl = new JLabel("Login");
 			JLabel userlbl = new JLabel("Username: ");
 			JLabel passlbl = new JLabel("Password: ");
 			JLabel newlbl = new JLabel("New Here? ");
@@ -161,16 +181,16 @@ public class AttentionAssistantDriver {
 			JButton backButton = new JButton("Back");
 			
 			
-			appLabel.setBounds(225, 0, 280, 100);
-			appLabel.setForeground(new Color(255, 255, 255));
-			appLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-			//appLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			panel.add(appLabel);
+//			appLabel.setBounds(230, 40, 280, 100);
+//			appLabel.setForeground(new Color(255, 255, 255));
+//			appLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+//			//appLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//			panel.add(appLabel);
 			
 			
-			loglbl.setBounds(305, 80, 280, 100);
-			loglbl.setForeground(new Color(210, 220, 230));
-			loglbl.setFont(new Font("Dosis SemiBold",Font.PLAIN,20));
+			loglbl.setBounds(300, 80, 280, 100);
+			loglbl.setForeground(aa_purple);
+			loglbl.setFont(new Font("Dosis SemiBold",Font.BOLD,40));
 			panel.add(loglbl);
 			
 			
@@ -296,27 +316,50 @@ public class AttentionAssistantDriver {
 			panel.setLayout(null);
 		
 			//TODO add logo
-			JLabel Label = new JLabel("The Attention Assistant");
+			JLabel Label = new JLabel("Welcome to");
+			JLabel Label2 = new JLabel("The Attention Assistant!");
 			JLabel option = new JLabel("Please login or register for an account");
 			JButton login=new JButton("Login");
 			JButton register= new JButton("Register"); 
 			JButton parentportal=new JButton("Parent Portal");
 			JButton ChildPortal= new JButton("Child Portal"); 
 			
-			Label.setBounds(225, 50, 280, 100);
+			BufferedImage cat1 = null;
+			 BufferedImage duck = null;
+			    try {
+			    	cat1 = ImageIO.read(new File("avatarSelection/avatar_cat1.png"));
+			    	duck = ImageIO.read(new File("avatarSelection/avatar_duck.png"));
+				
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			    
+			    JLabel catpic = new JLabel(new ImageIcon(cat1));
+			    catpic.setBounds(500, 50, 138, 150);
+			    panel.add(catpic);
+			    
+			    JLabel duckpic = new JLabel(new ImageIcon(duck));
+			    duckpic.setBounds(60, 50, 132, 150);
+			    panel.add(duckpic);
+			
+			
+			Label.setBounds(285, 75, 280, 100);
 			Label.setForeground(new Color(255, 255, 255));
 			Label.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
 			panel.add(Label);
 			
-			
+			Label2.setBounds(225, 110, 280, 100);
+			Label2.setForeground(new Color(255, 255, 255));
+			Label2.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+			panel.add(Label2);
 			
 
-			option.setBounds(200, 150, 280, 100);
+			option.setBounds(200, 200, 280, 100);
 			option.setForeground(new Color(255, 255, 255));
 			option.setFont(new Font("Dosis SemiBold",Font.BOLD,15));
 			panel.add(option);
-			
-		
+
 			
 			parentportal.setBounds(185, 400, 140, 35);
 			parentportal.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -327,6 +370,7 @@ public class AttentionAssistantDriver {
 			parentportal.setForeground(Color.WHITE);
 			parentportal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
+		        		db.DatabaseSetUp();
 		        		//open paernt portal
 		        		parentPortal(1);
 		        		frame.dispose();
@@ -358,6 +402,7 @@ public class AttentionAssistantDriver {
 			 ChildPortal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        	//open child portal
+		        	db.DatabaseSetUp();
 		        	childPortal(1);
 		        	frame.dispose();
 		        }});
@@ -406,6 +451,19 @@ public class AttentionAssistantDriver {
 		    JButton backButton = new JButton("Back");
 		    JButton loginButton = new JButton("Login");
 		    
+		    BufferedImage dino = null;
+		    try {
+				
+				dino = ImageIO.read(new File("avatarSelection/avatar_dino.png"));
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		    
+		    JLabel dinopic = new JLabel(new ImageIcon(dino));
+		    dinopic.setBounds(100, 182, 127, 150);
+		    panel.add(dinopic);
 		
 			register.setBounds(225, 0, 280, 100);
 			register.setForeground(aa_purple);
@@ -421,7 +479,9 @@ public class AttentionAssistantDriver {
 			Child.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
 			Child.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
+	        		//declares the string depending on who is registering
 	        		userinput = "Child";
+	        		//changes the color of button upon click
 	        		Child.setBackground(Color.WHITE);
 	        		Child.setForeground(aa_purple);
 	        		 Parent.setBackground(aa_purple);
@@ -437,7 +497,9 @@ public class AttentionAssistantDriver {
 	        Parent.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
 	        Parent.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
+	        		//declares the string depending on who is registering
 	        		userinput = "Parent";
+	        		//changes the color of button upon click
 	        		Parent.setBackground(Color.WHITE);
 	        		 Parent.setForeground(aa_purple);
 	        		 Child.setBackground(aa_purple);
@@ -514,13 +576,12 @@ public class AttentionAssistantDriver {
 	        		
 	        		
 	        		db.DatabaseSetUp();
-	        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
-	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
-	        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
+	        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
+	        		Parent_Account ParentAccount = db.SearchParent_Account(usr, pwd);
 	        		User_Account addChildUser = new User_Account();
 	        		Parent_Account addParentUser = new Parent_Account();
 	        	
-	        		
+	        		System.out.print("Here is the user acc " + UserAccount);
 	        		if(userinput == "Child") {
 	        			if(pwd.equals(reenterPwd) == false) {
 	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
@@ -715,7 +776,7 @@ public class AttentionAssistantDriver {
 	        LoginPanel = new JPanel();
 	        RegisterPanel = new JPanel();
 	        cardPane = new JPanel();
-	        LoginPanel = initializepage(card,frame);
+	        LoginPanel = loginpage(card,frame);
 	        RegisterPanel = Registerpage(card,frame);
 	        WelcomePanel = welcomepage(card,frame);
 	     
