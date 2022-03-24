@@ -201,7 +201,7 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 	
-		JLabel taskLabel=new JLabel(tasks(pm).get(0).getTaskName());
+		JLabel taskLabel=new JLabel("Task: " + pm.getActiveTask().getTaskName());
 		JPanel taskpanel = new JPanel();
 		taskpanel.setBackground(aa_grey);
 		taskLabel.setForeground(Color.white);
