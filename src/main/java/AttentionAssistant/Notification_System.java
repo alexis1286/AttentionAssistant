@@ -4,115 +4,244 @@
  */
 package AttentionAssistant;
 
-import java.util.Date;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.Timer;
  
 public class Notification_System {
-	//observe runs monitoring every 3 minutes, allows for time tracking 
+	//observe runs monitoring every 5 minutes, allows for time tracking 
 	private int userID;
-	
 	int timeDistracted=0; 
 	int timeFocused=0;
 	Settings settings;
 	private boolean isAudioActive;
+	private boolean ttsActive;
 	private boolean isAvatarActive;
 	private String avatarPath;
 	private int avatarSize;
 	private boolean avatarAlwaysOn;
 	DataBase db;
+	AudioHandler audio;
+	Priority_Manager pm;
+	private String userName;
+	User_Account user;
 	 
-	public Notification_System(int userID){
+	public Notification_System(int userID,DataBase db) throws IOException{
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
 		this.settings = new Settings(userID);
 		this.userID = userID;
 		this.isAudioActive = true;
+		this.ttsActive = true;
 		this.isAvatarActive = true;
 		this.avatarPath = "avatarSelection/avatar_dino.png";
 		this.avatarSize = 100;
 		this.avatarAlwaysOn = false;
+		this.db = db;
+		this.pm = new Priority_Manager(db);
+		user = db.SelectUser_Account(userID);
+		userName = user.getName();
 	}
 	
-	public Notification_System(Settings set,DataBase database){
+	public Notification_System(Settings set,DataBase database) throws IOException{
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
 		this.settings = set;
 		this.isAudioActive = set.getAudioIsActive();
+		this.ttsActive = set.getTextToSpeech();
 		this.isAvatarActive = set.getAvatarIsActive();
 		this.avatarPath = set.getAvatarFilePath();
 		this.avatarSize = set.getAvatarSize();
 		this.avatarAlwaysOn = set.getAlwaysOnScreen();
 		this.db = database;
+		this.pm = new Priority_Manager(db);
+		//user = db.SelectUser_Account(userID);
+		//userName = user.getName();
 	}
+	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+	int height = (int) screen.getHeight();
 	
-	
-	private void displayNotif(String text, String type) {
+	private void displayNotif(String text,String type) {
 		JFrame frame = new JFrame();
+		frame.setAlwaysOnTop(true);
+		frame.setUndecorated(true);
+		frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+		frame.setLocation(10,height-200);
+		
+		AudioHandler audio = new AudioHandler();
 		boolean isIgnored=false;
 		Date date = new Date();
 		if(isAudioActive == true) {
-			//audio for notification (based on type of notif)
-			AudioHandler audio = new AudioHandler();
-			audio.playNotificationType(type);
-			audio.notificationTTS(text);
+			audio.workTimeAudio();
 		}
+		if(ttsActive == true) {
+			/* This will say whatever is in String text */
+			audio.playNotificationType(type);
+		}
+		JPanel notifPanel = new JPanel();
+		notifPanel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+		notifPanel.setLayout(new BoxLayout(notifPanel,BoxLayout.X_AXIS));
 		if(isAvatarActive == true) {
 			//display text in speech bubble
-			String avatar = avatarPath;
 			//Display avatar
 			//string to place in text bubble
-			text = text+" (speech bubble)";
+			JLabel avatarLabel = new JLabel();
+			JLabel bubbleLabel = new JLabel();
+			
+			BufferedImage avatar = null;
+			BufferedImage bubble = null;
+			try {
+				//gets image for specific buttons icon
+				avatar = ImageIO.read(new File(avatarPath));
+				//gets circle image
+				bubble = ImageIO.read(new File("images/speechBubble.png"));
+			}catch(Exception e){
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			//add text to bubble			
+			Font font = new Font("Arial",Font.BOLD,16);
+
+			Graphics g = bubble.getGraphics();
+			g.setFont(font);
+			g.setColor(Color.black);
+			int x=40,y=20;
+			for (String line : text.split("\n")) {
+				g.drawString(line,x,y);
+				y += 20;
+			}
+			
+			avatarLabel.setIcon(new ImageIcon(avatar));
+			bubbleLabel.setIcon(new ImageIcon(bubble));
+			
+			notifPanel.add(avatarLabel);
+			notifPanel.add(bubbleLabel);
+			
 		}else {
 			//display text in text bubble
-			text = text+" (text bubble)";
+			Font font = new Font("Arial",Font.BOLD,16);
+			JLabel textBox = new JLabel(text,SwingConstants.CENTER);
+			textBox.setBackground(Color.white);
+			textBox.setForeground(Color.black);
+			textBox.setFont(font);
+			notifPanel.add(textBox);
 		}
 		//display notification, return isIgnored
-		Notification notif = new Notification(1,type,isIgnored,date);
+		Notification notif = new Notification();
+		notif.setDT_Notification(date);
+		notif.setType(type);
+		notif.setIgnored(isIgnored);
 		db.AddNotification(notif,userID);
-		JOptionPane.showMessageDialog(frame, text);
+		
+		frame.getContentPane().add(notifPanel);
+		frame.pack();
+		frame.setVisible(true);
+		new Timer(30_000, (e) -> { frame.setVisible(false); frame.dispose(); }).start();
 	}
 	
+	private int min = 1;
+	private int max = 3;
 	
 	public void resumePomo() {
 		//on-task & null
-		String text = "You're working but your timer is paused!";
-		timeFocused += 3;
+		String text = "";
+		
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "You're working but \n your timer is paused!";
+	        		break;
+	        case 2: text = "Unpause your timer to \n continue your work \n period countdown!";
+	                break;
+	        case 3:  text = "Your timer is paused \n but you're still \n working";
+	                break;
+	        default: text = "Resume pomo - randoNum \n out of range";;
+	                break;
+		}
+		
+		timeFocused += 5;
 		displayNotif(text,"resume");
 	}
 	
 	
 	public void isNull() {
 		//if off-task & null OR off-task & in break period
-		String text = "we are paused...";
+		String text = "We are paused on on break";
 		displayNotif(text,"paused");
 	}
 	
 	
 	public void distracted() {
 		//in work period & off-task
+		String text = "";
 		
-		String text = "User is distracted, guide back to task";
-		timeDistracted += 3;
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "Hey buddy! Let's get \n back to work!";
+	                 break;
+	        case 2: text = "Brotato-Chip! Why \n don't we get back to \n "+pm.getActiveTask().getTaskName()+"?";
+	                 break;
+	        case 3:  text = "Hey "+userName+"! \n we should get back \n on task!";
+	                 break;
+	        default: text = userName+"! \n We gotta finish \n "+pm.getActiveTask().getTaskName()+"!";
+	                 break;
+		}
+		timeDistracted += 5;
 		displayNotif(text, "distracted");
 	}
 	
 	
 	public void selfCare() {
 		//on-task for too long with no break
+		String text = "";
 		
-		String text = "User needs a break";
-		timeFocused += 3;
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = userName+", you've \n been working on "+pm.getActiveTask().getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
+	                 break;
+	        case 2: text = "You are KILLING it! \n You've definitely \n earned a break!";
+	                 break;
+	        case 3:  text = "Hey "+userName+", \n all this work is \n making me hungry... \n How about a snack break?";
+	                 break;
+	        default: text = "You've been working \n for ages! Why don't \n we stretch out legs?";
+	                 break;
+		}
+		timeFocused += 5;
 		displayNotif(text,"selfCare");
 	}
 	
 	
 	public void allGood() {
 		//in work period & on-task
+		String text = "";
 		
-		String text = "User is on task";
-		timeFocused += 3;
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "Keep up the great \n work "+userName+"!";
+	                 break;
+	        case 2:  text = "Way to stay on task!";
+	                 break;
+	        case 3:  text = "Hey "+userName+", \n you're rocking right \n along!";
+	                 break;
+	        default: text = "You'll be done before \n you know it at this \n pace!";
+	                 break;
+		}
+		
+		timeFocused += 5;
 		displayNotif(text,"encourage");
 		//add words of encouragement?
 	}
@@ -120,36 +249,81 @@ public class Notification_System {
 	
 	public void dueDateApproaching(Task task) {
 		//due date happening soon
+		String text = "";
 		
-		String text = "Due date approaching for task: " + task.getTaskName();
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "It's almost time to \n turn in "+task.getTaskName()+"!";
+	                 break;
+	        case 2: text = task.getTaskName()+" is \n due "+task.getStringDate()+"!";
+	                 break;
+	        case 3:  text = "The due date for \n "+task.getTaskName()+" is \n approaching!";
+	                 break;
+	        default: text = "Time to work on \n "+task.getTaskName()+"! \n It's due "+task.getStringDate();
+	                 break;
+		}
+		
 		displayNotif(text,"dueDate");
 	}
 	
 	
 	public void taskCompleted(Task task) {
 		//task is completed
+		String text = "";
 		
-		String text = "Yay! You completed "+task.getTaskName()+", great job!";
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = userName+", \n you finished "+pm.getActiveTask().getTaskName()+"! \n Ready to pick a new task?";
+	                 break;
+	        case 2: text = "You rocked "+task.getTaskName()+"! \n I'm so impressed!";
+	                 break;
+	        case 3:  text = userName+"! All your \n hard work has paid \n off, you're done \n with "+task.getTaskName()+"!";
+	                 break;
+	        default: text = "Yay! You completed \n "+task.getTaskName()+", great job!";
+	                 break;
+		}
 		displayNotif(text,"complete");
 	}
 	
 	
 	public void breakTime() {
 		//break period start
+		String text = "";
 		
-		Task task = new Task();
-		//get non-observable task
-		String text = "It's time to take a break, why not work on "+task.getTaskName()+"?";
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "It's time to take a \n break, why not work \n on "+pm.getNonObservableTask().getTaskName()+"?";
+	                 break;
+	        case 2:  text = "You made it through \n "+settings.getWorkPeriod()+" minutes of work, \n it's time for \n "+settings.getBreakPeriod()+" of play";
+	                 break;
+	        case 3:  text = "Hey "+userName+", it's \n break time! See you \n back in "+settings.getBreakPeriod()+" minutes!";
+	                 break;
+	        default: text = "You are KILLING it! \n You've definitely \n earned a break, luckily \n it's break time!";
+	                 break;
+		}
 		displayNotif(text,"break");
 	}
 	
 	
 	public void workTime() {
 		//work period start
+String text = "";
 		
-		Task activeTask = new Task();
-		//get active task
-		String text = "It's time to get back on task! "+activeTask.getTaskName()+" is your current goal.";
+		Random randomGenerator=new Random();
+		int randoNum = randomGenerator.nextInt(max) + min;
+		switch (randoNum) {
+	        case 1:  text = "Break time is over, \n let's get back to \n work on "+pm.getActiveTask().getTaskName()+"!";
+	                 break;
+	        case 2:  text = "I hope you had a great \n break! Let's get \n back to "+pm.getActiveTask().getTaskName();
+	                 break;
+	        case 3:  text = "Hey "+userName+", \n it's work time! \n It's great to have \n you back!";
+	                 break;
+	        default: text = "It's time to get back \n on task! "+pm.getActiveTask().getTaskName()+" \n is your current goal.";
+	                 break;
+		}
 		displayNotif(text,"work");
 	}
 }

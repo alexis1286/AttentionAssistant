@@ -32,9 +32,15 @@ public class Priority_Manager {
 	int height = 700;
 	int width = 550;
 	int row;
+	Task activeTask;
 	
 	private ArrayList<Task> Task_List;
 	private Task working_task;
+	
+	public Priority_Manager(DataBase db) throws IOException {
+		this.Task_List = new ArrayList<Task>();
+		populateTaskList(db);
+	}
 	
 	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
@@ -47,7 +53,12 @@ public class Priority_Manager {
 		if(db.SelectAllTasks().size() == 0) {
 			task = firstTaskWindow(db);
 		}
+		activeTask = task;
 		sendToObserver(task,observer);
+	}
+	
+	public Task getActiveTask() {
+		return activeTask;
 	}
 	
 	private void sendToObserver(Task task,Observer observer) {
@@ -57,6 +68,19 @@ public class Priority_Manager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public Task getNonObservableTask() {
+		Task task = new Task();
+		for(int i=0;i<Task_List.size();i++) {
+			if(Task_List.get(i).getObservable() == false) {
+				task = Task_List.get(i);
+			}
+		}
+		if(task.getTaskName() == null) {
+			task.setTaskName("take a breather");
+		}
+		return task;
 	}
 	
 	public ArrayList<Task> observableTasks() {
