@@ -51,6 +51,7 @@ public class AttentionAssistantDriver {
     static JPanel WelcomePanel;
 	static JPanel LoginPanel;
 	static JPanel RegisterPanel;
+	static JPanel ForgotPanel;
 	static JPanel cardPane;
     static CardLayout card;
     
@@ -179,6 +180,7 @@ public class AttentionAssistantDriver {
 			JPasswordField pass = new JPasswordField();
 			
 			JButton loginbut=new JButton("Sign In");
+			JButton forgotpassbut=new JButton("Forgot Password?");
 			JButton signbut= new JButton("Sign Up");
 			JButton backButton = new JButton("Back");
 			
@@ -216,7 +218,7 @@ public class AttentionAssistantDriver {
 			 pass.setBackground(aa_purple);
 			 panel.add(pass);
 			 
-			 loginbut.setBounds(300, 340, 97, 35);
+			 loginbut.setBounds(300, 320, 97, 35);
 			 loginbut.setHorizontalTextPosition(SwingConstants.CENTER);
 			 loginbut.setVerticalTextPosition(SwingConstants.CENTER);
 			 loginbut.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
@@ -264,6 +266,22 @@ public class AttentionAssistantDriver {
 		        }});
 			 panel.add(loginbut);
 			 
+			 forgotpassbut.setBounds(260, 390, 180, 35);
+			 forgotpassbut.setHorizontalTextPosition(SwingConstants.CENTER);
+			 forgotpassbut.setVerticalTextPosition(SwingConstants.CENTER);
+			 forgotpassbut.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
+			 forgotpassbut.setBorderPainted(false);
+			 forgotpassbut.setBackground(Color.WHITE);
+			 forgotpassbut.setForeground(aa_purple);
+			 forgotpassbut.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		card.last(cardPane);
+		        		
+		        		//switch to other card w forgotpass
+		        	
+		        }});
+			 panel.add(forgotpassbut);
+			 
 		     newlbl.setBounds(230, 430, 200, 100); 
 		     newlbl.setForeground(new Color(255, 255, 255));
 		     newlbl.setFont(new Font("Dosis SemiBold",Font.BOLD,15));
@@ -274,8 +292,8 @@ public class AttentionAssistantDriver {
 			 signbut.setVerticalTextPosition(SwingConstants.CENTER);
 			 signbut.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 			 signbut.setBorderPainted(false);
-			 signbut.setBackground(Color.white);
-			 signbut.setForeground(aa_purple);
+			 signbut.setBackground(aa_purple);
+			 signbut.setForeground(Color.white);
 			 signbut.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        	card.next(cardPane);
@@ -311,7 +329,267 @@ public class AttentionAssistantDriver {
 		     //maybe make parent/child button to push into the parent or child portals -DONE
 			return panel;
 		}
+		private static JPanel forgetPass(CardLayout card, JFrame frame) {
+			JPanel panel = new JPanel();
+			panel.setBackground(aa_grey);
+			panel.setLayout(null);
 		
+
+			JLabel username = new JLabel("Username: ");
+			JLabel oldpass = new JLabel("Old Password: ");
+			JLabel password = new JLabel("New Password: ");
+			JLabel password2 = new JLabel("Re-enter Password: ");
+		
+			JTextField usernametext = new JTextField();
+			JTextField oldpasstext = new JTextField();
+
+			
+			JLabel register = new JLabel("Forgot your password?");
+			
+			JPasswordField passwordtext = new JPasswordField();
+			JPasswordField reenterpasswordtext = new JPasswordField();
+			
+			JButton Child = new JButton("Child");
+		    JButton Parent = new JButton("Parent");
+			JButton accButton = new JButton("Change Password");
+		    JButton backButton = new JButton("Back");
+		    JButton loginButton = new JButton("Login");
+		    
+		    BufferedImage dino = null;
+		    try {
+				
+				dino = ImageIO.read(new File("avatarSelection/avatar_dino.png"));
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		    
+		    JLabel dinopic = new JLabel(new ImageIcon(dino));
+		    dinopic.setBounds(100, 182, 127, 150);
+		    panel.add(dinopic);
+		
+			register.setBounds(200, 0, 350, 100);
+			register.setForeground(aa_purple);
+			register.setFont(new Font("Dosis SemiBold",Font.BOLD,30));
+			register.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(register);
+
+			
+			Child.setBounds(397, 100, 78, 40);
+			Child.setBorderPainted(false);
+			Child.setBackground(aa_purple);
+			Child.setForeground(Color.WHITE);
+			Child.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+			Child.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//declares the string depending on who is registering
+	        		userinput = "Child";
+	        		//changes the color of button upon click
+	        		Child.setBackground(Color.WHITE);
+	        		Child.setForeground(aa_purple);
+	        		 Parent.setBackground(aa_purple);
+	      	        Parent.setForeground(Color.WHITE);
+	      	        
+	        }});
+	        panel.add(Child);
+	        
+	        Parent.setBounds(525, 100, 95, 40);
+	        Parent.setBorderPainted(false);
+	        Parent.setBackground(aa_purple);
+	        Parent.setForeground(Color.WHITE);
+	        Parent.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+	        Parent.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		//declares the string depending on who is registering
+	        		userinput = "Parent";
+	        		//changes the color of button upon click
+	        		Parent.setBackground(Color.WHITE);
+	        		 Parent.setForeground(aa_purple);
+	        		 Child.setBackground(aa_purple);
+	     			Child.setForeground(Color.WHITE);
+	        		
+	        }});
+	        panel.add(Parent);
+		        
+	       
+			username.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			username.setBounds(310, 182, 270, 28);
+			username.setForeground(aa_purple);
+			username.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(username);
+	        
+			usernametext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			usernametext.setBounds(398, 182, 270, 28);
+		    usernametext.setForeground(Color.BLACK);
+	        usernametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(usernametext);
+	        
+	        oldpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        oldpass.setBounds(290, 242, 270, 28);
+	        oldpass.setForeground(aa_purple);
+	        oldpass.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(oldpass);
+	        
+	        
+	        oldpasstext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        oldpasstext.setBounds(398, 242, 270, 28);
+	        oldpasstext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        oldpasstext.setForeground(Color.BLACK);
+	        panel.add(oldpasstext);
+	        
+	        password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        password.setBounds(280, 302, 270, 28);
+	        password.setForeground(aa_purple);
+	        password.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(password);
+	        
+	        passwordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        passwordtext.setBounds(398, 302, 270, 28);
+	        passwordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        passwordtext.setForeground(Color.BLACK);
+	        panel.add(passwordtext);
+	        
+	        
+	        password2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        password2.setBounds(250, 362, 270, 28);
+	        password2.setForeground(aa_purple);
+	        password2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(password2);
+	        
+	        reenterpasswordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        reenterpasswordtext.setBounds(398, 362, 270, 28);
+	        reenterpasswordtext.setForeground(Color.BLACK);
+	        reenterpasswordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(reenterpasswordtext);
+	        
+	        
+	        accButton.setBounds(397, 425, 200, 37);
+	        accButton.setBorderPainted(false);
+	        accButton.setBackground(aa_purple);
+	        accButton.setForeground(Color.WHITE);
+	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        accButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	
+	        		String usr = new String(usernametext.getText());
+	        		String oldpasst = new String(oldpasstext.getText());
+	        		String pwd = new String(passwordtext.getPassword());
+	        		String reenterPwd = new String(reenterpasswordtext.getPassword());
+	        		
+	        		
+	        		db.DatabaseSetUp();
+	        		User_Account UserAccount = db.SearchUser_Account(usr,oldpasst);
+	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,oldpasst);
+	        		User_Account addChildUser = new User_Account();
+	        		Parent_Account addParentUser = new Parent_Account();
+	        	
+	        		
+	        		if(userinput == "Child") {
+	        			if(pwd.equals(reenterPwd) == false) {
+	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+		        			
+		        		}
+	        			else {
+	        				if(UserAccount.getPassword().equals(oldpasst) == true && UserAccount.getUsername().equals(usr) == true) {
+	        					String firstname = UserAccount.getName();
+		        				int userid = UserAccount.getUserID();
+		        				
+		        				addChildUser.setName(firstname);
+		        				addChildUser.setUserID(userid);
+		        				addChildUser.setUsername(usr);
+		        				addChildUser.setPassword(pwd);
+		        				
+		        				db.UpdateUser_Account(addChildUser);
+		        				
+		        				JFrame success = new JFrame();
+		        				JOptionPane.showMessageDialog(success, "Successfully Updated Child Password! Logging in now...");
+		        				
+		        				frame.dispose();
+		        				success.dispose();
+		        				childPortal(userid);
+	        					
+	        				}
+		        			else  {
+		        			
+		        			
+		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+		        			}
+	        			}
+	        				
+	        
+	        		}
+	        		else if(userinput == "Parent") {
+	        			if(pwd.equals(reenterPwd) == false) {
+	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+		        			
+		        		}
+	        			else {
+	        				if(ParentAccount.getPassword().equals(oldpasst) == true && ParentAccount.getUsername().equals(usr) == true) {
+	        					
+		        				int parentid = ParentAccount.getParentID();
+		        						
+		        				addParentUser.setParentID(parentid);
+		        				addParentUser.setUsername(usr);
+		        				addParentUser.setPassword(pwd);
+		        				
+		        				db.UpdateParent_Account(addParentUser);
+		        				
+		        				JFrame success = new JFrame();
+		        				JOptionPane.showMessageDialog(success, "Successfully Updated Parent Password! Logging in now...");
+		        				
+		        				frame.dispose();
+		        				success.dispose();
+		        				parentPortal(parentid);
+	        					
+	        				}
+		        			else  {
+		        			
+		        			
+		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+		        			}
+	        		}
+	        				
+	        		
+	        		}
+	        		else {
+	        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
+	        		}
+	        	
+	        	
+	        }});
+	        panel.add(accButton);
+	        
+//	        loginButton.setBounds(500, 490, 78, 40);
+//	        loginButton.setBorderPainted(false);
+//	        loginButton.setBackground(aa_purple);
+//	        loginButton.setForeground(Color.WHITE);
+//	        loginButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+//	        loginButton.addActionListener(new ActionListener() {
+//	        	public void actionPerformed(ActionEvent e) {
+//	        	//redirect the user to the login page
+//	        	card.previous(cardPane);
+//	        }});
+//	        panel.add(loginButton);
+	       
+	        
+	        backButton.setBounds(397, 490, 78, 40);
+	        backButton.setBorderPainted(false);
+	        backButton.setBackground(Color.WHITE);
+	        backButton.setForeground(aa_purple);
+	        backButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+	        backButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	card.first(cardPane);
+	        }});
+	        panel.add(backButton);
+	        
+	        
+	    
+	        //TODO add a login button by the back button
+			return panel;
+		
+		}
 		private static JPanel welcomepage(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
@@ -420,7 +698,8 @@ public class AttentionAssistantDriver {
 			 register.setForeground(aa_purple);
 			 register.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        	card.last(cardPane);
+		        	card.next(cardPane);
+		        	card.next(cardPane);
 		        }});
 			 panel.add(register);
 			 
@@ -579,7 +858,7 @@ public class AttentionAssistantDriver {
 	        		
 	        		db.DatabaseSetUp();
 	        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
-	        		Parent_Account ParentAccount = db.SearchParent_Account(usr, pwd);
+	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
 	        		User_Account addChildUser = new User_Account();
 	        		Parent_Account addParentUser = new Parent_Account();
 	        	
@@ -777,10 +1056,12 @@ public class AttentionAssistantDriver {
 	        card = new CardLayout();
 	        LoginPanel = new JPanel();
 	        RegisterPanel = new JPanel();
+	        ForgotPanel = new JPanel();
 	        cardPane = new JPanel();
 	        LoginPanel = loginpage(card,frame);
 	        RegisterPanel = Registerpage(card,frame);
 	        WelcomePanel = welcomepage(card,frame);
+	        ForgotPanel = forgetPass(card,frame);
 	     
 	    	
 	    	
@@ -789,6 +1070,7 @@ public class AttentionAssistantDriver {
 	    	cardPane.add(WelcomePanel, "Welcome Panel");
 	        cardPane.add(LoginPanel, "Login Panel");
 	        cardPane.add(RegisterPanel, "Register Panel");
+	        cardPane.add(ForgotPanel, "Forgot Password Panel");
 	            
 	        
 	        cardPane.addMouseListener(new MouseAdapter(){
