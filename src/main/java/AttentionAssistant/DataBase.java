@@ -792,7 +792,7 @@ public class DataBase {
         }
         
         /**
-         * Returns the userID from a specific tasak
+         * Returns the userID from a specific task
          * 
          * @param task
          * @return int
@@ -814,6 +814,93 @@ public class DataBase {
     		sqlCon.enforceForeignKeys(false);
             ds.setConfig(sqlCon);
             return userID;
+        }
+        
+        /**
+         * Returns an array List of added tasks between 2 dates
+         * 
+         * @param Int, Date, Date
+         * @return ArrayList<Task>
+         */
+        public ArrayList<Task> SelectAllAddedTasks(int userID, Date dT_From, Date dT_Till){
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
+        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+        	Task blankTask = new Task();
+            String DateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_From);
+            String DateTill = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_Till);
+        	String query1 = "SELECT * FROM task WHERE fk_userID = '"+ userID+ 
+        			"' AND addedDate BETWEEN '" + DateFrom +
+        			"' AND '" + DateTill + "' ORDER BY addedDate ASC";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    while (rs.next()){
+        		    blankTask = new Task();
+        		    blankTask.setTaskID(rs.getInt("taskID"));
+        		    blankTask.setDescription(rs.getString("description"));
+        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
+        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
+        		    blankTask.setTaskName(rs.getString("name"));
+        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+        		    blankTask.setDueDate(date1);
+        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+        		    tasksOnList.add(blankTask);
+        		    }
+        		    System.out.println( "SelectAllAddedTasks() returned " + rs );
+        		} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);            
+        	return tasksOnList;
+
+        }
+        
+        /**
+         * Returns an array List of Completed tasks between 2 dates
+         * 
+         * @param Int, Date, Date
+         * @return ArrayList<Task>
+         */
+        public ArrayList<Task> SelectAllCompletedTasks(int userID, Date dT_From, Date dT_Till){
+    		sqlCon.enforceForeignKeys(true);
+            ds.setConfig(sqlCon);
+        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+        	Task blankTask = new Task();
+            String DateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_From);
+            String DateTill = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_Till);
+        	String query1 = "SELECT * FROM task WHERE fk_userID = '"+ userID+ 
+        			"' AND completedDate BETWEEN '" + DateFrom +
+        			"' AND '" + DateTill + "' ORDER BY completedDate ASC";
+        	try ( Connection conn = ds.getConnection();
+        		    Statement stmt = conn.createStatement(); ) {
+        		    ResultSet rs = stmt.executeQuery( query1 );
+        		    while (rs.next()){
+        		    blankTask = new Task();
+        		    blankTask.setTaskID(rs.getInt("taskID"));
+        		    blankTask.setDescription(rs.getString("description"));
+        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
+        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
+        		    blankTask.setTaskName(rs.getString("name"));
+        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+        		    blankTask.setDueDate(date1);
+        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+        		    tasksOnList.add(blankTask);
+        		    }
+        		    System.out.println( "SelectAllCompletedTasks() returned " + rs );
+        		} catch ( SQLException e ) {
+        			e.printStackTrace();
+        		}
+        		  catch ( ParseException p ) {
+        			p.printStackTrace();
+        		}
+    		sqlCon.enforceForeignKeys(false);
+            ds.setConfig(sqlCon);            
+        	return tasksOnList;
         }
         
         /**

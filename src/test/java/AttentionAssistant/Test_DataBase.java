@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -449,6 +450,105 @@ public class Test_DataBase {
     	assertEquals(1, testUserID, "testUserID should be set to 1, but instead returned: " + testUserID);
 
     }
+    
+    @Test
+    @Order(45)
+    @DisplayName("<DataBase> DatabaseSelectAllCompletedTasks")
+    void DatabaseSelectAllCompletedTasks(){
+		User_Account newUser = new User_Account();
+		User_Account TaskUser = new User_Account();
+		Task testTask= new Task();
+		ArrayList<Task> TaskList = new ArrayList<Task>();		
+		ArrayList<Task> testTaskList = new ArrayList<Task>();		
+		ArrayList<Task> dBTaskList = new ArrayList<Task>();		
+		
+		//add a new account to the database
+		newUser.setUsername("TestUser");
+		newUser.setPassword("TestPassword");
+		newUser.setName("Test");
+		db.AddUser_Account(newUser);
+		
+		TaskUser= db.SearchUser_Account(newUser.getUsername(), newUser.getPassword());
+		
+		
+		//add 3 new tasks to the database
+		for (int i = 1; i<4; i++) {
+		testTask.setTaskName("Completed Task " + i);
+		testTask.setDescription("Completed Task " + i + " Description");
+		testTask.setObservable(true);
+		testTask.setDueDate(new Date(System.currentTimeMillis()+ 100000L));
+		testTask.setStatus(TaskStatus.OPEN);
+		testTask.setPriority(true);
+		db.AddTask(testTask, TaskUser.getUserID());
+		}
+		
+		TaskList = db.SelectAllTasks(TaskUser.getUserID());
+		
+		TaskList.get(0).setStatus(TaskStatus.CLOSED);
+		db.UpdateTask(TaskList.get(0));
+		Long waitTime= System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L,TimeUnit.SECONDS);
+		while (System.nanoTime() < waitTime )
+		{	
+		}
+		TaskList.get(2).setStatus(TaskStatus.CLOSED);
+		db.UpdateTask(TaskList.get(2));
+		
+		testTaskList.add(TaskList.get(0));
+		testTaskList.add(TaskList.get(2));
+		
+		dBTaskList = db.SelectAllCompletedTasks(TaskUser.getUserID(), new Date(System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(10L, TimeUnit.SECONDS)), new Date(System.currentTimeMillis()));
+		for (int i =0; i< dBTaskList.size(); i++) {
+    		assertEquals(testTaskList.get(i).toString(), dBTaskList.get(i).toString(), "dBTask_List " + i + " should be set to " + testTaskList.get(i).toString() + " but instead returned: " + dBTaskList.get(i).toString());	
+		}
+		db.DeleteUser_Account(TaskUser.getUserID());
+    }
+    
+    @Test
+    @Order(46)
+    @DisplayName("<DataBase> DatabaseSelectAllAddedTasks")
+    void DatabaseSelectAllAddedTasks(){
+		User_Account newUser = new User_Account();
+		User_Account TaskUser = new User_Account();
+		Task testTask= new Task();
+		ArrayList<Task> TaskList = new ArrayList<Task>();		
+		ArrayList<Task> testTaskList = new ArrayList<Task>();		
+		ArrayList<Task> dBTaskList = new ArrayList<Task>();		
+		
+		//add a new account to the database
+		newUser.setUsername("TestUser");
+		newUser.setPassword("TestPassword");
+		newUser.setName("Test");
+		db.AddUser_Account(newUser);
+		TaskUser= db.SearchUser_Account(newUser.getUsername(), newUser.getPassword());
+		
+		
+		//add 3 new tasks to the database
+		for (int i = 1; i<4; i++) {
+		testTask.setTaskName("Added Task " + i);
+		testTask.setDescription("Added Task " + i + " Description");
+		testTask.setObservable(true);
+		testTask.setDueDate(new Date(System.currentTimeMillis()+ 100000L));
+		testTask.setStatus(TaskStatus.OPEN);
+		testTask.setPriority(true);
+		Long waitTime= System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L,TimeUnit.SECONDS);
+		while (System.nanoTime() < waitTime )
+		{	
+		}
+		db.AddTask(testTask, TaskUser.getUserID());
+		}
+		
+		TaskList = db.SelectAllTasks(TaskUser.getUserID());
+				
+		testTaskList.add(TaskList.get(1));
+		testTaskList.add(TaskList.get(2));
+		dBTaskList = db.SelectAllAddedTasks(TaskUser.getUserID(), new Date(System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(2L, TimeUnit.SECONDS)), new Date(System.currentTimeMillis()));
+		
+		for (int i =0; i< dBTaskList.size(); i++) {
+    		assertEquals(testTaskList.get(i).toString(), dBTaskList.get(i).toString(), "dBTask_List " + i + " should be set to " + testTaskList.get(i).toString() + " but instead returned: " + dBTaskList.get(i).toString());	
+		}
+		db.DeleteUser_Account(TaskUser.getUserID());
+    }
+    
     /**
     ***************** END OF TEST TASK CRUD *****************
     */
@@ -1005,10 +1105,10 @@ public class Test_DataBase {
      ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
      */
     
-    @Test
-    @Order(44)
-    @DisplayName("<DataBase> DatabaseTestPlayGround")
-    void DatabaseTestPlayground() {
+    //@Test
+    //@Order(44)
+    //@DisplayName("<DataBase> DatabaseTestPlayGround")
+    //void DatabaseTestPlayground() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
      *	UpdatedUser.setUserID(1);
      *	UpdatedUser.setUsername("UpdatedUsername1234");
@@ -1016,6 +1116,6 @@ public class Test_DataBase {
      *	db.UpdateUser_Account(UpdatedUser);
     */
     	
-    }
+//    }
 
 }
