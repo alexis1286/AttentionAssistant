@@ -242,7 +242,7 @@ public class Settings {
 		this.htbVisibilityIsLocked = false;
 		this.ntbVisibilityIsLocked = false;
 		this.progReportVisibilityIsLocked = false;
-		this.avatarIsActive = false; 
+		this.avatarIsActive = true; 
 		this.textIsActive = true; 
 		this.audioIsActive = false;
 		this.textToSpeech = false; 
@@ -2011,7 +2011,7 @@ public class Settings {
 		openPM.setForeground(Color.WHITE);
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				priority_manager.open_pm(db);
+				priority_manager.open_pm(userID,db);
 			}
 		});
 		
