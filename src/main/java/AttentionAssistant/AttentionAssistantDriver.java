@@ -654,10 +654,51 @@ public class AttentionAssistantDriver {
 			parentportal.setForeground(Color.WHITE);
 			parentportal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
+
+		        		String pwd = new String("1");
+		        		String usr = new String("Test");
+		        		
+		        		
 		        		db.DatabaseSetUp();
-		        		//open paernt portal
-		        		parentPortal(1);
-		        		frame.dispose();
+		        		
+		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
+		        		Parent_Account addParentUser = new Parent_Account();
+		        	
+		        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
+		        		//keep user name
+		        		//change password to security 1 &2 
+		        		//add one more to display question
+		        		//if questoins are right, do popup for change new passwrod
+		        		//another popup saying 1-2 questions wrong
+		        		
+		        		//TODO dispose frame when sucessful login
+		        		
+		        		if(ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
+		        			JFrame success = new JFrame();
+	        				JOptionPane.showMessageDialog(success, "Test Parent Account Logging In!");
+	        				
+	        				int ParentID = ParentAccount.getParentID();
+	        				frame.dispose();
+	        				success.dispose();
+	        				parentPortal(ParentID);
+		        		}
+		        		else {
+		        			
+		        			addParentUser.setUsername(usr);
+		        			addParentUser.setPassword(pwd);
+		        			db.AddParent_Account(addParentUser);
+	        				
+	        				int ParentID = ParentAccount.getParentID();
+	        				
+	        			
+	        				JFrame success = new JFrame();
+	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Parent Account! Logging in now...");
+	        				
+	        				frame.dispose();
+	        				success.dispose();
+	        				parentPortal(ParentID);
+		        		}
+		        		
 		        }});
 			 panel.add(parentportal);
 			 
@@ -686,9 +727,51 @@ public class AttentionAssistantDriver {
 			 ChildPortal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        	//open child portal
-		        	db.DatabaseSetUp();
-		        	childPortal(1);
-		        	frame.dispose();
+		        		String pwd = new String("1");
+		        		String usr = new String("Test");
+		        		String first = new String("TestChild");
+		        		
+		        		
+		        		db.DatabaseSetUp();
+		        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
+		        		//Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
+		        		User_Account addChildUser = new User_Account();
+		        		//Parent_Account addParentUser = new Parent_Account();
+		        	
+		        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
+		        		//keep user name
+		        		//change password to security 1 &2 
+		        		//add one more to display question
+		        		//if questoins are right, do popup for change new passwrod
+		        		//another popup saying 1-2 questions wrong
+		        		
+		        		//TODO dispose frame when sucessful login
+		        		
+		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
+		        			JFrame success = new JFrame();
+	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
+	        				
+	        				int userid = UserAccount.getUserID();
+	        				frame.dispose();
+	        				success.dispose();
+	        				childPortal(userid);
+		        		}
+		        		else {
+		        			addChildUser.setUsername(usr);
+	        				addChildUser.setPassword(pwd);
+	        				addChildUser.setName(first);
+	        				db.AddUser_Account(addChildUser);
+	        				
+	        				int userid = UserAccount.getUserID();
+	        				
+	        			
+	        				JFrame success = new JFrame();
+	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
+	        				
+	        				frame.dispose();
+	        				success.dispose();
+	        				childPortal(userid);
+		        		}
 		        }});
 			 panel.add(ChildPortal);
 			 
