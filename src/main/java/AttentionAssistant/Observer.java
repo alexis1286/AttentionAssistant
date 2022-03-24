@@ -435,6 +435,7 @@ public class Observer{
 		return calcObserverScore;
 	}
 	
+	
 	  /** 
 	   * Display Observer
 	   * @return String
@@ -450,4 +451,3 @@ public class Observer{
 	 }
 
 }
-
