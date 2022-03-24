@@ -37,33 +37,33 @@ public class Priority_Manager {
 	private ArrayList<Task> Task_List;
 	private Task working_task;
 	
-	public Priority_Manager(DataBase db) throws IOException {
+	public Priority_Manager(int userID, DataBase db) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		populateTaskList(db);
+		populateTaskList(userID,db);
 	}
 	
-	public Priority_Manager(DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
+	public Priority_Manager(int userID,DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		populateTaskList(db);
+		populateTaskList(userID,db);
 	}
 	
-	public void taskToObserve(DataBase db,Observer observer) {
+	public void taskToObserve(int userID,DataBase db,Observer observer,Notification_System notifSystem,Pomodoro_Timer pomo) {
 		Task task = new Task();
 		
-		if(db.SelectAllTasks().size() == 0) {
-			task = firstTaskWindow(db);
+		if(db.SelectAllTasks(userID).size() == 0) {
+			task = firstTaskWindow(userID,db);
 		}
 		activeTask = task;
-		sendToObserver(task,observer);
+		sendToObserver(task,observer, db, notifSystem, pomo);
 	}
 	
 	public Task getActiveTask() {
 		return activeTask;
 	}
 	
-	private void sendToObserver(Task task,Observer observer) {
+	private void sendToObserver(Task task,Observer observer,DataBase db,Notification_System notifSystem,Pomodoro_Timer pomo) {
 		try {
-			observer.monitor(task);
+			observer.monitor(task,db,notifSystem,pomo);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,7 +93,7 @@ public class Priority_Manager {
 		return list;
 	}
 	
-	public void open_pm(DataBase db) {
+	public void open_pm(int userID,DataBase db) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
@@ -108,7 +108,7 @@ public class Priority_Manager {
 				titlePanel.setBorder(line);
 				
 				//build table panel
-				JPanel taskPanel = taskPanel(db,frame);
+				JPanel taskPanel = taskPanel(userID,db,frame);
 				taskPanel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				
 				//build button panel
@@ -166,11 +166,11 @@ public class Priority_Manager {
 		return panel;
 	}
 	
-	private void populateTaskList(DataBase db) {
-		for(int i=0; i<db.SelectAllTasks().size();i++) {
-			if(db.SelectAllTasks().get(i).getStatus() != TaskStatus.CLOSED) {
-				System.out.println(db.SelectAllTasks().get(i));
-				Task_List.add(db.SelectAllTasks().get(i));
+	private void populateTaskList(int userID,DataBase db) {
+		for(int i=0; i<db.SelectAllTasks(userID).size();i++) {
+			if(db.SelectAllTasks(userID).get(i).getStatus() != TaskStatus.CLOSED) {
+				System.out.println(db.SelectAllTasks(userID).get(i));
+				Task_List.add(db.SelectAllTasks(userID).get(i));
 			}
 			
 		}
@@ -180,14 +180,14 @@ public class Priority_Manager {
 	/*
 	 * create panel that contains task list and buttons to edit/interact with task list
 	 */
-	private JPanel taskPanel(DataBase db,JFrame frame) {
+	private JPanel taskPanel(int userID,DataBase db,JFrame frame) {
 		JPanel panel = new JPanel();
 		
 		/*
 		 * populate task list from database
 		 */
 		Task_List.removeAll(Task_List);
-		populateTaskList(db);
+		populateTaskList(userID,db);
 		
 		/*
 		 * Create JTable to display task
@@ -290,7 +290,7 @@ public class Priority_Manager {
 		add_button.setFocusPainted(false);
 		add_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		addTask(db,model,table);
+        		addTask(userID,db,model,table);
         }});
 		
 		
@@ -305,7 +305,7 @@ public class Priority_Manager {
 		edit_button.setFocusPainted(false);
 		edit_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		editTask(db,model,table);
+        		editTask(userID,db,model,table);
         }});
 		
 		
@@ -384,7 +384,7 @@ public class Priority_Manager {
 	/*
 	 * Edit task
 	 */
-	private void editTask(DataBase db,DefaultTableModel model,JTable table) {
+	private void editTask(int userID,DataBase db,DefaultTableModel model,JTable table) {
 		//get task info and pass it to the task window
 		row = table.getSelectedRow();
 		int id = (int) table.getModel().getValueAt(row, 5);
@@ -392,7 +392,7 @@ public class Priority_Manager {
 			if(Task_List.get(i).getTaskID() == id) {
 				Task task = Task_List.get(i);
 				boolean isAnEdit = true;
-				taskWindow(task,isAnEdit,db,model,table);
+				taskWindow(userID,task,isAnEdit,db,model,table);
 			}
 		}
 	}
@@ -400,10 +400,10 @@ public class Priority_Manager {
 	/*
 	 * Add Task
 	 */
-	private void addTask(DataBase db,DefaultTableModel model,JTable table) {
+	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table) {
 		Task task = new Task();
 		boolean isAnEdit = false;
-		taskWindow(task,isAnEdit,db,model,table);
+		taskWindow(userID,task,isAnEdit,db,model,table);
 	}
 	
 	//******************************************************************************************************************
@@ -412,7 +412,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void taskWindow(Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table) {
+	private void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -556,7 +556,7 @@ public class Priority_Manager {
         			table.setValueAt(new_task.getObservable(), row, 4);
         		}else{
         			//adds task to database
-	        		database.AddTask(new_task);
+	        		database.AddTask(new_task,userID);
 	        		//creates object v populated with the new tasks details
 	        		Vector<Object> v = new Vector<Object>();
 	        		v.add(new_task.getTaskName());
@@ -630,7 +630,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	public Task firstTaskWindow(DataBase database) {
+	public Task firstTaskWindow(int userID,DataBase database) {
 		Task task = new Task();
 		//create task window
 		JFrame task_window = new JFrame("Add an Observable Task");
@@ -750,7 +750,7 @@ public class Priority_Manager {
         		}else {new_task.setStatus(TaskStatus.OPEN);}
         		
     			//adds task to database
-        		database.AddTask(new_task);
+        		database.AddTask(new_task,userID);
         		task_window.dispose();
         }});
 		

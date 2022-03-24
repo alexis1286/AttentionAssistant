@@ -48,7 +48,7 @@ public class Notification_System {
 		this.avatarSize = 100;
 		this.avatarAlwaysOn = false;
 		this.db = db;
-		this.pm = new Priority_Manager(db);
+		this.pm = new Priority_Manager(userID,db);
 		user = db.SelectUser_Account(userID);
 		userName = user.getName();
 	}
@@ -64,9 +64,11 @@ public class Notification_System {
 		this.avatarSize = set.getAvatarSize();
 		this.avatarAlwaysOn = set.getAlwaysOnScreen();
 		this.db = database;
-		this.pm = new Priority_Manager(db);
-		//user = db.SelectUser_Account(userID);
-		//userName = user.getName();
+		this.user = db.SelectUser_Account(userID);
+		this.userName = user.getName();
+		this.userID = user.getUserID();
+		this.pm = new Priority_Manager(userID,db);
+		
 	}
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	int height = (int) screen.getHeight();

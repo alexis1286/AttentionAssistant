@@ -263,7 +263,7 @@ public class Parent_Bar{
 	
 	private JButton createButton(String imgString) {
 		JButton button = new JButton();
-		int size = 70;
+		int size = 50;
 		BufferedImage img = null;
 		BufferedImage circle = null;
 		try {

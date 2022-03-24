@@ -115,10 +115,17 @@ public class Nav_Bar{
 	
 	JPanel icon_panel;
 	int counter;
+	Notification_System notifSystem;
 	public void run_nav_bar(int userID,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				pm.taskToObserve(db, observer);
+				try {
+					notifSystem = new Notification_System(settings,db);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				pm.taskToObserve(userID,db, observer,notifSystem,pomo);
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
@@ -253,7 +260,7 @@ public class Nav_Bar{
 	    	pmButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
-	        		pm.open_pm(db);
+	        		pm.open_pm(userID,db);
 	        }});
 			panel.add(pmButton);
 	    }
