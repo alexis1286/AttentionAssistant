@@ -1015,7 +1015,7 @@ public class AttentionAssistantDriver {
 			db.AddSettings(settings, userID); 
 			
 			try {
-				pm = new Priority_Manager(db,observer, pomo);
+				pm = new Priority_Manager(userID,db,observer, pomo);
 				navbar.run_nav_bar(userID,db,navbar,settings,observer,pm,pomo,ntb,htb,fts);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
