@@ -266,7 +266,7 @@ public class AttentionAssistantDriver {
 		        }});
 			 panel.add(loginbut);
 			 
-			 forgotpassbut.setBounds(260, 390, 180, 35);
+			 forgotpassbut.setBounds(260, 390, 200, 35);
 			 forgotpassbut.setHorizontalTextPosition(SwingConstants.CENTER);
 			 forgotpassbut.setVerticalTextPosition(SwingConstants.CENTER);
 			 forgotpassbut.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
@@ -325,8 +325,11 @@ public class AttentionAssistantDriver {
 		  
 		     
 		     //forgot password registration form needs to have sercuirty questions that they can choose from around 6 can do 2-3 and they have a key organized store the hashes from the look for hacking alogrithms 
-		     
+		     //to make sure they are the user, do secruity questions store the hash of the answers and store a key of the users answers questions key and answers 2-3 secruity questons
+		     //also add a hash for their password and store them into the db 
 		     //maybe make parent/child button to push into the parent or child portals -DONE
+		     
+		     //TODO ADD BORDER WITHIN THE PM
 			return panel;
 		}
 		private static JPanel forgetPass(CardLayout card, JFrame frame) {
@@ -369,7 +372,7 @@ public class AttentionAssistantDriver {
 		    dinopic.setBounds(100, 182, 127, 150);
 		    panel.add(dinopic);
 		
-			register.setBounds(200, 0, 350, 100);
+			register.setBounds(200, 0, 360, 100);
 			register.setForeground(aa_purple);
 			register.setFont(new Font("Dosis SemiBold",Font.BOLD,30));
 			register.setHorizontalAlignment(SwingConstants.CENTER);
