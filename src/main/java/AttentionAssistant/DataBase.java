@@ -1801,6 +1801,48 @@ public class DataBase {
    	return notificationsOnList;
    }
    
+   
+   /**
+    * Grab all Notifications within the Database by type
+    * 
+    * @param int
+    * @return ArrayList<Notification_System>
+    */
+   public ArrayList<Notification> SelectAllNotificationsType(int userID, String notificationType, Date dT_From, Date dT_Till){
+	   sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+       String DateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_From);
+       String DateTill = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(dT_Till);
+   	ArrayList<Notification> notificationsOnList = new ArrayList<Notification>();
+   	Notification blankNotification = new Notification();
+   	String query1 = "SELECT * FROM notification WHERE fk_userID = '" + userID +
+   	"' AND type = '" + notificationType +
+   	"' AND dT_Notification BETWEEN '" + DateFrom +
+   	"' AND '" + DateTill + "'";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    ResultSet rs = stmt.executeQuery( query1 );
+   		    while (rs.next()){
+   		    blankNotification = new Notification();
+   		    blankNotification.setNotificationID(rs.getInt("notificationID"));
+   		    blankNotification.setType(rs.getString("type"));
+   		    blankNotification.setIgnored(Boolean.valueOf(rs.getString("ignored")));
+   		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dT_Notification"));
+   		    blankNotification.setDT_Notification(date1);
+   		    notificationsOnList.add(blankNotification);
+   		    }
+   		    System.out.println( "SelectAllNotificationsType() returned " + rs );
+   		} catch ( SQLException e ) {
+   			e.printStackTrace();
+   		}
+   		  catch ( ParseException p ) {
+   			p.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   	return notificationsOnList;
+   }
+   
    /**
     ******* END OF NOTIFICATION SYSTEM CRUD *******
     */

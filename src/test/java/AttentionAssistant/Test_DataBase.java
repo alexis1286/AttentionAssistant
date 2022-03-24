@@ -1011,6 +1011,53 @@ public class Test_DataBase {
         }
     	
     } 
+    
+    
+    @Test
+    @Order(47)
+    @DisplayName("<DataBase> DatabaseSelectAllNotificationType")
+    void DatabaseSelectAllNotificationType(){
+		User_Account newUser = new User_Account();
+		User_Account notificationUser = new User_Account();
+		Notification testNotification= new Notification();
+		ArrayList<Notification> NotificationList = new ArrayList<Notification>();		
+		ArrayList<Notification> testNotificationList = new ArrayList<Notification>();		
+		ArrayList<Notification> dBNotificationList = new ArrayList<Notification>();		
+		
+		//add a new account to the database
+		newUser.setUsername("TestUser");
+		newUser.setPassword("TestPassword");
+		newUser.setName("Test");
+		db.AddUser_Account(newUser);
+		notificationUser= db.SearchUser_Account(newUser.getUsername(), newUser.getPassword());
+		
+		
+		//add 3 new tasks to the database
+		for (int i = 1; i<4; i++) {
+		testNotification.setType("allGoodType");
+		testNotification.setIgnored(true);
+		testNotification.setDT_Notification(new Date (System.currentTimeMillis()));
+		Long waitTime= System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L,TimeUnit.SECONDS);
+		while (System.nanoTime() < waitTime )
+		{	
+		}
+		db.AddNotification(testNotification, notificationUser.getUserID());
+		testNotification.setType("NullType");
+		db.AddNotification(testNotification, notificationUser.getUserID());
+		}
+		
+		NotificationList = db.SelectAllNotifications(notificationUser.getUserID());
+				
+		testNotificationList.add(NotificationList.get(2));
+		testNotificationList.add(NotificationList.get(4));
+		dBNotificationList = db.SelectAllNotificationsType(notificationUser.getUserID(), "allGoodType", new Date(System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(3L, TimeUnit.SECONDS)), new Date(System.currentTimeMillis()));
+		
+		for (int i =0; i< dBNotificationList.size(); i++) {
+    		assertEquals(testNotificationList.get(i).toString(), dBNotificationList.get(i).toString(), "dBNotification_List " + i + " should be set to " + testNotificationList.get(i).toString() + " but instead returned: " + dBNotificationList.get(i).toString());	
+		}
+		db.DeleteUser_Account(notificationUser.getUserID());
+    }
+
 
     /**
      ***************** END OF TEST NOTIFICATION SYSTEM CRUD *****************
