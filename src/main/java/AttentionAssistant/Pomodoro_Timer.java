@@ -674,8 +674,8 @@ public class Pomodoro_Timer
 				frame.setLocationRelativeTo(null);
 				//Input(settings);
 				getWorkBreakStatus();
-		
-				
+				//if(initalmin == 0 && initalbreakmin == 0) {}{
+				Input(settings);
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
