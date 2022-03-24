@@ -119,80 +119,81 @@ public class Pomodoro_Timer
 		return list;
 	}
 	
-	private JPanel titlePanel(JFrame frame) {
-		JPanel panel = new JPanel();
-		//panel.setBorder(line);
-		//aligns buttons in title panel from right -> left
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-		//makes title panel background grey
-		panel.setBackground(aa_grey);
-		//creates border and sets to purple
-		panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-		//creates label 
-		JLabel title = new JLabel("Pomodoro Timer");
-		//makes font color white
-		title.setForeground(Color.white);
-		//sets font, size, and bold
-		title.setFont(new Font("Serif", Font.BOLD, 18));
+	private JMenuBar titlePanel(JFrame frame) {
+		JMenuBar title_panel = new JMenuBar();
+		title_panel.setBorder(line);
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 		
-		//reads in images for the close and guide buttons
-		BufferedImage ci = null;
-		BufferedImage gi = null;
-		try {
-			ci = ImageIO.read(new File("images/exit_circle.png"));
-			gi = ImageIO.read(new File("images/guide.png"));
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
 		/*
 		 * allows drag and drop of frame
 		 */
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
 			}
 		});
 		
-		panel.addMouseListener(new MouseAdapter(){
+		title_panel.addMouseListener(new MouseAdapter(){
 			@Override 
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
 			}
 		});
+
+		JLabel title = new JLabel("Pomodoro Timer");
+		title.setForeground(Color.white);
+		title.setBounds(0,0,100,100);
+		title.setFont(new Font("San Francisco", Font.BOLD, 20));
 		
-		//creates close button with close icon and no background
+		/*
+		 * create icons to use as buttons for title bar
+		 */
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+		BufferedImage exit = null;
+		
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+			exit = ImageIO.read(new File("images/AA_exit.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
 		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 		Icon close = new ImageIcon(c_img);
+		
 		JButton close_window = new JButton(close);
 		close_window.setBorderPainted(false);
 		close_window.setContentAreaFilled(false);
 		close_window.setFocusPainted(false);
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//close window without saving info
+        		//close window without saving 
         		frame.dispose();
+        	
         }});
 		
-		//create guide button with guide icon and no background
 		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		Icon guideIcon = new ImageIcon(g_img);
+		
 		JButton guide = new JButton(guideIcon);
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
 		
-		//adds title JLabel, empty space, then guide button and close button
-		panel.add(title);
-		panel.add(Box.createRigidArea(new Dimension(275, 0)));
-		panel.add(guide);
-		panel.add(close_window);
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
 		
 		//returns panel
-		return panel;
+		return title_panel;
 	}
 
 	
@@ -657,7 +658,7 @@ public class Pomodoro_Timer
 				//panel.setBounds(1000, 1000, width, height);
 				panel.setBackground(aa_grey);
 				//build title panel
-				JPanel titlePanel = titlePanel(frame);
+				JMenuBar titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
 				//build table panel
 				icon_panel = timerPanel(frame,pm);

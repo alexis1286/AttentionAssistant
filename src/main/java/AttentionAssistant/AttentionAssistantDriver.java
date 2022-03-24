@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -60,86 +61,87 @@ public class AttentionAssistantDriver {
 	static Negative_Thought_Burner ntb = new Negative_Thought_Burner();
 	static Happy_Thought_Button htb = new Happy_Thought_Button(db);
 	static Free_Thought_Space fts = new Free_Thought_Space();
-
+	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	
 	public static void main(String[] args) throws Exception {
 		run_login();
 	
 	}
-		private static JPanel titlePanel(JFrame frame) {
-			JPanel panel = new JPanel();
-			//panel.setBorder(line);
-			//aligns buttons in title panel from right -> left
-			panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-			//makes title panel background grey
-			panel.setBackground(aa_grey);
-			//creates border and sets to purple
-			panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-			//creates label 
-			JLabel title = new JLabel("The Attention Assistant",SwingConstants.RIGHT);
-			//makes font color white
-			title.setForeground(Color.white);
-			//sets font, size, and bold
-			title.setFont(new Font("Serif", Font.BOLD, 18));
+		private static JMenuBar titlePanel(JFrame frame) {
+			JMenuBar title_panel = new JMenuBar();
+			title_panel.setBorder(line);
+			title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+			title_panel.setBackground(aa_grey);
+			title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
 			
-			//reads in images for the close and guide buttons
-			BufferedImage ci = null;
-			BufferedImage gi = null;
-			try {
-				ci = ImageIO.read(new File("images/exit_circle.png"));
-				gi = ImageIO.read(new File("images/guide.png"));
-			}catch(Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
 			/*
 			 * allows drag and drop of frame
 			 */
-			panel.addMouseMotionListener(new MouseMotionAdapter() {
+			title_panel.addMouseMotionListener(new MouseMotionAdapter() {
 				@Override
 				public void mouseDragged(MouseEvent e) {
 					frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
 				}
 			});
 			
-			panel.addMouseListener(new MouseAdapter(){
+			title_panel.addMouseListener(new MouseAdapter(){
 				@Override 
 				public void mousePressed(MouseEvent e) {
 					mouseX = e.getX();
 					mouseY = e.getY();
 				}
 			});
+
+			JLabel title = new JLabel("The Attention Assistant");
+			title.setForeground(Color.white);
+			title.setBounds(0,0,200,200);
+			title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
 			
-			//creates close button with close icon and no background
+			/*
+			 * create icons to use as buttons for title bar
+			 */
+			BufferedImage ci = null;
+			BufferedImage gi = null;
+			BufferedImage exit = null;
+			
+			try {
+				ci = ImageIO.read(new File("images/exit_circle.png"));
+				gi = ImageIO.read(new File("images/guide.png"));
+				exit = ImageIO.read(new File("images/AA_exit.png"));
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
 			Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 			Icon close = new ImageIcon(c_img);
+			
 			JButton close_window = new JButton(close);
 			close_window.setBorderPainted(false);
 			close_window.setContentAreaFilled(false);
 			close_window.setFocusPainted(false);
 			close_window.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        		//close window without saving info
+	        		//close window without saving 
 	        		frame.dispose();
+	        	
 	        }});
 			
-			//create guide button with guide icon and no background
 			Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 			Icon guideIcon = new ImageIcon(g_img);
+			
 			JButton guide = new JButton(guideIcon);
 			guide.setBorderPainted(false);
 			guide.setContentAreaFilled(false);
 			guide.setFocusPainted(false);
 			
-			//adds title JLabel, empty space, then guide button and close button
-			panel.add(title);
-			panel.add(Box.createRigidArea(new Dimension(275, 0)));
-			panel.add(guide);
-			panel.add(close_window);
+			title_panel.add(title);
+			title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
+			title_panel.add(guide);
+			title_panel.add(close_window);
 			
 			//returns panel
-			return panel;
+			return title_panel;
 			
 		}
 		private static JPanel loginpage(CardLayout card, JFrame frame) {
@@ -770,7 +772,7 @@ public class AttentionAssistantDriver {
 	        //makes frame and contents visible
 	    
 	        
-	        JPanel titlePanel = titlePanel(frame);
+	        JMenuBar titlePanel = titlePanel(frame);
 	        
 	        card = new CardLayout();
 	        LoginPanel = new JPanel();
