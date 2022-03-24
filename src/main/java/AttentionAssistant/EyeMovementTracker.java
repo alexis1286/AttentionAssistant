@@ -268,12 +268,15 @@ public class EyeMovementTracker {
 		for (int i = 0; i < alluserTasks.size(); i++) {
 			//Grabs all observers assigned to a task
 			allObservers= db.SelectAllObservers(alluserTasks.get(i).getTaskID());
-			//iterates through all observers 
+			//Iterates through all observers 
 			for (int i2 = 0; i2 < allObservers.size(); i2++ ) {
-				//add to totalScores
-				totalScores = totalScores + allObservers.get(i2).getDefaultEyeScore();
-				//add to number of scores
-				numOfScores++;
+				//if there was NOT an error with gathering DefaultEyeScore
+				if (allObservers.get(i2).getDefaultEyeScore() != -1) {
+					//add to totalScores
+					totalScores = totalScores + allObservers.get(i2).getDefaultEyeScore();
+					//add to number of scores
+					numOfScores++;
+				}
 			}
 		}
 		if (totalScores != 0) {
