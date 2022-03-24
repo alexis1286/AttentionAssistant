@@ -100,7 +100,7 @@ public class EyeMovementTracker {
 		if (capture.isOpened()) {
             
 			//print that camera is ready
-			System.out.println("Camera is ready!");
+			//System.out.println("Camera is ready!");
 
 			//used for calculating Score
     		double frames5=0;
@@ -157,10 +157,10 @@ public class EyeMovementTracker {
     		double eyeMovementScoreCalculator= (facesFound/frames5)*100;
     		
     		//Print when finished along with eyeMovementScore
-    	    System.out.println("I have finished EyeMovemtTracking\nEyeMovementScore= " + eyeMovementScoreCalculator);
+    	    //System.out.println("I have finished EyeMovemtTracking\nEyeMovementScore= " + eyeMovementScoreCalculator);
     	    
     	    //Print number of frames5 and number of facesFound
-    	    System.out.println("Frames5 = " + frames5 + "\nFacesFound = " + facesFound);
+    	    //System.out.println("Frames5 = " + frames5 + "\nFacesFound = " + facesFound);
     	    
     	    //Sets eyeMovementScore
     	    this.eyeMovementScore= (int)eyeMovementScoreCalculator;		
@@ -254,6 +254,50 @@ public class EyeMovementTracker {
     return false;
 	}
 	
-}
+	public int getWeightedEyeMovementScore(Task task, DataBase db) {
+		//variable creation
+		double weightedScore = 0;
+		double totalScores = 0;
+		double numOfScores = 0;
+		double averageScore = 0;
+		ArrayList<Observer> allObservers;
+		int userID = db.GetUserIDFromTask(task);
+		//Grabs all tasks assigned to a user
+		ArrayList<Task> alluserTasks = db.SelectAllTasks(userID);
+		//iterates through the task list
+		for (int i = 0; i < alluserTasks.size(); i++) {
+			//Grabs all observers assigned to a task
+			allObservers= db.SelectAllObservers(alluserTasks.get(i).getTaskID());
+			//iterates through all observers 
+			for (int i2 = 0; i2 < allObservers.size(); i2++ ) {
+				//add to totalScores
+				totalScores = totalScores + allObservers.get(i2).getDefaultEyeScore();
+				//add to number of scores
+				numOfScores++;
+			}
+		}
+		if (totalScores != 0) {
+			averageScore = totalScores / numOfScores;
+		}
+		else {
+		averageScore = 100;
+		}
+		
+		//System.out.println("Number of Scores:" + numOfScores);
+		//System.out.println("Total Scores: " + totalScores);
+		//System.out.println("Threshold: " + threshold);
+		
+		//defaultEyeMovementScore divided by averageScore * 100
+		weightedScore = (Double.valueOf(this.getEyeMovementScore()) / averageScore) *100; 
+		
+		//set a cap to 100
+		if ((int) weightedScore > 100)
+		{
+			weightedScore = 100;
+		}
+		
+		//return the int of weightedScore
+		return (int)weightedScore;
+	}
 
-	
+}

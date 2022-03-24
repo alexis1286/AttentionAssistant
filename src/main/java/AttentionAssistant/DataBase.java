@@ -63,8 +63,8 @@ public class DataBase {
    			 "dueDate DATETIME, " +
    			 "completedDate DATETIME, " +
    			 "addedDate DATETIME, " +
-   			 "priority BOOLEAN)";
-//		 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
+   			 "priority BOOLEAN, " +
+    		 "CONSTRAINT fk_UserID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
     	
     	/**
     	 * Set up for Table HappyThoughtButton
@@ -75,7 +75,7 @@ public class DataBase {
   			 "media_ID_Tag TEXT, " +
    			 "flagged BOOLEAN, " +
   			 "rating INTEGER, " +
-//   			 "dT_Executed DATE, " +
+//   			 "dT_Executed DATE, " + -old code -jmitchel
 			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
     	/**
@@ -115,7 +115,7 @@ public class DataBase {
    			 "textIsActive BOOLEAN, " +
    			 "audioIsActive BOOLEAN, " +
    			 "avatarFilePath TEXT, " +
-//   			 "audioFilePath TEXT, " +
+//   			 "audioFilePath TEXT, " + -old code -jmitchel
    			 "alwaysOnScreen BOOLEAN, " +
    			 "avatarSize INTEGER, " +
    			 "pomodoroIsActive BOOLEAN, " +
@@ -179,10 +179,16 @@ public class DataBase {
       			 "dT_Notification DATETIME, " +
       			 "CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE)";
 
+    	/**
+         * Set up for Table Event_Type
+         */
     	String queryEventType= "CREATE TABLE IF NOT EXISTS event_Type ( " +
     			"event_TypeID INTEGER PRIMARY KEY, " +
     			"name TEXT) ";
     	
+        /**
+         * Set up for Table Event
+         */
     	String queryEvent= "CREATE TABLE IF NOT EXISTS event ( " +
     			"eventID INTEGER PRIMARY KEY, " +
     			"fk_userID INTEGER, " +
@@ -191,6 +197,9 @@ public class DataBase {
     			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE, " +
     			"CONSTRAINT fk_event_TypeID FOREIGN KEY (\"fk_event_TypeID\") REFERENCES \"event_Type\"(\"Event_TypeID\") ON DELETE CASCADE)";
     			
+        /**
+         * Set up for Table FTS_Color
+         */
     	String queryFTS_Color= "CREATE TABLE IF NOT EXISTS FTS_Color ( " +
     			"ftsColorID INTEGER PRIMARY KEY, " +
     			"fk_userID INTEGER, " +
@@ -518,32 +527,33 @@ public class DataBase {
     ******* START OF TASK CRUD *******
     */
     /**
+     * OLD CODE 3-24-2022-Jmitchel
      * Add a new task to the database.
      * @param task
      */
-    public void AddTask(Task task) {
-		sqlCon.enforceForeignKeys(true);
-        ds.setConfig(sqlCon);
-    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
-    	String query1 = "INSERT INTO task " +
-    			"( description, observable, status, name, dueDate, priority ) Values ( '" +
-    			task.getDescription().replaceAll("'", "''") + "', '" +
-    			task.getObservable() + "', '" +
-    			task.getStatus().toString().replaceAll("'", "''") + "', '" +
-    			task.getTaskName().replaceAll("'", "''") + "', '" +
-    			DateTime + "', '" +
-    			task.getPriority() +"')";
-    	try ( Connection conn = ds.getConnection();
-    		    Statement stmt = conn.createStatement(); ) {
-    		    int rv = stmt.executeUpdate( query1 );
-    		    System.out.println( "AddTask() returned " + rv );
-    		} catch ( SQLException e ) {
-    		    //gets called when a user is passed in that isn't in the user table.
-    			e.printStackTrace();
-    		}
-		sqlCon.enforceForeignKeys(false);
-        ds.setConfig(sqlCon);
-    }
+//    public void AddTask(Task task) {
+//		sqlCon.enforceForeignKeys(true);
+//        ds.setConfig(sqlCon);
+//    	String DateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(task.getDueDate());
+//    	String query1 = "INSERT INTO task " +
+//    			"( description, observable, status, name, dueDate, priority ) Values ( '" +
+//    			task.getDescription().replaceAll("'", "''") + "', '" +
+//    			task.getObservable() + "', '" +
+//    			task.getStatus().toString().replaceAll("'", "''") + "', '" +
+//    			task.getTaskName().replaceAll("'", "''") + "', '" +
+//    			DateTime + "', '" +
+//    			task.getPriority() +"')";
+//    	try ( Connection conn = ds.getConnection();
+//    		    Statement stmt = conn.createStatement(); ) {
+//    		    int rv = stmt.executeUpdate( query1 );
+//    		    System.out.println( "AddTask() returned " + rv );
+//    		} catch ( SQLException e ) {
+//    		    //gets called when a user is passed in that isn't in the user table.
+//    			e.printStackTrace();
+//    		}
+//		sqlCon.enforceForeignKeys(false);
+//        ds.setConfig(sqlCon);
+//    }
 
     /**
      * Add a new task to the database.
@@ -677,43 +687,44 @@ public class DataBase {
         }
         
         /**
+         * OLD CODE 3-24-2022-jmitchel
          * Grab all tasks within the Database
          * 
          * This will eventually have a parameter int to grab by user id
          * @return ArrayList<Task>
          */
-        public ArrayList<Task> SelectAllTasks(){
-    		sqlCon.enforceForeignKeys(true);
-            ds.setConfig(sqlCon);
-        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
-        	Task blankTask = new Task();
-        	String query1 = "SELECT * FROM task ORDER BY observable DESC, priority DESC, dueDate ASC";
-        	try ( Connection conn = ds.getConnection();
-        		    Statement stmt = conn.createStatement(); ) {
-        		    ResultSet rs = stmt.executeQuery( query1 );
-        		    while (rs.next()){
-        		    blankTask = new Task();
-        		    blankTask.setTaskID(rs.getInt("taskID"));
-        		    blankTask.setDescription(rs.getString("description"));
-        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
-        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
-        		    blankTask.setTaskName(rs.getString("name"));
-        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
-        		    blankTask.setDueDate(date1);
-        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
-        		    tasksOnList.add(blankTask);
-        		    }
-        		    System.out.println( "SelectAllTasks() returned " + rs );
-        		} catch ( SQLException e ) {
-        			e.printStackTrace();
-        		}
-        		  catch ( ParseException p ) {
-        			p.printStackTrace();
-        		}
-    		sqlCon.enforceForeignKeys(false);
-            ds.setConfig(sqlCon);
-        	return tasksOnList;
-        }
+//        public ArrayList<Task> SelectAllTasks(){
+//    		sqlCon.enforceForeignKeys(true);
+//            ds.setConfig(sqlCon);
+//        	ArrayList<Task> tasksOnList = new ArrayList<Task>();
+//        	Task blankTask = new Task();
+//        	String query1 = "SELECT * FROM task ORDER BY observable DESC, priority DESC, dueDate ASC";
+//        	try ( Connection conn = ds.getConnection();
+//        		    Statement stmt = conn.createStatement(); ) {
+//        		    ResultSet rs = stmt.executeQuery( query1 );
+//        		    while (rs.next()){
+//        		    blankTask = new Task();
+//        		    blankTask.setTaskID(rs.getInt("taskID"));
+//        		    blankTask.setDescription(rs.getString("description"));
+//        		    blankTask.setObservable(Boolean.valueOf(rs.getString("observable")));
+//        		    blankTask.setStatus(TaskStatus.valueOf(rs.getString("status")));
+//        		    blankTask.setTaskName(rs.getString("name"));
+//        		    Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("dueDate"));
+//        		    blankTask.setDueDate(date1);
+//        		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
+//        		    tasksOnList.add(blankTask);
+//        		    }
+//        		    System.out.println( "SelectAllTasks() returned " + rs );
+//        		} catch ( SQLException e ) {
+//        			e.printStackTrace();
+//        		}
+//        		  catch ( ParseException p ) {
+//        			p.printStackTrace();
+//        		}
+//    		sqlCon.enforceForeignKeys(false);
+//            ds.setConfig(sqlCon);
+//        	return tasksOnList;
+//        }
 
         /**
          * Grab all tasks within the Database

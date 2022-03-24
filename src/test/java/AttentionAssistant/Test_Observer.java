@@ -24,30 +24,40 @@ public class Test_Observer {
 	Observer nonDefaultObserver;
 	Observer copyObserver;
 	Task testActiveTask;
+	DataBase db;
+	Pomodoro_Timer pomodoro;
+	Notification_System notificationSystem;
 	
 	@BeforeEach
 	void setup() {
-	//Observer object creation
-	int testObserver_ID= 999;
-	int testObserverScore= 100;
-	int testThreshold= 100;
-	Date testDT_Gathered= new Date(1220227200L * 1000);
-	int testEyeScore= 100;
+		db= new DataBase();
+		db.DatabaseSetUp();
+		
+		//Observer object creation
+		int testObserver_ID= 999;
+		int testObserverScore= 100;
+		int testThreshold= 100;
+		Date testDT_Gathered= new Date(1220227200L * 1000);
+		int testEyeScore= 100;
 	
-	defaultObserver= new Observer();
-	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore);
-	copyObserver= new Observer(nonDefaultObserver);
+		defaultObserver= new Observer();
+		nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore);
+		copyObserver= new Observer(nonDefaultObserver);
 
-	//Task object creation
-	int testTaskID = 999;
-	String testDescription = "bear migration";
-	boolean testObservable = true;
-	TaskStatus testStatus = TaskStatus.OPEN;
-	String testName = "This is a test Name";
-	Date testDate = new Date(1220227200L * 1000);
-	boolean testPriority = true;
+		//Task object creation
+		int testTaskID = 1;
+		String testDescription = "bear migration";
+		boolean testObservable = true;
+		TaskStatus testStatus = TaskStatus.OPEN;
+		String testName = "This is a test Name";
+		Date testDate = new Date(1220227200L * 1000);
+		boolean testPriority = true;
 
-	testActiveTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
+		testActiveTask = new Task(testTaskID, testDescription, testObservable, testStatus, testName, testDate, testPriority);
+	
+		pomodoro = new Pomodoro_Timer();
+	
+		notificationSystem= new Notification_System(1);
 	
 	}
 	
@@ -293,11 +303,15 @@ public class Test_Observer {
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     
+    
+    //Tests the Observer's monitor function
     @Test
-    @DisplayName("<Observer> monitory function")
+    @DisplayName("<Observer> monitor function")
     void observerMonitor() throws IOException {
-    	defaultObserver.monitor(testActiveTask);
-    	
+    	notificationSystem.db= db;
+    	Observer monitorObserver= new Observer(defaultObserver); 
+    	monitorObserver.monitor(testActiveTask, db, notificationSystem, pomodoro);
+    	System.out.println(monitorObserver.getObserverScore());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

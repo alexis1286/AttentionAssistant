@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import AttentionAssistant.Pomodoro_Timer.Work_Break;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.IIndexWord;
@@ -153,12 +154,9 @@ public class Observer{
 	 * send the appropriate notification
 	 * @throws IOException 
 	 */
-	protected void monitor(Task activeTask
-//			,DataBase db
-//			,Notification_System notification_System
-//			,PomodoroTimer pTimer
-			) throws IOException {	
-		
+	protected void monitor(Task activeTask ,DataBase db, Notification_System notification_System, Pomodoro_Timer pTimer
+			) throws IOException {
+
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
 			
 			System.out.println("Task Description: " + activeTask.getDescription());
@@ -178,45 +176,78 @@ public class Observer{
 			
 			//Start tracking Objects
 			mouseTracker.startTracking();
-			eyeMovementTracker.startTracking();  
-			keyBoardTracker.startTracking(keyWords);
+			
+			//Will uncomment later -jmitchell
+			//eyeMovementTracker.startTracking();  
+			//keyBoardTracker.startTracking(keyWords);
+			
 			osEventsTracker.startTracking();
 			internetTracker.startTracking(keyWords, startTime);
+
+			//CODE FOR TESTING WEIGHTS:
+			//Sets the mouseTrackerScore to 100
+			mouseTracker.setMouseScore(-1);
+			
+			//Sets the eyeMovementTrackerScore to 100
+			//eyeMovementTracker.setEyeMovementScore(100);
+			
+			//Sets the keyboardTrackerScore to 100
+			keyBoardTracker.setKeyBoardScore(-1);
+			
+			//Sets the osEventsScore to 100
+			//osEventsTracker.setOSEventsScore(100);
+			
+			//Sets the internetTrackerScore to 100
+			//internetTracker.setInternetScore(100);
+
+			//Sets the threshold
+			this.setThreshold(50);
 			
 			//Set up for Eye-movement-tracker profile
-			//this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
+			this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
 			
-			System.out.println("\nMouse Tracker: " + mouseTracker.getMouseScore() + 
+			//This will eventually be commented out
+			System.out.println("\nMouse Tracker: " + 
+			//this will eventually be changed to mouseTracker.getMouseScore()
+					mouseTracker.getDefaultMouseScore() +
 			//this will eventually be changed to eyeMovementTracker.getWeightedEyeMovementScore()
- 					"\neyeMovementTracker: " + eyeMovementTracker.getEyeMovementScore() +
- 					"\nkeyBoardTracker: " + keyBoardTracker.getKeyBoardScore() + 
-    				"\nosEventsTracker: " + osEventsTracker.getOSEventsScore() +
- 					"\ninternetTracker: " + internetTracker.getInternetScore());
+ 					"\nEye Movement Tracker: " + eyeMovementTracker.getEyeMovementScore() +
+ 					"\nKeyBoard Tracker: " + keyBoardTracker.getKeyBoardScore() + 
+    				"\nOSEvents Tracker: " + osEventsTracker.getOSEventsScore() +
+ 					"\nInternet Tracker: " + internetTracker.getInternetScore());
 
-			/**
+			
 			//calculation of the observer score
-			this.setObserverScore(calculateObserverScore(mouseMovementTracker.getMouseScore(),
-			//this will eventually be changed to eyeMovementTracker.getWeightedEyeMovementScore()
- 			eyeMovementTracker.getEyeMovementScore(),
+			this.setObserverScore(calculateObserverScore(
+			//mouseTracker.getMouseScore(),
+			mouseTracker.getDefaultMouseScore(),
+			eyeMovementTracker.getWeightedEyeMovementScore(activeTask, db),
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
-			internetTracker.getInternetScore())
+			internetTracker.getInternetScore()));
+			
 			//set the Date and Time the score was Gathered
 			this.setDTGathered(new Date(System.currentTimeMillis()));
-			*/
 
+			//write to database
+			db.AddObserver(this, activeTask.getTaskID());
+			
 			
 			/**
 			 * Check if user is focused on task when they should be working or
 			 * hyperfocusing when they should be off task
 			 */
+			//Primarily used for testing
+			//Work_Break observerWB = Work_Break.valueOf("Null");
 			
-			/**
+			//Stores the pTimerWork_Break status into the Work_Break observerWB
+			Work_Break observerWB = pTimer.getWorkBreakStatus();
+			
 			//pomo is on work timer
-			if(pTimer.getWorkBreakStatus() == Work_Break.WORK) {
+			if(observerWB.toString() == "Work") {
 				//on task
 				if(this.observerScore >= this.threshold){
-					notifiation_System.allGood();
+					notification_System.allGood();
 				}
 				//off task
 				else{
@@ -224,7 +255,7 @@ public class Observer{
 				}
 			}
 			//pomo is on break timer
-			else if (pTimer.getWorkBreakStatus() == Work_Break.BREAK) {
+			else if (observerWB.toString() == "Break") {
 				//on task
 				if(this.observerScore >= this.threshold){
 					notification_System.selfCare();
@@ -237,7 +268,7 @@ public class Observer{
 			//pomo is null/paused
 			else{
 				//on task
-				if(this.observerScore >= this.threhold){
+				if(this.observerScore >= this.threshold){
 					notification_System.resumePomo();
 				}
 				//off task
@@ -245,11 +276,9 @@ public class Observer{
 					notification_System.isNull();
 				}
 			}
-			*/
-			//Write to Database
-			/**
-			 * db.add(this, activeTask.getTaskID());
-			 */
+			
+			
+			 
 			}
 	
 	
@@ -350,10 +379,60 @@ public class Observer{
 	private int calculateObserverScore(int mouseMovementsScore, int eyeMovementScore, 
 			int keyBoardScore, int osEventsScore, int internetScore){
 		
-		int observerScore = (int) (0.2 * mouseMovementsScore + 0.2 * eyeMovementScore + 
-				0.2 * keyBoardScore + 0.2 * osEventsScore +  0.2 * internetScore);
 		
-		return observerScore;
+		double mouseWeight = 0.05;
+		double eyeWeight = 0.25;
+		double keyBoardWeight = 0.2;
+		double OSWeight = 0.25;
+		double internetWeight = 0.25;
+
+		double totalWeight= (mouseWeight * 100) + 
+				(eyeWeight * 100) + 
+				(keyBoardWeight * 100) + 
+				(OSWeight * 100) + 
+				(internetWeight * 100);
+
+		if (mouseMovementsScore == -1)
+		{
+			totalWeight= totalWeight - (mouseWeight*100);
+			mouseMovementsScore = 0;
+		}
+		
+		if (eyeMovementScore == -1)
+		{
+			totalWeight= totalWeight - (eyeWeight*100);
+			eyeMovementScore = 0;
+		}
+		
+		if (keyBoardScore == -1)
+		{
+			totalWeight= totalWeight - (keyBoardWeight*100);
+			keyBoardScore = 0;
+		}
+		
+		if (osEventsScore == -1)
+		{
+			totalWeight= totalWeight - (OSWeight*100);
+			osEventsScore = 0;
+		}
+		
+		if (internetScore == -1)
+		{
+			totalWeight= totalWeight - (internetWeight*100);
+			internetScore = 0;
+		}
+		
+		if (totalWeight ==0) {
+			totalWeight= 1;
+		}
+		
+		int calcObserverScore = (int) ((mouseWeight * Double.valueOf(mouseMovementsScore)) 
+				+ (eyeWeight * Double.valueOf(eyeMovementScore)) 
+				+ (keyBoardWeight * Double.valueOf(keyBoardScore)) 
+				+ (OSWeight * Double.valueOf(osEventsScore)) 
+				+  (internetWeight * Double.valueOf(internetScore))/totalWeight);
+		
+		return calcObserverScore;
 	}
 	
 	  /** 
