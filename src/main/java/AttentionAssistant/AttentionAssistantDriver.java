@@ -235,8 +235,8 @@ public class AttentionAssistantDriver {
 			        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
-		        				User_Account UserAccount2 = db.Username_User_Account(usr);
-		        				int userid = UserAccount2.getUserID();
+		        				//User_Account UserAccount2 = db.Username_User_Account(usr);
+		        				int userid = UserAccount.getUserID();
 		        			
 		        				Settings sett = new Settings(db,userid);
 		        				
@@ -777,8 +777,8 @@ public class AttentionAssistantDriver {
 		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
-	        				User_Account UserAccount2 = db.Username_User_Account(usr);
-	        				int userid = UserAccount2.getUserID();
+	        				//User_Account UserAccount2 = db.Username_User_Account(usr);
+	        				int userid = UserAccount.getUserID();
 	        				
 	        				Settings sett = new Settings(db,userid);
 	        				
@@ -794,8 +794,8 @@ public class AttentionAssistantDriver {
 	        				addChildUser.setName(first);
 	        				db.AddUser_Account(addChildUser);
 	        				
-	        				User_Account UserAccount2 = db.Username_User_Account(usr);
-	        				int userid = UserAccount2.getUserID();
+	        				//User_Account UserAccount2 = db.Username_User_Account(usr);
+	        				int userid = UserAccount.getUserID();
 	        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
 	        				db.AddMedia(media1, userid);
 	        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
@@ -1034,8 +1034,8 @@ public class AttentionAssistantDriver {
 			        				addChildUser.setName(fn);
 	
 			        				db.AddUser_Account(addChildUser);
-			        				User_Account UserAccount2 = db.Username_User_Account(usr);
-			        				int userid = UserAccount2.getUserID();
+			        				//User_Account UserAccount2 = db.Username_User_Account(usr);
+			        				int userid = UserAccount.getUserID();
 			        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
 			        				db.AddMedia(media1, userid);
 			        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
