@@ -17,7 +17,7 @@ public class User_Account{
 	
 	//Instantiating empty User_Account Object
 	public User_Account() {
-		this.userID= 0;
+		this.userID= 1;
 		this.username= "";
 		this.password= "";
 		this.name= "";

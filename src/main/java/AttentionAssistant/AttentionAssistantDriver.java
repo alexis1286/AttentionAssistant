@@ -830,6 +830,7 @@ public class AttentionAssistantDriver {
 	        				frame.dispose();
 	        				success.dispose();
 	        				childPortal(userid,sett);
+	        		
 		        		}
 		        }});
 			 panel.add(ChildPortal);
