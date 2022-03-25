@@ -114,7 +114,12 @@ public class InternetTracker {
 				}
 			}
 			urlCount -= nullUrls; //For demo purposes
-			this.internetScore = combinedScore / urlCount;
+			
+			//Accounting for the case where all latestUrls throw an Http 404 error
+			if(urlCount != 0)
+				this.internetScore = combinedScore / urlCount;
+			else
+				this.internetScore = -1;
 		}
 		else {
 			this.internetScore = -1;
