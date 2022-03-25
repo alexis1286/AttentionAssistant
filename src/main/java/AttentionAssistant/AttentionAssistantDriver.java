@@ -981,8 +981,8 @@ public class AttentionAssistantDriver {
 	        		else {
 	        			db.DatabaseSetUp();
 	        			
-		        		User_Account UserAccount = db.Username_User_Account(usr);
-		        		Parent_Account ParentAccount = db.Username_Parent_Account(usr);
+		        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
+		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
 		        		User_Account addChildUser = new User_Account();
 		        		Parent_Account addParentUser = new Parent_Account();
 		        	
