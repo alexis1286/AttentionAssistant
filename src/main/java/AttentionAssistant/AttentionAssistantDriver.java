@@ -774,8 +774,7 @@ public class AttentionAssistantDriver {
 		        		//add one more to display question
 		        		//if questoins are right, do popup for change new passwrod
 		        		//another popup saying 1-2 questions wrong
-		        		
-		        		//TODO dispose frame when sucessful login
+		        
 		        		//TODO shouldnt be able to run if string is empty
 		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
@@ -1030,6 +1029,7 @@ public class AttentionAssistantDriver {
 		        					addChildUser.setUsername(usr);
 			        				addChildUser.setPassword(pwd);
 			        				addChildUser.setName(fn);
+	
 			        				db.AddUser_Account(addChildUser);
 			        				
 			        				int userid = UserAccount.getUserID();
@@ -1061,6 +1061,7 @@ public class AttentionAssistantDriver {
 			        				db.AddMedia(media13, userid);
 			        				
 			        				Settings sett = new Settings(userid);
+			        			
 			        				db.AddSettings(sett, userid);
 			        				
 			        				JFrame success = new JFrame();
@@ -1180,7 +1181,8 @@ public class AttentionAssistantDriver {
 			 * db.selectSettings(userID) will be called during the login process for a returning user
 			 */
 			
-			db.AddSettings(settings, userID); 
+			
+			//db.AddSettings(settings, userID); 
 			
 			try {
 				pm = new Priority_Manager(userID,db,observer, pomo);
