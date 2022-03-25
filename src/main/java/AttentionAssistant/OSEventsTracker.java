@@ -150,8 +150,8 @@ public class OSEventsTracker {
 	public int calculateOSEventsScore(int blCount, int wlCount) { //Calculations may need further adjustment
 		if(wlCount == 0)
 			return 0;
-		float weight = 3.50f;
-		return (int)(blCount == 0 ? 100 : Math.min(100, (wlCount / (blCount * weight)) * 100));
+		float weight = 3.0f;
+		return (int)(blCount == 0 ? 100 : Math.min(100, (wlCount / (wlCount + blCount * weight)) * 100));
 	}
 		
 	/**
