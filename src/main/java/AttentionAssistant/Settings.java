@@ -243,7 +243,7 @@ public class Settings {
 		this.ntbVisibilityIsLocked = false;
 		this.progReportVisibilityIsLocked = false;
 		this.avatarIsActive = true; 
-		this.textIsActive = true; 
+		this.textIsActive = false; 
 		this.audioIsActive = false;
 		this.textToSpeech = false; 
 		this.avatarFilePath = "avatarSelection/avatar_dino.png"; 
