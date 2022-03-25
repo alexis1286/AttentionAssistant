@@ -242,7 +242,7 @@ public class AttentionAssistantDriver {
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
 		        				
 		        				int userid = UserAccount.getUserID();
-		        				db.SelectSettings(userid);
+		        			
 		        				Settings sett = new Settings(db,userid);
 		        				
 		        				frame.dispose();
@@ -782,7 +782,7 @@ public class AttentionAssistantDriver {
 	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
 	        				
 	        				int userid = UserAccount.getUserID();
-	        				db.SelectSettings(userid);
+	        				
 	        				Settings sett = new Settings(db,userid);
 	        				
 	        				frame.dispose();
