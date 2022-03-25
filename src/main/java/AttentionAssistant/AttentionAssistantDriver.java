@@ -796,8 +796,37 @@ public class AttentionAssistantDriver {
 	        				db.AddUser_Account(addChildUser);
 	        				
 	        				int userid = UserAccount.getUserID();
-	        			
+	        		
+	        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
+	        				db.AddMedia(media1, userid);
+	        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
+	        				db.AddMedia(media2, userid);
+	        				Media media3 = new Media("happyThoughtMedia/231582875_f219808478_o.jpg");
+	        				db.AddMedia(media3, userid);
+	        				Media media4 = new Media("happyThoughtMedia/jVo.gif");
+	        				db.AddMedia(media4, userid);
+	        				Media media5 = new Media("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
+	        				db.AddMedia(media5, userid);
+	        				Media media6 = new Media("happyThoughtMedia/PB35.gif");
+	        				db.AddMedia(media6, userid);
+	        				Media media7 = new Media("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
+	        				db.AddMedia(media7, userid);
+	        				Media media8 = new Media("happyThoughtMedia/QHa.gif");
+	        				db.AddMedia(media8, userid);
+	        				Media media9 = new Media("happyThoughtMedia/max-lissenden-snYLMKphCf4-unsplash.jpg");
+	        				db.AddMedia(media9, userid);
+	        				Media media10 = new Media("happyThoughtMedia/Z2QS.gif");
+	        				db.AddMedia(media10, userid);
+	        				Media media11 = new Media("happyThoughtMedia/rod-long-ogWhdXOl5qY-unsplash.jpg");
+	        				db.AddMedia(media11, userid);
+	        				Media media12 = new Media("happyThoughtMedia/4OKm.gif");
+	        				db.AddMedia(media12, userid);
+	        				Media media13 = new Media("happyThoughtMedia/yusuf-onuk-uzZgdFKisng-unsplash.jpg");
+	        				db.AddMedia(media13, userid);
+	        				
 	        				Settings sett = new Settings(userid);
+	        				
+	        		
 	        				db.AddSettings(sett, userid);
 	        				
 	        				JFrame success = new JFrame();
@@ -1004,6 +1033,33 @@ public class AttentionAssistantDriver {
 			        				db.AddUser_Account(addChildUser);
 			        				
 			        				int userid = UserAccount.getUserID();
+			        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
+			        				db.AddMedia(media1, userid);
+			        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
+			        				db.AddMedia(media2, userid);
+			        				Media media3 = new Media("happyThoughtMedia/231582875_f219808478_o.jpg");
+			        				db.AddMedia(media3, userid);
+			        				Media media4 = new Media("happyThoughtMedia/jVo.gif");
+			        				db.AddMedia(media4, userid);
+			        				Media media5 = new Media("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
+			        				db.AddMedia(media5, userid);
+			        				Media media6 = new Media("happyThoughtMedia/PB35.gif");
+			        				db.AddMedia(media6, userid);
+			        				Media media7 = new Media("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
+			        				db.AddMedia(media7, userid);
+			        				Media media8 = new Media("happyThoughtMedia/QHa.gif");
+			        				db.AddMedia(media8, userid);
+			        				Media media9 = new Media("happyThoughtMedia/max-lissenden-snYLMKphCf4-unsplash.jpg");
+			        				db.AddMedia(media9, userid);
+			        				Media media10 = new Media("happyThoughtMedia/Z2QS.gif");
+			        				db.AddMedia(media10, userid);
+			        				Media media11 = new Media("happyThoughtMedia/rod-long-ogWhdXOl5qY-unsplash.jpg");
+			        				db.AddMedia(media11, userid);
+			        				Media media12 = new Media("happyThoughtMedia/4OKm.gif");
+			        				db.AddMedia(media12, userid);
+			        				Media media13 = new Media("happyThoughtMedia/yusuf-onuk-uzZgdFKisng-unsplash.jpg");
+			        				db.AddMedia(media13, userid);
+			        				
 			        				Settings sett = new Settings(userid);
 			        				db.AddSettings(sett, userid);
 			        				
@@ -1114,32 +1170,7 @@ public class AttentionAssistantDriver {
 			 * this will take place just once during user registration
 			 * will remove from driver after user registration is created
 			 */
-			Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
-			db.AddMedia(media1, userID);
-			Media media2 = new Media("happyThoughtMedia/78nF.gif");
-			db.AddMedia(media2, userID);
-			Media media3 = new Media("happyThoughtMedia/231582875_f219808478_o.jpg");
-			db.AddMedia(media3, userID);
-			Media media4 = new Media("happyThoughtMedia/jVo.gif");
-			db.AddMedia(media4, userID);
-			Media media5 = new Media("happyThoughtMedia/alex-vinogradov--wHZZ-cg7rk-unsplash.jpg");
-			db.AddMedia(media5, userID);
-			Media media6 = new Media("happyThoughtMedia/PB35.gif");
-			db.AddMedia(media6, userID);
-			Media media7 = new Media("happyThoughtMedia/daniel-sessler-9Nn21mIKP1w-unsplash.jpg");
-			db.AddMedia(media7, userID);
-			Media media8 = new Media("happyThoughtMedia/QHa.gif");
-			db.AddMedia(media8, userID);
-			Media media9 = new Media("happyThoughtMedia/max-lissenden-snYLMKphCf4-unsplash.jpg");
-			db.AddMedia(media9, userID);
-			Media media10 = new Media("happyThoughtMedia/Z2QS.gif");
-			db.AddMedia(media10, userID);
-			Media media11 = new Media("happyThoughtMedia/rod-long-ogWhdXOl5qY-unsplash.jpg");
-			db.AddMedia(media11, userID);
-			Media media12 = new Media("happyThoughtMedia/4OKm.gif");
-			db.AddMedia(media12, userID);
-			Media media13 = new Media("happyThoughtMedia/yusuf-onuk-uzZgdFKisng-unsplash.jpg");
-			db.AddMedia(media13, userID);
+			
 			
 			/**
 			 * get settings
