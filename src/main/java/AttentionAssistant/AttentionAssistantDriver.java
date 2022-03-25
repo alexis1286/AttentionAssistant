@@ -244,6 +244,7 @@ public class AttentionAssistantDriver {
 		        				int userid = UserAccount.getUserID();
 		        				db.SelectSettings(userid);
 		        				Settings sett = new Settings(db,userid);
+		        				
 		        				frame.dispose();
 		        				success.dispose();
 		        				childPortal(userid,sett);
@@ -783,6 +784,7 @@ public class AttentionAssistantDriver {
 	        				int userid = UserAccount.getUserID();
 	        				db.SelectSettings(userid);
 	        				Settings sett = new Settings(db,userid);
+	        				
 	        				frame.dispose();
 	        				success.dispose();
 	        				childPortal(userid,sett);
@@ -794,8 +796,10 @@ public class AttentionAssistantDriver {
 	        				db.AddUser_Account(addChildUser);
 	        				
 	        				int userid = UserAccount.getUserID();
-	        				Settings sett = new Settings(db,userid);
 	        			
+	        				Settings sett = new Settings(userid);
+	        				db.AddSettings(sett, userid);
+	        				
 	        				JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
 	        				
@@ -990,7 +994,7 @@ public class AttentionAssistantDriver {
 		        		if(userinput == "Child") {
 		        			if(pwd.equals(reenterPwd) == false) {
 		        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-			        			
+			        			//TODO make sure user cannot have a super short password
 			        		}
 		        			else {
 		        				if(UserAccount.getUsername().isEmpty() == true  &&  ParentAccount.getUsername().isEmpty() == true ) {
@@ -1000,8 +1004,9 @@ public class AttentionAssistantDriver {
 			        				db.AddUser_Account(addChildUser);
 			        				
 			        				int userid = UserAccount.getUserID();
-			        				Settings sett = new Settings(db,userid);
-			        			
+			        				Settings sett = new Settings(userid);
+			        				db.AddSettings(sett, userid);
+			        				
 			        				JFrame success = new JFrame();
 			        				JOptionPane.showMessageDialog(success, "Successfully Registered Child Account! Logging in now...");
 			        				
