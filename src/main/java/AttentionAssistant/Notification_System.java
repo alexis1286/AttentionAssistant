@@ -67,11 +67,11 @@ public class Notification_System {
 		boolean isIgnored=false;
 		Date date = new Date();
 		if(isAudioActive == true) {
-			audio.workTimeAudio();
+			audio.playNotificationType(type);
 		}
 		if(ttsActive == true) {
 			/* This will say whatever is in String text */
-			audio.playNotificationType(type);
+			audio.notificationTTS(text);
 		}
 		JPanel notifPanel = new JPanel();
 		notifPanel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));

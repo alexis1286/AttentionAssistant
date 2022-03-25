@@ -289,6 +289,7 @@ public class Observer{
 	 * @param activeTask - task that's used to generate keywords
 	 * @return ArrayList<String> keywords - ArrayList of keywords
 	 * @throws IOException 
+	 * @author ehols001
 	 */
 	protected ArrayList<String> keywordsGenerator(Task activeTask) throws IOException {
 		ArrayList<String> keywords = new ArrayList<String>();
@@ -309,6 +310,7 @@ public class Observer{
 	 * Stores each three or more letter word from the task description into a ArrayList
 	 * @param activeTask - task to get description from
 	 * @return ArrayList<String> - ArrayList of words from the task description
+	 * @author ehols001
 	 */
 	public ArrayList<String> filterTaskDescription(Task activeTask) {
 		ArrayList<String> filteredWords = new ArrayList<String>();
@@ -331,6 +333,7 @@ public class Observer{
 	 * @param dict - dictionary to get synonyms from
 	 * @param taskWords - list of filtered words from the task description
 	 * @param ArrayList<String> keywords - ArrayList of keywords
+	 * @author ehols001
 	 */
 	public void setKeywordSynonyms(IDictionary dict, ArrayList<String> taskWords, ArrayList<String> keywords) {
 		for(int i = 0; i < taskWords.size(); i++) {
@@ -363,6 +366,7 @@ public class Observer{
 	 * Removes any duplicate keywords from the keyword list
 	 * @param ArrayList<String> keywords
 	 * @return ArrayList<String> keywords
+	 * @author ehols001
 	 */
 	public ArrayList<String> removeDuplicateKeywords(ArrayList<String> keywords) {
 		Set<String> temp = new LinkedHashSet<>();
