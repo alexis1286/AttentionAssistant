@@ -56,7 +56,6 @@ public class AttentionAssistantDriver {
 	static JPanel cardPane;
     static CardLayout card;
     
-	static DataBase db = new DataBase();	
 	static Observer observer = new Observer();
 	static Priority_Manager pm;
 	static LineBorder line = new LineBorder(aa_purple, 2, true);
@@ -217,7 +216,7 @@ public class AttentionAssistantDriver {
 			 loginbut.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        		
-		        		
+		        		DataBase db = new DataBase();	
 		        		String pwd = new String(pass.getPassword());
 		        		String usr = new String(user.getText());
 		        	
@@ -236,23 +235,23 @@ public class AttentionAssistantDriver {
 			        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
-		        				
-		        				int userid = UserAccount.getUserID();
+		        				User_Account UserAccount2 = db.Username_User_Account(usr);
+		        				int userid = UserAccount2.getUserID();
 		        			
 		        				Settings sett = new Settings(db,userid);
 		        				
 		        				frame.dispose();
 		        				success.dispose();
-		        				childPortal(userid,sett);
+		        				childPortal(userid,sett,db);
 			        		}
 			        		else if (ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Parent account!! Logging in now...");
-		        				
-		        				int parentid = ParentAccount.getParentID();
+		        				Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
+		        				int parentid = ParentAccount2.getParentID();
 		        				frame.dispose();
 		        				success.dispose();
-		        				parentPortal(parentid);
+		        				parentPortal(parentid,db);
 			        		}
 			        		else {
 			        			JFrame errorframe = new JFrame();
@@ -691,7 +690,7 @@ public class AttentionAssistantDriver {
 			parentportal.setForeground(Color.WHITE);
 			parentportal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-
+		        		DataBase db = new DataBase();	
 		        		String pwd = new String("1");
 		        		String usr = new String("Test");
 		        		
@@ -706,18 +705,20 @@ public class AttentionAssistantDriver {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Parent Account Logging In!");
 	        				
-	        				int ParentID = ParentAccount.getParentID();
+	        				Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+	        				int ParentID = Parent_Account2.getParentID();
 	        				frame.dispose();
 	        				success.dispose();
-	        				parentPortal(ParentID);
+	        				parentPortal(ParentID,db);
 		        		}
 		        		else {
 		        			
 		        			addParentUser.setUsername(usr);
 		        			addParentUser.setPassword(pwd);
 		        			db.AddParent_Account(addParentUser);
-	        				
-	        				int ParentID = ParentAccount.getParentID();
+		        			
+		        			Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+	        				int ParentID = Parent_Account2.getParentID();
 	        				
 	        			
 	        				JFrame success = new JFrame();
@@ -725,7 +726,7 @@ public class AttentionAssistantDriver {
 	        				
 	        				frame.dispose();
 	        				success.dispose();
-	        				parentPortal(ParentID);
+	        				parentPortal(ParentID,db);
 		        		}
 		        		
 		        }});
@@ -755,7 +756,8 @@ public class AttentionAssistantDriver {
 			 ChildPortal.setForeground(aa_purple);
 			 ChildPortal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        	//open child portal
+		        		DataBase db = new DataBase();	
+		        		//open child portal
 		        		String pwd = new String("1");
 		        		String usr = new String("Test");
 		        		String first = new String("TestChild");
@@ -775,14 +777,16 @@ public class AttentionAssistantDriver {
 		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
-	        				
-	        				int userid = UserAccount.getUserID();
+	        				User_Account UserAccount2 = db.Username_User_Account(usr);
+	        				int userid = UserAccount2.getUserID();
 	        				
 	        				Settings sett = new Settings(db,userid);
 	        				
+	        				
+	        				System.out.print("this is theuser id" + userid);
 	        				frame.dispose();
 	        				success.dispose();
-	        				childPortal(userid,sett);
+	        				childPortal(userid,sett,db);
 		        		}
 		        		else {
 		        			addChildUser.setUsername(usr);
@@ -790,8 +794,8 @@ public class AttentionAssistantDriver {
 	        				addChildUser.setName(first);
 	        				db.AddUser_Account(addChildUser);
 	        				
-	        				int userid = UserAccount.getUserID();
-	        		
+	        				User_Account UserAccount2 = db.Username_User_Account(usr);
+	        				int userid = UserAccount2.getUserID();
 	        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
 	        				db.AddMedia(media1, userid);
 	        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
@@ -827,9 +831,10 @@ public class AttentionAssistantDriver {
 	        				JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
 	        				
+	        				System.out.print("this is theuser id" + userid);
 	        				frame.dispose();
 	        				success.dispose();
-	        				childPortal(userid,sett);
+	        				childPortal(userid,sett,db);
 	        		
 		        		}
 		        }});
@@ -996,7 +1001,7 @@ public class AttentionAssistantDriver {
 	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 	        accButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        	
+	        		DataBase db = new DataBase();	
 	        		String pwd = new String(passwordtext.getPassword());
 	        		String reenterPwd = new String(reenterpasswordtext.getPassword());
 	        		String usr = new String(usernametext.getText());
@@ -1011,11 +1016,12 @@ public class AttentionAssistantDriver {
 	        			db.DatabaseSetUp();
 	        			
 		        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
+		        		
 		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
 		        		User_Account addChildUser = new User_Account();
 		        		Parent_Account addParentUser = new Parent_Account();
 		        	
-		        		System.out.print("Here is the user acc " + UserAccount);
+		        		
 		        		if(userinput == "Child") {
 		        			if(pwd.equals(reenterPwd) == false) {
 		        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
@@ -1028,8 +1034,8 @@ public class AttentionAssistantDriver {
 			        				addChildUser.setName(fn);
 	
 			        				db.AddUser_Account(addChildUser);
-			        				
-			        				int userid = UserAccount.getUserID();
+			        				User_Account UserAccount2 = db.Username_User_Account(usr);
+			        				int userid = UserAccount2.getUserID();
 			        				Media media1 = new Media("happyThoughtMedia/gratisography-447H-free-stock-photo.jpg");
 			        				db.AddMedia(media1, userid);
 			        				Media media2 = new Media("happyThoughtMedia/78nF.gif");
@@ -1060,13 +1066,13 @@ public class AttentionAssistantDriver {
 			        				Settings sett = new Settings(userid);
 			        			
 			        				db.AddSettings(sett, userid);
-			        				
+			        				System.out.print("here is teh useracct" + userid);
 			        				JFrame success = new JFrame();
 			        				JOptionPane.showMessageDialog(success, "Successfully Registered Child Account! Logging in now...");
 			        				
 			        				frame.dispose();
 			        				success.dispose();
-			        				childPortal(userid,sett);
+			        				childPortal(userid,sett,db);
 		        					
 		        				}
 			        			else  {
@@ -1089,14 +1095,15 @@ public class AttentionAssistantDriver {
 			        				addParentUser.setUsername(usr);
 			        				addParentUser.setPassword(pwd);
 			        				db.AddParent_Account(addParentUser);
-			        				int Parentid = ParentAccount.getParentID();
+			        				Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
+			        				int Parentid = ParentAccount2.getParentID();
 			      				
 			        				JFrame errorframe = new JFrame();
 			        				JOptionPane.showMessageDialog(errorframe, "Successfully Registered Parent Account! Logging in now...");
 			        				
 			        				frame.dispose();
 			        				errorframe.dispose();
-			        				parentPortal(Parentid);
+			        				parentPortal(Parentid,db);
 		        				} 
 				      			else {
 					      				
@@ -1146,7 +1153,7 @@ public class AttentionAssistantDriver {
 			return panel;
 		}
 		
-		private static void parentPortal(int userID) {
+		private static void parentPortal(int userID, DataBase db) {
 			Parent_Account parent = new Parent_Account(userID,"username1","pw1");
 			Parent_Bar parentBar = new Parent_Bar(parent,db);
 			parentBar.run_parent_bar();
@@ -1156,7 +1163,7 @@ public class AttentionAssistantDriver {
 		static Negative_Thought_Burner ntb;
 		static Happy_Thought_Button htb;
 		static Free_Thought_Space fts;
-		private static void childPortal(int userID,Settings settings) {
+		private static void childPortal(int userID,Settings settings,DataBase db) {
 			
 			//Settings settings = new Settings(userID);
 			Nav_Bar navbar = new Nav_Bar(settings,db);
