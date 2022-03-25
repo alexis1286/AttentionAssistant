@@ -59,10 +59,6 @@ public class AttentionAssistantDriver {
 	static DataBase db = new DataBase();	
 	static Observer observer = new Observer();
 	static Priority_Manager pm;
-	static Pomodoro_Timer pomo = new Pomodoro_Timer();
-	static Negative_Thought_Burner ntb = new Negative_Thought_Burner();
-	static Happy_Thought_Button htb = new Happy_Thought_Button(db);
-	static Free_Thought_Space fts = new Free_Thought_Space();
 	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	public static void main(String[] args) throws Exception {
 		run_login();
@@ -1155,7 +1151,12 @@ public class AttentionAssistantDriver {
 			parentBar.run_parent_bar();
 		}
 		static Notification_System notif;
+		static Pomodoro_Timer pomo;
+		static Negative_Thought_Burner ntb;
+		static Happy_Thought_Button htb;
+		static Free_Thought_Space fts;
 		private static void childPortal(int userID,Settings settings) {
+			
 			//Settings settings = new Settings(userID);
 			Nav_Bar navbar = new Nav_Bar(settings,db);
 			try {
@@ -1166,6 +1167,10 @@ public class AttentionAssistantDriver {
             }
 			//db.DatabaseSetUp();
 					
+			pomo = new Pomodoro_Timer();
+			ntb = new Negative_Thought_Burner();
+			htb = new Happy_Thought_Button(db);
+			fts = new Free_Thought_Space();
 			/**
 			 * loading default happy media library into database 
 			 * this will take place just once during user registration
