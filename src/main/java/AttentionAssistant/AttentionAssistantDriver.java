@@ -247,8 +247,8 @@ public class AttentionAssistantDriver {
 			        		else if (ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Parent account!! Logging in now...");
-		        				Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
-		        				int parentid = ParentAccount2.getParentID();
+		        				//Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
+		        				int parentid = ParentAccount.getParentID();
 		        				frame.dispose();
 		        				success.dispose();
 		        				parentPortal(parentid,db);
@@ -705,8 +705,8 @@ public class AttentionAssistantDriver {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Parent Account Logging In!");
 	        				
-	        				Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
-	        				int ParentID = Parent_Account2.getParentID();
+	        				//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+	        				int ParentID = ParentAccount.getParentID();
 	        				frame.dispose();
 	        				success.dispose();
 	        				parentPortal(ParentID,db);
@@ -717,8 +717,8 @@ public class AttentionAssistantDriver {
 		        			addParentUser.setPassword(pwd);
 		        			db.AddParent_Account(addParentUser);
 		        			
-		        			Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
-	        				int ParentID = Parent_Account2.getParentID();
+		        			//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+	        				int ParentID = ParentAccount.getParentID();
 	        				
 	        			
 	        				JFrame success = new JFrame();
@@ -761,6 +761,7 @@ public class AttentionAssistantDriver {
 		        		String pwd = new String("1");
 		        		String usr = new String("Test");
 		        		String first = new String("TestChild");
+		        		
 		        		
 		        		
 		        		db.DatabaseSetUp();
@@ -1095,8 +1096,8 @@ public class AttentionAssistantDriver {
 			        				addParentUser.setUsername(usr);
 			        				addParentUser.setPassword(pwd);
 			        				db.AddParent_Account(addParentUser);
-			        				Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
-			        				int Parentid = ParentAccount2.getParentID();
+			        				//Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
+			        				int Parentid = ParentAccount.getParentID();
 			      				
 			        				JFrame errorframe = new JFrame();
 			        				JOptionPane.showMessageDialog(errorframe, "Successfully Registered Parent Account! Logging in now...");
