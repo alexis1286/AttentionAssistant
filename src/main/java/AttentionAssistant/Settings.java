@@ -290,7 +290,7 @@ public class Settings {
 		this.pmIsVisible = loadSettings.getPmIsVisible(); 
 		this.ftsIsVisible = loadSettings.getFtsIsVisible(); 
 		this.htbIsVisible = loadSettings.getHtbIsVisible(); 
-		this.ntbIsVisible = loadSettings.ntbIsVisible; 
+		this.ntbIsVisible = loadSettings.getNtbIsVisible(); 
 		this.progReportIsVisible = loadSettings.getProgReportIsVisible(); 
 		this.timerVisibilityIsLocked = loadSettings.getTimerVisibilityIsLocked();
 		this.pmVisibilityIsLocked = loadSettings.getPmVisibilityIsLocked();
@@ -309,7 +309,7 @@ public class Settings {
 		this.pomodoroIsLocked = loadSettings.getPomodoroIsLocked();
 		this.workPeriod = loadSettings.getWorkPeriod(); 
 		this.workPeriodIsLocked = loadSettings.getWorkPeriodIsLocked();
-		this.breakPeriod = loadSettings.breakPeriod; 
+		this.breakPeriod = loadSettings.getBreakPeriod(); 
 		this.breakPeriodIsLocked = loadSettings.getBreakPeriodIsLocked();
 		this.timeShowing = loadSettings.getTimeShowing(); 
 		this.ftsIsActive = loadSettings.getFtsIsActive(); 

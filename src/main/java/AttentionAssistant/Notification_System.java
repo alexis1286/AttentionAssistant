@@ -37,14 +37,14 @@ public class Notification_System {
 	User_Account user;
 	 
 	public Notification_System(int userID,DataBase db) throws IOException{
+		this.settings = new Settings(db,userID);
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
-		this.settings = new Settings(userID);
 		this.userID = userID;
-		this.isAudioActive = true;
-		this.ttsActive = true;
-		this.isAvatarActive = true;
-		this.avatarPath = "avatarSelection/avatar_dino.png";
+		this.isAudioActive = settings.getAudioIsActive();
+		this.ttsActive = settings.getTextToSpeech();
+		this.isAvatarActive = settings.getAvatarIsActive();
+		this.avatarPath = settings.getAvatarFilePath();
 		this.avatarSize = 100;
 		this.avatarAlwaysOn = false;
 		this.db = db;
@@ -53,23 +53,6 @@ public class Notification_System {
 		userName = user.getName();
 	}
 	
-	public Notification_System(Settings set,DataBase database) throws IOException{
-		this.timeDistracted = 0;
-		this.timeFocused = 0;
-		this.settings = set;
-		this.isAudioActive = set.getAudioIsActive();
-		this.ttsActive = set.getTextToSpeech();
-		this.isAvatarActive = set.getAvatarIsActive();
-		this.avatarPath = set.getAvatarFilePath();
-		this.avatarSize = set.getAvatarSize();
-		this.avatarAlwaysOn = set.getAlwaysOnScreen();
-		this.db = database;
-		this.user = db.SelectUser_Account(userID);
-		this.userName = user.getName();
-		this.userID = user.getUserID();
-		this.pm = new Priority_Manager(userID,db);
-		
-	}
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	int height = (int) screen.getHeight();
 	
@@ -326,7 +309,7 @@ public class Notification_System {
 	
 	public void workTime() {
 		//work period start
-String text = "";
+		String text = "";
 		
 		Random randomGenerator=new Random();
 		int randoNum = randomGenerator.nextInt(max) + min;

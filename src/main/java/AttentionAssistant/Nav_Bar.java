@@ -68,11 +68,11 @@ public class Nav_Bar{
 	public Nav_Bar() {
 		this.x_coord = 0;
 		this.y_coord = 0;
-		this.size = 0;
+		this.size = 50;
 		this.iconColor = Color.white;
 		this.iconOpacity = 100;
 		this.circleColor = aa_grey;
-		this.circleOpacity = 0;
+		this.circleOpacity = 100;
 		this.isVert = false;
 		this.isCollapsed = false;
 		this.pm_visible = false;
