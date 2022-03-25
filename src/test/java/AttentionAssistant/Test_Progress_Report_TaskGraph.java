@@ -1,4 +1,5 @@
 package AttentionAssistant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,6 @@ public class Test_Progress_Report_TaskGraph{
 	Task nonDefaultTask;
 	Observer nonDefaultObserver;
 	User_Account nonDefaultUser;
-	DataBase db = new DataBase();
 	
 	@BeforeEach
 	void setup() {
@@ -42,83 +42,106 @@ public class Test_Progress_Report_TaskGraph{
 	Date testDT_Gathered= new Date(1220227200L * 1000);
 
 	nonDefaultObserver= new Observer(testObserver_ID, testObserverScore, testThreshold, testDT_Gathered, testEyeScore);
-
-	
-	DataBase db = new DataBase();
-	db.DatabaseSetUp();
-	db.DeleteTask(5);
-
-	db.AddTask(nonDefaultTask, 1);
-	
-	Observer testObserver= new Observer(nonDefaultObserver);
-	
-	testObserver.setObserverScore(75);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220227200L * 1000));
-	db.AddObserver(testObserver, 5);
-
-	testObserver.setObserverScore(70);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220227500L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(65);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220227800L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(55);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220228100L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(40);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220228400L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(45);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220228700L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(55);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220229000L * 1000));
-	db.AddObserver(testObserver, 5);
-	
-	testObserver.setObserverScore(60);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220229300L * 1000));
-	db.AddObserver(testObserver, 5);
-
-	testObserver.setObserverScore(75);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220229600L * 1000));
-	db.AddObserver(testObserver, 5);
-
-	testObserver.setObserverScore(85);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220229900L * 1000));
-	db.AddObserver(testObserver, 5);
-
-	testObserver.setObserverScore(65);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220230200L * 1000));
-	db.AddObserver(testObserver, 5);
-
-	testObserver.setObserverScore(55);
-	testObserver.setThreshold(50);
-	testObserver.setDTGathered(new Date(1220230500L * 1000));
-	db.AddObserver(testObserver, 5);
 	}
 	
 	@Test
     @DisplayName("<Test_Progress_Report_TaskGraph> Display_Task_Graph")
     void Display_Task_Graph() {
+		DataBase db = new DataBase();
 		db.DatabaseSetUp();
-		Progress_Report_TaskGraph example = new Progress_Report_TaskGraph("Observer Score during " + nonDefaultTask.getTaskName() + " Graph");
-		example.Make_TaskGraph(db, nonDefaultTask);
+		User_Account newUser = new User_Account();
+		User_Account TaskGraphUser = new User_Account();
+		Task TaskGraph= new Task();
+		ArrayList<Task> GraphTaskList = new ArrayList<Task>();
+		
+		//add a new account to the database
+		newUser.setUsername("TaskGraphUser");
+		newUser.setPassword("TaskGraphPassword");
+		newUser.setName("TaskGraph");
+		db.AddUser_Account(newUser);
+		
+		//add a new user profile to the database
+		TaskGraphUser= db.SearchUser_Account("TaskGraphUser", "TaskGraphPassword");
+		
+		//add 5 new tasks to the database
+		TaskGraph.setTaskName("TaskGraph Task 1");
+		TaskGraph.setDescription("TaskGraph Task 1 Description");
+		TaskGraph.setObservable(true);
+		TaskGraph.setDueDate(new Date(System.currentTimeMillis()));
+		TaskGraph.setStatus(TaskStatus.CLOSED);
+		TaskGraph.setPriority(true);
+		db.AddTask(TaskGraph, TaskGraphUser.getUserID());
+		
+		Observer testObserver= new Observer(nonDefaultObserver);
+		
+		GraphTaskList = db.SelectAllTasks(TaskGraphUser.getUserID());
+		
+		TaskGraph = GraphTaskList.get(0);
+		
+		testObserver.setObserverScore(75);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220227200L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+		testObserver.setObserverScore(70);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220227500L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(65);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220227800L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(55);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220228100L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(40);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220228400L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(45);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220228700L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(55);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220229000L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+		
+		testObserver.setObserverScore(60);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220229300L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+		testObserver.setObserverScore(75);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220229600L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+		testObserver.setObserverScore(85);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220229900L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+		testObserver.setObserverScore(65);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220230200L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+		testObserver.setObserverScore(55);
+		testObserver.setThreshold(50);
+		testObserver.setDTGathered(new Date(1220230500L * 1000));
+		db.AddObserver(testObserver, TaskGraph.getTaskID());
+
+
+		db.DatabaseSetUp();
+		Progress_Report_TaskGraph example = new Progress_Report_TaskGraph("Observer Score during " + TaskGraph.getTaskName() + " Graph");
+		example.Make_TaskGraph(db, TaskGraph);
 		example.setAlwaysOnTop(true);  
 		example.pack();
 		example.setSize(600, 400);  
@@ -127,9 +150,8 @@ public class Test_Progress_Report_TaskGraph{
 		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(20L, TimeUnit.SECONDS);
 		while (System.nanoTime()< endTime)
 			{
-			
 			}
-		db.DeleteTask(5);
+		db.DeleteUser_Account(TaskGraphUser.getUserID());
     }
 
 	
