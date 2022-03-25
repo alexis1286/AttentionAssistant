@@ -275,7 +275,50 @@ public class Settings {
 	public Settings(DataBase db, int userID) {
 		
 		Settings loadSettings= db.SelectSettings(userID);
-		
+		this.settingsID = loadSettings.getSettingsID();
+		this.userID = userID;
+		this.iconCircles = loadSettings.getIconCircles(); 
+		this.icons = loadSettings.getIcons();
+		this.opacityCircles = loadSettings.getOpacityCircles(); 
+		this.opacityIcons = loadSettings.getOpacityIcons(); 
+		this.isCollapsed = loadSettings.getIsCollapsed(); 
+		this.xCoord = loadSettings.getXCoord();
+		this.yCoord = loadSettings.getYCoord(); 
+		this.isVertical = loadSettings.getIsVertical(); 
+		this.iconSize = loadSettings.getIconSize(); 
+		this.timerIsVisible = loadSettings.getTimerIsVisible(); 
+		this.pmIsVisible = loadSettings.getPmIsVisible(); 
+		this.ftsIsVisible = loadSettings.getFtsIsVisible(); 
+		this.htbIsVisible = loadSettings.getHtbIsVisible(); 
+		this.ntbIsVisible = loadSettings.ntbIsVisible; 
+		this.progReportIsVisible = loadSettings.getProgReportIsVisible(); 
+		this.timerVisibilityIsLocked = loadSettings.getTimerVisibilityIsLocked();
+		this.pmVisibilityIsLocked = loadSettings.getPmVisibilityIsLocked();
+		this.ftsVisibilityIsLocked = loadSettings.getFtsVisibilityIsLocked();
+		this.htbVisibilityIsLocked = loadSettings.getHtbVisibilityIsLocked();
+		this.ntbVisibilityIsLocked = loadSettings.getNtbVisibilityIsLocked();
+		this.progReportVisibilityIsLocked = loadSettings.getProgReportVisibilityIsLocked();
+		this.avatarIsActive = loadSettings.getAvatarIsActive(); 
+		this.textIsActive = loadSettings.getTextIsActive(); 
+		this.audioIsActive = loadSettings.getAudioIsActive();
+		this.textToSpeech = loadSettings.getTextToSpeech(); 
+		this.avatarFilePath = loadSettings.getAvatarFilePath(); 
+		this.alwaysOnScreen = loadSettings.getAlwaysOnScreen(); 
+		this.avatarSize = loadSettings.getAvatarSize(); 
+		this.pomodoroIsActive = loadSettings.getPomodoroIsActive(); 
+		this.pomodoroIsLocked = loadSettings.getPomodoroIsLocked();
+		this.workPeriod = loadSettings.getWorkPeriod(); 
+		this.workPeriodIsLocked = loadSettings.getWorkPeriodIsLocked();
+		this.breakPeriod = loadSettings.breakPeriod; 
+		this.breakPeriodIsLocked = loadSettings.getBreakPeriodIsLocked();
+		this.timeShowing = loadSettings.getTimeShowing(); 
+		this.ftsIsActive = loadSettings.getFtsIsActive(); 
+		this.ntbIsActive = loadSettings.getNtbIsActive(); 
+		this.isAutoLinked = loadSettings.getIsAutoLinked(); 
+		this.htbIsActive = loadSettings.getHtbIsActive(); 
+		this.ftsIsLocked = loadSettings.getFtsIsLocked();
+		this.ntbIsLocked = loadSettings.getNtbIsLocked();
+		this.htbIsLocked = loadSettings.getHtbIsLocked();
 	}
 	
 	 /**

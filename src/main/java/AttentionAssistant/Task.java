@@ -41,7 +41,7 @@ public class Task{
 	 * Instantiating empty Task object
 	 */
 	public Task() {
-		this.taskID= 0;
+		this.taskID = 1;
 		this.description = "";
 		this.observable = false;
 		this.status = TaskStatus.CLOSED;
