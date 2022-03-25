@@ -115,11 +115,30 @@ public class Notification_System {
 			
 		}else {
 			//display text in text bubble
+			JLabel textBox = new JLabel();
+			
+			BufferedImage textBubble = null;
+			try {
+				//gets circle image
+				textBubble = ImageIO.read(new File("images/textBubble.png"));
+			}catch(Exception e){
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			//add text to bubble			
 			Font font = new Font("Arial",Font.BOLD,16);
-			JLabel textBox = new JLabel(text,SwingConstants.CENTER);
-			textBox.setBackground(Color.white);
-			textBox.setForeground(Color.black);
-			textBox.setFont(font);
+
+			Graphics g = textBubble.getGraphics();
+			g.setFont(font);
+			g.setColor(Color.black);
+			int x=40,y=25;
+			for (String line : text.split("\n")) {
+				g.drawString(line,x,y);
+				y += 20;
+			}
+			textBox.setIcon(new ImageIcon(textBubble));
+	
 			notifPanel.add(textBox);
 		}
 		//display notification, return isIgnored
