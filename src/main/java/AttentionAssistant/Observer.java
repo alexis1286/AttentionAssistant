@@ -382,45 +382,45 @@ public class Observer{
 			int keyBoardScore, int osEventsScore, int internetScore){
 		
 		
-		double mouseWeight = 0.05;
-		double eyeWeight = 0.25;
-		double keyBoardWeight = 0.2;
-		double OSWeight = 0.25;
-		double internetWeight = 0.25;
+		double mouseWeight = 5;
+		double eyeWeight = 25;
+		double keyBoardWeight = 20;
+		double OSWeight = 25;
+		double internetWeight = 25;
 
-		double totalWeight= (mouseWeight * 100) + 
-				(eyeWeight * 100) + 
-				(keyBoardWeight * 100) + 
-				(OSWeight * 100) + 
-				(internetWeight * 100);
+		double totalWeight= (mouseWeight) + 
+				(eyeWeight) + 
+				(keyBoardWeight) + 
+				(OSWeight) + 
+				(internetWeight);
 
 		if (mouseMovementsScore == -1)
 		{
-			totalWeight= totalWeight - (mouseWeight*100);
+			totalWeight= totalWeight - (mouseWeight);
 			mouseMovementsScore = 0;
 		}
 		
 		if (eyeMovementScore == -1)
 		{
-			totalWeight= totalWeight - (eyeWeight*100);
+			totalWeight= totalWeight - (eyeWeight);
 			eyeMovementScore = 0;
 		}
 		
 		if (keyBoardScore == -1)
 		{
-			totalWeight= totalWeight - (keyBoardWeight*100);
+			totalWeight= totalWeight - (keyBoardWeight);
 			keyBoardScore = 0;
 		}
 		
 		if (osEventsScore == -1)
 		{
-			totalWeight= totalWeight - (OSWeight*100);
+			totalWeight= totalWeight - (OSWeight);
 			osEventsScore = 0;
 		}
 		
 		if (internetScore == -1)
 		{
-			totalWeight= totalWeight - (internetWeight*100);
+			totalWeight= totalWeight - (internetWeight);
 			internetScore = 0;
 		}
 		
@@ -428,11 +428,11 @@ public class Observer{
 			totalWeight= 1;
 		}
 		
-		int calcObserverScore = (int) ((mouseWeight * Double.valueOf(mouseMovementsScore)) 
+		int calcObserverScore = (int) (((mouseWeight * Double.valueOf(mouseMovementsScore)) 
 				+ (eyeWeight * Double.valueOf(eyeMovementScore)) 
 				+ (keyBoardWeight * Double.valueOf(keyBoardScore)) 
 				+ (OSWeight * Double.valueOf(osEventsScore)) 
-				+  (internetWeight * Double.valueOf(internetScore))/totalWeight);
+				+  (internetWeight * Double.valueOf(internetScore)))/totalWeight);
 		
 		return calcObserverScore;
 	}
