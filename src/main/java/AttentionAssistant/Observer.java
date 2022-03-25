@@ -175,10 +175,10 @@ public class Observer{
 			long startTime = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 			
 			//Start tracking Objects
-			mouseTracker.startTracking();
+			eyeMovementTracker.startTracking();  
 			
 			//Will uncomment later -jmitchell
-			//eyeMovementTracker.startTracking();  
+			//mouseTracker.startTracking();
 			//keyBoardTracker.startTracking(keyWords);
 			
 			osEventsTracker.startTracking();
@@ -225,6 +225,8 @@ public class Observer{
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
 			internetTracker.getInternetScore()));
+			
+			System.out.println("Observer Score: " + this.getObserverScore());
 			
 			//set the Date and Time the score was Gathered
 			this.setDTGathered(new Date(System.currentTimeMillis()));
