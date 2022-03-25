@@ -90,7 +90,7 @@ public class Nav_Bar{
 	/*
 	 * create Nav_Bar with variables set by settings
 	 */
-	public Nav_Bar(Settings set) {
+	public Nav_Bar(Settings set,DataBase db) {
 		this.x_coord = set.getXCoord();
 		this.y_coord = set.getYCoord();
 		this.size = set.getIconSize();
@@ -115,16 +115,9 @@ public class Nav_Bar{
 	
 	JPanel icon_panel;
 	int counter;
-	Notification_System notifSystem;
-	public void run_nav_bar(int userID,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
+	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					notifSystem = new Notification_System(settings,db);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				pm.taskToObserve(userID,db, observer,notifSystem,pomo);
 				counter = 1;
 				count = 0;

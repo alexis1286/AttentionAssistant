@@ -50,9 +50,14 @@ public class Priority_Manager {
 	public void taskToObserve(int userID,DataBase db,Observer observer,Notification_System notifSystem,Pomodoro_Timer pomo) {
 		Task task = new Task();
 		
-		if(db.SelectAllTasks(userID).size() == 0) {
+		if(db.SelectAllTasks(userID).size() == 0 || observableTasks().size() == 0) {
 			task = firstTaskWindow(userID,db);
+
+		}else{
+			task = observableTasks().get(0);
 		}
+		
+		
 		activeTask = task;
 		sendToObserver(task,observer, db, notifSystem, pomo);
 	}
