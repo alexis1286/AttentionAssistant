@@ -25,6 +25,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
@@ -63,7 +64,6 @@ public class AttentionAssistantDriver {
 	static Happy_Thought_Button htb = new Happy_Thought_Button(db);
 	static Free_Thought_Space fts = new Free_Thought_Space();
 	static LineBorder line = new LineBorder(aa_purple, 2, true);
-	
 	public static void main(String[] args) throws Exception {
 		run_login();
 	
@@ -185,13 +185,6 @@ public class AttentionAssistantDriver {
 			JButton backButton = new JButton("Back");
 			
 			
-//			appLabel.setBounds(230, 40, 280, 100);
-//			appLabel.setForeground(new Color(255, 255, 255));
-//			appLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-//			//appLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//			panel.add(appLabel);
-			
-			
 			loglbl.setBounds(300, 80, 280, 100);
 			loglbl.setForeground(aa_purple);
 			loglbl.setFont(new Font("Dosis SemiBold",Font.BOLD,40));
@@ -265,7 +258,7 @@ public class AttentionAssistantDriver {
 		        	
 		        }});
 			 panel.add(loginbut);
-			 
+			 //TODO make this reset pass later 
 			 forgotpassbut.setBounds(260, 390, 200, 35);
 			 forgotpassbut.setHorizontalTextPosition(SwingConstants.CENTER);
 			 forgotpassbut.setVerticalTextPosition(SwingConstants.CENTER);
@@ -332,16 +325,31 @@ public class AttentionAssistantDriver {
 		     //TODO ADD BORDER WITHIN THE PM
 			return panel;
 		}
-		private static JPanel forgetPass(CardLayout card, JFrame frame) {
+		private static JPanel resetPass(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
 			panel.setLayout(null);
 		
+			//this is looking for an acc with this exact password and username, so i have to check the pass and user
+    		//keep user name
+    		//change password to security 1 &2 
+    		//add one more to display question
+    		//if questoins are right, do popup for change new passwrod
+    		//another popup saying 1-2 questions wrong
+			  String[] optionsToChoose = {"Apple", "Orange", "Banana", "Pineapple", "None of the listed"};
 
+			  String[] optionsToChoose2 = {"Apple", "Orange", "Banana", "Pineapple", "None of the listed"};
+
+
+		     
+			
 			JLabel username = new JLabel("Username: ");
-			JLabel oldpass = new JLabel("Old Password: ");
-			JLabel password = new JLabel("New Password: ");
-			JLabel password2 = new JLabel("Re-enter Password: ");
+			JComboBox<String> security1 = new JComboBox<>(optionsToChoose);
+			JLabel oldpass = new JLabel("Security Question 1: ");
+			JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
+			JLabel password = new JLabel("Security Question 2: ");
+		
+			
 		
 			JTextField usernametext = new JTextField();
 			JTextField oldpasstext = new JTextField();
@@ -452,13 +460,13 @@ public class AttentionAssistantDriver {
 	        passwordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
 	        passwordtext.setForeground(Color.BLACK);
 	        panel.add(passwordtext);
-	        
-	        
-	        password2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        password2.setBounds(250, 362, 270, 28);
-	        password2.setForeground(aa_purple);
-	        password2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-	        panel.add(password2);
+	      
+	       
+	        security1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        security1.setBounds(250, 362, 270, 28);
+	        security1.setForeground(aa_purple);
+	        security1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(security1);
 	        
 	        reenterpasswordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        reenterpasswordtext.setBounds(398, 362, 270, 28);
@@ -474,7 +482,14 @@ public class AttentionAssistantDriver {
 	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 	        accButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        	
+	        		JLabel jLabel = new JLabel();
+	  		        jLabel.setBounds(397, 500, 200, 37);
+
+	  		        String selectedFruit = "You selected " + security1.getItemAt(security1.getSelectedIndex());
+	  		        jLabel.setText(selectedFruit);
+	  		        panel.add(jLabel);
+			        
+	  			
 	        		String usr = new String(usernametext.getText());
 	        		String oldpasst = new String(oldpasstext.getText());
 	        		String pwd = new String(passwordtext.getPassword());
@@ -664,14 +679,6 @@ public class AttentionAssistantDriver {
 		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
 		        		Parent_Account addParentUser = new Parent_Account();
 		        	
-		        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
-		        		//keep user name
-		        		//change password to security 1 &2 
-		        		//add one more to display question
-		        		//if questoins are right, do popup for change new passwrod
-		        		//another popup saying 1-2 questions wrong
-		        		
-		        		//TODO dispose frame when sucessful login
 		        		
 		        		if(ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
@@ -734,12 +741,9 @@ public class AttentionAssistantDriver {
 		        		
 		        		db.DatabaseSetUp();
 		        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
-		        		//Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
 		        		User_Account addChildUser = new User_Account();
-		        		//Parent_Account addParentUser = new Parent_Account();
-		        	
-		        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
-		        		//keep user name
+		        
+		      		   //keep user name
 		        		//change password to security 1 &2 
 		        		//add one more to display question
 		        		//if questoins are right, do popup for change new passwrod
@@ -1053,10 +1057,16 @@ public class AttentionAssistantDriver {
 			Parent_Bar parentBar = new Parent_Bar(parent,db);
 			parentBar.run_parent_bar();
 		}
-		
+		static Notification_System notif;
 		private static void childPortal(int userID) {
 			Settings settings = new Settings(userID);
-			Nav_Bar navbar = new Nav_Bar(settings);
+			Nav_Bar navbar = new Nav_Bar(settings,db);
+			try {
+                notif = new Notification_System(userID,db);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
 			//db.DatabaseSetUp();
 					
 			/**
@@ -1102,7 +1112,7 @@ public class AttentionAssistantDriver {
 			
 			try {
 				pm = new Priority_Manager(userID,db,observer, pomo);
-				navbar.run_nav_bar(userID,db,navbar,settings,observer,pm,pomo,ntb,htb,fts);
+				navbar.run_nav_bar(userID,notif,db,navbar,settings,observer,pm,pomo,ntb,htb,fts);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1150,7 +1160,7 @@ public class AttentionAssistantDriver {
 	        LoginPanel = loginpage(card,frame);
 	        RegisterPanel = Registerpage(card,frame);
 	        WelcomePanel = welcomepage(card,frame);
-	        ForgotPanel = forgetPass(card,frame);
+	        ForgotPanel = resetPass(card,frame);
 	     
 	    	
 	    	
