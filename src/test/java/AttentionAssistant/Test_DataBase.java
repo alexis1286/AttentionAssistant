@@ -1152,17 +1152,23 @@ public class Test_DataBase {
      ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
      */
     
-    //@Test
-    //@Order(44)
-    //@DisplayName("<DataBase> DatabaseTestPlayGround")
-    //void DatabaseTestPlayground() {
+    @Test
+    @Order(48)
+    @DisplayName("<DataBase> DatabaseCleanUp")
+    void DatabaseCleanUp() {
     /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
      *	UpdatedUser.setUserID(1);
      *	UpdatedUser.setUsername("UpdatedUsername1234");
      *	UpdatedUser.setPassword("UpdatedPassword1234");
      *	db.UpdateUser_Account(UpdatedUser);
     */
-    	
-//    }
+    db.DeleteUser_Account(1);
+    db.DeleteUser_Account(2);
+    db.DeleteUser_Account(4);
+    db.DeleteParent_Account(1);
+    db.DeleteParent_Account(2);
+    db.DeleteParent_Account(4);
+    
+    }
 
 }
