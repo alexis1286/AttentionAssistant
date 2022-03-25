@@ -225,36 +225,44 @@ public class AttentionAssistantDriver {
 		        		String pwd = new String(pass.getPassword());
 		        		String usr = new String(user.getText());
 		        	
-		        		
-		        		db.DatabaseSetUp();
-		        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
-		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
-		        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
-		        
-		        		
-		        		//TODO dispose frame when sucessful login
-		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
-		        			JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
-	        				
-	        				int userid = UserAccount.getUserID();
-	        				frame.dispose();
-	        				success.dispose();
-	        				childPortal(userid);
-		        		}
-		        		else if (ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
-		        			JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Parent account!! Logging in now...");
-	        				
-	        				int parentid = ParentAccount.getParentID();
-	        				frame.dispose();
-	        				success.dispose();
-	        				parentPortal(parentid);
+		        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
+		        			JFrame errorframe = new JFrame();
+	        				JOptionPane.showMessageDialog(errorframe, "Please input Password or Username");
 		        		}
 		        		else {
-		        			JFrame errorframe = new JFrame();
-	        				JOptionPane.showMessageDialog(errorframe, "Incorrect Username/Password! Please try again!");
+		        			db.DatabaseSetUp();
+			        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
+			        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
+			        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
+			        
+			        		
+			        		//TODO dispose frame when sucessful login
+			        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
+			        			JFrame success = new JFrame();
+		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
+		        				
+		        				int userid = UserAccount.getUserID();
+		        				db.SelectSettings(userid);
+		        				Settings sett = new Settings(db,userid);
+		        				frame.dispose();
+		        				success.dispose();
+		        				childPortal(userid,sett);
+			        		}
+			        		else if (ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
+			        			JFrame success = new JFrame();
+		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Parent account!! Logging in now...");
+		        				
+		        				int parentid = ParentAccount.getParentID();
+		        				frame.dispose();
+		        				success.dispose();
+		        				parentPortal(parentid);
+			        		}
+			        		else {
+			        			JFrame errorframe = new JFrame();
+		        				JOptionPane.showMessageDialog(errorframe, "Incorrect Username/Password! Please try again!");
+			        		}
 		        		}
+		        	
 		        	
 		        }});
 			 panel.add(loginbut);
@@ -344,21 +352,25 @@ public class AttentionAssistantDriver {
 		     
 			
 			JLabel username = new JLabel("Username: ");
-			JComboBox<String> security1 = new JComboBox<>(optionsToChoose);
 			JLabel oldpass = new JLabel("Security Question 1: ");
-			JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
-			JLabel password = new JLabel("Security Question 2: ");
-		
+			JLabel ans1 = new JLabel("Answer: ");
+			JLabel password2 = new JLabel("Security Question 2: ");
+			JLabel ans2 = new JLabel("Answer: ");
 			
 		
+			JComboBox<String> security1 = new JComboBox<>(optionsToChoose);
+			JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
+			
 			JTextField usernametext = new JTextField();
-			JTextField oldpasstext = new JTextField();
+			
+			//JTextField oldpasstext = new JTextField(); combo box 1
 
 			
 			JLabel register = new JLabel("Forgot your password?");
 			
-			JPasswordField passwordtext = new JPasswordField();
-			JPasswordField reenterpasswordtext = new JPasswordField();
+			//JPasswordField passwordtext = new JPasswordField(); combo box 2
+			JPasswordField answer2text = new JPasswordField();
+			JPasswordField answer2text2 = new JPasswordField();
 			
 			JButton Child = new JButton("Child");
 		    JButton Parent = new JButton("Parent");
@@ -387,7 +399,7 @@ public class AttentionAssistantDriver {
 			panel.add(register);
 
 			
-			Child.setBounds(397, 100, 78, 40);
+			Child.setBounds(397, 80, 78, 40);
 			Child.setBorderPainted(false);
 			Child.setBackground(aa_purple);
 			Child.setForeground(Color.WHITE);
@@ -405,7 +417,7 @@ public class AttentionAssistantDriver {
 	        }});
 	        panel.add(Child);
 	        
-	        Parent.setBounds(525, 100, 95, 40);
+	        Parent.setBounds(525, 80, 95, 40);
 	        Parent.setBorderPainted(false);
 	        Parent.setBackground(aa_purple);
 	        Parent.setForeground(Color.WHITE);
@@ -425,54 +437,67 @@ public class AttentionAssistantDriver {
 		        
 	       
 			username.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			username.setBounds(310, 182, 270, 28);
+			username.setBounds(310, 152, 270, 28);
 			username.setForeground(aa_purple);
 			username.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 	        panel.add(username);
 	        
 			usernametext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			usernametext.setBounds(398, 182, 270, 28);
+			usernametext.setBounds(398, 152, 270, 28);
 		    usernametext.setForeground(Color.BLACK);
 	        usernametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
 	        panel.add(usernametext);
 	        
 	        oldpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        oldpass.setBounds(290, 242, 270, 28);
+	        oldpass.setBounds(250, 202, 270, 28);
 	        oldpass.setForeground(aa_purple);
 	        oldpass.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 	        panel.add(oldpass);
 	        
 	        
-	        oldpasstext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        oldpasstext.setBounds(398, 242, 270, 28);
-	        oldpasstext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
-	        oldpasstext.setForeground(Color.BLACK);
-	        panel.add(oldpasstext);
-	        
-	        password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        password.setBounds(280, 302, 270, 28);
-	        password.setForeground(aa_purple);
-	        password.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-	        panel.add(password);
-	        
-	        passwordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        passwordtext.setBounds(398, 302, 270, 28);
-	        passwordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
-	        passwordtext.setForeground(Color.BLACK);
-	        panel.add(passwordtext);
-	      
-	       
 	        security1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        security1.setBounds(250, 362, 270, 28);
-	        security1.setForeground(aa_purple);
-	        security1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        security1.setBounds(398, 202, 270, 28);
+	        security1.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        security1.setForeground(Color.BLACK);
 	        panel.add(security1);
 	        
-	        reenterpasswordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        reenterpasswordtext.setBounds(398, 362, 270, 28);
-	        reenterpasswordtext.setForeground(Color.BLACK);
-	        reenterpasswordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
-	        panel.add(reenterpasswordtext);
+	        ans1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        ans1.setBounds(340, 252, 270, 28);
+	        ans1.setForeground(aa_purple);
+	        ans1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(ans1);
+	        
+	        answer2text.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        answer2text.setBounds(398, 252, 270, 28);
+	        answer2text.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        answer2text.setForeground(Color.BLACK);
+	        panel.add(answer2text);
+	      
+	       
+	        password2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        password2.setBounds(250, 302, 270, 28);
+	        password2.setForeground(aa_purple);
+	        password2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(password2);
+	        
+	        security2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        security2.setBounds(398, 302, 270, 28);
+	        security2.setForeground(Color.BLACK);
+	        security2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(security2);
+	        
+	        
+	        ans2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        ans2.setBounds(340, 352, 270, 28);
+	        ans2.setForeground(aa_purple);
+	        ans2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(ans2);
+	        
+	        answer2text2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        answer2text2.setBounds(398, 352, 270, 28);
+	        answer2text2.setForeground(Color.BLACK);
+	        answer2text2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(answer2text2);
 	        
 	        
 	        accButton.setBounds(397, 425, 200, 37);
@@ -489,90 +514,90 @@ public class AttentionAssistantDriver {
 	  		        jLabel.setText(selectedFruit);
 	  		        panel.add(jLabel);
 			        
-	  			
-	        		String usr = new String(usernametext.getText());
-	        		String oldpasst = new String(oldpasstext.getText());
-	        		String pwd = new String(passwordtext.getPassword());
-	        		String reenterPwd = new String(reenterpasswordtext.getPassword());
-	        		
-	        		
-	        		db.DatabaseSetUp();
-	        		User_Account UserAccount = db.SearchUser_Account(usr,oldpasst);
-	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,oldpasst);
-	        		User_Account addChildUser = new User_Account();
-	        		Parent_Account addParentUser = new Parent_Account();
-	        	
-	        		
-	        		if(userinput == "Child") {
-	        			if(pwd.equals(reenterPwd) == false) {
-	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			
-		        		}
-	        			else {
-	        				if(UserAccount.getPassword().equals(oldpasst) == true && UserAccount.getUsername().equals(usr) == true) {
-	        					String firstname = UserAccount.getName();
-		        				int userid = UserAccount.getUserID();
-		        				
-		        				addChildUser.setName(firstname);
-		        				addChildUser.setUserID(userid);
-		        				addChildUser.setUsername(usr);
-		        				addChildUser.setPassword(pwd);
-		        				
-		        				db.UpdateUser_Account(addChildUser);
-		        				
-		        				JFrame success = new JFrame();
-		        				JOptionPane.showMessageDialog(success, "Successfully Updated Child Password! Logging in now...");
-		        				
-		        				frame.dispose();
-		        				success.dispose();
-		        				childPortal(userid);
-	        					
-	        				}
-		        			else  {
-		        			
-		        			
-		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			}
-	        			}
-	        				
-	        
-	        		}
-	        		else if(userinput == "Parent") {
-	        			if(pwd.equals(reenterPwd) == false) {
-	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			
-		        		}
-	        			else {
-	        				if(ParentAccount.getPassword().equals(oldpasst) == true && ParentAccount.getUsername().equals(usr) == true) {
-	        					
-		        				int parentid = ParentAccount.getParentID();
-		        						
-		        				addParentUser.setParentID(parentid);
-		        				addParentUser.setUsername(usr);
-		        				addParentUser.setPassword(pwd);
-		        				
-		        				db.UpdateParent_Account(addParentUser);
-		        				
-		        				JFrame success = new JFrame();
-		        				JOptionPane.showMessageDialog(success, "Successfully Updated Parent Password! Logging in now...");
-		        				
-		        				frame.dispose();
-		        				success.dispose();
-		        				parentPortal(parentid);
-	        					
-	        				}
-		        			else  {
-		        			
-		        			
-		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			}
-	        		}
-	        				
-	        		
-	        		}
-	        		else {
-	        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
-	        		}
+//	  			
+//	        		String usr = new String(usernametext.getText());
+//	        		String oldpasst = new String(oldpasstext.getText());
+//	        		String pwd = new String(passwordtext.getPassword());
+//	        		String reenterPwd = new String(answer2text2.getPassword());
+//	        		
+//	        		
+//	        		db.DatabaseSetUp();
+//	        		User_Account UserAccount = db.SearchUser_Account(usr,oldpasst);
+//	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,oldpasst);
+//	        		User_Account addChildUser = new User_Account();
+//	        		Parent_Account addParentUser = new Parent_Account();
+//	        	
+//	        		
+//	        		if(userinput == "Child") {
+//	        			if(pwd.equals(reenterPwd) == false) {
+//	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+//		        			
+//		        		}
+//	        			else {
+//	        				if(UserAccount.getPassword().equals(oldpasst) == true && UserAccount.getUsername().equals(usr) == true) {
+//	        					String firstname = UserAccount.getName();
+//		        				int userid = UserAccount.getUserID();
+//		        				
+//		        				addChildUser.setName(firstname);
+//		        				addChildUser.setUserID(userid);
+//		        				addChildUser.setUsername(usr);
+//		        				addChildUser.setPassword(pwd);
+//		        				
+//		        				db.UpdateUser_Account(addChildUser);
+//		        				
+//		        				JFrame success = new JFrame();
+//		        				JOptionPane.showMessageDialog(success, "Successfully Updated Child Password! Logging in now...");
+//		        				
+//		        				frame.dispose();
+//		        				success.dispose();
+//		        				childPortal(userid);
+//	        					
+//	        				}
+//		        			else  {
+//		        			
+//		        			
+//		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+//		        			}
+//	        			}
+//	        				
+//	        
+//	        		}
+//	        		else if(userinput == "Parent") {
+//	        			if(pwd.equals(reenterPwd) == false) {
+//	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+//		        			
+//		        		}
+//	        			else {
+//	        				if(ParentAccount.getPassword().equals(oldpasst) == true && ParentAccount.getUsername().equals(usr) == true) {
+//	        					
+//		        				int parentid = ParentAccount.getParentID();
+//		        						
+//		        				addParentUser.setParentID(parentid);
+//		        				addParentUser.setUsername(usr);
+//		        				addParentUser.setPassword(pwd);
+//		        				
+//		        				db.UpdateParent_Account(addParentUser);
+//		        				
+//		        				JFrame success = new JFrame();
+//		        				JOptionPane.showMessageDialog(success, "Successfully Updated Parent Password! Logging in now...");
+//		        				
+//		        				frame.dispose();
+//		        				success.dispose();
+//		        				parentPortal(parentid);
+//	        					
+//	        				}
+//		        			else  {
+//		        			
+//		        			
+//		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+//		        			}
+//	        		}
+//	        				
+//	        		
+//	        		}
+//	        		else {
+//	        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
+//	        		}
 	        	
 	        	
 	        }});
@@ -750,15 +775,17 @@ public class AttentionAssistantDriver {
 		        		//another popup saying 1-2 questions wrong
 		        		
 		        		//TODO dispose frame when sucessful login
-		        		
+		        		//TODO shouldnt be able to run if string is empty
 		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
 	        				
 	        				int userid = UserAccount.getUserID();
+	        				db.SelectSettings(userid);
+	        				Settings sett = new Settings(db,userid);
 	        				frame.dispose();
 	        				success.dispose();
-	        				childPortal(userid);
+	        				childPortal(userid,sett);
 		        		}
 		        		else {
 		        			addChildUser.setUsername(usr);
@@ -767,14 +794,14 @@ public class AttentionAssistantDriver {
 	        				db.AddUser_Account(addChildUser);
 	        				
 	        				int userid = UserAccount.getUserID();
-	        				
+	        				Settings sett = new Settings(db,userid);
 	        			
 	        				JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
 	        				
 	        				frame.dispose();
 	        				success.dispose();
-	        				childPortal(userid);
+	        				childPortal(userid,sett);
 		        		}
 		        }});
 			 panel.add(ChildPortal);
@@ -797,6 +824,7 @@ public class AttentionAssistantDriver {
 
 			return panel;
 		}
+		
 		private static JPanel Registerpage(CardLayout card,JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
@@ -946,77 +974,84 @@ public class AttentionAssistantDriver {
 	        		String fn = new String(firstnametext.getText());
 	        		
 	        		
-	        		
-	        		db.DatabaseSetUp();
-	        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
-	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
-	        		User_Account addChildUser = new User_Account();
-	        		Parent_Account addParentUser = new Parent_Account();
-	        	
-	        		System.out.print("Here is the user acc " + UserAccount);
-	        		if(userinput == "Child") {
-	        			if(pwd.equals(reenterPwd) == false) {
-	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			
-		        		}
-	        			else {
-	        				if(UserAccount.getUsername().isEmpty() == true  &&  ParentAccount.getUsername().isEmpty() == true ) {
-	        					addChildUser.setUsername(usr);
-		        				addChildUser.setPassword(pwd);
-		        				addChildUser.setName(fn);
-		        				db.AddUser_Account(addChildUser);
-		        				
-		        				int userid = UserAccount.getUserID();
-		        				
-		        			
-		        				JFrame success = new JFrame();
-		        				JOptionPane.showMessageDialog(success, "Successfully Registered Child Account! Logging in now...");
-		        				
-		        				frame.dispose();
-		        				success.dispose();
-		        				childPortal(userid);
-	        					
-	        				}
-		        			else  {
-		        			
-		        			
-		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			}
-	        			}
-	        				
-	        
-	        		}
-	        		else if(userinput == "Parent") {
-	        			if(pwd.equals(reenterPwd) == false) {
-	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-		        			
-		        		}
-	        			else {
-	        					if(UserAccount.getUsername().isEmpty() == true &&  ParentAccount.getUsername().isEmpty() == true) {
-		        				
-		        				addParentUser.setUsername(usr);
-		        				addParentUser.setPassword(pwd);
-		        				db.AddParent_Account(addParentUser);
-		        				int Parentid = ParentAccount.getParentID();
-		      				
-		        				JFrame errorframe = new JFrame();
-		        				JOptionPane.showMessageDialog(errorframe, "Successfully Registered Parent Account! Logging in now...");
-		        				
-		        				frame.dispose();
-		        				errorframe.dispose();
-		        				parentPortal(Parentid);
-	        				} 
-			      			else {
-				      				
-				      				 JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-				      			}
-	        		}
-	        				
-	        		
+	        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
+	        			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "Please input Password or Username");
 	        		}
 	        		else {
-	        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
+	        			db.DatabaseSetUp();
+	        			
+		        		User_Account UserAccount = db.Username_User_Account(usr);
+		        		Parent_Account ParentAccount = db.Username_Parent_Account(usr);
+		        		User_Account addChildUser = new User_Account();
+		        		Parent_Account addParentUser = new Parent_Account();
+		        	
+		        		System.out.print("Here is the user acc " + UserAccount);
+		        		if(userinput == "Child") {
+		        			if(pwd.equals(reenterPwd) == false) {
+		        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+			        			
+			        		}
+		        			else {
+		        				if(UserAccount.getUsername().isEmpty() == true  &&  ParentAccount.getUsername().isEmpty() == true ) {
+		        					addChildUser.setUsername(usr);
+			        				addChildUser.setPassword(pwd);
+			        				addChildUser.setName(fn);
+			        				db.AddUser_Account(addChildUser);
+			        				
+			        				int userid = UserAccount.getUserID();
+			        				Settings sett = new Settings(db,userid);
+			        			
+			        				JFrame success = new JFrame();
+			        				JOptionPane.showMessageDialog(success, "Successfully Registered Child Account! Logging in now...");
+			        				
+			        				frame.dispose();
+			        				success.dispose();
+			        				childPortal(userid,sett);
+		        					
+		        				}
+			        			else  {
+			        			
+			        			
+			        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+			        			}
+		        			}
+		        				
+		        
+		        		}
+		        		else if(userinput == "Parent") {
+		        			if(pwd.equals(reenterPwd) == false) {
+		        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+			        			
+			        		}
+		        			else {
+		        					if(UserAccount.getUsername().isEmpty() == true &&  ParentAccount.getUsername().isEmpty() == true) {
+			        				
+			        				addParentUser.setUsername(usr);
+			        				addParentUser.setPassword(pwd);
+			        				db.AddParent_Account(addParentUser);
+			        				int Parentid = ParentAccount.getParentID();
+			      				
+			        				JFrame errorframe = new JFrame();
+			        				JOptionPane.showMessageDialog(errorframe, "Successfully Registered Parent Account! Logging in now...");
+			        				
+			        				frame.dispose();
+			        				errorframe.dispose();
+			        				parentPortal(Parentid);
+		        				} 
+				      			else {
+					      				
+					      				 JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
+					      			}
+		        		}
+		        				
+		        		
+		        		}
+		        		else {
+		        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
+		        		}
 	        		}
+	        		
 	        	
 	        	
 	        }});
@@ -1058,8 +1093,8 @@ public class AttentionAssistantDriver {
 			parentBar.run_parent_bar();
 		}
 		static Notification_System notif;
-		private static void childPortal(int userID) {
-			Settings settings = new Settings(userID);
+		private static void childPortal(int userID,Settings settings) {
+			//Settings settings = new Settings(userID);
 			Nav_Bar navbar = new Nav_Bar(settings,db);
 			try {
                 notif = new Notification_System(userID,db);
@@ -1108,6 +1143,7 @@ public class AttentionAssistantDriver {
 			 * db.AddSettings(settings, userID) will be called from during the registration process for a new user
 			 * db.selectSettings(userID) will be called during the login process for a returning user
 			 */
+			
 			db.AddSettings(settings, userID); 
 			
 			try {
