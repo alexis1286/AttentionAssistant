@@ -17,14 +17,18 @@ import java.util.Map;
 
 import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 
 public class Parent_Bar{
+	private static int mouseX;
+	private static int mouseY;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	int sWidth = (int) screen.getWidth();
 	int sHeight = (int) screen.getHeight();
-	Color aa_grey = new Color(51,51,51);
-	Color aa_purple = new Color(137,31,191);
+	static Color aa_grey = new Color(51,51,51);
+	static Color aa_purple = new Color(137,31,191);
+	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	private int height = 750; 
 	private int width = 575;
 	private int counter;
@@ -57,6 +61,7 @@ public class Parent_Bar{
 		        frame.setLocation(0, 0);
 		        //makes frame and contents visible
 		        frame.setVisible(true);
+		        
 		        CardLayout cardLayout = new CardLayout();
 		        JPanel panel = new JPanel();
 		        panel.setBounds(0, 0, 1000, 1000);
@@ -117,25 +122,26 @@ public class Parent_Bar{
 	
 	private void accountManage() {
 		JFrame frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(Color.black);
 		frame.setPreferredSize(new Dimension(width, height));
+		JMenuBar titlePanel = titlePanel(frame);
+		
 		
 		int x = (int) ((screen.getWidth() - 570) /2);
 		int y = (int) ((screen.getHeight() - 750) /2);
 		frame.setLocation(x,y);
 		//set up title panel************************************
-		//JPanel titlePanel = titlePanel();
 		
-		//access guide*************************************
-		//change password
-		//Link child account
+		
 		JPanel linkPanel = linkPanel(frame);
 		
-		//frame.add(titlePanel);
+		frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
 		frame.getContentPane().add(linkPanel);
 		frame.pack();
 		frame.setVisible(true);
-		frame.setResizable(true);
+		frame.setResizable(false);
 	}
 	
 	private JPanel linkPanel(JFrame frame) {
@@ -555,5 +561,83 @@ public class Parent_Bar{
 		panel.repaint();
 		frame.revalidate();
 		frame.repaint();
+	}
+	
+	private static JMenuBar titlePanel(JFrame frame) {
+		JMenuBar title_panel = new JMenuBar();
+		title_panel.setBorder(line);
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+
+		JLabel title = new JLabel("The Attention Assistant");
+		title.setForeground(Color.white);
+		title.setBounds(0,0,200,200);
+		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
+		
+		/*
+		 * create icons to use as buttons for title bar
+		 */
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+		BufferedImage exit = null;
+		
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+			exit = ImageIO.read(new File("images/AA_exit.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		Icon close = new ImageIcon(c_img);
+		
+		JButton close_window = new JButton(close);
+		close_window.setBorderPainted(false);
+		close_window.setContentAreaFilled(false);
+		close_window.setFocusPainted(false);
+		close_window.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving 
+        		frame.dispose();
+        	
+        }});
+		
+		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Icon guideIcon = new ImageIcon(g_img);
+		
+		JButton guide = new JButton(guideIcon);
+		guide.setBorderPainted(false);
+		guide.setContentAreaFilled(false);
+		guide.setFocusPainted(false);
+		
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(225, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
+		
+		//returns panel
+		return title_panel;
+		
 	}
 }
