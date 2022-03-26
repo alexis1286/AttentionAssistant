@@ -753,6 +753,7 @@ public class DataBase {
         		    blankTask.setDueDate(date1);
         		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
         		    Date datenow = new Date(System.currentTimeMillis());
+        		    //Sets the Tasks Status to OverDue
         		    if (new Date(blankTask.getDueDate().getTime() + 86400000).compareTo(datenow) < 0 && blankTask.getStatus() == TaskStatus.OPEN) {
         		    	blankTask.setStatus(TaskStatus.OVERDUE);
         		    	overDueTasks.add(blankTask);
