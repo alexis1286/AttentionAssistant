@@ -1155,7 +1155,7 @@ public class AttentionAssistantDriver {
 		}
 		
 		private static void parentPortal(int userID, DataBase db) {
-			Parent_Account parent = new Parent_Account(userID,"username1","pw1");
+			Parent_Account parent = db.SelectParent_Account(userID);//***************************************************************************
 			Parent_Bar parentBar = new Parent_Bar(parent,db);
 			parentBar.run_parent_bar();
 		}
