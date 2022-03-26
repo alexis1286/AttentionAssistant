@@ -37,8 +37,6 @@ public class Parent_Bar{
 		this.parent = new Parent_Account(p);
 		this.childAccounts = db.Select_All_Users_Linked_Account(parent);
 		this.db = db;
-		
-		System.out.println(parent.toString());
 	}
 	
 	JPanel child_panel;
