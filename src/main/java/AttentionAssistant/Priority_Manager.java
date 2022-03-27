@@ -469,8 +469,6 @@ public class Priority_Manager {
 				taskWindow(userID,task,isAnEdit,db,model,table,frame);
 			}
 		}
-		frame.dispose();
-		open_pm(userID,db);
 	}
 	
 	/*
