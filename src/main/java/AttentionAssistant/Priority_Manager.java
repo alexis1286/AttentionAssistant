@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -59,16 +58,19 @@ public class Priority_Manager {
 		
 		
 		activeTask = task;
-		sendToObserver(task,observer, db, notifSystem, pomo);
+		sendToObserver(userID,task,observer, db, notifSystem, pomo);
 	}
 	
 	public Task getActiveTask() {
 		return activeTask;
 	}
 	
-	private void sendToObserver(Task task,Observer observer,DataBase db,Notification_System notifSystem,Pomodoro_Timer pomo) {
+	private void sendToObserver(int userID,Task task,Observer observer,DataBase db,Notification_System notifSystem,Pomodoro_Timer pomo) {
 		try {
 			observer.monitor(task,db,notifSystem,pomo);
+			Date timestamp = new Date();
+    		System.out.println(timestamp);
+    		db.AddEvent(userID, timestamp, "started");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,9 +279,13 @@ public class Priority_Manager {
         		model.removeRow(row);
         		for(int i=0;i<Task_List.size();i++) {
         			if(Task_List.get(i).getTaskID()==id) {
-        				Task_List.remove(i);
         				Task task = Task_List.get(i);
+        				task.setStatus(TaskStatus.CLOSED);
+        				Task_List.remove(i);
         				db.UpdateTask(task);
+        				Date timestamp = new Date();
+    	        		System.out.println(timestamp);
+    	        		db.AddEvent(userID, timestamp, "complete");
         			}
         		}
         }});
@@ -545,6 +551,11 @@ public class Priority_Manager {
         		if(isAnEdit == true) {
         			new_task.setTaskID(task.getTaskID());
         			database.UpdateTask(new_task);
+        			if(new_task.getStatus() == TaskStatus.CLOSED) {
+        				Date timestamp = new Date();
+                		System.out.println(timestamp);
+                		database.AddEvent(userID, timestamp, "complete");
+        			}
         			for(int i=0;i<Task_List.size();i++) {
         				if(Task_List.get(i).getTaskID() == new_task.getTaskID()) {
         					Task_List.get(i).setTaskName(new_task.getTaskName());
@@ -571,6 +582,9 @@ public class Priority_Manager {
 	        		v.add(new_task.getObservable());
 	        		//add row and populate it with object v
 	        		model.addRow(v);
+	        		Date timestamp = new Date();
+	        		System.out.println(timestamp);
+	        		database.AddEvent(userID, timestamp, "add");
         		}
         		
         		//gets table to display changes
@@ -756,6 +770,9 @@ public class Priority_Manager {
         		
     			//adds task to database
         		database.AddTask(new_task,userID);
+        		Date timestamp = new Date();
+        		System.out.println(timestamp);
+        		database.AddEvent(userID, timestamp, "add");
         		task_window.dispose();
         }});
 		
