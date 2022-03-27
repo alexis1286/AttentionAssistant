@@ -8,7 +8,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +71,36 @@ public class Notification_System {
 		frame.setAlwaysOnTop(true);
 		frame.setUndecorated(true);
 		frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
-		frame.setLocation(10,height-200);
+		frame.setLocation(10,height-220);
+		
+		JMenuBar close = new JMenuBar();
+		close.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+		close.setBorderPainted(false);
+		
+		BufferedImage exit = null;
+		try {
+			exit = ImageIO.read(new File("images/exit_circle.png"));
+		}catch(Exception e){
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		Image c_img = exit.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton exitButton = new JButton();
+		exitButton.setIcon(new ImageIcon(c_img));
+		exitButton.setContentAreaFilled(false);
+		exitButton.setFocusable(false);
+		exitButton.setBorderPainted(false);
+		exitButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving 
+        		frame.dispose();
+        	
+        }});
+		
+		close.add(exitButton);
+		frame.setJMenuBar(close);
 		
 		AudioHandler audio = new AudioHandler();
 		boolean isIgnored=false;
@@ -148,6 +180,7 @@ public class Notification_System {
 	
 			notifPanel.add(textBox);
 		}
+		
 		//display notification, return isIgnored
 		Notification notif = new Notification();
 		notif.setDT_Notification(date);

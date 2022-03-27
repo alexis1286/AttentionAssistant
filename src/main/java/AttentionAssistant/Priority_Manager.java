@@ -1003,22 +1003,6 @@ public class Priority_Manager {
 	//***************************************************************************************************************
 	//FUNCTIONALITY TO ADD
 	//***************************************************************************************************************
-	/**
-	 * Sort Tasks
-	 * @param
-	 */
-	private void sortTasks (){
-		//observable then non
-		//by priority
-		//by date
-		
-		
-		//Task_list.sort(priority);
-		
-		//Task_list.sort(dueDate);
-		
-		//Task_list.set(index, task);
-	}
 	
 	/**
 	 * Export Task List to Parent Portal
