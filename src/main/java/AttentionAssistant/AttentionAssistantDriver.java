@@ -56,7 +56,6 @@ public class AttentionAssistantDriver {
 	static JPanel cardPane;
     static CardLayout card;
     
-	static Observer observer = new Observer();
 	static Priority_Manager pm;
 	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	public static void main(String[] args) throws Exception {
@@ -1168,12 +1167,6 @@ public class AttentionAssistantDriver {
 			
 			//Settings settings = new Settings(userID);
 			Nav_Bar navbar = new Nav_Bar(settings,db);
-			try {
-                notif = new Notification_System(userID,db);
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
 			//db.DatabaseSetUp();
 					
 			pomo = new Pomodoro_Timer();
@@ -1199,8 +1192,9 @@ public class AttentionAssistantDriver {
 			//db.AddSettings(settings, userID); 
 			
 			try {
-				pm = new Priority_Manager(userID,db,observer, pomo);
-				navbar.run_nav_bar(userID,notif,db,navbar,settings,observer,pm,pomo,ntb,htb,fts);
+				notif = new Notification_System(userID,db,pomo);
+				pm = new Priority_Manager(userID,db,pomo);
+				navbar.run_nav_bar(userID,notif,db,navbar,settings,pm,pomo,ntb,htb,fts);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

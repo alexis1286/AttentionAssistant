@@ -2040,7 +2040,7 @@ public class Settings {
 	/**
 	 * RHS display for Priority Manager
 	 */
-	private void createPriorityManagerPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager priority_manager, DataBase db, Observer observer) {
+	private void createPriorityManagerPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager priority_manager, DataBase db) {
 		
 		JPanel pm_panel = new JPanel();
 		pm_panel.setLayout(new BoxLayout(pm_panel, BoxLayout.Y_AXIS));
@@ -2460,7 +2460,7 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Observer observer, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
+	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -2562,7 +2562,7 @@ public class Settings {
 				 */
 				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel, settingsChanges);
-				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db, observer);
+				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db);
 				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer, priority_manager );
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db);								
 				

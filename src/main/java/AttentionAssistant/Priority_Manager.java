@@ -3,6 +3,9 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +30,11 @@ public class Priority_Manager {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	JTable table;
+	private Notification_System notifSystem;
+	private Pomodoro_Timer pomo;
+	private static int mouseX;
+	private static int mouseY;
+	Observer observer;
 	int selectedTask;
 	int height = 700;
 	int width = 550;
@@ -34,47 +42,59 @@ public class Priority_Manager {
 	Task activeTask;
 	
 	private ArrayList<Task> Task_List;
-	private Task working_task;
 	
-	public Priority_Manager(int userID, DataBase db) throws IOException {
+	public Priority_Manager(int userID, DataBase db,Notification_System notifSystem) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		populateTaskList(userID,db);
+		this.notifSystem = notifSystem;
+		this.pomo = new Pomodoro_Timer();
 	}
 	
-	public Priority_Manager(int userID,DataBase db,Observer observer,Pomodoro_Timer pomo) throws IOException {
+	public Priority_Manager(int userID,DataBase db,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		populateTaskList(userID,db);
-	}
-	
-	public void taskToObserve(int userID,DataBase db,Observer observer,Notification_System notifSystem,Pomodoro_Timer pomo) {
-		Task task = new Task();
-		
-		if(db.SelectAllTasks(userID).size() == 0 || observableTasks().size() == 0) {
-			task = firstTaskWindow(userID,db);
-
-		}else{
-			task = observableTasks().get(0);
-		}
-		
-		
-		activeTask = task;
-		sendToObserver(userID,task,observer, db, notifSystem, pomo);
+		this.pomo = pomo;
+		this.notifSystem = new Notification_System(userID,db,pomo);
 	}
 	
 	public Task getActiveTask() {
 		return activeTask;
 	}
 	
-	private void sendToObserver(int userID,Task task,Observer observer,DataBase db,Notification_System notifSystem,Pomodoro_Timer pomo) {
-		try {
-			observer.monitor(task,db,notifSystem,pomo);
-			Date timestamp = new Date();
-    		System.out.println(timestamp);
-    		db.AddEvent(userID, timestamp, "started");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void observeTask(int userID,Task task,DataBase db,boolean flag) throws IOException {
+		if(flag == false) {
+			populateTaskList(userID,db);
+			ArrayList<Task> oTasks = observableTasks();
+			if(oTasks.size() != 0) {
+				task = oTasks.get(0);
+			}else {
+				firstTaskWindow(userID, db);
+				populateTaskList(userID,db);
+				oTasks.clear();
+				oTasks = observableTasks();
+				task = oTasks.get(0);
+			}
 		}
+		//deconstruct old observer*************************************************************************
+		
+		for(int i=0;i<Task_List.size();i++) {
+			if(Task_List.get(i).getTaskID() == task.getTaskID()) {
+				Task_List.get(i).setPriority(true);
+				Task tempT = Task_List.get(i);
+				db.UpdateTask(tempT);
+			}else {
+				Task_List.get(i).setPriority(false);
+				Task tempT = Task_List.get(i);
+				db.UpdateTask(tempT);
+			}
+		}
+		
+		task.setPriority(true);
+		observer = new Observer();
+		observer.monitor(task, db, notifSystem, pomo);
+		Date timestamp = new Date();
+		db.AddEvent(userID, timestamp, "started");
+		activeTask = task;
+		System.out.println("Task "+task.getTaskName()+" activated");
+		//refresh table
 	}
 	
 	public Task getNonObservableTask() {
@@ -111,7 +131,7 @@ public class Priority_Manager {
 				frame.setPreferredSize(new Dimension(width, height));
 				
 				//build title panel
-				JPanel titlePanel = titlePanel(frame);
+				JMenuBar titlePanel = titlePanel(frame,'P');
 				titlePanel.setBorder(line);
 				
 				//build table panel
@@ -204,7 +224,7 @@ public class Priority_Manager {
 		table = new JTable(model);
 		model.addColumn("Task");
 		model.addColumn("Description");
-		model.addColumn("Priority");
+		model.addColumn("Active");
 		model.addColumn("Due Date");
 		model.addColumn("Observable");
 		model.addColumn("ID");
@@ -274,8 +294,12 @@ public class Priority_Manager {
 		check_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//markComplete();
-        		row = table.getSelectedRow();
-        		int id = (int)table.getModel().getValueAt(row, 5);
+        		
+        		
+        		int rowSel = table.getSelectedRow();
+        		System.out.println(table.getModel().getValueAt(rowSel,0));
+        		int id = Task_List.get(rowSel).getTaskID();
+        		System.out.println(Task_List.get(rowSel).getTaskName());
         		model.removeRow(row);
         		for(int i=0;i<Task_List.size();i++) {
         			if(Task_List.get(i).getTaskID()==id) {
@@ -301,7 +325,7 @@ public class Priority_Manager {
 		add_button.setFocusPainted(false);
 		add_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		addTask(userID,db,model,table);
+        		addTask(userID,db,model,table,frame);
         }});
 		
 		
@@ -316,12 +340,12 @@ public class Priority_Manager {
 		edit_button.setFocusPainted(false);
 		edit_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		editTask(userID,db,model,table);
+        		editTask(userID,db,model,table,frame);
         }});
 		
 		
 		/*
-		 * Edit task
+		 * calendar style view of tasks
 		 */
 		Icon calendar_icon;
 		calendar_icon = new ImageIcon("images/calendar.png");
@@ -331,7 +355,44 @@ public class Priority_Manager {
 		calendar_button.setFocusPainted(false);
 		calendar_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//open calendar view of tasks
+        		//open calendar view of tasks*********************************************
+        }});
+		
+		/*
+		 * mark task as active
+		 */
+		Icon active_icon;
+		active_icon = new ImageIcon("images/active.png");
+		JButton active_button = new JButton(active_icon);
+		active_button.setContentAreaFilled(false);
+		active_button.setBorderPainted(false);
+		active_button.setFocusPainted(false);
+		active_button.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//make task active
+        		row = table.getSelectedRow();
+        		int id = (int) table.getModel().getValueAt(row, 5);
+        		for(int i=0;i<Task_List.size();i++) {
+        			if(Task_List.get(i).getTaskID() == id) {
+        				Task task = Task_List.get(i);
+        				boolean flag = true;
+        				try {
+							observeTask(userID, task, db,flag);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+        			}
+        		}
+        		for(int j=0;j<table.getRowCount();j++) {
+        			if(j != row) {
+        				table.setValueAt(false, j,2);
+        			}else {
+        				table.setValueAt(true, j,2);
+        			}
+        		}
+        		table.revalidate();
+        		//deconstruct old observer******************************************************************
         }});
 		
 		
@@ -359,6 +420,8 @@ public class Priority_Manager {
 		bpane.add(add_button);
 		//add edit button to bpane
 		bpane.add(edit_button);
+		//add make active button to bpane
+		bpane.add(active_button);
 		
 		//set layout of panel so components display vertically
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
@@ -395,7 +458,7 @@ public class Priority_Manager {
 	/*
 	 * Edit task
 	 */
-	private void editTask(int userID,DataBase db,DefaultTableModel model,JTable table) {
+	private void editTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame) {
 		//get task info and pass it to the task window
 		row = table.getSelectedRow();
 		int id = (int) table.getModel().getValueAt(row, 5);
@@ -403,7 +466,7 @@ public class Priority_Manager {
 			if(Task_List.get(i).getTaskID() == id) {
 				Task task = Task_List.get(i);
 				boolean isAnEdit = true;
-				taskWindow(userID,task,isAnEdit,db,model,table);
+				taskWindow(userID,task,isAnEdit,db,model,table,frame);
 			}
 		}
 	}
@@ -411,10 +474,10 @@ public class Priority_Manager {
 	/*
 	 * Add Task
 	 */
-	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table) {
+	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame) {
 		Task task = new Task();
 		boolean isAnEdit = false;
-		taskWindow(userID,task,isAnEdit,db,model,table);
+		taskWindow(userID,task,isAnEdit,db,model,table,frame);
 	}
 	
 	//******************************************************************************************************************
@@ -423,7 +486,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table) {
+	private void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -435,7 +498,7 @@ public class Priority_Manager {
 		task_window.setVisible(true);
 		
 		//makes custom title panel
-		JPanel title_panel = titlePanel(task_window);
+		JMenuBar title_panel = titlePanel(task_window,'A');
 		
 		//creates panel for task information form
 		JPanel tpane = new JPanel();
@@ -565,6 +628,7 @@ public class Priority_Manager {
         					Task_List.get(i).setObservable(new_task.getObservable());
         				}
         			}
+        			
         			table.setValueAt(new_task.getTaskName(), row, 0);
         			table.setValueAt(new_task.getDescription(), row, 1);
         			table.setValueAt(new_task.getPriority(), row, 2);
@@ -582,14 +646,27 @@ public class Priority_Manager {
 	        		v.add(new_task.getObservable());
 	        		//add row and populate it with object v
 	        		model.addRow(v);
+	        		
 	        		Date timestamp = new Date();
 	        		System.out.println(timestamp);
 	        		database.AddEvent(userID, timestamp, "add");
         		}
+        		if(new_task.getPriority() == true) {
+        			try {
+						observeTask(userID, new_task, database, true);
+						activeTask = new_task;
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+        		}
         		
         		//gets table to display changes
         		table.revalidate();
+        		frame.dispose();
+        		open_pm(userID,database);
         		task_window.dispose();
+        		
         }});
 		
 		//make cancel button, closes task window without adding
@@ -662,7 +739,7 @@ public class Priority_Manager {
 		task_window.setVisible(true);
 		
 		//makes custom title panel
-		JPanel title_panel = titlePanel(task_window);
+		JMenuBar title_panel = titlePanel(task_window,'O');
 		
 		//creates panel for task information form
 		JPanel tpane = new JPanel();
@@ -834,84 +911,96 @@ public class Priority_Manager {
 	/*creates title panel with close and guide buttons
 	 * 
 	 */
-	private JPanel titlePanel(JFrame frame) {
-		JPanel panel = new JPanel();
-		//panel.setBorder(line);
-		//aligns buttons in title panel from right -> left
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-		//makes title panel background grey
-		panel.setBackground(aa_grey);
-		//creates border and sets to purple
-		panel.setBorder(BorderFactory.createLineBorder(aa_purple));
-		//creates label 
-		JLabel title = new JLabel("Priority Manager");
-		//makes font color white
-		title.setForeground(Color.white);
-		//sets font, size, and bold
-		title.setFont(new Font("Serif", Font.BOLD, 18));
+	private JMenuBar titlePanel(JFrame frame,char key) {
+		String t = "";
+		switch (key) {
+        case 'P':  t = "Priority Manager";
+                 break;
+        case 'A':  t = "Add Task";
+                 break;
+        case 'O':  t = "Add Observable Task";
+                 break;
+		}
 		
-		//reads in images for the close and guide buttons
+		JMenuBar title_panel = new JMenuBar();
+		title_panel.setBorder(line);
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+
+		JLabel title = new JLabel(t);
+		title.setForeground(Color.white);
+		title.setBounds(0,0,200,200);
+		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
+		
+		/*
+		 * create icons to use as buttons for title bar
+		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
+		BufferedImage exit = null;
+		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
+			exit = ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		//creates close button with close icon and no background
 		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 		Icon close = new ImageIcon(c_img);
+		
 		JButton close_window = new JButton(close);
 		close_window.setBorderPainted(false);
 		close_window.setContentAreaFilled(false);
 		close_window.setFocusPainted(false);
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//close window without saving info
+        		//close window without saving 
         		frame.dispose();
+        	
         }});
 		
-		//create guide button with guide icon and no background
 		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		Icon guideIcon = new ImageIcon(g_img);
+		
 		JButton guide = new JButton(guideIcon);
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
 		
-		//adds title JLabel, empty space, then guide button and close button
-		panel.add(title);
-		panel.add(Box.createRigidArea(new Dimension(275, 0)));
-		panel.add(guide);
-		panel.add(close_window);
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(30, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
 		
 		//returns panel
-		return panel;
+		return title_panel;
 	}
 	
 	//***************************************************************************************************************
 	//FUNCTIONALITY TO ADD
 	//***************************************************************************************************************
-	/**
-	 * Sort Tasks
-	 * @param
-	 */
-	private void sortTasks (){
-		//observable then non
-		//by priority
-		//by date
-		
-		
-		//Task_list.sort(priority);
-		
-		//Task_list.sort(dueDate);
-		
-		//Task_list.set(index, task);
-	}
 	
 	/**
 	 * Export Task List to Parent Portal
