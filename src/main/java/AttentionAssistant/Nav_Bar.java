@@ -116,10 +116,16 @@ public class Nav_Bar{
 	
 	JPanel icon_panel;
 	int counter;
-	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
+	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				pm.taskToObserve(userID,db, observer,notifSystem,pomo);
+				Task task = new Task();
+				try {
+					pm.observeTask(userID, task, db, false);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
@@ -142,7 +148,7 @@ public class Nav_Bar{
 		        panel.setLayout(cardLayout);
 		        
 		        //panel for buttons
-		        icon_panel = iconPanel(userID,cardLayout,db,navbar,settings,observer,pm,pomo,ntb,htb,fts,frame);
+		        icon_panel = iconPanel(userID,cardLayout,db,navbar,settings,pm,pomo,ntb,htb,fts,frame);
 		        panel.add("iPanel", icon_panel);
 		        cardLayout.show(panel, "iPanel");
 		        frame.getContentPane().add(panel);
@@ -153,21 +159,21 @@ public class Nav_Bar{
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(userID,cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts,panel,frame);
+		        		rebuildPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts,panel,frame);
 		        	}});
 			}
 		});
 	}
 	
-	private void rebuildPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JPanel panel,JFrame frame) {
+	private void rebuildPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JPanel panel,JFrame frame) {
 		JPanel new_icon_panel = new JPanel();
 		if(counter % 2 != 0) {
-			new_icon_panel = iconPanel(userID,cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+			new_icon_panel = iconPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, frame);
 			panel.add("newIPanel",new_icon_panel);
 			cardLayout.show(panel, "newIPanel");
 			panel.remove(icon_panel);
 		}else {
-			icon_panel = iconPanel(userID,cardLayout,db, navbar, settings, observer, pm, pomo, ntb, htb, fts, frame);
+			icon_panel = iconPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, frame);
 			panel.add("iPanel",icon_panel);
 			cardLayout.show(panel, "iPanel");
 			panel.remove(new_icon_panel);
@@ -182,7 +188,7 @@ public class Nav_Bar{
 	/*
 	 * create panel that houses active & visible feature icons
 	 */
-	private JPanel iconPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Observer observer,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
+	private JPanel iconPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
 		JPanel panel = new JPanel();
 		//displays buttons vertically if true, horizontally is false
 		if(isVert == true) {
@@ -245,7 +251,7 @@ public class Nav_Bar{
 	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(userID, db, navbar, settings, observer, pm, pomo, ntb, htb, fts);
+	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts);
 	        }});
 	    	panel.add(settingsButton);
 		}

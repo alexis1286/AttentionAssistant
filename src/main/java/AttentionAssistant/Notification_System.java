@@ -35,8 +35,9 @@ public class Notification_System {
 	Priority_Manager pm;
 	private String userName;
 	User_Account user;
+	Pomodoro_Timer pomo;
 	 
-	public Notification_System(int userID,DataBase db) throws IOException{
+	public Notification_System(int userID,DataBase db,Pomodoro_Timer pomo) throws IOException{
 		this.settings = new Settings(db,userID);
 		this.timeDistracted = 0;
 		this.timeFocused = 0;
@@ -48,7 +49,7 @@ public class Notification_System {
 		this.avatarSize = 100;
 		this.avatarAlwaysOn = false;
 		this.db = db;
-		this.pm = new Priority_Manager(userID,db);
+		this.pomo = pomo;
 		user = db.SelectUser_Account(userID);
 		userName = user.getName();
 	}
@@ -57,6 +58,12 @@ public class Notification_System {
 	int height = (int) screen.getHeight();
 	
 	private void displayNotif(String text,String type) {
+		try {
+			this.pm = new Priority_Manager(userID,db,pomo);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JFrame frame = new JFrame();
 		frame.setAlwaysOnTop(true);
 		frame.setUndecorated(true);
