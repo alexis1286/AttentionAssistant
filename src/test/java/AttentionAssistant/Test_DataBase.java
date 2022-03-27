@@ -174,6 +174,7 @@ public class Test_DataBase {
     db.DeleteAllEventTypes();
     db.DeleteAllEvents();
     db.DeleteAllFTS_Colors();
+    db.DeleteAllWBList();
     }
 
     /**
@@ -1152,22 +1153,72 @@ public class Test_DataBase {
      ***************** END OF TEST EVENTS SYSTEM ADD & COUNT *****************
      */
     
+    /**
+     ***************** START OF TEST WBList ADD, DELETE, SELECT ALL *****************
+     */
     @Test
     @Order(48)
+    @DisplayName("<DataBase> DatabaseAddWBList")
+    void DatabaseAddWBList() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	db.AddWBlist("TestProcess1 True", true, UpdatedUser.getUserID());
+     	db.AddWBlist("TestProcess2 False", false, UpdatedUser.getUserID());
+     	db.AddWBlist("TestProcess3 True", true, UpdatedUser.getUserID());
+    	db.AddWBlist("TestProcess4 False", false, UpdatedUser.getUserID());
+    	db.AddWBlist("TestProcess5 Deleted", true, UpdatedUser.getUserID());
+      	UpdatedUser.setUserID(2);
+     	db.AddWBlist("TestProcess5 True", true, UpdatedUser.getUserID());
+    }
+    
+    @Test
+    @Order(49)
+    @DisplayName("<DataBase> DatabaseDeleteWB_List")
+    void DatabaseDeleteWBList() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+    	db.DeleteWB_List("TestProcess5 Deleted", true, UpdatedUser.getUserID());
+    	db.DeleteWB_List("TestProcess5 True", true, UpdatedUser.getUserID());
+    }    
+    
+    @Test
+    @Order(50)
+    @DisplayName("<DataBase> DatabaseSelectAllFromWBList")
+    void DatabaseSelectAllFromWBList() {
+    	User_Account UpdatedUser= new User_Account(nonDefaultUser);
+     	UpdatedUser.setUserID(1);
+     	ArrayList<String> testProcessesTrue = new ArrayList<String>();
+     	ArrayList<String> testProcessesFalse = new ArrayList<String>();
+     	ArrayList<String> testDataBaseProcesses = new ArrayList<String>();
+     	testProcessesTrue.add("TestProcess1 True");
+     	testProcessesTrue.add("TestProcess3 True");
+     	testProcessesFalse.add("TestProcess2 False");
+     	testProcessesFalse.add("TestProcess4 False");
+     	testDataBaseProcesses= db.SelectAllFromWBList(UpdatedUser.getUserID(), true);
+
+     	for (int i =0; i< testDataBaseProcesses.size(); i++) {        
+    		assertEquals(testProcessesTrue.get(i), testDataBaseProcesses.get(i), "testDataBaseProcesses " + i + " should be set to " + testProcessesTrue.get(i) + " but instead returned: " + testDataBaseProcesses.get(i));
+    		System.out.println(testDataBaseProcesses.size());
+     	}
+
+     	testDataBaseProcesses= db.SelectAllFromWBList(UpdatedUser.getUserID(), false);
+     	for (int i =0; i< testDataBaseProcesses.size(); i++) {        
+    		assertEquals(testProcessesFalse.get(i), testDataBaseProcesses.get(i), "testDataBaseProcesses " + i + " should be set to " + testProcessesFalse.get(i) + " but instead returned: " + testDataBaseProcesses.get(i));
+        }
+    }
+
+    @Test
+    @Order(51)
     @DisplayName("<DataBase> DatabaseCleanUp")
     void DatabaseCleanUp() {
-    /**	User_Account UpdatedUser= new User_Account(nonDefaultUser);
-     *	UpdatedUser.setUserID(1);
-     *	UpdatedUser.setUsername("UpdatedUsername1234");
-     *	UpdatedUser.setPassword("UpdatedPassword1234");
-     *	db.UpdateUser_Account(UpdatedUser);
-    */
     db.DeleteUser_Account(1);
     db.DeleteUser_Account(2);
     db.DeleteUser_Account(4);
     db.DeleteParent_Account(1);
     db.DeleteParent_Account(2);
     db.DeleteParent_Account(4);
+    db.DeleteAllEventTypes();
+
     
     }
 

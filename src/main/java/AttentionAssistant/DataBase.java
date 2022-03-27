@@ -205,6 +205,16 @@ public class DataBase {
     			"fk_userID INTEGER, " +
     			"color INTEGER, " +
     			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE) "; 
+
+    	/**
+         * Set up for Table BWList
+         */
+    	String queryWBList= "CREATE TABLE IF NOT EXISTS wbList ( " +
+    			"bwListID INTEGER PRIMARY KEY, " +
+    			"fk_userID INTEGER, " +
+    			"processName TEXT, " +
+     			 "white_Or_Black BOOLEAN, " +    			
+    			"CONSTRAINT fk_userID FOREIGN KEY (\"fk_userID\") REFERENCES \"user\"(\"userID\") ON DELETE CASCADE) "; 
     	
     	try (Connection conn = this.ds.getConnection();
    			Statement stmt = conn.createStatement(); ){
@@ -230,6 +240,8 @@ public class DataBase {
    		System.out.println( "CreateEventTable() returned " + rv10 );
    		int rv11 = stmt.executeUpdate(queryFTS_Color);
    		System.out.println( "CreateFTS_ColorTable() returned " + rv11 );
+   		int rv12 = stmt.executeUpdate(queryWBList);
+   		System.out.println( "CreateWB_ListTable() returned " + rv12 );
        } catch ( SQLException e ) {
            e.printStackTrace();
        }
@@ -753,7 +765,8 @@ public class DataBase {
         		    blankTask.setDueDate(date1);
         		    blankTask.setPriority(Boolean.valueOf(rs.getString("priority")));
         		    Date datenow = new Date(System.currentTimeMillis());
-        		    if (blankTask.getDueDate().compareTo(datenow) < 0 && blankTask.getStatus() == TaskStatus.OPEN) {
+        		    //Sets the Tasks Status to OverDue
+        		    if (new Date(blankTask.getDueDate().getTime() + 86400000).compareTo(datenow) < 0 && blankTask.getStatus() == TaskStatus.OPEN) {
         		    	blankTask.setStatus(TaskStatus.OVERDUE);
         		    	overDueTasks.add(blankTask);
         		    }
@@ -2091,5 +2104,101 @@ public class DataBase {
     ******* END OF FTS_Color Add, Delete, SelectAll, & Drop *******
     */
 
+   /**
+    ******* START OF WBLIST Add, Delete, SelectAll, & Drop *******
+    */
+   
+   /**
+    * Add a new WBList to the database.
+    * @param Color, User_Account
+    */
+   public void AddWBlist(String ProcessName, boolean white_Or_Black, int userID) {
+   	sqlCon.enforceForeignKeys(true);
+    ds.setConfig(sqlCon);
+   	String query1 = "INSERT INTO wbList " +
+   			"(fk_userID, processName, white_Or_Black) Values ( '" +
+   			userID + "', '" +
+   			ProcessName.replaceAll("'", "''") + "', '" +
+   			white_Or_Black+ "')";
+   	try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "AddWBList() returned " + rv );
+   		} catch ( SQLException e ) {
+   		    //gets called when a task is passed in that isn't in the task table.
+   			e.printStackTrace();
+   		}
+		sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+   
+   /**
+    * Delete a WB_List within the Database
+    *              * 
+    * @param String, boolean, User_Account
+    */
+   public void DeleteWB_List(String ProcessName, boolean white_Or_Black, int userID) {
+	   sqlCon.enforceForeignKeys(true);
+	   ds.setConfig(sqlCon);
+   	   String query1 = "DELETE FROM wbList WHERE fk_userID = '" + userID + 
+   			   "' AND processName = '" + ProcessName +
+   	   		   "' AND white_Or_Black = '" + Boolean.toString(white_Or_Black) + "'";
+   	   try ( Connection conn = ds.getConnection();
+   		    Statement stmt = conn.createStatement(); ) {
+   		    int rv = stmt.executeUpdate( query1 );
+   		    System.out.println( "DeleteWB_List() returned " + rv );
+   	   } catch ( SQLException e ) {
+   		    e.printStackTrace();
+   	   }
+   	   sqlCon.enforceForeignKeys(false);
+       ds.setConfig(sqlCon);
+   }
+   
+   /**
+    * Selects all WBlist processes within the Database depending upon the boolean
+    * 
+    * @param User_Account, boolean
+    * @return ArrayList<String>
+    */
+   public ArrayList<String> SelectAllFromWBList(int userID, boolean white_Or_Black){
+	   sqlCon.enforceForeignKeys(true);
+       ds.setConfig(sqlCon);
+	   ArrayList<String> Processes_On_List = new ArrayList<String>();
+	   String query1 = "SELECT * FROM wbList WHERE fk_userID = '" + userID + 
+			   "' AND white_Or_Black = '" + Boolean.toString(white_Or_Black) +"'";
+   		try ( Connection conn = ds.getConnection();
+		    Statement stmt = conn.createStatement(); ) {
+		    ResultSet rs = stmt.executeQuery( query1 );
+		    if (rs.isClosed()) {
+		    	return Processes_On_List;
+		    }
+		    while (rs.next()){
+    		Processes_On_List.add(new String(rs.getString("processName")));
+		    }		    
+   		}catch ( SQLException e ) {
+			e.printStackTrace();
+		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);	   
+	   return Processes_On_List;
+   }
+
+   /**
+    * Primarily used for JUNIT testing, deletes the WbList table
+    */
+   public void DeleteAllWBList() {
+	   String query1 = "DROP TABLE IF EXISTS 'wbList'";
+	   try ( Connection conn = this.ds.getConnection();
+	   		    Statement stmt = conn.createStatement(); ) {
+			    int rv = stmt.executeUpdate( query1 );
+			    System.out.println( "DeleteAllWBLists() returned " + rv );
+	   } catch ( SQLException e ) {
+				e.printStackTrace();
+	   }   
+	   }
+   
+   /**
+    ******* END OF WBLIST Add, Delete, SelectAll, & Drop *******
+    */
    
 }
