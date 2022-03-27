@@ -11,6 +11,7 @@ import java.awt.image.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.*;
 import javax.swing.*;
@@ -270,6 +271,9 @@ public class Nav_Bar{
 			ntbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		ntb.run_ntb();
+	        		Date timestamp = new Date();
+	        		System.out.println(timestamp);
+	        		db.AddEvent(userID, timestamp, "ntb");
 	        }});
 			panel.add(ntbButton);
 		}
@@ -278,6 +282,9 @@ public class Nav_Bar{
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open htb
 	        		htb.open_htb(db, userID);
+	        		Date timestamp = new Date();
+	        		System.out.println(timestamp);
+	        		db.AddEvent(userID, timestamp, "htb");
 	        }});
 			panel.add(htbButton);
 		}
@@ -286,7 +293,9 @@ public class Nav_Bar{
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open fts
 	        		fts.runFts(fts, db, userID);
-	        		System.out.println("fts clicked");
+	        		Date timestamp = new Date();
+	        		System.out.println(timestamp);
+	        		db.AddEvent(userID, timestamp, "fts");
 	        }});
 			panel.add(ftsButton);
 		}

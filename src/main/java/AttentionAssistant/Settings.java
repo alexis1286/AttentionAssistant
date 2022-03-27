@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Date;
+
 import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -2390,6 +2392,9 @@ public class Settings {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Free Thought Space
 				free_thought_space.runFts(free_thought_space, db, settingsChanges.userID);
+				Date timestamp = new Date();
+        		System.out.println(timestamp);
+        		db.AddEvent(userID, timestamp, "fts");
 			}
 		});
 		
@@ -2407,6 +2412,9 @@ public class Settings {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Happy Thought Button 
 				happy_thought_button.open_htb(db, settingsChanges.userID);
+				Date timestamp = new Date();
+        		System.out.println(timestamp);
+        		db.AddEvent(userID, timestamp, "htb");
 			}
 		});
 		
@@ -2424,6 +2432,9 @@ public class Settings {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Negative Thought Burner
 				negative_thought_burner.run_ntb();
+				Date timestamp = new Date();
+        		System.out.println(timestamp);
+        		db.AddEvent(userID, timestamp, "ntb");
 			}
 		});
 		

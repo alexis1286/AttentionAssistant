@@ -177,6 +177,9 @@ public class Notification_System {
 		}
 		
 		timeFocused += 5;
+		Date timestamp = new Date();
+		System.out.println(timestamp);
+		db.AddEvent(userID, timestamp, "focus");
 		displayNotif(text,"resume");
 	}
 	
@@ -207,6 +210,9 @@ public class Notification_System {
     				break;
 		}
 		timeDistracted += 5;
+		Date timestamp = new Date();
+		System.out.println(timestamp);
+		db.AddEvent(userID, timestamp, "distract");
 		displayNotif(text, "distracted");
 	}
 	
@@ -230,6 +236,9 @@ public class Notification_System {
     				break;
 		}
 		timeFocused += 5;
+		Date timestamp = new Date();
+		System.out.println(timestamp);
+		db.AddEvent(userID, timestamp, "focus");
 		displayNotif(text,"selfCare");
 	}
 	
@@ -254,6 +263,9 @@ public class Notification_System {
 		}
 		
 		timeFocused += 5;
+		Date timestamp = new Date();
+		System.out.println(timestamp);
+		db.AddEvent(userID, timestamp, "focus");
 		displayNotif(text,"encourage");
 		//add words of encouragement?
 	}
