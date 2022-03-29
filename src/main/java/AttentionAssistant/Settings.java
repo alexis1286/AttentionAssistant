@@ -6,6 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 
 import javax.accessibility.AccessibleContext;
@@ -277,50 +281,51 @@ public class Settings {
 	public Settings(DataBase db, int userID) {
 		
 		Settings loadSettings= db.SelectSettings(userID);
-		this.settingsID = loadSettings.getSettingsID();
-		this.userID = userID;
-		this.iconCircles = loadSettings.getIconCircles(); 
-		this.icons = loadSettings.getIcons();
-		this.opacityCircles = loadSettings.getOpacityCircles(); 
-		this.opacityIcons = loadSettings.getOpacityIcons(); 
-		this.isCollapsed = loadSettings.getIsCollapsed(); 
-		this.xCoord = loadSettings.getXCoord();
-		this.yCoord = loadSettings.getYCoord(); 
-		this.isVertical = loadSettings.getIsVertical(); 
-		this.iconSize = loadSettings.getIconSize(); 
-		this.timerIsVisible = loadSettings.getTimerIsVisible(); 
-		this.pmIsVisible = loadSettings.getPmIsVisible(); 
-		this.ftsIsVisible = loadSettings.getFtsIsVisible(); 
-		this.htbIsVisible = loadSettings.getHtbIsVisible(); 
-		this.ntbIsVisible = loadSettings.getNtbIsVisible(); 
-		this.progReportIsVisible = loadSettings.getProgReportIsVisible(); 
-		this.timerVisibilityIsLocked = loadSettings.getTimerVisibilityIsLocked();
-		this.pmVisibilityIsLocked = loadSettings.getPmVisibilityIsLocked();
-		this.ftsVisibilityIsLocked = loadSettings.getFtsVisibilityIsLocked();
-		this.htbVisibilityIsLocked = loadSettings.getHtbVisibilityIsLocked();
-		this.ntbVisibilityIsLocked = loadSettings.getNtbVisibilityIsLocked();
-		this.progReportVisibilityIsLocked = loadSettings.getProgReportVisibilityIsLocked();
-		this.avatarIsActive = loadSettings.getAvatarIsActive(); 
-		this.textIsActive = loadSettings.getTextIsActive(); 
-		this.audioIsActive = loadSettings.getAudioIsActive();
-		this.textToSpeech = loadSettings.getTextToSpeech(); 
-		this.avatarFilePath = loadSettings.getAvatarFilePath(); 
-		this.alwaysOnScreen = loadSettings.getAlwaysOnScreen(); 
-		this.avatarSize = loadSettings.getAvatarSize(); 
-		this.pomodoroIsActive = loadSettings.getPomodoroIsActive(); 
-		this.pomodoroIsLocked = loadSettings.getPomodoroIsLocked();
-		this.workPeriod = loadSettings.getWorkPeriod(); 
-		this.workPeriodIsLocked = loadSettings.getWorkPeriodIsLocked();
-		this.breakPeriod = loadSettings.getBreakPeriod(); 
-		this.breakPeriodIsLocked = loadSettings.getBreakPeriodIsLocked();
-		this.timeShowing = loadSettings.getTimeShowing(); 
-		this.ftsIsActive = loadSettings.getFtsIsActive(); 
-		this.ntbIsActive = loadSettings.getNtbIsActive(); 
-		this.isAutoLinked = loadSettings.getIsAutoLinked(); 
-		this.htbIsActive = loadSettings.getHtbIsActive(); 
-		this.ftsIsLocked = loadSettings.getFtsIsLocked();
-		this.ntbIsLocked = loadSettings.getNtbIsLocked();
-		this.htbIsLocked = loadSettings.getHtbIsLocked();
+		
+		this.settingsID = loadSettings.settingsID;
+		this.userID = loadSettings.userID;
+		this.iconCircles = loadSettings.iconCircles; 
+		this.icons = loadSettings.icons;
+		this.opacityCircles = loadSettings.opacityCircles; 
+		this.opacityIcons = loadSettings.opacityIcons; 
+		this.isCollapsed = loadSettings.isCollapsed; 
+		this.xCoord = loadSettings.xCoord;
+		this.yCoord = loadSettings.yCoord; 
+		this.isVertical = loadSettings.isVertical; 
+		this.iconSize = loadSettings.iconSize; 
+		this.timerIsVisible = loadSettings.timerIsVisible; 
+		this.pmIsVisible = loadSettings.pmIsVisible; 
+		this.ftsIsVisible = loadSettings.ftsIsVisible; 
+		this.htbIsVisible = loadSettings.htbIsVisible; 
+		this.ntbIsVisible = loadSettings.ntbIsVisible; 
+		this.progReportIsVisible = loadSettings.progReportIsVisible; 
+		this.timerVisibilityIsLocked = loadSettings.timerVisibilityIsLocked;
+		this.pmVisibilityIsLocked = loadSettings.pmVisibilityIsLocked;
+		this.ftsVisibilityIsLocked = loadSettings.ftsVisibilityIsLocked;
+		this.htbVisibilityIsLocked = loadSettings.htbVisibilityIsLocked;
+		this.ntbVisibilityIsLocked = loadSettings.ntbVisibilityIsLocked;
+		this.progReportVisibilityIsLocked = loadSettings.progReportVisibilityIsLocked;
+		this.avatarIsActive = loadSettings.avatarIsActive; 
+		this.textIsActive = loadSettings.textIsActive; 
+		this.audioIsActive = loadSettings.audioIsActive;
+		this.textToSpeech = loadSettings.textToSpeech; 
+		this.avatarFilePath = loadSettings.avatarFilePath; 
+		this.alwaysOnScreen = loadSettings.alwaysOnScreen; 
+		this.avatarSize = loadSettings.avatarSize;
+		this.pomodoroIsActive = loadSettings.pomodoroIsActive; 
+		this.pomodoroIsLocked = loadSettings.pomodoroIsLocked;
+		this.workPeriod = loadSettings.workPeriod; 
+		this.workPeriodIsLocked = loadSettings.workPeriodIsLocked;
+		this.breakPeriod = loadSettings.breakPeriod; 
+		this.breakPeriodIsLocked = loadSettings.breakPeriodIsLocked;
+		this.timeShowing = loadSettings.timeShowing; 
+		this.ftsIsActive = loadSettings.ftsIsActive; 
+		this.ntbIsActive = loadSettings.ntbIsActive; 
+		this.isAutoLinked = loadSettings.isAutoLinked; 
+		this.htbIsActive = loadSettings.htbIsActive; 
+		this.ftsIsLocked = loadSettings.ftsIsLocked;
+		this.ntbIsLocked = loadSettings.ntbIsLocked;
+		this.htbIsLocked = loadSettings.htbIsLocked;
 	}
 	
 	 /**
@@ -2369,7 +2374,18 @@ public class Settings {
 				int returnVal = happyThoughtsDirectory.showDialog(null, "Upload New Media");
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					File happyThoughtFile = happyThoughtsDirectory.getSelectedFile();
-					String filePath = happyThoughtFile.getAbsolutePath();
+					
+					Path sourcePath = Paths.get(happyThoughtFile.getAbsolutePath());
+					Path destinationPath = Paths.get("happyThoughtMedia/" + happyThoughtFile.getName());
+					
+					try {
+						Files.copy(sourcePath, destinationPath);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} 
+				
+					String filePath = destinationPath.toString();
 					Media newMedia = new Media(filePath);
 					db.AddMedia(newMedia, settingsChanges.userID);
 				}
