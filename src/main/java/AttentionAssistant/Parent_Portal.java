@@ -107,7 +107,7 @@ public class Parent_Portal {
 		lock_timerVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setTimerVisibilityIsLocked(lock_timerVisibility.isSelected());
         }});
 		
 		JCheckBox pmVisibleBox = new JCheckBox("<html><center>Priority Manager&nbsp;</center></html>", settingsChanges.getPmIsVisible());
@@ -125,7 +125,7 @@ public class Parent_Portal {
 		lock_pmVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setPmVisibilityIsLocked(lock_pmVisibility.isSelected());
         }});
 		
 		firstRowVisibilityChecks.add(timerVisibleBox);
@@ -153,7 +153,7 @@ public class Parent_Portal {
 		lock_ftsVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setFtsVisibilityIsLocked(lock_ftsVisibility.isSelected());
         }});
 		
 		ntbVisibleBox.setSelected(settingsChanges.getNtbIsVisible()); 
@@ -171,7 +171,7 @@ public class Parent_Portal {
 		lock_ntbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setNtbVisibilityIsLocked(lock_ntbVisibility.isSelected());
         }});
 		
 		secondRowVisibilityChecks.add(ftsVisibleBox);
@@ -199,7 +199,7 @@ public class Parent_Portal {
 		lock_htbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setHtbVisibilityIsLocked(lock_htbVisibility.isSelected());
         }});
 		
 		JCheckBox prVisibleBox = new JCheckBox("<html><center>Progress Report&nbsp;&nbsp;&nbsp;</center></html>", settingsChanges.getProgReportIsVisible());
@@ -218,7 +218,7 @@ public class Parent_Portal {
 		lock_prVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setProgReportVisibilityIsLocked(lock_prVisibility.isSelected());
         }});
 		
 		thirdRowVisibilityChecks.add(htbVisibleBox);
@@ -267,7 +267,7 @@ public class Parent_Portal {
 		lock_timerActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setPomodoroIsLocked(lock_timerActive.isSelected());
         }});
 		
 		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
@@ -285,7 +285,7 @@ public class Parent_Portal {
 		lock_ftsActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
         }});
 		
 		firstRowActiveChecks.add(toggleTimer);
@@ -313,7 +313,7 @@ public class Parent_Portal {
 		lock_ntbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
         }});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
@@ -331,7 +331,7 @@ public class Parent_Portal {
 		lock_htbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setHtbIsLocked(lock_htbActive.isSelected());
         }});
 		
 		secondRowActiveChecks.add(ntbBox);
@@ -393,6 +393,7 @@ public class Parent_Portal {
 		lock_workPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
+        		settingsChanges.setWorkPeriodIsLocked(lock_workPeriod.isSelected());
         	
         }});
 		
@@ -426,7 +427,7 @@ public class Parent_Portal {
 		lock_breakPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        	
+        		settingsChanges.setBreakPeriodIsLocked(lock_breakPeriod.isSelected());
         }});
 		
 		intervalSettings.add(workPeriod);
@@ -530,7 +531,11 @@ public class Parent_Portal {
 	}
 	
 	private void createMonitoringManagementPanel(JPanel card_panel, Settings settingsChanges) {
+		JPanel monitor_panel = new JPanel();
+		monitor_panel.setLayout(new BoxLayout(monitor_panel, BoxLayout.Y_AXIS));
+		monitor_panel.setBackground(aa_grey);
 		
+		card_panel.add("monitor", monitor_panel);
 	}
 	
 	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm) {
@@ -657,7 +662,7 @@ public class Parent_Portal {
 						monitoringManagement.setBorderPainted(false);
 						generalSettings.setBorderPainted(true);
 						generalSettings.setBorder(new LineBorder(aa_purple));
-						card_layout.show(card_panel, "general");						
+						card_layout.show(card_panel, "settings");						
 					}
 				});
 				
@@ -677,7 +682,7 @@ public class Parent_Portal {
 						generalSettings.setBorderPainted(false);
 						monitoringManagement.setBorderPainted(true);
 						monitoringManagement.setBorder(new LineBorder(aa_purple));
-						card_layout.show(card_panel, "notifications");
+						card_layout.show(card_panel, "monitor");
 					}
 				});
 				
@@ -765,95 +770,32 @@ public class Parent_Portal {
 				apply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						/*
-						settings.settingsID = settingsChanges.settingsID;
-						settings.userID = settingsChanges.userID; 
+						settings.setTimerIsVisible(settingsChanges.getTimerIsVisible()); 
+						settings.setPmIsVisible(settingsChanges.getPmIsVisible()); 
+						settings.setFtsIsVisible(settingsChanges.getFtsIsVisible()); 
+						settings.setHtbIsVisible(settingsChanges.getHtbIsVisible());
+						settings.setNtbIsVisible(settingsChanges.getNtbIsVisible()); 
+						settings.setProgReportIsVisible(settingsChanges.getProgReportIsVisible()); 
+						settings.setTimerVisibilityIsLocked(settingsChanges.getTimerVisibilityIsLocked());
+						settings.setPmVisibilityIsLocked(settingsChanges.getPmVisibilityIsLocked());
+						settings.setFtsVisibilityIsLocked(settingsChanges.getFtsVisibilityIsLocked());
+						settings.setHtbVisibilityIsLocked(settingsChanges.getHtbVisibilityIsLocked());
+						settings.setNtbVisibilityIsLocked(settingsChanges.getNtbVisibilityIsLocked());
+						settings.setProgReportVisibilityIsLocked(settingsChanges.getProgReportVisibilityIsLocked());
+						settings.setPomodoroIsActive(settingsChanges.getPomodoroIsActive()); 
+						settings.setPomodoroIsLocked(settingsChanges.getPomodoroIsLocked());
+						settings.setWorkPeriod(settingsChanges.getWorkPeriod()); 
+						settings.setWorkPeriodIsLocked(settingsChanges.getWorkPeriodIsLocked());
+						settings.setBreakPeriod(settingsChanges.getBreakPeriod()); 
+						settings.setBreakPeriodIsLocked(settingsChanges.getBreakPeriodIsLocked()); 
+						settings.setFtsIsActive(settingsChanges.getFtsIsActive()); 
+						settings.setNtbIsActive(settingsChanges.getNtbIsActive());  
+						settings.setHtbIsActive(settingsChanges.getHtbIsActive());
+						settings.setFtsIsLocked(settingsChanges.getFtsIsLocked());
+						settings.setNtbIsLocked(settingsChanges.getNtbIsLocked());
+						settings.setHtbIsLocked(settingsChanges.getHtbIsLocked());
 						
-						if(settingsChanges.iconCircles != null) {
-							settings.iconCircles = settingsChanges.iconCircles;
-						}
-						
-						if(settingsChanges.icons != null) {
-							settings.icons = settingsChanges.icons;
-						}
-						
-						settings.opacityCircles = settingsChanges.opacityCircles; 
-						settings.opacityIcons = settingsChanges.opacityIcons; 
-						settings.isCollapsed = settingsChanges.isCollapsed; 
-						settings.xCoord = settingsChanges.xCoord;
-						settings.yCoord = settingsChanges.yCoord; 
-						settings.isVertical = settingsChanges.isVertical;
-						settings.iconSize = settingsChanges.iconSize;
-						settings.timerIsVisible = settingsChanges.timerIsVisible; 
-						settings.pmIsVisible = settingsChanges.pmIsVisible; 
-						settings.ftsIsVisible = settingsChanges.ftsIsVisible; 
-						settings.htbIsVisible = settingsChanges.htbIsVisible;
-						settings.ntbIsVisible = settingsChanges.ntbIsVisible; 
-						settings.progReportIsVisible = settingsChanges.progReportIsVisible; 
-						settings.timerVisibilityIsLocked = settingsChanges.timerVisibilityIsLocked;
-						settings.pmVisibilityIsLocked = settingsChanges.pmVisibilityIsLocked;
-						settings.ftsVisibilityIsLocked = settingsChanges.ftsVisibilityIsLocked;
-						settings.htbVisibilityIsLocked = settingsChanges.htbVisibilityIsLocked;
-						settings.ntbVisibilityIsLocked = settingsChanges.ntbVisibilityIsLocked;
-						settings.progReportVisibilityIsLocked = settingsChanges.progReportVisibilityIsLocked;
-						settings.avatarIsActive = settingsChanges.avatarIsActive; 
-						settings.textIsActive = settingsChanges.textIsActive; 
-						settings.audioIsActive = settingsChanges.audioIsActive;
-						settings.textToSpeech = settingsChanges.textToSpeech;
-						settings.avatarFilePath = settingsChanges.avatarFilePath; 
-						settings.alwaysOnScreen = settingsChanges.alwaysOnScreen; 
-						settings.avatarSize = settingsChanges.avatarSize; 
-						settings.pomodoroIsActive = settingsChanges.pomodoroIsActive; 
-						settings.pomodoroIsLocked = settingsChanges.pomodoroIsLocked;
-						settings.workPeriod = settingsChanges.workPeriod; 
-						settings.workPeriodIsLocked = settingsChanges.workPeriodIsLocked;
-						settings.breakPeriod = settingsChanges.breakPeriod; 
-						settings.breakPeriodIsLocked = settingsChanges.breakPeriodIsLocked;
-						settings.timeShowing = settingsChanges.timeShowing; 
-						settings.ftsIsActive = settingsChanges.ftsIsActive; 
-						settings.ntbIsActive = settingsChanges.ntbIsActive; 
-						settings.isAutoLinked = settingsChanges.isAutoLinked; 
-						settings.htbIsActive = settingsChanges.htbIsActive;
-						settings.ftsIsLocked = settingsChanges.ftsIsLocked;
-						settings.ntbIsLocked = settingsChanges.ntbIsLocked;
-						settings.htbIsLocked = settingsChanges.htbIsLocked;
-						
-						if(settings.ftsIsActive == false) {
-							ftsVisibleBox.setEnabled(false);
-							openFTS.setEnabled(false);
-						}else if(settings.ftsIsActive == true) {
-							ftsVisibleBox.setEnabled(true);
-							openFTS.setEnabled(true); 
-						}
-						
-						if(settings.htbIsActive == false) {
-							htbVisibleBox.setEnabled(false);
-							openHTB.setEnabled(false);
-						}else if(settings.htbIsActive == true) {
-							htbVisibleBox.setEnabled(true);
-							openHTB.setEnabled(true); 
-						}
-						
-						if(settings.ntbIsActive == false) {
-							ntbVisibleBox.setEnabled(false);
-							openNTB.setEnabled(false);
-						}else if(settings.ntbIsActive == true) {
-							ntbVisibleBox.setEnabled(true);
-							openNTB.setEnabled(true); 
-						}
-						
-						if(settings.pomodoroIsActive == false) {
-							timerVisibleBox.setEnabled(false);
-							openPom.setEnabled(false); 
-						}else if(settings.pomodoroIsActive == true) {
-							timerVisibleBox.setEnabled(true);
-							openPom.setEnabled(true);
-						}
-						
-						navbar.refresh(settings);
-						pomodoro_timer.refresh(settings);
-						db.UpdateSettings(settings);
-						*/
+						db.UpdateSettings(settings);	
 					}
 				});
 				
