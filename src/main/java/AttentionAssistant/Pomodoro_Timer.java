@@ -197,27 +197,23 @@ public class Pomodoro_Timer
 	}
 
 	
-	private JPanel timerPanel(JFrame frame, Priority_Manager pm) {
+	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
-	
+		panel.setLayout(null);
+		
 		JLabel taskLabel=new JLabel("Task: " + pm.getActiveTask().getTaskName());
-		JPanel taskpanel = new JPanel();
-		taskpanel.setBackground(aa_grey);
+		taskLabel.setBounds(215, 130, 400, 100);
 		taskLabel.setForeground(Color.white);
 		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		taskpanel.add(taskLabel);
+		panel.add(taskLabel);
 	
-		
-		JPanel timerpanel = new JPanel();
-		timerpanel.setBackground(aa_grey);
+		time.setBounds(180, 180, 280, 100);
 		time.setForeground(Color.white);
 		time.setFont(new Font("Dosis SemiBold",Font.BOLD,50));
-		timerpanel.add(time);
+		panel.add(time);
 		
-		JPanel buttonpanel = new JPanel();
-		
-		buttonpanel.setBackground(aa_grey);
+		startbut.setBounds(130, 325, 85, 35);
 		startbut.setBorderPainted(false);
 		startbut.setBackground(aa_purple);
 		startbut.setForeground(Color.WHITE);
@@ -255,9 +251,9 @@ public class Pomodoro_Timer
     			lastButtonPressed = buttonPressed;
     			//TODO reset to null as one of the reset functions
         }});
-		buttonpanel.add(startbut);
+		panel.add(startbut);
 
-
+		pausebut.setBounds(230, 325, 85, 35);
 		pausebut.setBorderPainted(false);
 		pausebut.setBackground(aa_purple);
 		pausebut.setForeground(Color.WHITE);
@@ -299,9 +295,9 @@ public class Pomodoro_Timer
         		lastButtonPressed = buttonPressed;
         		
         }});
-		buttonpanel.add(pausebut);
+		panel.add(pausebut);
 		
-
+		endbut.setBounds(330, 325, 85, 35);
 		endbut.setBorderPainted(false);
 		endbut.setBackground(aa_purple);
 		endbut.setForeground(Color.WHITE);
@@ -332,6 +328,8 @@ public class Pomodoro_Timer
    	    				paused = false;
    	    				time.setText(String.valueOf("00m:00s"));
    	    		   	    lastButtonPressed = null;
+   	    		   	    min = initalmin;
+   	    		   	    breakmin = initalbreak;
    	    				getWorkBreakStatus();
    	    				
    	    				}	
@@ -344,28 +342,23 @@ public class Pomodoro_Timer
     			
         		
         }});
-		buttonpanel.add(endbut);
+		panel.add(endbut);
 		
-		JPanel timerwordpanel = new JPanel();
-		timerwordpanel.setBackground(aa_grey);
+		c.setBounds(200, 235, 280, 100);
 		c.setForeground(Color.white);
 		c.setFont(new Font("Dosis SemiBold",Font.BOLD,20));;
-		timerwordpanel.add(c);
+		panel.add(c);
+		b.setBounds(215, 235, 280, 100);
 		b.setForeground(Color.white);
 		b.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		timerwordpanel.add(b);
+		panel.add(b);
 		
 		c.setVisible(false);
 		b.setVisible(false);
 		
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(Box.createRigidArea(new Dimension(400,200)));
-		
-		
-		panel.add(taskpanel);
-		panel.add(timerpanel);
-		panel.add(timerwordpanel);
-		panel.add(buttonpanel);
+		//panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		//panel.add(Box.createRigidArea(new Dimension(400,200)));
+	
 		
 		if(min == 0 && breakmin == 0) {
 			lastButtonPressed = null; 	
@@ -478,6 +471,7 @@ public class Pomodoro_Timer
 	        jFrame.add(jComboBox);
 	        jFrame.add(jLabel);
 	        
+	        jFrame.setLocationRelativeTo(null);
 	        jFrame.setLayout(null);
 	        jFrame.setSize(350, 250);
 	        jFrame.setVisible(true);
@@ -486,8 +480,8 @@ public class Pomodoro_Timer
 	        jButton.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
-	                String selectedFruit = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
-	                jLabel.setText(selectedFruit);
+	                String newtask = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
+	                jLabel.setText(newtask);
 	                //	TODO add lexis function to make a set new active task
 	            }
 	        });
@@ -653,17 +647,20 @@ public class Pomodoro_Timer
 				frame.setUndecorated(true);
 				//sets window width and height
 			
-				
+				CardLayout cardLayout = new CardLayout();
 				JPanel panel = new JPanel();
 				//panel.setBounds(1000, 1000, width, height);
 				panel.setBackground(aa_grey);
+				panel.setLayout(cardLayout);
 				//build title panel
 				JMenuBar titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
 				//build table panel
-				icon_panel = timerPanel(frame,pm);
+				icon_panel = timerPanel(frame,cardLayout,pm);
 				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 			    panel.add("PT", icon_panel);
+			    cardLayout.show(panel, "iPanel");
+			    panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
 				frame.getContentPane().add(panel,BorderLayout.CENTER);
 				frame.setPreferredSize(new Dimension(width, height)); 
@@ -672,14 +669,13 @@ public class Pomodoro_Timer
 				frame.setVisible(true);
 				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
-				//Input(settings);
 				getWorkBreakStatus();
-				//if(initalmin == 0 && initalbreakmin == 0) {}{
 				Input(settings);
+				
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(panel, frame, pm);
+		        		rebuildPanel(cardLayout,panel, frame, pm);
 		        	}});
 			}
 		});
@@ -710,17 +706,22 @@ public class Pomodoro_Timer
 			toRefresh.doClick();
 		}
 	}
-	public void rebuildPanel( JPanel panel, JFrame frame, Priority_Manager pm) {
-		JPanel new_icon_panel = new JPanel();	
+	public void rebuildPanel(CardLayout cardLayout,JPanel panel, JFrame frame, Priority_Manager pm) {
+		JPanel new_icon_panel = new JPanel();
+		
 		if(counter % 2 != 0) {
-			new_icon_panel = timerPanel(frame,pm);
+			
+		
+			new_icon_panel = timerPanel(frame,cardLayout,pm);
 			panel.add("newIPanel",new_icon_panel);
+			cardLayout.show(panel, "newIPanel");
 			panel.remove(icon_panel);
 	
 		}else {
 			panel.remove(icon_panel);
-			icon_panel = timerPanel(frame,pm);
+			icon_panel = timerPanel(frame,cardLayout, pm);
 			panel.add("iPanel",icon_panel);
+			cardLayout.show(panel, "iPanel");
 			panel.remove(new_icon_panel);
 		}
 		counter++;

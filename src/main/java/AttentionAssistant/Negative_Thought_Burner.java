@@ -146,21 +146,15 @@ public class Negative_Thought_Burner {
 		
 		
 		
-		JTextArea firstnametext = new JTextArea(500, 250);
-		firstnametext.setBorder(BorderFactory.createLineBorder(Color.RED));
-		//firstnametext.setBounds(100, 200, 500, 250);
+		JTextArea firstnametext = new JTextArea();
+		firstnametext.setBounds(100, 200, 500, 250);
 	    firstnametext.setBackground(new Color(237,221,246));
-        firstnametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	    firstnametext.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
         firstnametext.setLineWrap(true);
         firstnametext.setWrapStyleWord(true);
         panel.add(firstnametext);
         
         
-        JScrollPane scroll = new JScrollPane(firstnametext,
-	                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-	                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
-        panel.add(scroll);
 
         burnbut.setBounds(300, 480, 97, 35);
         burnbut.setHorizontalTextPosition(SwingConstants.CENTER);
