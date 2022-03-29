@@ -1654,16 +1654,6 @@ public class Settings {
 						//remove media from database 
 						db.DeleteMedia(media.getMediaID());
 						
-						
-						/**
-						 * ***********THIS NEEDS TO BE UNCOMMENTED BEFORE THE DEMO************
-						 * 
-						 * this will permanently delete images from the happyThoughtMedia folder as 
-						 * intended in our user stories. For testing I am commenting out so that we 
-						 * don't keep deleting our "preloaded" htb library for NEW users with every 
-						 * test of this. You MUST manually delete your uploaded photos from the 
-						 * directory for the time being or they will get uploaded to github! 
-						 *
 						Path path = Paths.get(filepath); 
 						//delete file from directory
 						try {
@@ -1672,8 +1662,7 @@ public class Settings {
 				            System.err.format("%s: no such" + " file or directory%n", path);
 				        } catch (IOException x) {
 				            System.err.println(x);
-				        }
-				        */					 
+				        }				 
 					}
 				}
 				

@@ -306,7 +306,15 @@ public class Happy_Thought_Button {
 		media_panel.setBackground(Color.black);
 		media_panel.setMaximumSize(new Dimension(480, 360));
 		
-		String fileName = happyMedia.get(current);
+		String fileName = ""; 
+		
+		if(current < happyMedia.size()) {
+			fileName = happyMedia.get(current);
+		}else if(current == happyMedia.size()) {
+			current--;
+			fileName = happyMedia.get(current);
+		}
+		
 		String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
 		
 		if(fileExtension.equals("jpg")) {
