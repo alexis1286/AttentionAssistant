@@ -72,8 +72,6 @@ public class Happy_Thought_Button {
 	
 	/**
 	 * creates an array of images to display
-	 * will need to be modified for more functionality
-	 * right now just loading the test images to an array
 	 * 
 	 * @author krchr
 	 */
