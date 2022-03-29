@@ -1,0 +1,791 @@
+package AttentionAssistant;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.accessibility.AccessibleContext;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicComboPopup;
+
+/**
+ * Class that encompasses Parent Portal whenever adolescent is 
+ * clicked on from child selection bar
+ * @author krchr
+ *
+ */
+
+public class Parent_Portal {
+
+	Color aa_grey = new Color(51,51,51);
+	Color aa_purple = new Color(137,31,191);
+	LineBorder line = new LineBorder(aa_purple, 2, true);
+	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+	private int height = 700; 
+	private int width = 550; 
+	private int mouseX;
+	private int mouseY;
+	final static boolean shouldFill = true; 
+	final static boolean shouldWeightX = true; 
+	final static boolean RIGHT_TO_LEFT = false; 
+	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>");
+	JCheckBox ntbVisibleBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>");
+	JCheckBox htbVisibleBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>");
+	JCheckBox timerVisibleBox = new JCheckBox("Pomodoro Timer");
+	
+	private void createSettingsPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager pm, DataBase db) {
+		JPanel settings_panel = new JPanel();
+		settings_panel.setLayout(new BoxLayout(settings_panel, BoxLayout.Y_AXIS));
+		settings_panel.setBackground(aa_grey);
+		
+		JPanel header_panel = new JPanel();
+		header_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		header_panel.setBackground(aa_grey);
+		
+		JLabel overrideOptions = new JLabel("Override Options:");
+		overrideOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		overrideOptions.setForeground(Color.white);
+		
+		header_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		header_panel.add(overrideOptions);
+		
+		JPanel featuresHeader = new JPanel();
+		featuresHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		featuresHeader.setBackground(aa_grey);
+		featuresHeader.setMaximumSize(new Dimension(400, 15));
+		
+		JLabel visibleFeatures = new JLabel("<html><center><u>Features Displayed in NavBar</u>:</center></html>");
+		visibleFeatures.setFont(new Font("Serif", Font.BOLD, 18));
+		visibleFeatures.setForeground(Color.white); 
+		
+		featuresHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		featuresHeader.add(visibleFeatures);
+		
+		JPanel navBarBoxes = new JPanel();
+		GridLayout grid = new GridLayout(0,2);
+		navBarBoxes.setLayout(grid);
+		navBarBoxes.setBackground(aa_grey);
+		navBarBoxes.setMaximumSize(new Dimension(325, 60));
+		
+		timerVisibleBox.setSelected(settingsChanges.getTimerIsVisible()); 
+		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		timerVisibleBox.setForeground(Color.white);
+		timerVisibleBox.setContentAreaFilled(false);
+		timerVisibleBox.setFocusPainted(false);
+		timerVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setTimerIsVisible(timerVisibleBox.isSelected()); 
+			}
+		});
+		
+		JCheckBox pmVisibleBox = new JCheckBox("Priority Manager", settingsChanges.getPmIsVisible());
+		pmVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		pmVisibleBox.setForeground(Color.white);
+		pmVisibleBox.setContentAreaFilled(false);
+		pmVisibleBox.setFocusPainted(false);
+		pmVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setPmIsVisible(pmVisibleBox.isSelected()); 
+			}
+		});
+		
+		ftsVisibleBox.setSelected(settingsChanges.getFtsIsVisible());
+		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ftsVisibleBox.setForeground(Color.white);
+		ftsVisibleBox.setContentAreaFilled(false);
+		ftsVisibleBox.setFocusPainted(false);
+		ftsVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setFtsIsVisible(ftsVisibleBox.isSelected()); 
+			}
+		});
+		
+		ntbVisibleBox.setSelected(settingsChanges.getNtbIsVisible()); 
+		ntbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ntbVisibleBox.setForeground(Color.white);
+		ntbVisibleBox.setContentAreaFilled(false);
+		ntbVisibleBox.setFocusPainted(false);
+		ntbVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setNtbIsVisible(ntbVisibleBox.isSelected()); 
+			}
+		});
+		
+		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible()); 
+		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		htbVisibleBox.setForeground(Color.white);
+		htbVisibleBox.setContentAreaFilled(false);
+		htbVisibleBox.setFocusPainted(false);
+		htbVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setHtbIsVisible(htbVisibleBox.isSelected()); 
+			}
+		});
+		
+		JCheckBox prVisibleBox = new JCheckBox("Progress Report", settingsChanges.getProgReportIsVisible());
+		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
+		prVisibleBox.setForeground(Color.white);
+		prVisibleBox.setContentAreaFilled(false);
+		prVisibleBox.setFocusPainted(false);
+		prVisibleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setProgReportIsVisible(prVisibleBox.isSelected()); 
+			}
+		});
+		
+		navBarBoxes.add(timerVisibleBox);
+		navBarBoxes.add(pmVisibleBox);
+		navBarBoxes.add(ftsVisibleBox);
+		navBarBoxes.add(ntbVisibleBox);
+		navBarBoxes.add(htbVisibleBox);
+		navBarBoxes.add(prVisibleBox);
+		
+		JPanel activefeaturesHeader = new JPanel();
+		activefeaturesHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		activefeaturesHeader.setBackground(aa_grey);
+		activefeaturesHeader.setMaximumSize(new Dimension(400, 15));
+		
+		JLabel activeFeatures = new JLabel("<html><center><u>Active Features</u>:</center></html>");
+		activeFeatures.setFont(new Font("Serif", Font.BOLD, 18));
+		activeFeatures.setForeground(Color.white); 
+		
+		activefeaturesHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		activefeaturesHeader.add(activeFeatures);
+		
+		JPanel featureBoxes = new JPanel();
+		GridLayout grid2 = new GridLayout(0,2);
+		featureBoxes.setLayout(grid2);
+		featureBoxes.setBackground(aa_grey);
+		featureBoxes.setMaximumSize(new Dimension(325, 50));
+		
+		JCheckBox toggleTimer = new JCheckBox("Pomodoro Timer", settingsChanges.getPomodoroIsActive());
+		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
+		toggleTimer.setForeground(Color.white);
+		toggleTimer.setContentAreaFilled(false);
+		toggleTimer.setFocusPainted(false);
+		toggleTimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setPomodoroIsActive(toggleTimer.isSelected()); 
+			}
+		});
+		
+		JCheckBox ftsBox = new JCheckBox("Free Thought Space", settingsChanges.getFtsIsActive());
+		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ftsBox.setForeground(Color.white);
+		ftsBox.setContentAreaFilled(false);
+		ftsBox.setFocusPainted(false);
+		ftsBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setFtsIsActive(ftsBox.isSelected()); 
+			}
+		});
+		
+		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.getNtbIsActive());
+		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ntbBox.setForeground(Color.white);
+		ntbBox.setContentAreaFilled(false);
+		ntbBox.setFocusPainted(false);
+		ntbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setNtbIsActive(ntbBox.isSelected()); 
+			}
+		});
+		
+		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
+		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
+		htbBox.setForeground(Color.white);
+		htbBox.setContentAreaFilled(false);
+		htbBox.setFocusPainted(false);
+		htbBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setHtbIsActive(htbBox.isSelected()); 
+			}
+		});
+		
+		featureBoxes.add(toggleTimer);
+		featureBoxes.add(ftsBox);
+		featureBoxes.add(ntbBox);
+		featureBoxes.add(htbBox);
+		
+		JPanel timerHeader = new JPanel();
+		timerHeader.setLayout(new FlowLayout(FlowLayout.LEFT));
+		timerHeader.setBackground(aa_grey);
+		timerHeader.setMaximumSize(new Dimension(400, 15));
+		
+		JLabel timerLabel = new JLabel("<html><center><u>Pomodoro Timer Intervals</u>:</center></html>");
+		timerLabel.setFont(new Font("Serif", Font.BOLD, 18));
+		timerLabel.setForeground(Color.white); 
+		
+		timerHeader.add(Box.createRigidArea(new Dimension(15, 0)));
+		timerHeader.add(timerLabel);
+		
+		JPanel intervalSettings = new JPanel();
+		GridLayout grid3 = new GridLayout(0,3);
+		intervalSettings.setLayout(grid3);
+		intervalSettings.setBackground(aa_grey);
+		intervalSettings.setMaximumSize(new Dimension(300, 100));
+		
+		JLabel workPeriod = new JLabel("<html><center>Enter Work" + "<br/>Period: </center></html>");
+		workPeriod.setFont(new Font("Serif", Font.BOLD, 16));
+		workPeriod.setForeground(Color.white);
+		
+		Integer workMinutes[] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
+		
+		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
+		AccessibleContext accessCont = workInterval.getAccessibleContext();
+		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
+		JList workList = pop.getList();
+		workList.setSelectionForeground(Color.WHITE);
+		workList.setSelectionBackground(aa_purple);
+		workInterval.setBackground(Color.black);
+		workInterval.setForeground(Color.white);
+		workInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		workInterval.setSelectedIndex((settingsChanges.getWorkPeriod()/5) - 3); 
+		((JLabel)workInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		workInterval.setMaximumSize(new Dimension(50,25));
+		workInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setWorkPeriod((int) workInterval.getSelectedItem());	
+			} 
+		});
+		
+		JLabel minutesWork = new JLabel(" minutes");
+		minutesWork.setFont(new Font("Serif", Font.BOLD, 16));
+		minutesWork.setForeground(Color.white);
+		
+		JLabel breakPeriod = new JLabel("<html><center>Enter Break" + "<br/>Period: </center></html>");
+		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
+		breakPeriod.setForeground(Color.white);
+		
+		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes); 
+		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
+		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
+		JList breakList = pop2.getList();
+		breakList.setSelectionForeground(Color.WHITE);
+		breakList.setSelectionBackground(aa_purple);
+		breakInterval.setBackground(Color.black);
+		breakInterval.setForeground(Color.white);
+		breakInterval.setFont(new Font("Serif", Font.BOLD, 24));
+		breakInterval.setSelectedIndex((settingsChanges.getBreakPeriod()/5) - 2); 
+		((JLabel)breakInterval.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		breakInterval.setMaximumSize(new Dimension(50,25));
+		breakInterval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setBreakPeriod((int) breakInterval.getSelectedItem());	
+			} 
+		});
+		
+		JLabel minutesBreak = new JLabel(" minutes");
+		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
+		minutesBreak.setForeground(Color.white);
+		
+		intervalSettings.add(workPeriod);
+		intervalSettings.add(workInterval);
+		intervalSettings.add(minutesWork);
+		intervalSettings.add(breakPeriod);
+		intervalSettings.add(breakInterval);
+		intervalSettings.add(minutesBreak);
+		
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+		buttonsPanel.setBackground(aa_grey);
+		buttonsPanel.setMaximumSize(new Dimension (400, 140));
+		
+		JPanel topRowButtons = new JPanel();
+		topRowButtons.setLayout(new FlowLayout(FlowLayout.LEFT));
+		topRowButtons.setBackground(aa_grey);
+		topRowButtons.setMaximumSize(new Dimension(400, 35));
+		
+		JPanel bottomRowButtons = new JPanel();
+		bottomRowButtons.setLayout(new FlowLayout(FlowLayout.LEFT));
+		bottomRowButtons.setBackground(aa_grey);
+		bottomRowButtons.setMaximumSize(new Dimension(400, 35));
+		
+		JButton openPM = new JButton("Open Priority Manager");
+		openPM.setMaximumSize(new Dimension(200, 30));
+		openPM.setBackground(Color.GRAY);
+		openPM.setForeground(Color.WHITE);
+		openPM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pm.open_pm(settingsChanges.getUserID(),db);
+			}
+		});
+		
+		JButton calendar = new JButton("Open Calendar");
+		calendar.setMaximumSize(new Dimension(200, 30));
+		calendar.setBackground(Color.GRAY);
+		calendar.setForeground(Color.WHITE);
+		calendar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to open calendar
+				pm.userCalendar();
+			}
+		});
+		
+		JButton calendarInt = new JButton("Calendar Integration");
+		calendarInt.setMaximumSize(new Dimension(200, 30));
+		calendarInt.setBackground(Color.GRAY);
+		calendarInt.setForeground(Color.WHITE);
+		calendarInt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to integrate calendar
+				pm.importCalendar();
+			}
+		});
+		
+		JButton progressReport = new JButton("Open Progress Report");
+		progressReport.setMaximumSize(new Dimension(200, 30));
+		progressReport.setBackground(Color.GRAY);
+		progressReport.setForeground(Color.WHITE);
+		progressReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//call to open progress report
+				
+			}
+		});
+		
+		topRowButtons.add(Box.createRigidArea(new Dimension(10, 0)));
+		topRowButtons.add(openPM);
+		topRowButtons.add(Box.createRigidArea(new Dimension(10, 0)));
+		topRowButtons.add(calendar);
+		
+		bottomRowButtons.add(Box.createRigidArea(new Dimension(17, 0)));
+		bottomRowButtons.add(calendarInt);
+		bottomRowButtons.add(Box.createRigidArea(new Dimension(15, 0)));
+		bottomRowButtons.add(progressReport);
+		
+		buttonsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		buttonsPanel.add(topRowButtons);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		buttonsPanel.add(bottomRowButtons);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		
+		/*
+		 * add everything to settings_panel
+		 */
+		settings_panel.add(header_panel);
+		settings_panel.add(featuresHeader);
+		settings_panel.add(navBarBoxes);
+		settings_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		settings_panel.add(activefeaturesHeader);
+		settings_panel.add(featureBoxes);
+		settings_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		settings_panel.add(timerHeader);
+		settings_panel.add(intervalSettings);
+		settings_panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		settings_panel.add(buttonsPanel);
+		settings_panel.add(Box.createRigidArea(new Dimension(0, 45)));
+		
+		//add to settings_panel to  card_panel
+		card_panel.add("settings", settings_panel);	
+	}
+	
+	private void createMonitoringManagementPanel(JPanel card_panel, Settings settingsChanges) {
+		
+	}
+	
+	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm) {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+		
+				Settings settingsChanges = new Settings(db, settings.getUserID());
+				
+				JFrame pPortal_Frame = new JFrame("Attention Assistant Parent Portal");
+				
+				pPortal_Frame.setUndecorated(true);
+				pPortal_Frame.setPreferredSize(new Dimension(width, height)); 
+				
+				JPanel masterPanel = new JPanel(new BorderLayout());
+				masterPanel.setBackground(Color.black);
+				
+				
+				JMenuBar title_panel = new JMenuBar();
+				title_panel.setBorder(line);
+				title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+				title_panel.setBackground(aa_grey);
+				title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+				
+				/*
+				 * allows drag and drop of frame
+				 */
+				title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+					@Override
+					public void mouseDragged(MouseEvent e) {
+						pPortal_Frame.setLocation(pPortal_Frame.getX() + e.getX() - mouseX, pPortal_Frame.getY() + e.getY() - mouseY);
+					}
+				});
+				
+				title_panel.addMouseListener(new MouseAdapter(){
+					@Override 
+					public void mousePressed(MouseEvent e) {
+						mouseX = e.getX();
+						mouseY = e.getY();
+					}
+				});
+		
+				JLabel title = new JLabel("Parent Portal");
+				title.setForeground(Color.white);
+				title.setFont(new Font("Serif", Font.BOLD, 20));
+				
+				/*
+				 * create icons to use as buttons for title bar
+				 */
+				BufferedImage ci = null;
+				BufferedImage gi = null;
+				BufferedImage exit = null;
+				
+				try {
+					ci = ImageIO.read(new File("images/exit_circle.png"));
+					gi = ImageIO.read(new File("images/guide.png"));
+					exit = ImageIO.read(new File("images/AA_exit.png"));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+				
+				Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+				Icon close = new ImageIcon(c_img);
+				
+				JButton close_window = new JButton(close);
+				close_window.setBorderPainted(false);
+				close_window.setContentAreaFilled(false);
+				close_window.setFocusPainted(false);
+				close_window.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		//close window without saving 
+		        		pPortal_Frame.dispose();
+		        	
+		        }});
+				
+				Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+				Icon guideIcon = new ImageIcon(g_img);
+				
+				JButton guide = new JButton(guideIcon);
+				guide.setBorderPainted(false);
+				guide.setContentAreaFilled(false);
+				guide.setFocusPainted(false);
+				
+				title_panel.add(title);
+				title_panel.add(Box.createRigidArea(new Dimension(290, 0)));
+				title_panel.add(guide);
+				title_panel.add(close_window);
+				
+				//card layout and panel for RHS of parent portal that displays sub-menu with each button option 
+				JPanel card_panel = new JPanel();
+				//creates layout for sub-menus and panels for each sub-menu
+				CardLayout card_layout = new CardLayout();
+				card_panel.setLayout(card_layout);
+				
+				createSettingsPanel(card_panel, settingsChanges, pm, db);
+				createMonitoringManagementPanel(card_panel, settingsChanges);
+				
+				JButton generalSettings = new JButton("<html><center>General" + "<br/>Settings</center></html>");
+				JButton monitoringManagement = new JButton("<html><center>Monitoring" + "<br/>Management</center></html>");
+				
+				/*
+				 * specifications for settings button
+				 */
+				generalSettings.setForeground(Color.white);
+				generalSettings.setFont(new Font("Serif", Font.BOLD, 16));
+				generalSettings.setContentAreaFilled(true);
+				generalSettings.setBorderPainted(true);
+				generalSettings.setBorder(new LineBorder(aa_purple));
+				generalSettings.setFocusPainted(false);
+				generalSettings.setBackground(aa_grey);
+				generalSettings.setMaximumSize(new Dimension(175, 47));
+				generalSettings.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						/*
+						 * open general sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						monitoringManagement.setBorderPainted(false);
+						generalSettings.setBorderPainted(true);
+						generalSettings.setBorder(new LineBorder(aa_purple));
+						card_layout.show(card_panel, "general");						
+					}
+				});
+				
+				monitoringManagement.setForeground(Color.white);
+				monitoringManagement.setFont(new Font("Serif", Font.BOLD, 16));
+				monitoringManagement.setContentAreaFilled(true);
+				monitoringManagement.setBorderPainted(false);
+				monitoringManagement.setFocusPainted(false);
+				monitoringManagement.setBackground(aa_grey);
+				monitoringManagement.setMaximumSize(new Dimension(175, 47));
+				monitoringManagement.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						/*
+						 * open notification systems sub-menu
+						 * adjusts border of all buttons to put purple border on selected button
+						 */
+						generalSettings.setBorderPainted(false);
+						monitoringManagement.setBorderPainted(true);
+						monitoringManagement.setBorder(new LineBorder(aa_purple));
+						card_layout.show(card_panel, "notifications");
+					}
+				});
+				
+				JButton progressReport = new JButton("<html><center>Download" + "<br/>Progress Report</center></html>");
+				progressReport.setForeground(Color.white);
+				progressReport.setFont(new Font("Serif", Font.BOLD, 16));
+				progressReport.setContentAreaFilled(true);
+				progressReport.setBorderPainted(false);
+				progressReport.setFocusPainted(false);
+				progressReport.setBackground(aa_purple);
+				progressReport.setMaximumSize(new Dimension(170, 47));
+				progressReport.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//download progress report
+					}
+				});
+				
+				JButton guideButton = new JButton(guideIcon);
+				guideButton.setText("<html><center>Guide" + "<br/>       </center></html>");
+				guideButton.setForeground(Color.white);
+				guideButton.setFont(new Font("Serif", Font.BOLD, 16));
+				guideButton.setContentAreaFilled(true);
+				guideButton.setBorderPainted(false);
+				guideButton.setFocusPainted(false);
+				guideButton.setBackground(aa_purple);
+				guideButton.setMaximumSize(new Dimension(170, 30));
+				guideButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//open guide
+					}
+				});
+				
+				Image ex_img = exit.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+				Icon exitIcon = new ImageIcon(ex_img);
+				
+				JButton exit_AA = new JButton(exitIcon);
+				exit_AA.setText("EXIT");
+				exit_AA.setForeground(Color.white);
+				exit_AA.setFont(new Font("Serif", Font.BOLD, 16));
+				exit_AA.setContentAreaFilled(true);
+				exit_AA.setBorderPainted(false);
+				exit_AA.setFocusPainted(false);
+				exit_AA.setBackground(aa_purple);
+				exit_AA.setMaximumSize(new Dimension(170, 30));
+				exit_AA.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// exit entire application 
+						UIManager.put("Button.foreground", aa_purple);
+						UIManager.put("Button.background", aa_grey);
+						UIManager.put("OptionPane.background", Color.black);
+						UIManager.put("Panel.setOpaque", true);
+						UIManager.put("Panel.background", aa_grey);
+						UIManager.put("TextField.selectionBackground", Color.WHITE);
+						UIManager.put("TextField.selectionForeground", Color.WHITE);
+						
+						JLabel warning = new JLabel("<html><center>Are you sure you want to EXIT" + "<br/>The Attention Assistant?</center></html>");
+						warning.setFont(new Font("Serif", Font.BOLD, 16));
+						warning.setForeground(Color.white);
+						
+						int response = JOptionPane.showConfirmDialog(null, warning, "The Attention Assistant", JOptionPane.OK_CANCEL_OPTION);
+						switch (response) {
+						case JOptionPane.OK_OPTION:
+							System.exit(0); 
+						case JOptionPane.CANCEL_OPTION:
+							break; 
+						}
+					}
+				});
+				
+				/*
+				 * buttons for bottom border
+				 */
+				JButton apply = new JButton("apply");
+				apply.setForeground(Color.white);
+				apply.setFont(new Font("Serif", Font.BOLD, 16));
+				apply.setContentAreaFilled(true);
+				apply.setBorderPainted(true);
+				apply.setBorder(new LineBorder(Color.GRAY));
+				apply.setFocusPainted(false);
+				apply.setBackground(aa_grey);
+				apply.setMaximumSize(new Dimension(75,35));
+				/*
+				 * When apply is selected all changes made to settingsChanges are applied to settings
+				 */
+				apply.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						/*
+						settings.settingsID = settingsChanges.settingsID;
+						settings.userID = settingsChanges.userID; 
+						
+						if(settingsChanges.iconCircles != null) {
+							settings.iconCircles = settingsChanges.iconCircles;
+						}
+						
+						if(settingsChanges.icons != null) {
+							settings.icons = settingsChanges.icons;
+						}
+						
+						settings.opacityCircles = settingsChanges.opacityCircles; 
+						settings.opacityIcons = settingsChanges.opacityIcons; 
+						settings.isCollapsed = settingsChanges.isCollapsed; 
+						settings.xCoord = settingsChanges.xCoord;
+						settings.yCoord = settingsChanges.yCoord; 
+						settings.isVertical = settingsChanges.isVertical;
+						settings.iconSize = settingsChanges.iconSize;
+						settings.timerIsVisible = settingsChanges.timerIsVisible; 
+						settings.pmIsVisible = settingsChanges.pmIsVisible; 
+						settings.ftsIsVisible = settingsChanges.ftsIsVisible; 
+						settings.htbIsVisible = settingsChanges.htbIsVisible;
+						settings.ntbIsVisible = settingsChanges.ntbIsVisible; 
+						settings.progReportIsVisible = settingsChanges.progReportIsVisible; 
+						settings.timerVisibilityIsLocked = settingsChanges.timerVisibilityIsLocked;
+						settings.pmVisibilityIsLocked = settingsChanges.pmVisibilityIsLocked;
+						settings.ftsVisibilityIsLocked = settingsChanges.ftsVisibilityIsLocked;
+						settings.htbVisibilityIsLocked = settingsChanges.htbVisibilityIsLocked;
+						settings.ntbVisibilityIsLocked = settingsChanges.ntbVisibilityIsLocked;
+						settings.progReportVisibilityIsLocked = settingsChanges.progReportVisibilityIsLocked;
+						settings.avatarIsActive = settingsChanges.avatarIsActive; 
+						settings.textIsActive = settingsChanges.textIsActive; 
+						settings.audioIsActive = settingsChanges.audioIsActive;
+						settings.textToSpeech = settingsChanges.textToSpeech;
+						settings.avatarFilePath = settingsChanges.avatarFilePath; 
+						settings.alwaysOnScreen = settingsChanges.alwaysOnScreen; 
+						settings.avatarSize = settingsChanges.avatarSize; 
+						settings.pomodoroIsActive = settingsChanges.pomodoroIsActive; 
+						settings.pomodoroIsLocked = settingsChanges.pomodoroIsLocked;
+						settings.workPeriod = settingsChanges.workPeriod; 
+						settings.workPeriodIsLocked = settingsChanges.workPeriodIsLocked;
+						settings.breakPeriod = settingsChanges.breakPeriod; 
+						settings.breakPeriodIsLocked = settingsChanges.breakPeriodIsLocked;
+						settings.timeShowing = settingsChanges.timeShowing; 
+						settings.ftsIsActive = settingsChanges.ftsIsActive; 
+						settings.ntbIsActive = settingsChanges.ntbIsActive; 
+						settings.isAutoLinked = settingsChanges.isAutoLinked; 
+						settings.htbIsActive = settingsChanges.htbIsActive;
+						settings.ftsIsLocked = settingsChanges.ftsIsLocked;
+						settings.ntbIsLocked = settingsChanges.ntbIsLocked;
+						settings.htbIsLocked = settingsChanges.htbIsLocked;
+						
+						if(settings.ftsIsActive == false) {
+							ftsVisibleBox.setEnabled(false);
+							openFTS.setEnabled(false);
+						}else if(settings.ftsIsActive == true) {
+							ftsVisibleBox.setEnabled(true);
+							openFTS.setEnabled(true); 
+						}
+						
+						if(settings.htbIsActive == false) {
+							htbVisibleBox.setEnabled(false);
+							openHTB.setEnabled(false);
+						}else if(settings.htbIsActive == true) {
+							htbVisibleBox.setEnabled(true);
+							openHTB.setEnabled(true); 
+						}
+						
+						if(settings.ntbIsActive == false) {
+							ntbVisibleBox.setEnabled(false);
+							openNTB.setEnabled(false);
+						}else if(settings.ntbIsActive == true) {
+							ntbVisibleBox.setEnabled(true);
+							openNTB.setEnabled(true); 
+						}
+						
+						if(settings.pomodoroIsActive == false) {
+							timerVisibleBox.setEnabled(false);
+							openPom.setEnabled(false); 
+						}else if(settings.pomodoroIsActive == true) {
+							timerVisibleBox.setEnabled(true);
+							openPom.setEnabled(true);
+						}
+						
+						navbar.refresh(settings);
+						pomodoro_timer.refresh(settings);
+						db.UpdateSettings(settings);
+						*/
+					}
+				});
+				
+				JButton cancel = new JButton("cancel");
+				cancel.setForeground(Color.white);
+				cancel.setFont(new Font("Serif", Font.BOLD, 16));
+				cancel.setContentAreaFilled(true);
+				cancel.setBorderPainted(true);
+				cancel.setBorder(new LineBorder(Color.GRAY));
+				cancel.setFocusPainted(false);
+				cancel.setBackground(aa_grey);
+				cancel.setMaximumSize(new Dimension(80,35));
+				cancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//close window without saving info
+						pPortal_Frame.dispose();
+					}
+				});
+				
+				
+				/*
+				 * creates layout for left side panel and buttons for side-bar sub-menus 
+				 */ 
+				JPanel sideMenu = new JPanel();
+				sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
+				sideMenu.setPreferredSize(new Dimension(160, 675));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
+				sideMenu.add(generalSettings);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
+				sideMenu.add(monitoringManagement);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,335)));
+				sideMenu.add(progressReport);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
+				sideMenu.add(guideButton);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
+				sideMenu.add(exit_AA);
+				sideMenu.setBackground(Color.black);
+				
+				/*
+				 * creates split center panel
+				 */
+				JPanel center_panel = new JPanel(new BorderLayout());
+				center_panel.setBackground(Color.black);
+				center_panel.add(card_panel, BorderLayout.CENTER);
+				center_panel.add(sideMenu, BorderLayout.WEST);
+			
+				/*
+				 * creates layout for panel and buttons along bottom of frame
+				 */
+				JPanel bottomButtons = new JPanel();
+				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
+				bottomButtons.add(Box.createRigidArea(new Dimension(365, 0)));
+				bottomButtons.add(apply);
+				bottomButtons.add(Box.createRigidArea(new Dimension(15, 0)));
+				bottomButtons.add(cancel);
+				bottomButtons.setBackground(Color.black);
+				
+				/*
+				 * populates master panel 
+				 */
+				masterPanel.add(title_panel, BorderLayout.PAGE_START); 
+				masterPanel.add(center_panel, BorderLayout.CENTER);
+				masterPanel.add(bottomButtons, BorderLayout.PAGE_END);
+			
+				/*
+				 * adds master panel to frame
+				 */
+				pPortal_Frame.getContentPane().add(masterPanel); 
+				pPortal_Frame.getContentPane().setBackground(Color.black);
+				pPortal_Frame.pack();
+				pPortal_Frame.setAlwaysOnTop(false);
+				pPortal_Frame.setVisible(true);
+				pPortal_Frame.setResizable(true);
+				pPortal_Frame.setLocationRelativeTo(null);
+				
+			}
+		});
+	}
+}

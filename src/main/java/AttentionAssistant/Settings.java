@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.net.URL;
 import java.net.MalformedURLException;
-import java.net.URI;
 import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,8 +25,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 /**
  * Class that contains GUI and information whenever Settings 
@@ -48,7 +45,6 @@ public class Settings {
 	private int width = 550; 
 	private int mouseX;
 	private int mouseY;
-	private int mediaID;
 	JLabel displayAvatar;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
@@ -1712,7 +1708,6 @@ public class Settings {
 		JPanel backgroundColorOptions = new JPanel();
 		backgroundColorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
 		backgroundColorOptions.setBackground(aa_grey);
-
 		
 		JLabel backgroundColor = new JLabel(("<html><center>Navigation Bar" + "<br/>Background Color: </center></html>"));
 		backgroundColor.setFont(new Font("Serif", Font.BOLD, 16));
@@ -2807,7 +2802,7 @@ public class Settings {
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db, UserID);								
 				
 				/*
-				 * buttons for bottom border
+				 * buttons for sidebar
 				 */
 				JButton general = new JButton("<html><center>General" + "<br/>Settings</center></html>");
 				JButton notifications = new JButton("<html><center>Notification" + "<br/>System</center></html>");
@@ -3190,9 +3185,9 @@ public class Settings {
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
 				bottomButtons.add(Box.createRigidArea(new Dimension(160, 0)));
 				bottomButtons.add(accountManagment);
-				bottomButtons.add(Box.createRigidArea(new Dimension(40, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(35, 0)));
 				bottomButtons.add(apply);
-				bottomButtons.add(Box.createRigidArea(new Dimension(6, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(7, 0)));
 				bottomButtons.add(cancel);
 				bottomButtons.setBackground(Color.black);
 				
