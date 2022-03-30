@@ -29,7 +29,7 @@ public class Parent_Portal {
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	private int height = 700; 
-	private int width = 650; 
+	private int width = 600; 
 	private int mouseX;
 	private int mouseY;
 	final static boolean shouldFill = true; 
@@ -621,7 +621,7 @@ public class Parent_Portal {
 				guide.setFocusPainted(false);
 				
 				title_panel.add(title);
-				title_panel.add(Box.createRigidArea(new Dimension(390, 0)));
+				title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
@@ -847,7 +847,7 @@ public class Parent_Portal {
 				 */
 				JPanel bottomButtons = new JPanel();
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
-				bottomButtons.add(Box.createRigidArea(new Dimension(465, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(415, 0)));
 				bottomButtons.add(apply);
 				bottomButtons.add(Box.createRigidArea(new Dimension(15, 0)));
 				bottomButtons.add(cancel);
