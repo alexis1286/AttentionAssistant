@@ -37,7 +37,7 @@ public class Parent_Portal {
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
-	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>");
+	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&#8202;&#8202;&nbsp;&nbsp;" + "<br/>Space</center></html>");
 	JCheckBox ntbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Negative Thought" + "<br/>Burner</center></html>");
 	JCheckBox htbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>");
 	JCheckBox timerVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>");
