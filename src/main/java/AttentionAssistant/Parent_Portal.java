@@ -104,7 +104,7 @@ public class Parent_Portal {
 		JPanel firstRowVisibilityChecks = new JPanel();
 		firstRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowVisibilityChecks.setBackground(aa_grey);
-		firstRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		firstRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		timerVisibleBox.setSelected(settingsChanges.getTimerIsVisible()); 
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
@@ -154,7 +154,7 @@ public class Parent_Portal {
 		JPanel secondRowVisibilityChecks = new JPanel();
 		secondRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		secondRowVisibilityChecks.setBackground(aa_grey);
-		secondRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		secondRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		ftsVisibleBox.setSelected(settingsChanges.getFtsIsVisible());
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
@@ -204,7 +204,7 @@ public class Parent_Portal {
 		JPanel thirdRowVisibilityChecks = new JPanel();
 		thirdRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		thirdRowVisibilityChecks.setBackground(aa_grey);
-		thirdRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		thirdRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible()); 
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
@@ -276,7 +276,7 @@ public class Parent_Portal {
 		JPanel firstRowActiveChecks = new JPanel();
 		firstRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowActiveChecks.setBackground(aa_grey);
-		firstRowActiveChecks.setMaximumSize(new Dimension(405, 55));
+		firstRowActiveChecks.setMaximumSize(new Dimension(415, 55));
 		
 		JCheckBox toggleTimer = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>", settingsChanges.getPomodoroIsActive());
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
@@ -326,9 +326,9 @@ public class Parent_Portal {
 		JPanel secondRowActiveChecks = new JPanel();
 		secondRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		secondRowActiveChecks.setBackground(aa_grey);
-		secondRowActiveChecks.setMaximumSize(new Dimension(405, 55));
+		secondRowActiveChecks.setMaximumSize(new Dimension(415, 55));
 		
-		JCheckBox ftsBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
+		JCheckBox ftsBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
