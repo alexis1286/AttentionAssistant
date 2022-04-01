@@ -97,19 +97,20 @@ public class Parent_Bar{
 	        for(int i=0;i<childAccounts.size();i++) {
 	        	int childID = childAccounts.get(i).getUserID();
 	        	Settings settings = new Settings(db,childID);
-	        	Parent_Child_Menu menu = new Parent_Child_Menu(settings,db);
+	        	Parent_Portal menu = new Parent_Portal();
 	        	
 	        	JButton button = createButton(childAccounts.get(i).getName());
 	        	
 	        	button.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent e) {
-	            		menu.child_menu();
+	            		Priority_Manager pm = new Priority_Manager(childID,db);
+	            		menu.open_parentPortal(db, settings, pm);
 	            	}});
 	        	cPanel.add(button);
 	        }
 		}
-		JButton account = createAmButton();
 		
+		JButton account = createAmButton();
 		account.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		accountManage();
