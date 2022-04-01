@@ -44,6 +44,15 @@ public class Parent_Portal {
 	JTable tableWL;
 	JTable tableBL;
 	boolean allowed = true;
+	boolean isInstantiated = false;
+	
+	public void rebuildPanel(CardLayout card_layout, JPanel card_panel, Settings settingsChanges, DataBase db) {
+		
+		createMonitoringManagementPanel(card_layout, card_panel, settingsChanges, db);
+		card_layout.show(card_panel, "monitor"); 
+		card_panel.revalidate();
+		card_panel.repaint();
+	}
 	
 	private JCheckBox createLockCheckBox(String html) {
 		
@@ -544,9 +553,9 @@ public class Parent_Portal {
 		card_panel.add("settings", settings_panel);	
 	}
 	
-	private JPanel generateTablePanels(DataBase db, Settings settingsChanges, JTable table, ArrayList<String> applicationList, boolean listType, String columnName) {
+	private JPanel generateTablePanels(DataBase db, Settings settingsChanges, CardLayout card_layout, JPanel card_panel, JTable table, 
+										ArrayList<String> applicationList, boolean listType, String columnName) {
 	
-		allowed = listType;
 		JPanel panel = new JPanel(); 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(aa_grey);
@@ -573,13 +582,13 @@ public class Parent_Portal {
 		table.setForeground(Color.white);
 		table.setBorder(null);
 		
-		if (allowed) {
+		if (listType) {
 			tableWL = table;
 		} else {
 			tableBL = table;
 		}
 		
-		JScrollPane table_pane = new JScrollPane(allowed ? tableWL : tableBL);
+		JScrollPane table_pane = new JScrollPane(listType ? tableWL : tableBL);
 		table_pane.setBackground(Color.black);
 		
 		Border empty = new EmptyBorder(0,0,0,0);
@@ -610,9 +619,9 @@ public class Parent_Portal {
 			public void actionPerformed(ActionEvent e) {
 				//add new application to database table
 				String name = applicationName.getText(); 
-				db.AddWBlist(name, listType, settingsChanges.getUserID());
 				
-				//call to revalidate frame and add new task to table 
+				db.AddWBlist(name, listType, settingsChanges.getUserID());
+				rebuildPanel(card_layout, card_panel, settingsChanges, db);
 			}
 		});
 		
@@ -633,7 +642,6 @@ public class Parent_Portal {
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
 					//call to delete selected row from table
 					model.removeRow(tableWL.getSelectedRow());
-					//call to revalidate frame and add new task to table
 				} else {
 					row = tableBL.getSelectedRow();
 					System.out.println("row is: " + row);
@@ -642,7 +650,6 @@ public class Parent_Portal {
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
 					//call to delete selected row from table
 					model.removeRow(tableBL.getSelectedRow());
-					//call to revalidate frame and add new task to table 
 				} 
 			}
 		});
@@ -661,7 +668,7 @@ public class Parent_Portal {
 	 * @param card_panel
 	 * @param settingsChanges
 	 */
-	private void createMonitoringManagementPanel(JPanel card_panel, Settings settingsChanges, DataBase db) {
+	private void createMonitoringManagementPanel(CardLayout card_layout, JPanel card_panel, Settings settingsChanges, DataBase db) {
 		JPanel monitor_panel = new JPanel();
 		monitor_panel.setLayout(new BoxLayout(monitor_panel, BoxLayout.Y_AXIS));
 		monitor_panel.setBackground(aa_grey);
@@ -679,8 +686,8 @@ public class Parent_Portal {
 		
 		//panel for whitelist and blacklist cards
 		JPanel tables_panel = new JPanel();
-		CardLayout card_layout = new CardLayout();
-		tables_panel.setLayout(card_layout);
+		CardLayout cardLayout = new CardLayout();
+		tables_panel.setLayout(cardLayout);
 		tables_panel.setMaximumSize(new Dimension(400, 500));
 		
 		JPanel button_panel = new JPanel();
@@ -694,7 +701,7 @@ public class Parent_Portal {
 		viewWhiteList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//card panel for whitelist
-				card_layout.show(tables_panel, "whitelist"); 
+				cardLayout.show(tables_panel, "whitelist"); 
 				allowed = true;
 			}
 		});		
@@ -706,7 +713,7 @@ public class Parent_Portal {
 		viewBlackList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//card panel for blackList
-				card_layout.show(tables_panel, "blacklist");
+				cardLayout.show(tables_panel, "blacklist");
 				allowed = false;
 			}
 		});		
@@ -723,12 +730,22 @@ public class Parent_Portal {
 		String whiteListColumn = "On-Task Applications";
 		String blackListColumn = "Off-Task Applications";
 		
-		JPanel whiteListPanel = generateTablePanels(db, settingsChanges, tableWL, whiteList, true, whiteListColumn);
-		JPanel blackListPanel = generateTablePanels(db, settingsChanges, tableBL, blackList, false, blackListColumn);
-		allowed = true;
+		JPanel whiteListPanel = generateTablePanels(db, settingsChanges, card_layout, card_panel, tableWL, whiteList, true, whiteListColumn);
+		JPanel blackListPanel = generateTablePanels(db, settingsChanges, card_layout, card_panel, tableBL, blackList, false, blackListColumn);
+		
+		if (!isInstantiated) {
+			allowed = true;
+			isInstantiated = true;
+		}
 		
 		tables_panel.add("whitelist", whiteListPanel);
 		tables_panel.add("blacklist", blackListPanel);
+		
+		if (allowed) {
+			cardLayout.show(tables_panel, "whitelist");
+		} else {
+			cardLayout.show(tables_panel, "blacklist");
+		}
 		
 		monitor_panel.add(header_panel);
 		monitor_panel.add(button_panel);
@@ -836,7 +853,7 @@ public class Parent_Portal {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				createMonitoringManagementPanel(card_panel, settingsChanges, db);
+				createMonitoringManagementPanel(card_layout, card_panel, settingsChanges, db);
 				
 				JButton generalSettings = new JButton("<html><center>General" + "<br/>Settings</center></html>");
 				JButton monitoringManagement = new JButton("<html><center>Monitoring" + "<br/>Management</center></html>");
