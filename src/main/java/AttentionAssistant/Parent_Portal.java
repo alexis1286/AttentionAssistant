@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Class that encompasses Parent Portal whenever adolescent is 
@@ -32,13 +33,17 @@ public class Parent_Portal {
 	private int width = 600; 
 	private int mouseX;
 	private int mouseY;
+	private int row; 
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
-	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>");
-	JCheckBox ntbVisibleBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>");
-	JCheckBox htbVisibleBox = new JCheckBox("<html><center>Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>");
-	JCheckBox timerVisibleBox = new JCheckBox("Pomodoro Timer");
+	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>");
+	JCheckBox ntbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Negative Thought" + "<br/>Burner</center></html>");
+	JCheckBox htbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>");
+	JCheckBox timerVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>");
+	JTable tableWL;
+	JTable tableBL;
+	boolean allowed = true;
 	
 	private JCheckBox createLockCheckBox(String html) {
 		
@@ -90,12 +95,14 @@ public class Parent_Portal {
 		JPanel firstRowVisibilityChecks = new JPanel();
 		firstRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowVisibilityChecks.setBackground(aa_grey);
-		firstRowVisibilityChecks.setMaximumSize(new Dimension(400, 45));
+		firstRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
 		
 		timerVisibleBox.setSelected(settingsChanges.getTimerIsVisible()); 
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerVisibleBox.setForeground(Color.white);
 		timerVisibleBox.setContentAreaFilled(false);
+		timerVisibleBox.setBorderPainted(true);
+		timerVisibleBox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 4, aa_purple));
 		timerVisibleBox.setFocusPainted(false);
 		timerVisibleBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -110,7 +117,7 @@ public class Parent_Portal {
         		settingsChanges.setTimerVisibilityIsLocked(lock_timerVisibility.isSelected());
         }});
 		
-		JCheckBox pmVisibleBox = new JCheckBox("<html><center>Priority Manager&nbsp;</center></html>", settingsChanges.getPmIsVisible());
+		JCheckBox pmVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Manager</center></html>", settingsChanges.getPmIsVisible());
 		pmVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmVisibleBox.setForeground(Color.white);
 		pmVisibleBox.setContentAreaFilled(false);
@@ -128,19 +135,21 @@ public class Parent_Portal {
         		settingsChanges.setPmVisibilityIsLocked(lock_pmVisibility.isSelected());
         }});
 		
-		firstRowVisibilityChecks.add(timerVisibleBox);
 		firstRowVisibilityChecks.add(lock_timerVisibility);
-		firstRowVisibilityChecks.add(pmVisibleBox);
+		firstRowVisibilityChecks.add(timerVisibleBox);
 		firstRowVisibilityChecks.add(lock_pmVisibility);
+		firstRowVisibilityChecks.add(pmVisibleBox);
 		
 		JPanel secondRowVisibilityChecks = new JPanel();
 		secondRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		secondRowVisibilityChecks.setBackground(aa_grey);
-		secondRowVisibilityChecks.setMaximumSize(new Dimension(400, 55));
+		secondRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
 		
 		ftsVisibleBox.setSelected(settingsChanges.getFtsIsVisible());
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsVisibleBox.setForeground(Color.white);
+		ftsVisibleBox.setBorderPainted(true);
+		ftsVisibleBox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 4, aa_purple));
 		ftsVisibleBox.setContentAreaFilled(false);
 		ftsVisibleBox.setFocusPainted(false);
 		ftsVisibleBox.addActionListener(new ActionListener() {
@@ -174,19 +183,21 @@ public class Parent_Portal {
         		settingsChanges.setNtbVisibilityIsLocked(lock_ntbVisibility.isSelected());
         }});
 		
-		secondRowVisibilityChecks.add(ftsVisibleBox);
 		secondRowVisibilityChecks.add(lock_ftsVisibility);
-		secondRowVisibilityChecks.add(ntbVisibleBox);
+		secondRowVisibilityChecks.add(ftsVisibleBox);
 		secondRowVisibilityChecks.add(lock_ntbVisibility);
+		secondRowVisibilityChecks.add(ntbVisibleBox);
 		
 		JPanel thirdRowVisibilityChecks = new JPanel();
 		thirdRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		thirdRowVisibilityChecks.setBackground(aa_grey);
-		thirdRowVisibilityChecks.setMaximumSize(new Dimension(400, 55));
+		thirdRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
 		
 		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible()); 
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbVisibleBox.setForeground(Color.white);
+		htbVisibleBox.setBorderPainted(true);
+		htbVisibleBox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 4, aa_purple));
 		htbVisibleBox.setContentAreaFilled(false);
 		htbVisibleBox.setFocusPainted(false);
 		htbVisibleBox.addActionListener(new ActionListener() {
@@ -202,7 +213,7 @@ public class Parent_Portal {
         		settingsChanges.setHtbVisibilityIsLocked(lock_htbVisibility.isSelected());
         }});
 		
-		JCheckBox prVisibleBox = new JCheckBox("<html><center>Progress Report&nbsp;&nbsp;&nbsp;</center></html>", settingsChanges.getProgReportIsVisible());
+		JCheckBox prVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Progress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Report</center></html>", settingsChanges.getProgReportIsVisible());
 		
 		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prVisibleBox.setForeground(Color.white);
@@ -221,10 +232,10 @@ public class Parent_Portal {
         		settingsChanges.setProgReportVisibilityIsLocked(lock_prVisibility.isSelected());
         }});
 		
-		thirdRowVisibilityChecks.add(htbVisibleBox);
 		thirdRowVisibilityChecks.add(lock_htbVisibility);
-		thirdRowVisibilityChecks.add(prVisibleBox);
+		thirdRowVisibilityChecks.add(htbVisibleBox);
 		thirdRowVisibilityChecks.add(lock_prVisibility);
+		thirdRowVisibilityChecks.add(prVisibleBox);
 		
 		navBarBoxes.add(firstRowVisibilityChecks);
 		navBarBoxes.add(secondRowVisibilityChecks);
@@ -245,18 +256,20 @@ public class Parent_Portal {
 		JPanel featureBoxes = new JPanel();
 		featureBoxes.setLayout(new BoxLayout(featureBoxes, BoxLayout.Y_AXIS));
 		featureBoxes.setBackground(aa_grey);
-		featureBoxes.setMaximumSize(new Dimension(425, 40));
+		featureBoxes.setMaximumSize(new Dimension(420, 5));
 		
 		JPanel firstRowActiveChecks = new JPanel();
 		firstRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowActiveChecks.setBackground(aa_grey);
-		firstRowActiveChecks.setMaximumSize(new Dimension(400, 55));
+		firstRowActiveChecks.setMaximumSize(new Dimension(405, 55));
 		
-		JCheckBox toggleTimer = new JCheckBox("<html><center>Pomodoro Timer&nbsp;&nbsp;</center></html>", settingsChanges.getPomodoroIsActive());
+		JCheckBox toggleTimer = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>", settingsChanges.getPomodoroIsActive());
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
 		toggleTimer.setForeground(Color.white);
 		toggleTimer.setContentAreaFilled(false);
 		toggleTimer.setFocusPainted(false);
+		toggleTimer.setBorderPainted(true);
+		toggleTimer.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 4, aa_purple));
 		toggleTimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				settingsChanges.setPomodoroIsActive(toggleTimer.isSelected()); 
@@ -270,35 +283,7 @@ public class Parent_Portal {
         		settingsChanges.setPomodoroIsLocked(lock_timerActive.isSelected());
         }});
 		
-		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
-		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
-		ftsBox.setForeground(Color.white);
-		ftsBox.setContentAreaFilled(false);
-		ftsBox.setFocusPainted(false);
-		ftsBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				settingsChanges.setFtsIsActive(ftsBox.isSelected()); 
-			}
-		});
-		
-		JCheckBox lock_ftsActive = createLockCheckBox(html); 
-		lock_ftsActive.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//lock feature
-        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
-        }});
-		
-		firstRowActiveChecks.add(toggleTimer);
-		firstRowActiveChecks.add(lock_timerActive);
-		firstRowActiveChecks.add(ftsBox);
-		firstRowActiveChecks.add(lock_ftsActive);
-		
-		JPanel secondRowActiveChecks = new JPanel();
-		secondRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
-		secondRowActiveChecks.setBackground(aa_grey);
-		secondRowActiveChecks.setMaximumSize(new Dimension(400, 55));
-		
-		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.getNtbIsActive());
+		JCheckBox ntbBox = new JCheckBox("<html><center>&nbsp;&nbsp;Negative Thought" + "<br/>Burner</center></html>", settingsChanges.getNtbIsActive());
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
@@ -309,6 +294,34 @@ public class Parent_Portal {
 			}
 		});
 		
+		JCheckBox lock_ftsActive = createLockCheckBox(html); 
+		lock_ftsActive.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//lock feature
+        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
+        }});
+		
+		firstRowActiveChecks.add(lock_timerActive);
+		firstRowActiveChecks.add(toggleTimer);
+		firstRowActiveChecks.add(lock_ftsActive);
+		firstRowActiveChecks.add(ntbBox);
+		
+		JPanel secondRowActiveChecks = new JPanel();
+		secondRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
+		secondRowActiveChecks.setBackground(aa_grey);
+		secondRowActiveChecks.setMaximumSize(new Dimension(405, 55));
+		
+		JCheckBox ftsBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
+		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
+		ftsBox.setForeground(Color.white);
+		ftsBox.setContentAreaFilled(false);
+		ftsBox.setFocusPainted(false);
+		ftsBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				settingsChanges.setFtsIsActive(ftsBox.isSelected()); 
+			}
+		});
+		
 		JCheckBox lock_ntbActive = createLockCheckBox(html); 
 		lock_ntbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -316,11 +329,13 @@ public class Parent_Portal {
         		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
         }});
 		
-		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
+		JCheckBox htbBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
 		htbBox.setFocusPainted(false);
+		htbBox.setBorderPainted(true);
+		htbBox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 4, aa_purple));
 		htbBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				settingsChanges.setHtbIsActive(htbBox.isSelected()); 
@@ -334,10 +349,10 @@ public class Parent_Portal {
         		settingsChanges.setHtbIsLocked(lock_htbActive.isSelected());
         }});
 		
-		secondRowActiveChecks.add(ntbBox);
 		secondRowActiveChecks.add(lock_ntbActive);
 		secondRowActiveChecks.add(htbBox);
 		secondRowActiveChecks.add(lock_htbActive);
+		secondRowActiveChecks.add(ftsBox);
 		
 		featureBoxes.add(firstRowActiveChecks);
 		featureBoxes.add(secondRowActiveChecks);
@@ -464,7 +479,7 @@ public class Parent_Portal {
 			}
 		});
 		
-		JButton calendar = new JButton("Open Calendar");
+		JButton calendar = new JButton("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Open Calendar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></html>");
 		calendar.setMaximumSize(new Dimension(200, 20));
 		calendar.setBackground(Color.GRAY);
 		calendar.setForeground(Color.WHITE);
@@ -475,7 +490,7 @@ public class Parent_Portal {
 			}
 		});
 		
-		JButton calendarInt = new JButton("Calendar Integration");
+		JButton calendarInt = new JButton("<html><center>&nbsp;&nbsp;Calendar Integration&nbsp;&nbsp;</center></html>");
 		calendarInt.setMaximumSize(new Dimension(200, 20));
 		calendarInt.setBackground(Color.GRAY);
 		calendarInt.setForeground(Color.WHITE);
@@ -486,7 +501,7 @@ public class Parent_Portal {
 			}
 		});
 		
-		JButton progressReport = new JButton("Open Progress Report");
+		JButton progressReport = new JButton("Open Progress Report ");
 		progressReport.setMaximumSize(new Dimension(200, 0));
 		progressReport.setBackground(Color.GRAY);
 		progressReport.setForeground(Color.WHITE);
@@ -504,7 +519,7 @@ public class Parent_Portal {
 		
 		bottomRowButtons.add(Box.createRigidArea(new Dimension(20, 0)));
 		bottomRowButtons.add(calendarInt);
-		bottomRowButtons.add(Box.createRigidArea(new Dimension(22, 0)));
+		bottomRowButtons.add(Box.createRigidArea(new Dimension(10, 0)));
 		bottomRowButtons.add(progressReport);
 		
 		buttonsPanel.add(topRowButtons);
@@ -516,24 +531,208 @@ public class Parent_Portal {
 		settings_panel.add(header_panel);
 		settings_panel.add(featuresHeader);
 		settings_panel.add(navBarBoxes);
-		settings_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		settings_panel.add(activefeaturesHeader);
-		settings_panel.add(featureBoxes);
-		settings_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		settings_panel.add(featureBoxes);	
 		settings_panel.add(timerHeader);
+		settings_panel.add(Box.createRigidArea(new Dimension(10, 0)));
 		settings_panel.add(intervalSettings);
 		settings_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		settings_panel.add(buttonsPanel);
-		settings_panel.add(Box.createRigidArea(new Dimension(0, 55)));
+		settings_panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		
 		//add to settings_panel to  card_panel
 		card_panel.add("settings", settings_panel);	
 	}
 	
-	private void createMonitoringManagementPanel(JPanel card_panel, Settings settingsChanges) {
+	private JPanel generateTablePanels(DataBase db, Settings settingsChanges, JTable table, ArrayList<String> applicationList, boolean listType, String columnName) {
+	
+		allowed = listType;
+		JPanel panel = new JPanel(); 
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(aa_grey);
+		panel.setMaximumSize(new Dimension(400, 500));
+		
+		DefaultTableModel model = new DefaultTableModel(applicationList.size(), 0);
+		table = new JTable(model); 
+		model.addColumn(columnName);
+		table.getTableHeader().setFont(new Font("TimesRoman", Font.ITALIC, 18));
+		
+		table.setFillsViewportHeight(true);
+		table.setBorder(BorderFactory.createEmptyBorder());
+		table.getTableHeader().setBackground(aa_grey);
+		table.getTableHeader().setForeground(Color.white);
+		table.setGridColor(aa_purple);
+		table.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		
+		for(int i = 0; i < applicationList.size(); i++) {
+			
+			table.setValueAt(applicationList.get(i),i,0); 
+		}
+			
+		table.setBackground(Color.black);
+		table.setForeground(Color.white);
+		table.setBorder(null);
+		
+		if (allowed) {
+			tableWL = table;
+		} else {
+			tableBL = table;
+		}
+		
+		JScrollPane table_pane = new JScrollPane(allowed ? tableWL : tableBL);
+		table_pane.setBackground(Color.black);
+		
+		Border empty = new EmptyBorder(0,0,0,0);
+		table_pane.setBorder(empty);
+		//sets dimensions for table panel
+		table_pane.setPreferredSize(new Dimension(350,500));
+		
+		JPanel button_pane = new JPanel();
+		button_pane.setLayout(new FlowLayout(FlowLayout.LEFT));
+		button_pane.setBackground(aa_grey);
+		button_pane.setMaximumSize(new Dimension(400, 55));
+		
+		JPanel add_pane = new JPanel();
+		add_pane.setLayout(new FlowLayout(FlowLayout.LEFT));
+		add_pane.setBackground(aa_grey);
+		add_pane.setMaximumSize(new Dimension(300, 55));
+		
+		//creates text area for application name input
+		JTextArea applicationName = new JTextArea(1, 19);
+		applicationName.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		applicationName.setBorder(new LineBorder(aa_purple,5,false));
+		
+		JButton addApplication = new JButton("Add"); 
+		addApplication.setMaximumSize(new Dimension(50, 0));
+		addApplication.setBackground(aa_purple);
+		addApplication.setForeground(Color.WHITE);
+		addApplication.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//add new application to database table
+				String name = applicationName.getText(); 
+				db.AddWBlist(name, listType, settingsChanges.getUserID());
+				
+				//call to revalidate frame and add new task to table 
+			}
+		});
+		
+		add_pane.add(applicationName);
+		add_pane.add(addApplication); 
+		
+		JButton deleteApplication = new JButton("Delete"); 
+		deleteApplication.setMaximumSize(new Dimension(40, 0));
+		deleteApplication.setBackground(Color.GRAY);
+		deleteApplication.setForeground(Color.WHITE);
+		deleteApplication.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (allowed) {
+					row = tableWL.getSelectedRow();
+					System.out.println("row is: " + row);
+					String appName = String.valueOf(tableWL.getModel().getValueAt(row, 0));
+					//call to delete selected row from database
+					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
+					//call to delete selected row from table
+					model.removeRow(tableWL.getSelectedRow());
+					//call to revalidate frame and add new task to table
+				} else {
+					row = tableBL.getSelectedRow();
+					System.out.println("row is: " + row);
+					String appName = String.valueOf(tableBL.getModel().getValueAt(row, 0));
+					//call to delete selected row from database
+					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
+					//call to delete selected row from table
+					model.removeRow(tableBL.getSelectedRow());
+					//call to revalidate frame and add new task to table 
+				} 
+			}
+		});
+		
+		button_pane.add(add_pane);
+		button_pane.add(deleteApplication);
+		
+		panel.add(table_pane);
+		panel.add(button_pane);
+		
+		return panel;
+	}
+	
+	/**
+	 * 
+	 * @param card_panel
+	 * @param settingsChanges
+	 */
+	private void createMonitoringManagementPanel(JPanel card_panel, Settings settingsChanges, DataBase db) {
 		JPanel monitor_panel = new JPanel();
 		monitor_panel.setLayout(new BoxLayout(monitor_panel, BoxLayout.Y_AXIS));
 		monitor_panel.setBackground(aa_grey);
+		
+		JPanel header_panel = new JPanel();
+		header_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		header_panel.setBackground(aa_grey);
+		
+		JLabel listOptions = new JLabel("Application Lists:");
+		listOptions.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		listOptions.setForeground(Color.white);
+		
+		header_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		header_panel.add(listOptions);
+		
+		//panel for whitelist and blacklist cards
+		JPanel tables_panel = new JPanel();
+		CardLayout card_layout = new CardLayout();
+		tables_panel.setLayout(card_layout);
+		tables_panel.setMaximumSize(new Dimension(400, 500));
+		
+		JPanel button_panel = new JPanel();
+		button_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		button_panel.setBackground(aa_grey);
+		
+		JButton viewWhiteList = new JButton("On-Task Applications");
+		viewWhiteList.setMaximumSize(new Dimension(70,20));
+		viewWhiteList.setBackground(Color.GRAY);
+		viewWhiteList.setForeground(Color.WHITE);
+		viewWhiteList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//card panel for whitelist
+				card_layout.show(tables_panel, "whitelist"); 
+				allowed = true;
+			}
+		});		
+		
+		JButton viewBlackList = new JButton("Off-Task Applications");
+		viewBlackList.setMaximumSize(new Dimension(70,20));
+		viewBlackList.setBackground(Color.GRAY);
+		viewBlackList.setForeground(Color.WHITE);
+		viewBlackList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//card panel for blackList
+				card_layout.show(tables_panel, "blacklist");
+				allowed = false;
+			}
+		});		
+		
+		button_panel.add(Box.createRigidArea(new Dimension(40, 0)));
+		button_panel.add(viewWhiteList);
+		button_panel.add(Box.createRigidArea(new Dimension(20, 0)));
+		button_panel.add(viewBlackList);
+		
+		// whitelist == true
+		// blacklist == false
+		ArrayList<String> whiteList = db.SelectAllFromWBList(settingsChanges.getUserID(), true);
+		ArrayList<String> blackList = db.SelectAllFromWBList(settingsChanges.getUserID(), false);
+		String whiteListColumn = "On-Task Applications";
+		String blackListColumn = "Off-Task Applications";
+		
+		JPanel whiteListPanel = generateTablePanels(db, settingsChanges, tableWL, whiteList, true, whiteListColumn);
+		JPanel blackListPanel = generateTablePanels(db, settingsChanges, tableBL, blackList, false, blackListColumn);
+		allowed = true;
+		
+		tables_panel.add("whitelist", whiteListPanel);
+		tables_panel.add("blacklist", blackListPanel);
+		
+		monitor_panel.add(header_panel);
+		monitor_panel.add(button_panel);
+		monitor_panel.add(tables_panel);
 		
 		card_panel.add("monitor", monitor_panel);
 	}
@@ -637,7 +836,7 @@ public class Parent_Portal {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				createMonitoringManagementPanel(card_panel, settingsChanges);
+				createMonitoringManagementPanel(card_panel, settingsChanges, db);
 				
 				JButton generalSettings = new JButton("<html><center>General" + "<br/>Settings</center></html>");
 				JButton monitoringManagement = new JButton("<html><center>Monitoring" + "<br/>Management</center></html>");
