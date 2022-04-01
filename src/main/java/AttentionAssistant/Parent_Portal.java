@@ -30,7 +30,7 @@ public class Parent_Portal {
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	private int height = 700; 
-	private int width = 600; 
+	private int width = 615; 
 	private int mouseX;
 	private int mouseY;
 	private int row; 
@@ -119,7 +119,8 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_timerVisibility = createLockCheckBox(html); 
+		JCheckBox lock_timerVisibility = createLockCheckBox(html);
+		lock_timerVisibility.setSelected(settingsChanges.getTimerVisibilityIsLocked());
 		lock_timerVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -138,6 +139,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_pmVisibility = createLockCheckBox(html); 
+		lock_pmVisibility.setSelected(settingsChanges.getPmVisibilityIsLocked());
 		lock_pmVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -168,6 +170,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_ftsVisibility = createLockCheckBox(html); 
+		lock_ftsVisibility.setSelected(settingsChanges.getFtsVisibilityIsLocked());
 		lock_ftsVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -185,7 +188,8 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ntbVisibility = createLockCheckBox(html); 
+		JCheckBox lock_ntbVisibility = createLockCheckBox(html);
+		lock_ntbVisibility.setSelected(settingsChanges.getNtbVisibilityIsLocked());
 		lock_ntbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -216,6 +220,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_htbVisibility = createLockCheckBox(html); 
+		lock_htbVisibility.setSelected(settingsChanges.getHtbVisibilityIsLocked());
 		lock_htbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -235,6 +240,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_prVisibility = createLockCheckBox(html); 
+		lock_prVisibility.setSelected(settingsChanges.getProgReportVisibilityIsLocked());
 		lock_prVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -286,6 +292,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_timerActive = createLockCheckBox(html); 
+		lock_timerActive.setSelected(settingsChanges.getPomodoroIsLocked());
 		lock_timerActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -304,6 +311,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_ftsActive = createLockCheckBox(html); 
+		lock_ftsActive.setSelected(settingsChanges.getFtsIsLocked());
 		lock_ftsActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -332,6 +340,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_ntbActive = createLockCheckBox(html); 
+		lock_ntbActive.setSelected(settingsChanges.getNtbIsLocked());
 		lock_ntbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -352,6 +361,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_htbActive = createLockCheckBox(html); 
+		lock_htbActive.setSelected(settingsChanges.getHtbIsLocked());
 		lock_htbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
