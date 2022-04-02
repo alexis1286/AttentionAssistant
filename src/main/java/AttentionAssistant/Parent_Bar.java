@@ -87,6 +87,7 @@ public class Parent_Bar{
 		});
 	}
 	
+	Priority_Manager pm;
 	String[] children;
 	private JPanel childPanel(DataBase db,CardLayout cardLayout,JPanel panel,JFrame frame) {
 		JPanel cPanel = new JPanel();
@@ -100,12 +101,11 @@ public class Parent_Bar{
 	        	int childID = childAccounts.get(i).getUserID();
 	        	Settings settings = new Settings(db,childID);
 	        	Parent_Portal menu = new Parent_Portal();
-	        	
+	        	pm = new Priority_Manager(childID,db);
 	        	JButton button = createButton(childAccounts.get(i).getName());
-	        	
 	        	button.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent e) {
-	            		Priority_Manager pm = new Priority_Manager(childID,db);
+	            		
 	            		menu.open_parentPortal(db, settings, pm);
 	            	}});
 	        	cPanel.add(button);
