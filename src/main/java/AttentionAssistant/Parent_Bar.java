@@ -12,6 +12,7 @@ import java.awt.image.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public class Parent_Bar{
 		        
 		        CardLayout cardLayout = new CardLayout();
 		        JPanel panel = new JPanel();
-		        panel.setBounds(0, 0, 1000, 1000);
+		        panel.setBounds(0, 0, 100, 1000);
 		        panel.setLayout(cardLayout);
 		        
 		        //panel for buttons
@@ -80,18 +81,19 @@ public class Parent_Bar{
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        		rebuildPanel(db,cardLayout,panel,frame);
-		        		int height = 70 * (childAccounts.size()+1);
-		        		frame.setPreferredSize(new Dimension(100,height));
 		        }});
 				
 			}
 		});
 	}
 	
-	
+	String[] children;
 	private JPanel childPanel(DataBase db,CardLayout cardLayout,JPanel panel,JFrame frame) {
 		JPanel cPanel = new JPanel();
+		frame.setPreferredSize(new Dimension(80,(80*9)));
+		cPanel.setPreferredSize(new Dimension(80,(80*9)));
 		cPanel.setLayout(new BoxLayout(cPanel,BoxLayout.Y_AXIS));
+		
 		if(childAccounts.size() != 0) {
 			//display button for each linked child - opens child management
 	        for(int i=0;i<childAccounts.size();i++) {
@@ -108,6 +110,10 @@ public class Parent_Bar{
 	            	}});
 	        	cPanel.add(button);
 	        }
+	        cPanel.revalidate();
+			cPanel.repaint();
+			frame.revalidate();
+			frame.repaint();
 		}
 		
 		JButton account = createAmButton();
@@ -117,6 +123,8 @@ public class Parent_Bar{
         	}});
 		cPanel.add(account);
 		cPanel.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+		frame.revalidate();
+		frame.repaint();
 		return cPanel;
 	}
 	
@@ -145,6 +153,7 @@ public class Parent_Bar{
 		frame.setResizable(false);
 	}
 	
+	JComboBox<String> accounts;
 	private JPanel linkPanel(JFrame frame) {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -213,53 +222,7 @@ public class Parent_Bar{
         link.setForeground(Color.white);
         link.setFont(font);
         link.setBorderPainted(false);
-        link.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		// add child account        		
-        		String pwd = new String(childPwText.getPassword());
-        		String usr = new String(childNameText.getText());
-        	
-        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
-        			JFrame errorframe = new JFrame();
-    				JOptionPane.showMessageDialog(errorframe, "Please input Password or Username");
-    				errorframe.dispose();
-        		}
-        		else {
-	        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
-	        		
-	        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
-        				boolean alreadyLinked = false;
-        				for(int i=0;i<childAccounts.size();i++) {
-        					if(childAccounts.get(i).getUserID() == UserAccount.getUserID()) {
-        						alreadyLinked = true;
-        					}
-        				}
-        				if(alreadyLinked == false) {
-        					childAccounts.add(UserAccount);
-        					db.AddLinked_Account(parent, UserAccount);
-        					JFrame success = new JFrame();
-        					JOptionPane.showMessageDialog(success, "Sucessfully linked Child account!!");
-        					toRefresh.doClick();
-        					success.dispose();
-        				}else {
-        					JFrame exist = new JFrame();
-            				JOptionPane.showMessageDialog(exist, "Child account already linked");
-            				exist.dispose();
-            				
-        				}
-        				
-        				childNameText.setText("");
-        				childPwText.setText("");
-	        		}else {
-	        			JFrame errorframe = new JFrame();
-        				JOptionPane.showMessageDialog(errorframe, "Incorrect Username/Password! Please try again!");
-        				childPwText.setText("");
-        				errorframe.dispose();
-	        		}
-        		}
-        		
-        	}
-        });
+        
         link.setBounds(425,180,75,30);
         panel.add(link);
         
@@ -272,7 +235,7 @@ public class Parent_Bar{
 		
 		panel.add(unlinkChild);
         
-        String[] children = new String[childAccounts.size()];
+        children = new String[childAccounts.size()];
         Integer[] c = new Integer[childAccounts.size()];
         for(int i=0;i<childAccounts.size();i++) {
         	String name = childAccounts.get(i).getName();
@@ -280,9 +243,15 @@ public class Parent_Bar{
         	children[i] = name;
         	c[i] = cid;
         }
-        JComboBox<String> accounts = new JComboBox<String>(children);
+        
+        ArrayList<String> listChildren = new ArrayList<String>(Arrays.asList(children));
+        
+        accounts = new JComboBox<String>();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(children);
+        accounts.setModel(model);
         accounts.setVisible(true);
         accounts.setBounds(100,330,150,30);
+        accounts.setSelectedIndex(-1);
         panel.add(accounts);
         
         JButton delete = new JButton("Unlink");
@@ -296,17 +265,23 @@ public class Parent_Bar{
         		for(int j=0;j<childAccounts.size();j++) {
         			if(c[s] == childAccounts.get(j).getUserID()) {
         				// remove linked account
-        				childAccounts.remove(j);
         				User_Account user = childAccounts.get(j);
+        				childAccounts.remove(j);
         				db.DeleteLinked_Account(parent, user);
         				JFrame unlinked = new JFrame();
         				JOptionPane.showMessageDialog(unlinked, "Child account unlinked");
-        				accounts.remove(s);
+        				
+        				listChildren.remove(s);
+        				children = listChildren.toArray(new String [0]);
+        				DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>(children);
+        				accounts.setModel(newModel);
+        				accounts.setSelectedIndex(-1);
         				unlinked.dispose();
-        			}
+        				toRefresh.doClick();
+	        		}
         		}
         		// refresh
-        		toRefresh.doClick();
+        		
         	}
         });
         delete.setBounds(300,330,100,30);
@@ -400,6 +375,63 @@ public class Parent_Bar{
         });
         pwChange.setBounds(400,600,100,30);
         panel.add(pwChange);
+        
+        link.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		// add child account        		
+        		String pwd = new String(childPwText.getPassword());
+        		String usr = new String(childNameText.getText());
+        	
+        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
+        			JFrame errorframe = new JFrame();
+    				JOptionPane.showMessageDialog(errorframe, "Please input Password or Username");
+    				errorframe.dispose();
+        		}
+        		else {
+	        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
+	        		
+	        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
+        				boolean alreadyLinked = false;
+        				for(int i=0;i<childAccounts.size();i++) {
+        					if(childAccounts.get(i).getUserID() == UserAccount.getUserID()) {
+        						alreadyLinked = true;
+        					}
+        				}
+        				if(alreadyLinked == false) {
+        					childAccounts.add(UserAccount);
+        					db.AddLinked_Account(parent, UserAccount);
+        					JFrame success = new JFrame();
+        					JOptionPane.showMessageDialog(success, "Sucessfully linked Child account!!");
+        					toRefresh.doClick();
+        					success.dispose();
+        					
+        					listChildren.add(UserAccount.getName());
+            				children = listChildren.toArray(new String [0]);
+            				DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>(children);
+            				accounts.setModel(newModel);
+            				accounts.setSelectedIndex(-1);
+            				toRefresh.doClick();
+        					
+        				}else {
+        					JFrame exist = new JFrame();
+            				JOptionPane.showMessageDialog(exist, "Child account already linked");
+            				exist.dispose();
+            				
+        				}
+        				
+        				childNameText.setText("");
+        				childPwText.setText("");
+	        		}else {
+	        			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "Incorrect Username/Password! Please try again!");
+        				childPwText.setText("");
+        				errorframe.dispose();
+	        		}
+        		}
+        		
+        	}
+        });
+        
 		return panel;
 	}
 	
@@ -541,7 +573,7 @@ public class Parent_Bar{
 	      }
 	    }
 	    return image;
-	  }
+	}
 	
 	
 	private void rebuildPanel(DataBase db,CardLayout cardLayout,JPanel panel,JFrame frame) {

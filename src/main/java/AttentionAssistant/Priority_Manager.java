@@ -40,19 +40,27 @@ public class Priority_Manager {
 	int width = 550;
 	int row;
 	Task activeTask;
+	boolean isParent;
 	
 	private ArrayList<Task> Task_List;
+	
+	public Priority_Manager(int userID,DataBase db) {
+		this.Task_List = new ArrayList<Task>();
+		this.isParent = true;
+	}
 	
 	public Priority_Manager(int userID, DataBase db,Notification_System notifSystem) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		this.notifSystem = notifSystem;
 		this.pomo = new Pomodoro_Timer();
+		this.isParent = false;
 	}
 	
 	public Priority_Manager(int userID,DataBase db,Pomodoro_Timer pomo) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		this.pomo = pomo;
 		this.notifSystem = new Notification_System(userID,db,pomo);
+		this.isParent = false;
 	}
 	
 	public Task getActiveTask() {
@@ -86,10 +94,13 @@ public class Priority_Manager {
 				db.UpdateTask(tempT);
 			}
 		}
-		
 		task.setPriority(true);
-		observer = new Observer();
-		observer.monitor(task, db, notifSystem, pomo);
+		
+		if(isParent == false) {
+			observer = new Observer();
+			observer.monitor(task, db, notifSystem, pomo);
+		}
+		
 		Date timestamp = new Date();
 		db.AddEvent(userID, timestamp, "started");
 		activeTask = task;
