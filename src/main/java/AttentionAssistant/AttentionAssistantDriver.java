@@ -782,7 +782,6 @@ public class AttentionAssistantDriver {
 	        				
 	        				Settings sett = new Settings(db,userid);
 	        				
-	        				
 	           				System.out.print("this is theuser id" + userid);
 	        				frame.dispose();
 	        				success.dispose();

@@ -1909,7 +1909,14 @@ public class Settings {
 		navBarBoxes.setMaximumSize(new Dimension(325, 60));
 		
 		//JCheckBox timerVisibleBox = new JCheckBox("Pomodoro Timer", settingsChanges.timerIsVisible);
-		timerVisibleBox.setSelected(settingsChanges.timerIsVisible); 
+		timerVisibleBox.setSelected(settingsChanges.timerIsVisible);
+		if(settingsChanges.timerVisibilityIsLocked) {
+			timerVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.timerVisibilityIsLocked && settingsChanges.pomodoroIsActive) {
+			timerVisibleBox.setEnabled(true);
+		}else {
+			timerVisibleBox.setEnabled(false);
+		}
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerVisibleBox.setForeground(Color.white);
 		timerVisibleBox.setContentAreaFilled(false);
@@ -1921,6 +1928,12 @@ public class Settings {
 		});
 		
 		JCheckBox pmVisibleBox = new JCheckBox("Priority Manager", settingsChanges.pmIsVisible);
+		pmVisibleBox.setSelected(settingsChanges.pmIsVisible);
+		if(settingsChanges.pmVisibilityIsLocked) {
+			pmVisibleBox.setEnabled(false);
+		}else {
+			pmVisibleBox.setEnabled(true);
+		}
 		pmVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmVisibleBox.setForeground(Color.white);
 		pmVisibleBox.setContentAreaFilled(false);
@@ -1933,6 +1946,13 @@ public class Settings {
 		
 		//JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", settingsChanges.ftsIsVisible);
 		ftsVisibleBox.setSelected(settingsChanges.ftsIsVisible);
+		if(settingsChanges.ftsVisibilityIsLocked) {
+			ftsVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.ftsVisibilityIsLocked && settingsChanges.ftsIsActive) {
+			ftsVisibleBox.setEnabled(true);
+		}else {
+			ftsVisibleBox.setEnabled(false);
+		}
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsVisibleBox.setForeground(Color.white);
 		ftsVisibleBox.setContentAreaFilled(false);
@@ -1943,8 +1963,15 @@ public class Settings {
 			}
 		});
 		
-		//JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.ntbIsVisible);
-		ntbVisibleBox.setSelected(settingsChanges.ntbIsVisible); 
+		//JCheckBox ntbVisibleBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.ntbIsVisible);
+		ntbVisibleBox.setSelected(settingsChanges.ntbIsVisible);
+		if(settingsChanges.ntbVisibilityIsLocked) {
+			ntbVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.ntbVisibilityIsLocked && settingsChanges.ntbIsActive) {
+			ntbVisibleBox.setEnabled(true);
+		}else {
+			ntbVisibleBox.setEnabled(false);
+		}
 		ntbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbVisibleBox.setForeground(Color.white);
 		ntbVisibleBox.setContentAreaFilled(false);
@@ -1956,7 +1983,14 @@ public class Settings {
 		});
 		
 		//JCheckBox htbVisibleBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.htbIsVisible);
-		htbVisibleBox.setSelected(settingsChanges.htbIsVisible); 
+		htbVisibleBox.setSelected(settingsChanges.htbIsVisible);
+		if(settingsChanges.htbVisibilityIsLocked) {
+			htbVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.htbVisibilityIsLocked && settingsChanges.htbIsActive) {
+			htbVisibleBox.setEnabled(true);
+		}else {
+			htbVisibleBox.setEnabled(false);
+		}
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbVisibleBox.setForeground(Color.white);
 		htbVisibleBox.setContentAreaFilled(false);
@@ -1968,6 +2002,12 @@ public class Settings {
 		});
 		
 		JCheckBox prVisibleBox = new JCheckBox("Progress Report", settingsChanges.progReportIsVisible);
+		prVisibleBox.setSelected(settingsChanges.progReportIsVisible);
+		if(settingsChanges.progReportVisibilityIsLocked) {
+			prVisibleBox.setEnabled(false);
+		}else {
+			prVisibleBox.setEnabled(true);
+		}
 		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prVisibleBox.setForeground(Color.white);
 		prVisibleBox.setContentAreaFilled(false);
@@ -2310,6 +2350,11 @@ public class Settings {
 		pomodoro_header.add(pomHeader);
 		
 		//JButton openPom = new JButton("Open Pomodoro Timer");
+		if(settingsChanges.pomodoroIsActive == false) {
+			openPom.setEnabled(false); 
+		}else if(settingsChanges.pomodoroIsActive == true) {
+			openPom.setEnabled(true); 
+		}
 		openPom.setMaximumSize(new Dimension(200, 30));
 		openPom.setBackground(Color.GRAY);
 		openPom.setForeground(Color.WHITE);
@@ -2326,6 +2371,12 @@ public class Settings {
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
 		JCheckBox toggleTimer = new JCheckBox("<html><cente>Timer <i><u>Active</u></i></center></html>", settingsChanges.pomodoroIsActive);
+		if(settingsChanges.pomodoroIsLocked) {
+			toggleTimer.setEnabled(false);
+		}else {
+			toggleTimer.setEnabled(true);
+			toggleTimer.setSelected(settingsChanges.pomodoroIsActive);
+		}
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
 		toggleTimer.setForeground(Color.white);
 		toggleTimer.setContentAreaFilled(false);
@@ -2353,6 +2404,11 @@ public class Settings {
 		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
 		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
+		if(settingsChanges.workPeriodIsLocked) {
+			workInterval.setEnabled(false);
+		}else {
+			workInterval.setEnabled(true);
+		}
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
 		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
 		JList workList = pop.getList();
@@ -2379,6 +2435,11 @@ public class Settings {
 		breakPeriod.setForeground(Color.white);
 		
 		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes); 
+		if(settingsChanges.breakPeriodIsLocked) {
+			breakInterval.setEnabled(false);
+		}else {
+			breakInterval.setEnabled(true);
+		}
 		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
 		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
 		JList breakList = pop2.getList();
@@ -2476,6 +2537,12 @@ public class Settings {
 		checkBoxes.setMaximumSize(new Dimension(350, 160));
 		
 		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought Space <i><u>Active</u></i></center></html>", settingsChanges.ftsIsActive);
+		if(settingsChanges.ftsIsLocked) {
+			ftsBox.setEnabled(false);
+		}else {
+			ftsBox.setEnabled(true);
+			ftsBox.setSelected(settingsChanges.ftsIsActive);
+		}
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
@@ -2487,6 +2554,12 @@ public class Settings {
 		});
 		
 		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", settingsChanges.isAutoLinked);
+		if(settingsChanges.ntbIsActive == true && settingsChanges.htbIsActive == true) {
+			autoLinkBox.setEnabled(true); 
+			autoLinkBox.setSelected(settingsChanges.isAutoLinked);
+		}else if(settingsChanges.ntbIsActive == false || settingsChanges.htbIsActive == false) {
+			autoLinkBox.setEnabled(false);
+		}
 		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 16));
 		autoLinkBox.setForeground(Color.white);
 		autoLinkBox.setContentAreaFilled(false);
@@ -2498,6 +2571,12 @@ public class Settings {
 		});
 		
 		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought Burner <i><u>Active</u></i></center></html>", settingsChanges.ntbIsActive);
+		if(settingsChanges.ntbIsLocked) {
+			ntbBox.setEnabled(false);
+		}else {
+			ntbBox.setEnabled(true);
+			ntbBox.setSelected(settingsChanges.ntbIsActive);
+		}
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
@@ -2515,6 +2594,12 @@ public class Settings {
 		});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought Button <i><u>Active</u></i></center></html>", settingsChanges.htbIsActive);
+		if(settingsChanges.htbIsLocked) {
+			htbBox.setEnabled(false);
+		}else {
+			htbBox.setEnabled(true);
+			htbBox.setSelected(settingsChanges.htbIsActive);
+		}
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
@@ -2619,6 +2704,11 @@ public class Settings {
 		ftsButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openFTS = new JButton("     Open Free Thought Space     ");
+		if(settingsChanges.ftsIsActive == false) {
+			openFTS.setEnabled(false);
+		}else if(settingsChanges.ftsIsActive == true) {
+			openFTS.setEnabled(true); 
+		}
 		openFTS.setBackground(Color.GRAY);
 		openFTS.setForeground(Color.WHITE);
 		openFTS.addActionListener(new ActionListener() {
@@ -2639,6 +2729,11 @@ public class Settings {
 		htbButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openHTB = new JButton("   Open Happy Thought Button   ");
+		if(settingsChanges.htbIsActive == false) {
+			openHTB.setEnabled(false);
+		}else if(settingsChanges.htbIsActive == true) {
+			openHTB.setEnabled(true); 
+		}
 		openHTB.setBackground(Color.GRAY);
 		openHTB.setForeground(Color.WHITE);
 		openHTB.addActionListener(new ActionListener() {
@@ -2659,6 +2754,11 @@ public class Settings {
 		ntbButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openNTB = new JButton("Open Negative Thought Burner");
+		if(settingsChanges.ntbIsActive == false) {
+			openNTB.setEnabled(false);
+		}else if(settingsChanges.ntbIsActive == true) {
+			openNTB.setEnabled(true); 
+		}
 		openNTB.setBackground(Color.GRAY);
 		openNTB.setForeground(Color.WHITE);
 		openNTB.addActionListener(new ActionListener() {
@@ -2704,7 +2804,7 @@ public class Settings {
 				 * instantiate a new settings object using the copy constructor 
 				 * so that it is a copy of the passed settings object. 
 				 */
-				Settings settingsChanges = new Settings(userID); 
+				Settings settingsChanges = new Settings(settings); 
 				
 				JFrame settings_frame = new JFrame("Attention Assistant Settings");
 				

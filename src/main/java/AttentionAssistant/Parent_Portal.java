@@ -29,7 +29,7 @@ public class Parent_Portal {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	private int height = 700; 
+	private int height = 715; 
 	private int width = 615; 
 	private int mouseX;
 	private int mouseY;
@@ -107,6 +107,11 @@ public class Parent_Portal {
 		firstRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		timerVisibleBox.setSelected(settingsChanges.getTimerIsVisible()); 
+		if(settingsChanges.getPomodoroIsActive() == false) {
+			timerVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getPomodoroIsActive() == true) {
+			timerVisibleBox.setEnabled(true);
+		}
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerVisibleBox.setForeground(Color.white);
 		timerVisibleBox.setContentAreaFilled(false);
@@ -157,6 +162,11 @@ public class Parent_Portal {
 		secondRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		ftsVisibleBox.setSelected(settingsChanges.getFtsIsVisible());
+		if(settingsChanges.getFtsIsActive() == false) {
+			ftsVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getFtsIsActive() == true) {
+			ftsVisibleBox.setEnabled(true);
+		}
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsVisibleBox.setForeground(Color.white);
 		ftsVisibleBox.setBorderPainted(true);
@@ -178,6 +188,11 @@ public class Parent_Portal {
         }});
 		
 		ntbVisibleBox.setSelected(settingsChanges.getNtbIsVisible()); 
+		if(settingsChanges.getNtbIsActive() == false) {
+			ntbVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getNtbIsActive() == true) {
+			ntbVisibleBox.setEnabled(true);
+		}
 		ntbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbVisibleBox.setForeground(Color.white);
 		ntbVisibleBox.setContentAreaFilled(false);
@@ -206,7 +221,12 @@ public class Parent_Portal {
 		thirdRowVisibilityChecks.setBackground(aa_grey);
 		thirdRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
-		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible()); 
+		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible());
+		if(settingsChanges.getHtbIsActive() == false) {
+			htbVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getHtbIsActive() == true) {
+			htbVisibleBox.setEnabled(true);
+		}
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbVisibleBox.setForeground(Color.white);
 		htbVisibleBox.setBorderPainted(true);
@@ -228,7 +248,6 @@ public class Parent_Portal {
         }});
 		
 		JCheckBox prVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Progress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Report</center></html>", settingsChanges.getProgReportIsVisible());
-		
 		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prVisibleBox.setForeground(Color.white);
 		prVisibleBox.setContentAreaFilled(false);
@@ -310,17 +329,18 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ftsActive = createLockCheckBox(html); 
-		lock_ftsActive.setSelected(settingsChanges.getFtsIsLocked());
-		lock_ftsActive.addActionListener(new ActionListener() {
+		JCheckBox lock_ntbActive = createLockCheckBox(html); 
+		lock_ntbActive.setSelected(settingsChanges.getNtbIsLocked());
+		lock_ntbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
+        		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
         }});
+		
 		
 		firstRowActiveChecks.add(lock_timerActive);
 		firstRowActiveChecks.add(toggleTimer);
-		firstRowActiveChecks.add(lock_ftsActive);
+		firstRowActiveChecks.add(lock_ntbActive);
 		firstRowActiveChecks.add(ntbBox);
 		
 		JPanel secondRowActiveChecks = new JPanel();
@@ -339,12 +359,12 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ntbActive = createLockCheckBox(html); 
-		lock_ntbActive.setSelected(settingsChanges.getNtbIsLocked());
-		lock_ntbActive.addActionListener(new ActionListener() {
+		JCheckBox lock_ftsActive = createLockCheckBox(html); 
+		lock_ftsActive.setSelected(settingsChanges.getFtsIsLocked());
+		lock_ftsActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
+        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
         }});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
@@ -368,9 +388,9 @@ public class Parent_Portal {
         		settingsChanges.setHtbIsLocked(lock_htbActive.isSelected());
         }});
 		
-		secondRowActiveChecks.add(lock_ntbActive);
-		secondRowActiveChecks.add(htbBox);
 		secondRowActiveChecks.add(lock_htbActive);
+		secondRowActiveChecks.add(htbBox);
+		secondRowActiveChecks.add(lock_ftsActive);
 		secondRowActiveChecks.add(ftsBox);
 		
 		featureBoxes.add(firstRowActiveChecks);
@@ -401,7 +421,7 @@ public class Parent_Portal {
 		Integer workMinutes[] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
-		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
+		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes);
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
 		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
 		JList workList = pop.getList();
@@ -424,6 +444,7 @@ public class Parent_Portal {
 		minutesWork.setForeground(Color.white);
 		
 		JCheckBox lock_workPeriod = createLockCheckBox(html); 
+		lock_workPeriod.setSelected(settingsChanges.getWorkPeriodIsLocked());
 		lock_workPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -435,7 +456,7 @@ public class Parent_Portal {
 		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		breakPeriod.setForeground(Color.white);
 		
-		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes); 
+		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes);
 		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
 		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
 		JList breakList = pop2.getList();
@@ -457,7 +478,8 @@ public class Parent_Portal {
 		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesBreak.setForeground(Color.white);
 		
-		JCheckBox lock_breakPeriod = createLockCheckBox(html); 
+		JCheckBox lock_breakPeriod = createLockCheckBox(html);
+		lock_breakPeriod.setSelected(settingsChanges.getBreakPeriodIsLocked());
 		lock_breakPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -646,7 +668,6 @@ public class Parent_Portal {
 			public void actionPerformed(ActionEvent e) {
 				if (allowed) {
 					row = tableWL.getSelectedRow();
-					System.out.println("row is: " + row);
 					String appName = String.valueOf(tableWL.getModel().getValueAt(row, 0));
 					//call to delete selected row from database
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
@@ -654,7 +675,6 @@ public class Parent_Portal {
 					model.removeRow(tableWL.getSelectedRow());
 				} else {
 					row = tableBL.getSelectedRow();
-					System.out.println("row is: " + row);
 					String appName = String.valueOf(tableBL.getModel().getValueAt(row, 0));
 					//call to delete selected row from database
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
@@ -1020,6 +1040,30 @@ public class Parent_Portal {
 						settings.setFtsIsLocked(settingsChanges.getFtsIsLocked());
 						settings.setNtbIsLocked(settingsChanges.getNtbIsLocked());
 						settings.setHtbIsLocked(settingsChanges.getHtbIsLocked());
+						
+						if(settings.getFtsIsActive() == false) {
+							ftsVisibleBox.setEnabled(false);
+						}else if(settings.getFtsIsActive() == true) {
+							ftsVisibleBox.setEnabled(true); 
+						}
+
+						if(settings.getHtbIsActive() == false) {
+							htbVisibleBox.setEnabled(false);
+						}else if(settings.getHtbIsActive() == true) {
+							htbVisibleBox.setEnabled(true);
+						}
+
+						if(settings.getNtbIsActive() == false) {
+							ntbVisibleBox.setEnabled(false);
+						}else if(settings.getNtbIsActive() == true) {
+							ntbVisibleBox.setEnabled(true);
+						}
+
+						if(settings.getPomodoroIsActive() == false) {
+							timerVisibleBox.setEnabled(false);
+						}else if(settings.getPomodoroIsActive() == true) {
+							timerVisibleBox.setEnabled(true);
+						}
 						
 						db.UpdateSettings(settings);	
 					}
