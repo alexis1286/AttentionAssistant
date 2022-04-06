@@ -19,6 +19,8 @@ public class Test_OSEventsTracker {
 	Set<String> testNames = new HashSet<>();
 	ArrayList<String> testBlacklist = new ArrayList<String>();
 	ArrayList<String> testWhitelist = new ArrayList<String>();
+	ArrayList<String> testBlistOpen = new ArrayList<String>();
+	ArrayList<String> testWlistOpen = new ArrayList<String>();
 
 	@BeforeEach
 	void setup() {
@@ -34,6 +36,20 @@ public class Test_OSEventsTracker {
 	
 	@Test
 	@Order(1)
+	@DisplayName("<OSEventsTracker> OSEventsDefaultConstructor")
+	void OSEventsDefaultConstructor() {
+		OSEventsTracker testDefault = new OSEventsTracker();
+		assertEquals(100, testDefault.getOSEventsScore(), "Expected: 100 | Actual: "
+				+ testDefault.getOSEventsScore());
+		assertTrue(testDefault.getNames().isEmpty());
+		assertTrue(testDefault.getBlacklist().isEmpty());
+		assertTrue(testDefault.getWhitelist().isEmpty());
+		assertTrue(testDefault.getBlistOpen().isEmpty());
+		assertTrue(testDefault.getWlistOpen().isEmpty());
+	}
+	
+	@Test
+	@Order(2)
 	@DisplayName("<OSEventsTracker> OSEventsProcessDetails")
 	void OSEventsProcessDetails() {
 		String testapp1 = testEvent.processDetails("C:\\usr\\test\\appname1.exe");
@@ -43,7 +59,7 @@ public class Test_OSEventsTracker {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(3)
 	@DisplayName("<OSEventsTracker> OSEventsGetBlacklistCount")
 	void OSEventsGetBlacklistCount() {
 		int blcount = 0;
@@ -54,7 +70,7 @@ public class Test_OSEventsTracker {
 	}
 	
 	@Test
-	@Order(3)
+	@Order(4)
 	@DisplayName("<OSEventsTracker> OSEventsGetWhitelistCount")
 	void OSEventsGetWhitelistCount() {
 		int wlcount = 0;
@@ -65,12 +81,12 @@ public class Test_OSEventsTracker {
 	}
 	
 	@Test
-	@Order(4)
+	@Order(5)
 	@DisplayName("<OSEventsTracker> OSEventsCalculateOSEventsScore")
 	void OSEventsCalculateOSEventsScore() {
 		int testTotal = 0;
 		testTotal = testEvent.calculateOSEventsScore(1, 2);
-		assertEquals(57, testTotal, "Expected: 57, Actual: " + testTotal);
+		assertEquals(40, testTotal, "Expected: 40, Actual: " + testTotal);
 		testTotal = testEvent.calculateOSEventsScore(0, 2);
 		assertEquals(100, testTotal, "Expected: 100, Actual: " + testTotal);
 		testTotal = testEvent.calculateOSEventsScore(1, 0);
