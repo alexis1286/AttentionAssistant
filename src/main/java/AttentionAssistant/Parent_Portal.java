@@ -29,15 +29,15 @@ public class Parent_Portal {
 	Color aa_purple = new Color(137,31,191);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	private int height = 700; 
-	private int width = 600; 
+	private int height = 715; 
+	private int width = 615; 
 	private int mouseX;
 	private int mouseY;
 	private int row; 
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
-	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>");
+	JCheckBox ftsVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&#8202;&#8202;&nbsp;&nbsp;" + "<br/>Space</center></html>");
 	JCheckBox ntbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Negative Thought" + "<br/>Burner</center></html>");
 	JCheckBox htbVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>");
 	JCheckBox timerVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>");
@@ -104,9 +104,14 @@ public class Parent_Portal {
 		JPanel firstRowVisibilityChecks = new JPanel();
 		firstRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowVisibilityChecks.setBackground(aa_grey);
-		firstRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		firstRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		timerVisibleBox.setSelected(settingsChanges.getTimerIsVisible()); 
+		if(settingsChanges.getPomodoroIsActive() == false) {
+			timerVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getPomodoroIsActive() == true) {
+			timerVisibleBox.setEnabled(true);
+		}
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerVisibleBox.setForeground(Color.white);
 		timerVisibleBox.setContentAreaFilled(false);
@@ -119,7 +124,8 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_timerVisibility = createLockCheckBox(html); 
+		JCheckBox lock_timerVisibility = createLockCheckBox(html);
+		lock_timerVisibility.setSelected(settingsChanges.getTimerVisibilityIsLocked());
 		lock_timerVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -138,6 +144,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_pmVisibility = createLockCheckBox(html); 
+		lock_pmVisibility.setSelected(settingsChanges.getPmVisibilityIsLocked());
 		lock_pmVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -152,9 +159,14 @@ public class Parent_Portal {
 		JPanel secondRowVisibilityChecks = new JPanel();
 		secondRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		secondRowVisibilityChecks.setBackground(aa_grey);
-		secondRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		secondRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
 		ftsVisibleBox.setSelected(settingsChanges.getFtsIsVisible());
+		if(settingsChanges.getFtsIsActive() == false) {
+			ftsVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getFtsIsActive() == true) {
+			ftsVisibleBox.setEnabled(true);
+		}
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsVisibleBox.setForeground(Color.white);
 		ftsVisibleBox.setBorderPainted(true);
@@ -168,6 +180,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_ftsVisibility = createLockCheckBox(html); 
+		lock_ftsVisibility.setSelected(settingsChanges.getFtsVisibilityIsLocked());
 		lock_ftsVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -175,6 +188,11 @@ public class Parent_Portal {
         }});
 		
 		ntbVisibleBox.setSelected(settingsChanges.getNtbIsVisible()); 
+		if(settingsChanges.getNtbIsActive() == false) {
+			ntbVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getNtbIsActive() == true) {
+			ntbVisibleBox.setEnabled(true);
+		}
 		ntbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbVisibleBox.setForeground(Color.white);
 		ntbVisibleBox.setContentAreaFilled(false);
@@ -185,7 +203,8 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ntbVisibility = createLockCheckBox(html); 
+		JCheckBox lock_ntbVisibility = createLockCheckBox(html);
+		lock_ntbVisibility.setSelected(settingsChanges.getNtbVisibilityIsLocked());
 		lock_ntbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -200,9 +219,14 @@ public class Parent_Portal {
 		JPanel thirdRowVisibilityChecks = new JPanel();
 		thirdRowVisibilityChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		thirdRowVisibilityChecks.setBackground(aa_grey);
-		thirdRowVisibilityChecks.setMaximumSize(new Dimension(405, 55));
+		thirdRowVisibilityChecks.setMaximumSize(new Dimension(415, 55));
 		
-		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible()); 
+		htbVisibleBox.setSelected(settingsChanges.getHtbIsVisible());
+		if(settingsChanges.getHtbIsActive() == false) {
+			htbVisibleBox.setEnabled(false); 
+		}else if(settingsChanges.getHtbIsActive() == true) {
+			htbVisibleBox.setEnabled(true);
+		}
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbVisibleBox.setForeground(Color.white);
 		htbVisibleBox.setBorderPainted(true);
@@ -216,6 +240,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_htbVisibility = createLockCheckBox(html); 
+		lock_htbVisibility.setSelected(settingsChanges.getHtbVisibilityIsLocked());
 		lock_htbVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -223,7 +248,6 @@ public class Parent_Portal {
         }});
 		
 		JCheckBox prVisibleBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Progress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Report</center></html>", settingsChanges.getProgReportIsVisible());
-		
 		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prVisibleBox.setForeground(Color.white);
 		prVisibleBox.setContentAreaFilled(false);
@@ -235,6 +259,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_prVisibility = createLockCheckBox(html); 
+		lock_prVisibility.setSelected(settingsChanges.getProgReportVisibilityIsLocked());
 		lock_prVisibility.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -270,7 +295,7 @@ public class Parent_Portal {
 		JPanel firstRowActiveChecks = new JPanel();
 		firstRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		firstRowActiveChecks.setBackground(aa_grey);
-		firstRowActiveChecks.setMaximumSize(new Dimension(405, 55));
+		firstRowActiveChecks.setMaximumSize(new Dimension(415, 55));
 		
 		JCheckBox toggleTimer = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pomodoro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;" + "<br/>Timer</center></html>", settingsChanges.getPomodoroIsActive());
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
@@ -286,6 +311,7 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_timerActive = createLockCheckBox(html); 
+		lock_timerActive.setSelected(settingsChanges.getPomodoroIsLocked());
 		lock_timerActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -303,24 +329,26 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ftsActive = createLockCheckBox(html); 
-		lock_ftsActive.addActionListener(new ActionListener() {
+		JCheckBox lock_ntbActive = createLockCheckBox(html); 
+		lock_ntbActive.setSelected(settingsChanges.getNtbIsLocked());
+		lock_ntbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
+        		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
         }});
+		
 		
 		firstRowActiveChecks.add(lock_timerActive);
 		firstRowActiveChecks.add(toggleTimer);
-		firstRowActiveChecks.add(lock_ftsActive);
+		firstRowActiveChecks.add(lock_ntbActive);
 		firstRowActiveChecks.add(ntbBox);
 		
 		JPanel secondRowActiveChecks = new JPanel();
 		secondRowActiveChecks.setLayout(new FlowLayout(FlowLayout.LEFT));
 		secondRowActiveChecks.setBackground(aa_grey);
-		secondRowActiveChecks.setMaximumSize(new Dimension(405, 55));
+		secondRowActiveChecks.setMaximumSize(new Dimension(415, 55));
 		
-		JCheckBox ftsBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
+		JCheckBox ftsBox = new JCheckBox("<html><center>&nbsp;&nbsp;&nbsp;&nbsp;Free Thought&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<br/>Space</center></html>", settingsChanges.getFtsIsActive());
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
@@ -331,11 +359,12 @@ public class Parent_Portal {
 			}
 		});
 		
-		JCheckBox lock_ntbActive = createLockCheckBox(html); 
-		lock_ntbActive.addActionListener(new ActionListener() {
+		JCheckBox lock_ftsActive = createLockCheckBox(html); 
+		lock_ftsActive.setSelected(settingsChanges.getFtsIsLocked());
+		lock_ftsActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
-        		settingsChanges.setNtbIsLocked(lock_ntbActive.isSelected());
+        		settingsChanges.setFtsIsLocked(lock_ftsActive.isSelected());
         }});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>&nbsp;&nbsp;Happy Thought&nbsp;&nbsp;" + "<br/>Button</center></html>", settingsChanges.getHtbIsActive());
@@ -352,15 +381,16 @@ public class Parent_Portal {
 		});
 		
 		JCheckBox lock_htbActive = createLockCheckBox(html); 
+		lock_htbActive.setSelected(settingsChanges.getHtbIsLocked());
 		lock_htbActive.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
         		settingsChanges.setHtbIsLocked(lock_htbActive.isSelected());
         }});
 		
-		secondRowActiveChecks.add(lock_ntbActive);
-		secondRowActiveChecks.add(htbBox);
 		secondRowActiveChecks.add(lock_htbActive);
+		secondRowActiveChecks.add(htbBox);
+		secondRowActiveChecks.add(lock_ftsActive);
 		secondRowActiveChecks.add(ftsBox);
 		
 		featureBoxes.add(firstRowActiveChecks);
@@ -391,7 +421,7 @@ public class Parent_Portal {
 		Integer workMinutes[] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
-		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
+		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes);
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
 		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
 		JList workList = pop.getList();
@@ -414,6 +444,7 @@ public class Parent_Portal {
 		minutesWork.setForeground(Color.white);
 		
 		JCheckBox lock_workPeriod = createLockCheckBox(html); 
+		lock_workPeriod.setSelected(settingsChanges.getWorkPeriodIsLocked());
 		lock_workPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -425,7 +456,7 @@ public class Parent_Portal {
 		breakPeriod.setFont(new Font("Serif", Font.BOLD, 16));
 		breakPeriod.setForeground(Color.white);
 		
-		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes); 
+		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes);
 		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
 		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
 		JList breakList = pop2.getList();
@@ -447,7 +478,8 @@ public class Parent_Portal {
 		minutesBreak.setFont(new Font("Serif", Font.BOLD, 16));
 		minutesBreak.setForeground(Color.white);
 		
-		JCheckBox lock_breakPeriod = createLockCheckBox(html); 
+		JCheckBox lock_breakPeriod = createLockCheckBox(html);
+		lock_breakPeriod.setSelected(settingsChanges.getBreakPeriodIsLocked());
 		lock_breakPeriod.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//lock feature
@@ -636,7 +668,6 @@ public class Parent_Portal {
 			public void actionPerformed(ActionEvent e) {
 				if (allowed) {
 					row = tableWL.getSelectedRow();
-					System.out.println("row is: " + row);
 					String appName = String.valueOf(tableWL.getModel().getValueAt(row, 0));
 					//call to delete selected row from database
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
@@ -644,7 +675,6 @@ public class Parent_Portal {
 					model.removeRow(tableWL.getSelectedRow());
 				} else {
 					row = tableBL.getSelectedRow();
-					System.out.println("row is: " + row);
 					String appName = String.valueOf(tableBL.getModel().getValueAt(row, 0));
 					//call to delete selected row from database
 					db.DeleteWB_List(appName, listType, settingsChanges.getUserID());
@@ -1010,6 +1040,30 @@ public class Parent_Portal {
 						settings.setFtsIsLocked(settingsChanges.getFtsIsLocked());
 						settings.setNtbIsLocked(settingsChanges.getNtbIsLocked());
 						settings.setHtbIsLocked(settingsChanges.getHtbIsLocked());
+						
+						if(settings.getFtsIsActive() == false) {
+							ftsVisibleBox.setEnabled(false);
+						}else if(settings.getFtsIsActive() == true) {
+							ftsVisibleBox.setEnabled(true); 
+						}
+
+						if(settings.getHtbIsActive() == false) {
+							htbVisibleBox.setEnabled(false);
+						}else if(settings.getHtbIsActive() == true) {
+							htbVisibleBox.setEnabled(true);
+						}
+
+						if(settings.getNtbIsActive() == false) {
+							ntbVisibleBox.setEnabled(false);
+						}else if(settings.getNtbIsActive() == true) {
+							ntbVisibleBox.setEnabled(true);
+						}
+
+						if(settings.getPomodoroIsActive() == false) {
+							timerVisibleBox.setEnabled(false);
+						}else if(settings.getPomodoroIsActive() == true) {
+							timerVisibleBox.setEnabled(true);
+						}
 						
 						db.UpdateSettings(settings);	
 					}
