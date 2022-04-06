@@ -221,7 +221,7 @@ public class Observer{
 			this.setObserverScore(calculateObserverScore(
 			//mouseTracker.getMouseScore(),
 			mouseTracker.getDefaultMouseScore(),
-			eyeMovementTracker.getWeightedEyeMovementScore(activeTask, db),
+			eyeMovementTracker.calculateWeightedEyeMovementScore(activeTask, db),
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
 			internetTracker.getInternetScore()));

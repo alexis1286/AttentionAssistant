@@ -292,7 +292,7 @@ public class Test_EyeMovementTracker {
 
 		profileTracker.setEyeMovementScore(defaultScore);
 		
-		weightedScore = profileTracker.getWeightedEyeMovementScore(profileTaskList.get(1), db);
+		weightedScore = profileTracker.calculateWeightedEyeMovementScore(profileTaskList.get(1), db);
 		
 		assertEquals(60, defaultScore, "defaultScore should be 60. Returned: "
 				+ Integer.toString(defaultScore)); 
