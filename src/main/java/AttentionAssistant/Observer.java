@@ -157,14 +157,8 @@ public class Observer{
 	protected void monitor(Task activeTask ,DataBase db, Notification_System notification_System, Pomodoro_Timer pTimer
 			) throws IOException {
 
+			//Generate the keywords for the active task
 			ArrayList<String> keyWords = this.keywordsGenerator(activeTask);
-			
-			System.out.println("Task Description: " + activeTask.getDescription());
-			System.out.println("Generated KeyWords List: ");
-			for (int i =0; i< keyWords.size(); i++)
- 			{
- 				System.out.println(keyWords.get(i));
- 			}
 
 			MouseTracker mouseTracker = new MouseTracker();
 			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
@@ -226,8 +220,6 @@ public class Observer{
 			osEventsTracker.getOSEventsScore(),
 			internetTracker.getInternetScore()));
 			
-			System.out.println("Observer Score: " + this.getObserverScore());
-			
 			//set the Date and Time the score was Gathered
 			this.setDTGathered(new Date(System.currentTimeMillis()));
 
@@ -279,10 +271,53 @@ public class Observer{
 				}
 			}
 			
-			
-			 
-			}
+			//Function call to display the Observer Monitor data GUI
+			displayObserver(activeTask, keyWords, mouseTracker, eyeMovementTracker, 
+					keyBoardTracker, osEventsTracker, internetTracker);
+	}
 	
+	/**
+	 * Displays Observer Monitor Details
+	 * 
+	 * @param activeTask
+	 * @param keyWords
+	 * @param mouseTracker 
+	 * @param eyeMovementTracker
+	 * @param keyBoardTracker
+	 * @param osEventsTracker
+	 * @param internetTracker
+	 * @author ehols001
+	 */
+	public void displayObserver(Task activeTask, ArrayList<String> keyWords, MouseTracker mouseTracker, EyeMovementTracker eyeMovementTracker, 
+					KeyBoardTracker keyBoardTracker, OSEventsTracker osEventsTracker, InternetTracker internetTracker) {
+		
+		ObserverInfo monitorInfo = new ObserverInfo();
+		ObserverDisplay monitorDisplay = new ObserverDisplay();
+		
+		monitorInfo.setTask(activeTask);
+		monitorInfo.setTaskKeywords(keyWords);
+		monitorInfo.setObserverScore(this.observerScore);
+		
+		monitorInfo.setGroupsOfFrames(eyeMovementTracker.getTotalGroupsOfFrames());
+		monitorInfo.setNumFaceDetected(eyeMovementTracker.getnumberOfTimesFaceDetected());
+		monitorInfo.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
+		monitorInfo.setThresholdGathered(eyeMovementTracker.getThresholdScore());
+		monitorInfo.setWeightedEyeScore(eyeMovementTracker.getweightedScore());
+		
+		monitorInfo.setBlApps(osEventsTracker.getBlacklist());
+		monitorInfo.setWlApps(osEventsTracker.getWhitelist());
+		monitorInfo.setBlAppsOpen(osEventsTracker.getBlistOpen());
+		monitorInfo.setWlAppsOpen(osEventsTracker.getWlistOpen());
+		monitorInfo.setOsEventsScore(osEventsTracker.getOSEventsScore());
+		
+		monitorInfo.setUrls(internetTracker.getLatestUrls());
+		monitorInfo.setNumKeywordsPerURL(internetTracker.getKeywordCounts());
+		monitorInfo.setNumTotalWordsURL(internetTracker.getWordCounts());
+		monitorInfo.setScorePerURL(internetTracker.getUrlScores());
+		monitorInfo.setInternetScore(internetTracker.getInternetScore());
+		
+		monitorDisplay.monitorDetails(monitorInfo);
+	}
 	
 	/**
 	 * Returns an ArrayList with keywords based on the task's description
@@ -296,7 +331,6 @@ public class Observer{
 		
 		//create a instance of the IDictionary Object from the WordNet datasets
 		URL location =  new File("./src/main/resources/dict").toURI().toURL();
-		//System.out.println("URL of resource " + location);
 		IDictionary dict = new Dictionary(location);
 		dict.open();
 			
