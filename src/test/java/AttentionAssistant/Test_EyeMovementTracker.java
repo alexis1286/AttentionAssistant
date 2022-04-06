@@ -19,8 +19,12 @@ public class Test_EyeMovementTracker {
 	void setup() {
 		
 		int testEyeMovementScore = 80;
+		int totalGroupsOfFrames = 10;
+		int numberOfTimesFaceDetected = 8;
+		int weightedScore = 100;
+		int thresholdScore = 80;
 		defaultEyeMovementTracker= new EyeMovementTracker();
-		nonDefaultEyeMovementTracker= new EyeMovementTracker(testEyeMovementScore);
+		nonDefaultEyeMovementTracker= new EyeMovementTracker(testEyeMovementScore, totalGroupsOfFrames, numberOfTimesFaceDetected, weightedScore, thresholdScore);
 	}
 	
 	@Test
@@ -45,7 +49,42 @@ public class Test_EyeMovementTracker {
 				+ Integer.toString(nonDefaultEyeMovementTracker.getEyeMovementScore())); 
 		
 	}
-	
+
+	@Test
+	@DisplayName("<EyeMovementTracker> settotalGroupsOfFrame")
+	void EyeMovementTrackerGetTotalGroupsOfFrames(){
+		nonDefaultEyeMovementTracker.setTotalGroupsOfFrames(75);
+		assertEquals(75, nonDefaultEyeMovementTracker.getTotalGroupsOfFrames(), "nonDefault constructor EyeMovementTracker.TotalGroupsOfFrames should be 75. Returned: "
+				+ Integer.toString(nonDefaultEyeMovementTracker.getTotalGroupsOfFrames())); 
+		
+	}
+
+	@Test
+	@DisplayName("<EyeMovementTracker> setnumberOfTimesFaceDetected")
+	void EyeMovementTrackerGetnumberOfTimesFaceDetected(){
+		nonDefaultEyeMovementTracker.setnumberOfTimesFaceDetected(75);
+		assertEquals(75, nonDefaultEyeMovementTracker.getnumberOfTimesFaceDetected(), "nonDefault constructor EyeMovementTracker.numberOfTimesFaceDetected should be 75. Returned: "
+				+ Integer.toString(nonDefaultEyeMovementTracker.getnumberOfTimesFaceDetected())); 		
+	}
+
+	@Test
+	@DisplayName("<EyeMovementTracker> setweightedScore")
+	void EyeMovementTrackerGetweightedScore(){
+		nonDefaultEyeMovementTracker.setweightedScore(75);
+		assertEquals(75, nonDefaultEyeMovementTracker.getweightedScore(), "nonDefault constructor EyeMovementTracker.weightedScore should be 75. Returned: "
+				+ Integer.toString(nonDefaultEyeMovementTracker.getweightedScore())); 
+		
+	}
+
+	@Test
+	@DisplayName("<EyeMovementTracker> setThresholdScore")
+	void EyeMovementTrackerGetThresholdScore(){
+		nonDefaultEyeMovementTracker.setThresholdScore(75);
+		assertEquals(75, nonDefaultEyeMovementTracker.getThresholdScore(), "nonDefault constructor EyeMovementTracker.ThresholdScore should be 75. Returned: "
+				+ Integer.toString(nonDefaultEyeMovementTracker.getThresholdScore())); 
+		
+	}
+
 	@Test
 	@DisplayName("<EyeMovementTracker> Setup Testing")
 	void EyeMovementTrackerSetupTesting(){

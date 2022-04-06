@@ -34,6 +34,27 @@ public class EyeMovementTracker {
 	 */
 	private int eyeMovementScore;
 	
+	/**
+	 * the total number of groups of frames gathered
+	 */
+	private int totalGroupsOfFrames;
+	
+	/**
+	 * the numbe of times a face was detected in a group of frames gathered
+	 */
+	private int numberOfTimesFaceDetected;
+	
+	/**
+	 * the weighted eyeScore after calculation
+	 */
+	private int weightedScore;
+	
+	/**
+	 * The average of all scores stored in the database
+	 */
+	private int ThresholdScore;
+	
+	
 	
 	/**
 	 * Instantiating empty EyeMovementTracker object
@@ -41,7 +62,10 @@ public class EyeMovementTracker {
 	 */
 	public EyeMovementTracker(){
 		this.eyeMovementScore= 100;
-
+		this.totalGroupsOfFrames=0;
+		this.numberOfTimesFaceDetected=0;
+		this.weightedScore = 0;
+		this.ThresholdScore = 0;
 	}
 	
 	/**
@@ -49,8 +73,13 @@ public class EyeMovementTracker {
 	 * eyeMovementScore
 	 * @param int 
 	 */
-	public EyeMovementTracker(int eyeMovementScore) {
+	public EyeMovementTracker(int eyeMovementScore, int totalGroupsOfFrames, int numberOfTimesFaceDetected, int weightedScore, int threshold) {
 		this.eyeMovementScore= eyeMovementScore;
+		this.totalGroupsOfFrames= totalGroupsOfFrames;
+		this.weightedScore = weightedScore;
+		this.numberOfTimesFaceDetected = numberOfTimesFaceDetected;
+		this.weightedScore = weightedScore;
+		this.ThresholdScore = threshold;
 	}
 	
 	
@@ -61,7 +90,7 @@ public class EyeMovementTracker {
 	 * @return int
 	 */
 	public int getEyeMovementScore() {
-		return eyeMovementScore;
+		return this.eyeMovementScore;
 	}
 	
 	
@@ -71,6 +100,75 @@ public class EyeMovementTracker {
 	 */
 	public void setEyeMovementScore(int eyeMovementScore) {
 		this.eyeMovementScore = eyeMovementScore;
+	}
+
+	/** 
+	 * Get totalGroupsOfFrames
+	 * @return int
+	 */
+	public int getTotalGroupsOfFrames() {
+		return this.totalGroupsOfFrames;
+	}
+	
+	
+	/**
+	 * Set totalGroupsOfFrames
+	 * @param int
+	 */
+	public void setTotalGroupsOfFrames(int totalGroupsOfFrames) {
+		this.totalGroupsOfFrames = totalGroupsOfFrames;
+	}
+	
+	/** 
+	 * Get numberOfTimesFaceDetected
+	 * @return int
+	 */
+	public int getnumberOfTimesFaceDetected() {
+		return this.numberOfTimesFaceDetected;
+	}
+	
+	
+	/**
+	 * Set numberOfTimesFaceDetected
+	 * @param int
+	 */
+	public void setnumberOfTimesFaceDetected(int numberOfTimesFaceDetected) {
+		this.numberOfTimesFaceDetected = numberOfTimesFaceDetected;
+	}
+
+	
+	/** 
+	 * Get weightedScore
+	 * @return int
+	 */
+	public int getweightedScore() {
+		return this.weightedScore;
+	}
+	
+	
+	/**
+	 * Set weightedScore
+	 * @param int
+	 */
+	public void setweightedScore(int weightedScore) {
+		this.weightedScore = weightedScore;
+	}	
+	
+	/** 
+	 * Get ThresholdScore
+	 * @return int
+	 */
+	public int getThresholdScore() {
+		return this.ThresholdScore;
+	}
+	
+	
+	/**
+	 * Set ThresholdScore
+	 * @param int
+	 */
+	public void setThresholdScore(int ThresholdScore) {
+		this.ThresholdScore = ThresholdScore;
 	}
 	
 	
@@ -161,7 +259,8 @@ public class EyeMovementTracker {
     	    
     	    //Print number of frames5 and number of facesFound
     	    //System.out.println("Frames5 = " + frames5 + "\nFacesFound = " + facesFound);
-    	    
+    	    this.setnumberOfTimesFaceDetected((int) facesFound);
+    	    this.setTotalGroupsOfFrames((int) frames5);
     	    //Sets eyeMovementScore
     	    this.eyeMovementScore= (int)eyeMovementScoreCalculator;		
     		
@@ -299,6 +398,8 @@ public class EyeMovementTracker {
 			weightedScore = 100;
 		}
 		
+		this.setThresholdScore((int)averageScore);
+		this.setweightedScore((int) weightedScore);
 		//return the int of weightedScore
 		return (int)weightedScore;
 	}
