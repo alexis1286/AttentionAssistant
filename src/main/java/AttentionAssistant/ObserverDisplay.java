@@ -252,49 +252,97 @@ public class ObserverDisplay {
 		/*
 		 * everything within the Most Recently Visited URLs section
 		 */
+		JPanel urlsLabel_panel = new JPanel();
+		urlsLabel_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		urlsLabel_panel.setBackground(aa_grey);
+		urlsLabel_panel.setMaximumSize(new Dimension(425, 25));
+		
+		JLabel urlsLabel = new JLabel("Most Recently Visited URLs:");
+		urlsLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		urlsLabel.setForeground(Color.white);
+		
+		urlsLabel_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		urlsLabel_panel.add(urlsLabel);
+		
 		JPanel urls_panel = new JPanel();
-		urls_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		urls_panel.setLayout(new GridLayout(0, 1));
 		urls_panel.setBackground(aa_grey);
-		urls_panel.setMaximumSize(new Dimension(400, 400));
+		urls_panel.setMaximumSize(new Dimension(425, 425));
 		
-		JLabel urls = new JLabel("Most Recently Visited URLs:");
-		urls.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
-		urls.setForeground(Color.white);
-		
-		urls_panel.add(Box.createRigidArea(new Dimension(15, 0)));
-		urls_panel.add(urls);
-		
-		
-		/*
-		 * everything within the Total Keywords Found section
-		 */
-		JPanel keywords_panel = new JPanel();
-		keywords_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		keywords_panel.setBackground(aa_grey);
-		keywords_panel.setMaximumSize(new Dimension(400, 110));
-		
-		JLabel keywords = new JLabel("Total Keywords Found:");
-		keywords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
-		keywords.setForeground(Color.white);
-		
-		keywords_panel.add(Box.createRigidArea(new Dimension(15, 0)));
-		keywords_panel.add(keywords);
+		JLabel url;
+		ArrayList<String> urls = monitorInfo.getUrls();
+		for(int i = 0; i < urls.size(); i++) {
+			url = new JLabel("       " + (i + 1) + ".)  " + urls.get(i));
+			url.setFont(new Font("Serif", Font.BOLD, 15));
+			url.setForeground(Color.white);
+
+			urls_panel.add(url);	
+		}
 		
 		
 		/*
-		 * everything within the Total Words Across All URLs section
+		 * everything within the Information per URL section
 		 */
-		JPanel words_panel = new JPanel();
-		words_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		words_panel.setBackground(aa_grey);
-		words_panel.setMaximumSize(new Dimension(400, 110));
+		JPanel urlInfo_panel = new JPanel();
+		urlInfo_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
+		urlInfo_panel.setBackground(aa_grey);
+		urlInfo_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel totalWords = new JLabel("Total Words Across All URLs:");
-		totalWords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
-		totalWords.setForeground(Color.white);
+		JLabel urlColumn = new JLabel("<html><u>URL</u></html>");
+		urlColumn.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 18));
+		urlColumn.setForeground(Color.white);
 		
-		words_panel.add(Box.createRigidArea(new Dimension(15, 0)));
-		words_panel.add(totalWords);
+		JLabel numKeywords = new JLabel("<html><u># of keywords</u></html>");
+		numKeywords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 18));
+		numKeywords.setForeground(Color.white);
+		
+		JLabel numWords = new JLabel("<html><u># of words</u></html>");
+		numWords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 18));
+		numWords.setForeground(Color.white);
+		
+		JLabel urlScore = new JLabel("<html><u>URL score</u></html>");
+		urlScore.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 18));
+		urlScore.setForeground(Color.white);
+		
+		urlInfo_panel.add(Box.createRigidArea(new Dimension(5, 0)));
+		urlInfo_panel.add(urlColumn);
+		urlInfo_panel.add(numKeywords);
+		urlInfo_panel.add(numWords);
+		urlInfo_panel.add(urlScore);
+		
+		JPanel urlData_panel = new JPanel();
+		urlData_panel.setLayout(new GridLayout(0, 4));
+		urlData_panel.setBackground(aa_grey);
+		urlData_panel.setMaximumSize(new Dimension(425, 425));
+		
+		JLabel keywordsPer;
+		JLabel wordsPer;
+		JLabel scorePer;
+		ArrayList<Integer> keywordsPerURL = monitorInfo.getNumKeywordsPerURL();
+		ArrayList<Integer> wordsPerURL = monitorInfo.getNumTotalWordsURL();
+		ArrayList<Integer> scorePerURL = monitorInfo.getScorePerURL();
+		for(int i = 0; i < urls.size(); i++) {
+			url = new JLabel("         " + (i + 1));
+			url.setFont(new Font("Serif", Font.BOLD, 15));
+			url.setForeground(Color.white);
+			
+			keywordsPer = new JLabel("     " + keywordsPerURL.get(i));
+			keywordsPer.setFont(new Font("Serif", Font.BOLD, 15));
+			keywordsPer.setForeground(Color.white);
+			
+			wordsPer = new JLabel("    " + wordsPerURL.get(i));
+			wordsPer.setFont(new Font("Serif", Font.BOLD, 15));
+			wordsPer.setForeground(Color.white);
+			
+			scorePer = new JLabel("   " + scorePerURL.get(i));
+			scorePer.setFont(new Font("Serif", Font.BOLD, 15));
+			scorePer.setForeground(Color.white);
+
+			urlData_panel.add(url);	
+			urlData_panel.add(keywordsPer);
+			urlData_panel.add(wordsPer);
+			urlData_panel.add(scorePer);
+		}
 		
 		
 		/*
@@ -304,8 +352,8 @@ public class ObserverDisplay {
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
 		
-		JLabel score = new JLabel("Internet Score:");
-		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		JLabel score = new JLabel("Internet Score: " + monitorInfo.getInternetScore());
+		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		score.setForeground(Color.white);
 		
 		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -315,9 +363,12 @@ public class ObserverDisplay {
 		/*
 		 * add everything to internet_panel
 		 */
+		internet_panel.add(urlsLabel_panel);
 		internet_panel.add(urls_panel);
-		internet_panel.add(keywords_panel);
-		internet_panel.add(words_panel);
+		internet_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		internet_panel.add(urlInfo_panel);
+		internet_panel.add(urlData_panel);
+		internet_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		internet_panel.add(score_panel);
 		
 		//add to internet_panel to card_panel
