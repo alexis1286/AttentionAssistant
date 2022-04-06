@@ -353,7 +353,7 @@ public class EyeMovementTracker {
     return false;
 	}
 	
-	public int getWeightedEyeMovementScore(Task task, DataBase db) {
+	public int calculateWeightedEyeMovementScore(Task task, DataBase db) {
 		//variable creation
 		double weightedScore = 0;
 		double totalScores = 0;
