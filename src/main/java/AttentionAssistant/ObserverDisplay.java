@@ -624,14 +624,44 @@ public class ObserverDisplay {
 		
 		
 		/*
+		 * everything within the Current Mouse Score section
+		 */
+		JPanel currentscore_panel = new JPanel();
+		currentscore_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		currentscore_panel.setBackground(aa_grey);
+		
+		JLabel currentscore = new JLabel("Current Mouse Score: " + monitorInfo.getCurrentMouseScore());
+		currentscore.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		currentscore.setForeground(Color.white);
+		
+		currentscore_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		currentscore_panel.add(currentscore);
+		
+		
+		/*
+		 * everything within the Last Mouse Score section
+		 */
+		JPanel lastscore_panel = new JPanel();
+		lastscore_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		lastscore_panel.setBackground(aa_grey);
+		
+		JLabel lastscore = new JLabel("Last Mouse Score: " + monitorInfo.getLastMouseScore());
+		lastscore.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		lastscore.setForeground(Color.white);
+		
+		lastscore_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		lastscore_panel.add(lastscore);
+		
+		
+		/*
 		 * everything within the Mouse Score section
 		 */
 		JPanel score_panel = new JPanel();
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
 		
-		JLabel score = new JLabel("Mouse Score:");
-		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		JLabel score = new JLabel("Mouse Score: " + monitorInfo.getMouseScore());
+		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		score.setForeground(Color.white);
 		
 		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -641,6 +671,8 @@ public class ObserverDisplay {
 		/*
 		 * add everything to mouse_panel
 		 */
+		mouse_panel.add(currentscore_panel);
+		mouse_panel.add(lastscore_panel);
 		mouse_panel.add(score_panel);
 		
 		//add to mouse_panel to card_panel

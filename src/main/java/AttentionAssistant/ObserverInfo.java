@@ -48,6 +48,8 @@ public class ObserverInfo {
 	/*
 	 * Mouse Tracking variables
 	 */
+	private int currentScore;
+	private int lastScore;
 	private int mouseScore;
 	
 	/*
@@ -75,6 +77,8 @@ public class ObserverInfo {
 		this.wordsTyped = "<No keyboard input received>";
 		this.numKeywordsTyped = 0;
 		this.keyboardScore = 0;
+		this.currentScore = 0;
+		this.lastScore = 0;
 		this.mouseScore = 0;
 	}
 	
@@ -438,6 +442,38 @@ public class ObserverInfo {
 	
 	
 	/***************************** Mouse Tracking Gets/Sets *****************************/
+	
+	/**
+	 * Set the current mouse score for this monitor period
+	 * @param int score
+	 */
+	public void setCurrentMouseScore(int score) {
+		this.currentScore = score;
+	}
+	
+	/**
+	 * Get the current mouse score for this monitor period
+	 * @return int 
+	 */
+	public int getCurrentMouseScore() {
+		return this.currentScore;
+	}
+	
+	/**
+	 * Set the last mouse score for this monitor period
+	 * @param int score
+	 */
+	public void setLastMouseScore(int score) {
+		this.lastScore = score;
+	}
+	
+	/**
+	 * Get the last mouse score for this monitor period
+	 * @return int 
+	 */
+	public int getLastMouseScore() {
+		return this.lastScore;
+	}
 	
 	/**
 	 * Set the mouse score for this monitor period
