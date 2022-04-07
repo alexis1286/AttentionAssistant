@@ -8,6 +8,7 @@ public class ObserverInfo {
 	 * Monitor Overview variables
 	 */
 	private String task;
+	private String taskDescription;
 	private ArrayList<String> taskKeywords;
 	private int observerScore;
 	
@@ -57,6 +58,7 @@ public class ObserverInfo {
 	 */
 	public ObserverInfo() {
 		this.task = "<No active task>";
+		this.taskDescription = "<No task description>";
 		this.taskKeywords = new ArrayList<String>();
 		this.observerScore = 0;
 		this.groupsOfFrames = 0;
@@ -106,6 +108,22 @@ public class ObserverInfo {
 	 */
 	public String getTask() {
 		return this.task;
+	}
+	
+	/**
+	 * Set the task description to be displayed
+	 * @param activeTask
+	 */
+	public void setTaskDescription(Task activeTask) {
+		this.taskDescription = activeTask.getDescription();
+	}
+	
+	/**
+	 * Get the task description to be displayed
+	 * @return String task description
+	 */
+	public String getTaskDescription() {
+		return this.taskDescription;
 	}
 	
 	/**

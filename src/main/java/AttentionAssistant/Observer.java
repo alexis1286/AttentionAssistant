@@ -296,6 +296,7 @@ public class Observer{
 		ObserverDisplay monitorDisplay = new ObserverDisplay();
 		
 		monitorInfo.setTask(activeTask);
+		monitorInfo.setTaskDescription(activeTask);
 		monitorInfo.setTaskKeywords(keyWords);
 		monitorInfo.setObserverScore(this.observerScore);
 		
