@@ -60,6 +60,20 @@ public class AttentionAssistantDriver {
 	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	public static void main(String[] args) throws Exception {
 		run_login();
+		/**
+		 * TEST CODE
+		 * DELETE BEFORE PRODUCTION
+		 */
+		//Observer testObserver = new Observer();
+		//Task testTask = new Task();
+		
+		//MouseTracker testMouse = new MouseTracker();
+		//testMouse.startTracking();
+		
+		//testObserver.keywordsGenerator(testTask);
+		
+		//KeyBoardTracker testKeyboard = new KeyBoardTracker();
+		//testKeyboard.startTracking(null);
 	
 	}
 		private static JMenuBar titlePanel(JFrame frame) {
@@ -1176,20 +1190,6 @@ public class AttentionAssistantDriver {
 				e.printStackTrace();
 			}
 		   	 
-			/**
-			 * TEST CODE
-			 * DELETE BEFORE PRODUCTION
-			 */
-			//Observer testObserver = new Observer();
-			//Task testTask = new Task();
-			
-			//MouseTracker testMouse = new MouseTracker();
-			//testMouse.startTracking();
-			
-			//testObserver.keywordsGenerator(testTask);
-			
-			//KeyBoardTracker testKeyboard = new KeyBoardTracker();
-			//testKeyboard.startTracking(null);
 		}
 		
 		public static void run_login() {
