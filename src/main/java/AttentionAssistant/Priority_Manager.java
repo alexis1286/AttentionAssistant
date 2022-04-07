@@ -1009,6 +1009,54 @@ public class Priority_Manager {
 		return title_panel;
 	}
 	
+	/**
+	 * Get Height
+	 * @return int
+	 */
+	public int getHeight() {
+		return this.height;
+	}
+	
+	/**
+	 * Set Height
+	 * @param int
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
+	/**
+	 * Get Width
+	 * @return int
+	 */
+	public int getWidth() {
+		return this.width;
+	}
+	
+	/**
+	 * Set Width
+	 * @param int
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	/**
+	 * Get Task_List
+	 * @return Task_List
+	 */
+	public ArrayList<Task> getTask_List() {
+		return this.Task_List;
+	}
+	
+	/**
+	 * Set Task_List
+	 * @param Task_List
+	 */
+	public void setTask_List(ArrayList<Task> TaskList) {
+		this.Task_List = TaskList;
+	}
+	
 	//***************************************************************************************************************
 	//FUNCTIONALITY TO ADD
 	//***************************************************************************************************************

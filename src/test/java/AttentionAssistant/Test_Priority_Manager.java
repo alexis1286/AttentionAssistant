@@ -118,39 +118,6 @@ public class Test_Priority_Manager {
         "Default constructor testTask_List1 should be empty. Returned: "
         + Integer.toString(testTask_List1.size()));
         
-        /**
-         *  Grab Default Working Task
-         */
-        Task testWorkingTask1 = defaultPM.getWorkingTask();
-        
-        /**
-         *  Make sure the PM workingTask taskID is 0 for the default constructor
-         */
-        assertEquals(0, testWorkingTask1.getTaskID(), 
-        "Default constructor testWorkingTask1.taskID should be 0. Returned: "
-        + Integer.toString(testWorkingTask1.getTaskID()));
-        
-        /**
-         *  Make sure the workingTask description is empty for the default constructor
-         */
-        assertEquals("" , testWorkingTask1.getDescription(), 
-        "Default constructor testWorkingTask1.description should be empty. Returned: "
-        + testWorkingTask1.getDescription());
-        
-        /**
-         *  Make sure the workingTask observable is set to false for the default constructor
-         */
-        assertEquals(false , testWorkingTask1.getObservable(), 
-        "Default constructor testWorkingTask1.observable should be false. Returned: "
-        + String.valueOf(testWorkingTask1.getObservable()));
-
-        /**
-         *  Make sure the workingTask status is set to CLOSED for the default constructor
-         */
-        assertEquals(TaskStatus.CLOSED , testWorkingTask1.getStatus(), 
-        "Default constructor testWorkingTask1.status should be CLOSED. Returned: "
-        + testWorkingTask1.getStatus());
- 
     }
 	
 	@Test
@@ -232,54 +199,6 @@ public class Test_Priority_Manager {
         assertEquals(0, testTask_List2.size(), 
         "Default constructor testTask_List2 should have 1 entry. Returned: "
         + Integer.toString(testTask_List2.size()));
-        
-        /**
-         *  Grab Parameter Working Task
-         */
-        Task testWorkingTask2 = new Task(888, "This is a test description", true, TaskStatus.OPEN, "This is a test Name", new Date(1220227200L * 1000), true);
-        
-        /**
-         *  Make sure the PM workingTask taskID is 888 for the parameter constructor
-         */
-        assertEquals(888, testWorkingTask2.getTaskID(), 
-        "Default constructor testWorkingTask2.taskID should be 888. Returned: "
-        + Integer.toString(testWorkingTask2.getTaskID()));
-        
-        /**
-         *  Make sure the workingTask description is empty for the parameter constructor
-         */
-        assertEquals("This is a test description" , testWorkingTask2.getDescription(), 
-        "Default constructor testWorkingTask2.description should be empty. Returned: "
-        + testWorkingTask2.getDescription());
-        
-        /**
-         *  Make sure the workingTask observable is set to false for the parameter constructor
-         */
-        assertEquals(false , testWorkingTask2.getObservable(), 
-        "Default constructor testWorkingTask2.observable should be false. Returned: "
-        + String.valueOf(testWorkingTask2.getObservable()));
-
-        /**
-         *  Make sure the workingTask status is set to CLOSED for the parameter constructor
-         */
-        assertEquals(TaskStatus.CLOSED , testWorkingTask2.getStatus(), 
-        "Default constructor testWorkingTask2.status should be CLOSED. Returned: "
-        + testWorkingTask2.getStatus());
-        
-        /**
-         *  Make sure the workingTask dueDate is set to Date(1220227200L * 1000) for the Parameter constructor
-         */
-        assertEquals(new Date(1220227200L * 1000) , testWorkingTask2.getDueDate(), 
-        "Parameter constructor testWorkingTask2.date should be Sun Aug 31 20:00:00 EDT 2008 Returned: "
-        + testWorkingTask2.getDueDate());
-
-        /**
-         *  Make sure the workingTask Priority is set to true for the Parameter constructor
-         */
-        assertEquals(true , testWorkingTask2.getPriority(), 
-        "Parameter constructor testWorkingTest2.priority should be true Returned: "
-        + testWorkingTask2.getPriority());
- 
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
