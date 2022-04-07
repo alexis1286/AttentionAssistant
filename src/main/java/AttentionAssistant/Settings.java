@@ -6,18 +6,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.net.URL;
+import java.net.MalformedURLException;
 import javax.accessibility.AccessibleContext;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 /**
  * Class that contains GUI and information whenever Settings 
@@ -277,50 +284,51 @@ public class Settings {
 	public Settings(DataBase db, int userID) {
 		
 		Settings loadSettings= db.SelectSettings(userID);
-		this.settingsID = loadSettings.getSettingsID();
-		this.userID = userID;
-		this.iconCircles = loadSettings.getIconCircles(); 
-		this.icons = loadSettings.getIcons();
-		this.opacityCircles = loadSettings.getOpacityCircles(); 
-		this.opacityIcons = loadSettings.getOpacityIcons(); 
-		this.isCollapsed = loadSettings.getIsCollapsed(); 
-		this.xCoord = loadSettings.getXCoord();
-		this.yCoord = loadSettings.getYCoord(); 
-		this.isVertical = loadSettings.getIsVertical(); 
-		this.iconSize = loadSettings.getIconSize(); 
-		this.timerIsVisible = loadSettings.getTimerIsVisible(); 
-		this.pmIsVisible = loadSettings.getPmIsVisible(); 
-		this.ftsIsVisible = loadSettings.getFtsIsVisible(); 
-		this.htbIsVisible = loadSettings.getHtbIsVisible(); 
-		this.ntbIsVisible = loadSettings.getNtbIsVisible(); 
-		this.progReportIsVisible = loadSettings.getProgReportIsVisible(); 
-		this.timerVisibilityIsLocked = loadSettings.getTimerVisibilityIsLocked();
-		this.pmVisibilityIsLocked = loadSettings.getPmVisibilityIsLocked();
-		this.ftsVisibilityIsLocked = loadSettings.getFtsVisibilityIsLocked();
-		this.htbVisibilityIsLocked = loadSettings.getHtbVisibilityIsLocked();
-		this.ntbVisibilityIsLocked = loadSettings.getNtbVisibilityIsLocked();
-		this.progReportVisibilityIsLocked = loadSettings.getProgReportVisibilityIsLocked();
-		this.avatarIsActive = loadSettings.getAvatarIsActive(); 
-		this.textIsActive = loadSettings.getTextIsActive(); 
-		this.audioIsActive = loadSettings.getAudioIsActive();
-		this.textToSpeech = loadSettings.getTextToSpeech(); 
-		this.avatarFilePath = loadSettings.getAvatarFilePath(); 
-		this.alwaysOnScreen = loadSettings.getAlwaysOnScreen(); 
-		this.avatarSize = loadSettings.getAvatarSize(); 
-		this.pomodoroIsActive = loadSettings.getPomodoroIsActive(); 
-		this.pomodoroIsLocked = loadSettings.getPomodoroIsLocked();
-		this.workPeriod = loadSettings.getWorkPeriod(); 
-		this.workPeriodIsLocked = loadSettings.getWorkPeriodIsLocked();
-		this.breakPeriod = loadSettings.getBreakPeriod(); 
-		this.breakPeriodIsLocked = loadSettings.getBreakPeriodIsLocked();
-		this.timeShowing = loadSettings.getTimeShowing(); 
-		this.ftsIsActive = loadSettings.getFtsIsActive(); 
-		this.ntbIsActive = loadSettings.getNtbIsActive(); 
-		this.isAutoLinked = loadSettings.getIsAutoLinked(); 
-		this.htbIsActive = loadSettings.getHtbIsActive(); 
-		this.ftsIsLocked = loadSettings.getFtsIsLocked();
-		this.ntbIsLocked = loadSettings.getNtbIsLocked();
-		this.htbIsLocked = loadSettings.getHtbIsLocked();
+		
+		this.settingsID = loadSettings.settingsID;
+		this.userID = loadSettings.userID;
+		this.iconCircles = loadSettings.iconCircles; 
+		this.icons = loadSettings.icons;
+		this.opacityCircles = loadSettings.opacityCircles; 
+		this.opacityIcons = loadSettings.opacityIcons; 
+		this.isCollapsed = loadSettings.isCollapsed; 
+		this.xCoord = loadSettings.xCoord;
+		this.yCoord = loadSettings.yCoord; 
+		this.isVertical = loadSettings.isVertical; 
+		this.iconSize = loadSettings.iconSize; 
+		this.timerIsVisible = loadSettings.timerIsVisible; 
+		this.pmIsVisible = loadSettings.pmIsVisible; 
+		this.ftsIsVisible = loadSettings.ftsIsVisible; 
+		this.htbIsVisible = loadSettings.htbIsVisible; 
+		this.ntbIsVisible = loadSettings.ntbIsVisible; 
+		this.progReportIsVisible = loadSettings.progReportIsVisible; 
+		this.timerVisibilityIsLocked = loadSettings.timerVisibilityIsLocked;
+		this.pmVisibilityIsLocked = loadSettings.pmVisibilityIsLocked;
+		this.ftsVisibilityIsLocked = loadSettings.ftsVisibilityIsLocked;
+		this.htbVisibilityIsLocked = loadSettings.htbVisibilityIsLocked;
+		this.ntbVisibilityIsLocked = loadSettings.ntbVisibilityIsLocked;
+		this.progReportVisibilityIsLocked = loadSettings.progReportVisibilityIsLocked;
+		this.avatarIsActive = loadSettings.avatarIsActive; 
+		this.textIsActive = loadSettings.textIsActive; 
+		this.audioIsActive = loadSettings.audioIsActive;
+		this.textToSpeech = loadSettings.textToSpeech; 
+		this.avatarFilePath = loadSettings.avatarFilePath; 
+		this.alwaysOnScreen = loadSettings.alwaysOnScreen; 
+		this.avatarSize = loadSettings.avatarSize;
+		this.pomodoroIsActive = loadSettings.pomodoroIsActive; 
+		this.pomodoroIsLocked = loadSettings.pomodoroIsLocked;
+		this.workPeriod = loadSettings.workPeriod; 
+		this.workPeriodIsLocked = loadSettings.workPeriodIsLocked;
+		this.breakPeriod = loadSettings.breakPeriod; 
+		this.breakPeriodIsLocked = loadSettings.breakPeriodIsLocked;
+		this.timeShowing = loadSettings.timeShowing; 
+		this.ftsIsActive = loadSettings.ftsIsActive; 
+		this.ntbIsActive = loadSettings.ntbIsActive; 
+		this.isAutoLinked = loadSettings.isAutoLinked; 
+		this.htbIsActive = loadSettings.htbIsActive; 
+		this.ftsIsLocked = loadSettings.ftsIsLocked;
+		this.ntbIsLocked = loadSettings.ntbIsLocked;
+		this.htbIsLocked = loadSettings.htbIsLocked;
 	}
 	
 	 /**
@@ -1490,6 +1498,193 @@ public class Settings {
 	}
 	
 	/**
+	 * remove happy thought media window
+	 * shows all non flagged media in HTB media folder to allow user to
+	 * remove media from application
+	 * @throws MalformedURLException 
+	 */
+	private void htbMediaDeletionWindow(DataBase db, int userID) throws MalformedURLException {
+		//create window for user to delete happy thought media 
+		JFrame htbMedia_window = new JFrame("Select Happy Media to Delete");
+		htbMedia_window.setAlwaysOnTop(true);
+		htbMedia_window.setBackground(Color.black);
+		htbMedia_window.setUndecorated(true);
+		htbMedia_window.setVisible(true);
+		
+		JPanel title_panel = new JPanel();
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		JLabel title = new JLabel("Select Happy Media to Delete");
+		title.setForeground(Color.white);
+		title.setFont(new Font("Serif", Font.BOLD, 18));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				htbMedia_window.setLocation(htbMedia_window.getX() + e.getX() - mouseX, htbMedia_window.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+		
+		//reads in images for the close and guide buttons
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+			
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		//creates close button with close icon and no background
+		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		Icon close = new ImageIcon(c_img);
+		JButton close_window = new JButton(close);
+		close_window.setBorderPainted(false);
+		close_window.setContentAreaFilled(false);
+		close_window.setFocusPainted(false);
+		close_window.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving info
+        		htbMedia_window.dispose();
+        	}
+        });
+		
+		//create guide button with guide icon and no background
+		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Icon guideIcon = new ImageIcon(g_img);
+		JButton guide = new JButton(guideIcon);
+		guide.setBorderPainted(false);
+		guide.setContentAreaFilled(false);
+		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//call to open guide when ready
+        	}
+        });
+		
+		//adds title JLabel, empty space, then guide button and close button
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
+		
+		JPanel mediaChoices = new JPanel();
+		mediaChoices.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
+		mediaChoices.setBackground(Color.black);
+		
+		GridLayout mediaGrid = new GridLayout(0,3);
+		mediaChoices.setLayout(mediaGrid);
+		
+		ArrayList<String> happyMedia = new ArrayList<String>();
+		Happy_Thought_Button htb = new Happy_Thought_Button(db);
+		htb.setMediaList(db.SelectAllMedias(userID));
+		ButtonGroup toDeleteOptions = new ButtonGroup();
+		
+		//only displaying media that is NOT flagged in database
+		for(Media media : htb.getMediaList()) {
+			if(media.getFlagged() != true){
+				happyMedia.add(media.getMedia_ID_Tag()); 
+			}
+		}
+		
+		/*
+		 * creating radio buttons for EACH media using html to generate image for RB instead of text
+		 * button group is used to enforce only one selection for deletion at a time
+		 */
+		
+		for(int i = 0; i < happyMedia.size(); i++) {
+			File file = new File(happyMedia.get(i)); 
+			URL url = file.toURI().toURL();
+	        final String html = "<html><body><img src='" + url.toString() +"'width=\"200\" height=\"200\">"; 
+			
+			JRadioButton jrb = new JRadioButton(html);
+			jrb.setActionCommand(happyMedia.get(i));
+			jrb.setFont(new Font("Serif", Font.BOLD, 16));
+			jrb.setForeground(Color.white);
+			jrb.setContentAreaFilled(false);
+			jrb.setFocusPainted(false);
+			toDeleteOptions.add(jrb);
+			mediaChoices.add(jrb);
+		}
+		
+		//scroll-able pane to view all available media
+		JScrollPane scroll = new JScrollPane(mediaChoices);
+		scroll.setBackground(Color.black);
+		Border empty = new EmptyBorder(0,0,0,0);
+		scroll.setBorder(empty);
+		scroll.setPreferredSize(new Dimension(400,300));
+		
+		JButton close_mediaWindow = new JButton("Delete");
+		close_mediaWindow.setForeground(Color.white);
+		close_mediaWindow.setFont(new Font("Serif", Font.BOLD, 16));
+		close_mediaWindow.setContentAreaFilled(true);
+		close_mediaWindow.setBorderPainted(false);
+		close_mediaWindow.setFocusPainted(false);
+		close_mediaWindow.setBackground(aa_purple);
+		close_mediaWindow.setMaximumSize(new Dimension(85,20));
+		close_mediaWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*
+				 * delete media from HTB folder and remove from media table in database 
+				 */
+				String filepath = toDeleteOptions.getSelection().getActionCommand();
+				Happy_Thought_Button htb = new Happy_Thought_Button(db);
+				htb.setMediaList(db.SelectAllMedias(userID));
+				
+				for(Media media : htb.getMediaList()) {
+					if(media.getMedia_ID_Tag().equals(filepath)){
+						//remove media from database 
+						db.DeleteMedia(media.getMediaID());
+						
+						Path path = Paths.get(filepath); 
+						//delete file from directory
+						try {
+				            Files.delete(path);
+				        } catch (NoSuchFileException x) {
+				            System.err.format("%s: no such" + " file or directory%n", path);
+				        } catch (IOException x) {
+				            System.err.println(x);
+				        }				 
+					}
+				}
+				
+				htbMedia_window.dispose();
+			}
+		});
+		
+		JPanel bottom_panel = new JPanel();
+		bottom_panel.setLayout(new BoxLayout(bottom_panel, BoxLayout.X_AXIS));
+		bottom_panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
+		bottom_panel.add(Box.createRigidArea(new Dimension(540, 0)));
+		bottom_panel.add(close_mediaWindow);
+		bottom_panel.setBackground(aa_grey);
+		
+		//sets location and dimensions of task window
+		int x = (int) ((screen.getWidth() - htbMedia_window.getWidth()) /2);
+		int y = (int) ((screen.getHeight() - htbMedia_window.getHeight()) /2);
+		htbMedia_window.setLocation(x, y);
+		
+		htbMedia_window.add(title_panel, BorderLayout.PAGE_START); 
+		htbMedia_window.add(scroll, BorderLayout.CENTER);
+		htbMedia_window.add(bottom_panel, BorderLayout.PAGE_END);
+		htbMedia_window.pack();
+	}
+	
+	/**
 	 * RHS display for General Settings sub menu
 	 * 
 	 */
@@ -1513,7 +1708,6 @@ public class Settings {
 		JPanel backgroundColorOptions = new JPanel();
 		backgroundColorOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
 		backgroundColorOptions.setBackground(aa_grey);
-
 		
 		JLabel backgroundColor = new JLabel(("<html><center>Navigation Bar" + "<br/>Background Color: </center></html>"));
 		backgroundColor.setFont(new Font("Serif", Font.BOLD, 16));
@@ -1715,7 +1909,14 @@ public class Settings {
 		navBarBoxes.setMaximumSize(new Dimension(325, 60));
 		
 		//JCheckBox timerVisibleBox = new JCheckBox("Pomodoro Timer", settingsChanges.timerIsVisible);
-		timerVisibleBox.setSelected(settingsChanges.timerIsVisible); 
+		timerVisibleBox.setSelected(settingsChanges.timerIsVisible);
+		if(settingsChanges.timerVisibilityIsLocked) {
+			timerVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.timerVisibilityIsLocked && settingsChanges.pomodoroIsActive) {
+			timerVisibleBox.setEnabled(true);
+		}else {
+			timerVisibleBox.setEnabled(false);
+		}
 		timerVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		timerVisibleBox.setForeground(Color.white);
 		timerVisibleBox.setContentAreaFilled(false);
@@ -1727,6 +1928,12 @@ public class Settings {
 		});
 		
 		JCheckBox pmVisibleBox = new JCheckBox("Priority Manager", settingsChanges.pmIsVisible);
+		pmVisibleBox.setSelected(settingsChanges.pmIsVisible);
+		if(settingsChanges.pmVisibilityIsLocked) {
+			pmVisibleBox.setEnabled(false);
+		}else {
+			pmVisibleBox.setEnabled(true);
+		}
 		pmVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		pmVisibleBox.setForeground(Color.white);
 		pmVisibleBox.setContentAreaFilled(false);
@@ -1739,6 +1946,13 @@ public class Settings {
 		
 		//JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought" + "<br/>Space</center></html>", settingsChanges.ftsIsVisible);
 		ftsVisibleBox.setSelected(settingsChanges.ftsIsVisible);
+		if(settingsChanges.ftsVisibilityIsLocked) {
+			ftsVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.ftsVisibilityIsLocked && settingsChanges.ftsIsActive) {
+			ftsVisibleBox.setEnabled(true);
+		}else {
+			ftsVisibleBox.setEnabled(false);
+		}
 		ftsVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsVisibleBox.setForeground(Color.white);
 		ftsVisibleBox.setContentAreaFilled(false);
@@ -1749,8 +1963,15 @@ public class Settings {
 			}
 		});
 		
-		//JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.ntbIsVisible);
-		ntbVisibleBox.setSelected(settingsChanges.ntbIsVisible); 
+		//JCheckBox ntbVisibleBox = new JCheckBox("<html><center>Negative Thought" + "<br/>Burner</center></html>", settingsChanges.ntbIsVisible);
+		ntbVisibleBox.setSelected(settingsChanges.ntbIsVisible);
+		if(settingsChanges.ntbVisibilityIsLocked) {
+			ntbVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.ntbVisibilityIsLocked && settingsChanges.ntbIsActive) {
+			ntbVisibleBox.setEnabled(true);
+		}else {
+			ntbVisibleBox.setEnabled(false);
+		}
 		ntbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbVisibleBox.setForeground(Color.white);
 		ntbVisibleBox.setContentAreaFilled(false);
@@ -1762,7 +1983,14 @@ public class Settings {
 		});
 		
 		//JCheckBox htbVisibleBox = new JCheckBox("<html><center>Happy Thought" + "<br/>Button</center></html>", settingsChanges.htbIsVisible);
-		htbVisibleBox.setSelected(settingsChanges.htbIsVisible); 
+		htbVisibleBox.setSelected(settingsChanges.htbIsVisible);
+		if(settingsChanges.htbVisibilityIsLocked) {
+			htbVisibleBox.setEnabled(false);
+		}else if(!settingsChanges.htbVisibilityIsLocked && settingsChanges.htbIsActive) {
+			htbVisibleBox.setEnabled(true);
+		}else {
+			htbVisibleBox.setEnabled(false);
+		}
 		htbVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbVisibleBox.setForeground(Color.white);
 		htbVisibleBox.setContentAreaFilled(false);
@@ -1774,6 +2002,12 @@ public class Settings {
 		});
 		
 		JCheckBox prVisibleBox = new JCheckBox("Progress Report", settingsChanges.progReportIsVisible);
+		prVisibleBox.setSelected(settingsChanges.progReportIsVisible);
+		if(settingsChanges.progReportVisibilityIsLocked) {
+			prVisibleBox.setEnabled(false);
+		}else {
+			prVisibleBox.setEnabled(true);
+		}
 		prVisibleBox.setFont(new Font("Serif", Font.BOLD, 16));
 		prVisibleBox.setForeground(Color.white);
 		prVisibleBox.setContentAreaFilled(false);
@@ -2116,6 +2350,11 @@ public class Settings {
 		pomodoro_header.add(pomHeader);
 		
 		//JButton openPom = new JButton("Open Pomodoro Timer");
+		if(settingsChanges.pomodoroIsActive == false) {
+			openPom.setEnabled(false); 
+		}else if(settingsChanges.pomodoroIsActive == true) {
+			openPom.setEnabled(true); 
+		}
 		openPom.setMaximumSize(new Dimension(200, 30));
 		openPom.setBackground(Color.GRAY);
 		openPom.setForeground(Color.WHITE);
@@ -2132,6 +2371,12 @@ public class Settings {
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
 		JCheckBox toggleTimer = new JCheckBox("<html><cente>Timer <i><u>Active</u></i></center></html>", settingsChanges.pomodoroIsActive);
+		if(settingsChanges.pomodoroIsLocked) {
+			toggleTimer.setEnabled(false);
+		}else {
+			toggleTimer.setEnabled(true);
+			toggleTimer.setSelected(settingsChanges.pomodoroIsActive);
+		}
 		toggleTimer.setFont(new Font("Serif", Font.BOLD, 16));
 		toggleTimer.setForeground(Color.white);
 		toggleTimer.setContentAreaFilled(false);
@@ -2159,6 +2404,11 @@ public class Settings {
 		Integer breakMinutes[] = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60};
 		
 		JComboBox<Integer> workInterval = new JComboBox<>(workMinutes); 
+		if(settingsChanges.workPeriodIsLocked) {
+			workInterval.setEnabled(false);
+		}else {
+			workInterval.setEnabled(true);
+		}
 		AccessibleContext accessCont = workInterval.getAccessibleContext();
 		BasicComboPopup pop = (BasicComboPopup) accessCont.getAccessibleChild(0);
 		JList workList = pop.getList();
@@ -2185,6 +2435,11 @@ public class Settings {
 		breakPeriod.setForeground(Color.white);
 		
 		JComboBox<Integer> breakInterval = new JComboBox<>(breakMinutes); 
+		if(settingsChanges.breakPeriodIsLocked) {
+			breakInterval.setEnabled(false);
+		}else {
+			breakInterval.setEnabled(true);
+		}
 		AccessibleContext accessCont2 = breakInterval.getAccessibleContext();
 		BasicComboPopup pop2 = (BasicComboPopup) accessCont2.getAccessibleChild(0);
 		JList breakList = pop2.getList();
@@ -2257,7 +2512,7 @@ public class Settings {
 	/**
 	 * RHS display for Thought Management
 	 */
-	private void createThoughtPanel(JPanel card_panel, Settings settingsChanges, Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space, DataBase db) {
+	private void createThoughtPanel(JPanel card_panel, Settings settingsChanges, Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space, DataBase db, int userID) {
 		
 		JPanel thought_panel = new JPanel();
 		thought_panel.setLayout(new BoxLayout(thought_panel, BoxLayout.Y_AXIS));
@@ -2282,6 +2537,12 @@ public class Settings {
 		checkBoxes.setMaximumSize(new Dimension(350, 160));
 		
 		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought Space <i><u>Active</u></i></center></html>", settingsChanges.ftsIsActive);
+		if(settingsChanges.ftsIsLocked) {
+			ftsBox.setEnabled(false);
+		}else {
+			ftsBox.setEnabled(true);
+			ftsBox.setSelected(settingsChanges.ftsIsActive);
+		}
 		ftsBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ftsBox.setForeground(Color.white);
 		ftsBox.setContentAreaFilled(false);
@@ -2293,6 +2554,12 @@ public class Settings {
 		});
 		
 		JCheckBox autoLinkBox = new JCheckBox("<html><center>Auto-Link Negative Thought Burner" + "<br/>to Happy Thought Button</center></html>", settingsChanges.isAutoLinked);
+		if(settingsChanges.ntbIsActive == true && settingsChanges.htbIsActive == true) {
+			autoLinkBox.setEnabled(true); 
+			autoLinkBox.setSelected(settingsChanges.isAutoLinked);
+		}else if(settingsChanges.ntbIsActive == false || settingsChanges.htbIsActive == false) {
+			autoLinkBox.setEnabled(false);
+		}
 		autoLinkBox.setFont(new Font("Serif", Font.BOLD, 16));
 		autoLinkBox.setForeground(Color.white);
 		autoLinkBox.setContentAreaFilled(false);
@@ -2304,6 +2571,12 @@ public class Settings {
 		});
 		
 		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought Burner <i><u>Active</u></i></center></html>", settingsChanges.ntbIsActive);
+		if(settingsChanges.ntbIsLocked) {
+			ntbBox.setEnabled(false);
+		}else {
+			ntbBox.setEnabled(true);
+			ntbBox.setSelected(settingsChanges.ntbIsActive);
+		}
 		ntbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		ntbBox.setForeground(Color.white);
 		ntbBox.setContentAreaFilled(false);
@@ -2321,6 +2594,12 @@ public class Settings {
 		});
 		
 		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought Button <i><u>Active</u></i></center></html>", settingsChanges.htbIsActive);
+		if(settingsChanges.htbIsLocked) {
+			htbBox.setEnabled(false);
+		}else {
+			htbBox.setEnabled(true);
+			htbBox.setSelected(settingsChanges.htbIsActive);
+		}
 		htbBox.setFont(new Font("Serif", Font.BOLD, 16));
 		htbBox.setForeground(Color.white);
 		htbBox.setContentAreaFilled(false);
@@ -2369,7 +2648,18 @@ public class Settings {
 				int returnVal = happyThoughtsDirectory.showDialog(null, "Upload New Media");
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					File happyThoughtFile = happyThoughtsDirectory.getSelectedFile();
-					String filePath = happyThoughtFile.getAbsolutePath();
+					
+					Path sourcePath = Paths.get(happyThoughtFile.getAbsolutePath());
+					Path destinationPath = Paths.get("happyThoughtMedia/" + happyThoughtFile.getName());
+					
+					try {
+						Files.copy(sourcePath, destinationPath);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} 
+				
+					String filePath = destinationPath.toString();
 					Media newMedia = new Media(filePath);
 					db.AddMedia(newMedia, settingsChanges.userID);
 				}
@@ -2380,12 +2670,45 @@ public class Settings {
 		htbUploadPanel.add(htbUpload);
 		htbUploadPanel.add(upload);
 		
+		JPanel htbDeletePanel = new JPanel();
+		htbDeletePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		htbDeletePanel.setBackground(aa_grey);
+		htbDeletePanel.setMaximumSize(new Dimension(500, 35));
+		
+		JLabel htbDelete = new JLabel("Delete Media: ");
+		htbDelete.setFont(new Font("Serif", Font.BOLD, 16));
+		htbDelete.setForeground(Color.white);
+		
+		JButton delete = new JButton("Select Media");
+		delete.setMaximumSize(new Dimension(70,20));
+		delete.setBackground(Color.GRAY);
+		delete.setForeground(Color.WHITE);
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					htbMediaDeletionWindow(db, userID);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		htbDeletePanel.add(Box.createRigidArea(new Dimension(15, 0)));
+		htbDeletePanel.add(htbDelete);
+		htbDeletePanel.add(delete);
+		
 		JPanel ftsButtonPanel = new JPanel();
 		ftsButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		ftsButtonPanel.setBackground(aa_grey);
 		ftsButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openFTS = new JButton("     Open Free Thought Space     ");
+		if(settingsChanges.ftsIsActive == false) {
+			openFTS.setEnabled(false);
+		}else if(settingsChanges.ftsIsActive == true) {
+			openFTS.setEnabled(true); 
+		}
 		openFTS.setBackground(Color.GRAY);
 		openFTS.setForeground(Color.WHITE);
 		openFTS.addActionListener(new ActionListener() {
@@ -2406,6 +2729,11 @@ public class Settings {
 		htbButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openHTB = new JButton("   Open Happy Thought Button   ");
+		if(settingsChanges.htbIsActive == false) {
+			openHTB.setEnabled(false);
+		}else if(settingsChanges.htbIsActive == true) {
+			openHTB.setEnabled(true); 
+		}
 		openHTB.setBackground(Color.GRAY);
 		openHTB.setForeground(Color.WHITE);
 		openHTB.addActionListener(new ActionListener() {
@@ -2426,6 +2754,11 @@ public class Settings {
 		ntbButtonPanel.setMaximumSize(new Dimension(350, 35));
 		
 		//JButton openNTB = new JButton("Open Negative Thought Burner");
+		if(settingsChanges.ntbIsActive == false) {
+			openNTB.setEnabled(false);
+		}else if(settingsChanges.ntbIsActive == true) {
+			openNTB.setEnabled(true); 
+		}
 		openNTB.setBackground(Color.GRAY);
 		openNTB.setForeground(Color.WHITE);
 		openNTB.addActionListener(new ActionListener() {
@@ -2445,6 +2778,8 @@ public class Settings {
 		thought_panel.add(checkBoxes);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		thought_panel.add(htbUploadPanel);
+		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		thought_panel.add(htbDeletePanel);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 15)));
 		thought_panel.add(ftsButtonPanel);
 		thought_panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -2469,7 +2804,7 @@ public class Settings {
 				 * instantiate a new settings object using the copy constructor 
 				 * so that it is a copy of the passed settings object. 
 				 */
-				Settings settingsChanges = new Settings(userID); 
+				Settings settingsChanges = new Settings(settings); 
 				
 				JFrame settings_frame = new JFrame("Attention Assistant Settings");
 				
@@ -2564,10 +2899,10 @@ public class Settings {
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db);
 				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer, priority_manager );
-				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db);								
+				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db, UserID);								
 				
 				/*
-				 * buttons for bottom border
+				 * buttons for sidebar
 				 */
 				JButton general = new JButton("<html><center>General" + "<br/>Settings</center></html>");
 				JButton notifications = new JButton("<html><center>Notification" + "<br/>System</center></html>");
@@ -2950,9 +3285,9 @@ public class Settings {
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
 				bottomButtons.add(Box.createRigidArea(new Dimension(160, 0)));
 				bottomButtons.add(accountManagment);
-				bottomButtons.add(Box.createRigidArea(new Dimension(40, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(35, 0)));
 				bottomButtons.add(apply);
-				bottomButtons.add(Box.createRigidArea(new Dimension(6, 0)));
+				bottomButtons.add(Box.createRigidArea(new Dimension(7, 0)));
 				bottomButtons.add(cancel);
 				bottomButtons.setBackground(Color.black);
 				

@@ -23,16 +23,18 @@ class Test_MouseTracker {
 	@Order(1)
 	@DisplayName("<MouseTracker> defaultConstructor")
 	void testMouseTrackerConstructor() {
-		//might want to be testMouse.getDefaultMouseScore() - jmitchel
-		assertEquals(0, testMouse.getMouseScore(), 
-				"Expected: 0 | Actual: " + testMouse.getMouseScore());
+		assertEquals(1, testMouse.getDefaultMouseScore(),
+				"Expected: 1 | Actual: " + testMouse.getMouseScore());
+		assertEquals(1, testMouse.getMouseScore(), 
+				"Expected: 1 | Actual: " + testMouse.getMouseScore());
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("<MouseTracker> intConstructor")
 	void testMouseTrackerIntConstructor() {
-		//might want to be testMouse.getDefaultMouseScore() - jmitchel
+		assertEquals(1, testMouse.getDefaultMouseScore(),
+				"Expected: 1 | Actual: " + testMouse.getMouseScore());
 		assertEquals(50, testMouseInt.getMouseScore(), 
 				"Expected: 50 | Actual: " + testMouseInt.getMouseScore());
 	}
@@ -42,7 +44,8 @@ class Test_MouseTracker {
 	@DisplayName("<MouseTracker> setMouseScore")
 	void testSetMouseScore() {
 		testMouse.setMouseScore(75);
-		//might want to be testMouse.getDefaultMouseScore() - jmitchel
+		assertEquals(1, testMouse.getDefaultMouseScore(),
+				"Expected: 1 | Actual: " + testMouse.getMouseScore());
 		assertEquals(75, testMouse.getMouseScore(), 
 				"Expected: 75 | Actual: " + testMouse.getMouseScore());
 	}

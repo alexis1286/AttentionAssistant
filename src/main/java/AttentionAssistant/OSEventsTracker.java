@@ -19,6 +19,10 @@ public class OSEventsTracker {
 	ArrayList<String> blacklist;
 	//ArrayList used to store each line from the whitelist text file
 	ArrayList<String> whitelist;
+	//ArrayList used to store each app from the blacklist the user has active
+	ArrayList<String> blistOpen;
+	//ArrayList used to store each app from the whitelist the user has active
+	ArrayList<String> wlistOpen;
 	
 	private int osEventsScore;
 		
@@ -30,6 +34,8 @@ public class OSEventsTracker {
 		this.names = new HashSet<>();
 		this.blacklist = new ArrayList<String>();
 		this.whitelist = new ArrayList<String>();
+		this.blistOpen = new ArrayList<String>();
+		this.wlistOpen = new ArrayList<String>();
 	}
 		
 	/**
@@ -49,11 +55,8 @@ public class OSEventsTracker {
 			//Storing each line from the blacklist into an array list
 			bl_reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
 			String bline = bl_reader.readLine();
-			System.out.println("\n~ OS_EVENT_TRACKING - START ~"); //For demonstration purposes
-			System.out.println("Blacklisted applications: "); //For demonstration purposes
 			while(bline != null) {
 				String lcLine = bline.toLowerCase();
-				System.out.println(lcLine); //For demonstration purposes
 				blacklist.add(lcLine);
 				bline = bl_reader.readLine();
 			}
@@ -61,10 +64,8 @@ public class OSEventsTracker {
 			//Storing each line from the whitelist into an array list
 			wl_reader = new BufferedReader(new FileReader("src/main/resources/OSWhitelist.txt"));
 			String wline = wl_reader.readLine();
-			System.out.println("Whitelisted applications: "); //For demonstration purposes
 			while(wline != null) {
 				String lcLine = wline.toLowerCase();
-				System.out.println(lcLine); //For demonstration purposes
 				whitelist.add(lcLine);
 				wline = wl_reader.readLine();
 			}
@@ -76,12 +77,8 @@ public class OSEventsTracker {
 				blCount += getBlacklistCount(name, blacklist);
 				wlCount += getWhitelistCount(name, whitelist);
 			}
-			System.out.println("Blacklist Count: " + blCount); //For demonstration purposes
-			System.out.println("Whitelist Count: " + wlCount); //For demonstration purposes
 			
 			osEventsScore = calculateOSEventsScore(blCount, wlCount);
-			System.out.println("OS events score: " + osEventsScore); //For demonstration purposes
-			System.out.println("~ OS_EVENT_TRACKING - FINISH ~"); //For demonstration purposes
 			bl_reader.close();
 			wl_reader.close();
 		} catch (IOException e) {
@@ -116,7 +113,7 @@ public class OSEventsTracker {
 		int count = 0;
 		for(String line : blist) {
 			if(line.equals(processName)) {
-				System.out.println("Blacklist application detected: " + processName); //For demonstration purposes
+				blistOpen.add(processName);
 				count++;
 			}
 		}
@@ -133,7 +130,7 @@ public class OSEventsTracker {
 		int count = 0;
 		for(String line : wlist) {
 			if(line.equals(processName)) {
-				System.out.println("Whitelist application detected: " + processName); //For demonstration purposes
+				wlistOpen.add(processName);
 				count++;
 			}
 		}
@@ -147,11 +144,91 @@ public class OSEventsTracker {
 	 * @param wlCount -> total whitelist app occurances
 	 * @return int
 	 */
-	public int calculateOSEventsScore(int blCount, int wlCount) { //Calculations may need further adjustment
+	public int calculateOSEventsScore(int blCount, int wlCount) { 
 		if(wlCount == 0)
 			return 0;
 		float weight = 3.0f;
 		return (int)(blCount == 0 ? 100 : Math.min(100, (wlCount / (wlCount + blCount * weight)) * 100));
+	}
+	
+	/**
+	 * set names
+	 * @param Set<String> names
+	 */
+	public void setNames(Set<String> names) {
+		this.names = names;
+	}
+	
+	/**
+	 * get names
+	 * @return Set<String>
+	 */
+	public Set<String> getNames() {
+		return this.names;
+	}
+	
+	/**
+	 * set blacklist
+	 * @param ArrayList<String> blist
+	 */
+	public void setBlacklist(ArrayList<String> blist) {
+		this.blacklist = blist;
+	}
+	
+	/**
+	 * get blacklist
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getBlacklist() {
+		return this.blacklist;
+	}
+	
+	/**
+	 * set whitelist
+	 * @param ArrayList<String> wlist
+	 */
+	public void setWhitelist(ArrayList<String> wlist) {
+		this.whitelist = wlist;
+	}
+	
+	/**
+	 * get whitelist
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getWhitelist() {
+		return this.whitelist;
+	}
+	
+	/**
+	 * set blacklist apps that are active
+	 * @param ArrayList<String> blapps
+	 */
+	public void setBlistOpen(ArrayList<String> blapps) {
+		this.blistOpen = blapps;
+	}
+	
+	/**
+	 * get blacklist apps that are active
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getBlistOpen() {
+		return this.blistOpen;
+	}
+	
+	/**
+	 * set whitelist apps that are active
+	 * @param ArrayList<String> wlapps
+	 */
+	public void setWlistOpen(ArrayList<String> wlapps) {
+		this.wlistOpen = wlapps;
+	}
+	
+	/**
+	 * get whitelist apps that are active
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getWlistOpen() {
+		return this.wlistOpen;
 	}
 		
 	/**

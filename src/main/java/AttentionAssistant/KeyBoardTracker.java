@@ -11,11 +11,14 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-//To be implemented by Paul
-
 public class KeyBoardTracker implements Runnable, NativeKeyListener {
 
-	int keyBoardScore;
+	int keyBoardScore; //Final keyboard score
+	ArrayList<String> ignoreKeys = new ArrayList<String>(); //List of keys that will not be stored
+	
+	/**
+	 * Adding the keys to ignore
+	 */
 
 	
 	/**
@@ -24,6 +27,17 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
  	 */
 	public KeyBoardTracker(){
 		this.keyBoardScore= 0;
+		ignoreKeys.add("Space");
+		ignoreKeys.add("Backspace");
+		ignoreKeys.add("Tab");
+		ignoreKeys.add("Enter");
+		ignoreKeys.add("Left Shift");
+		ignoreKeys.add("Right Shift");
+		ignoreKeys.add("Period");
+		ignoreKeys.add("Comma");
+		ignoreKeys.add("Quote");
+		ignoreKeys.add("Semicolon");
+		
 	}
 	
 	/**
@@ -89,7 +103,12 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 			}
 			FileWriter keyBoardPresses = new FileWriter(outPutFile.getName(),true);
 			BufferedWriter bufferFile = new BufferedWriter(keyBoardPresses);
-			bufferFile.append(NativeKeyEvent.getKeyText(e.getKeyCode()));
+			
+			if(ignoreKeys.contains(NativeKeyEvent.getKeyText(e.getKeyCode()))) {
+				bufferFile.append("\n");
+			} else {
+				bufferFile.append(NativeKeyEvent.getKeyText(e.getKeyCode()));
+			}
 			bufferFile.close();
 		} catch (IOException e1) {
 			System.out.println("An error occurred.");

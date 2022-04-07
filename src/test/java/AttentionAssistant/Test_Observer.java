@@ -57,7 +57,7 @@ public class Test_Observer {
 	
 		pomodoro = new Pomodoro_Timer();
 	
-		notificationSystem= new Notification_System(1, db);
+		notificationSystem= new Notification_System(1, db, pomodoro);
 	
 	}
 	

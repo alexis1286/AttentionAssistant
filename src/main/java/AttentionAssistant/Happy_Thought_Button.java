@@ -72,8 +72,6 @@ public class Happy_Thought_Button {
 	
 	/**
 	 * creates an array of images to display
-	 * will need to be modified for more functionality
-	 * right now just loading the test images to an array
 	 * 
 	 * @author krchr
 	 */
@@ -308,7 +306,15 @@ public class Happy_Thought_Button {
 		media_panel.setBackground(Color.black);
 		media_panel.setMaximumSize(new Dimension(480, 360));
 		
-		String fileName = happyMedia.get(current);
+		String fileName = ""; 
+		
+		if(current < happyMedia.size()) {
+			fileName = happyMedia.get(current);
+		}else if(current == happyMedia.size()) {
+			current--;
+			fileName = happyMedia.get(current);
+		}
+		
 		String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
 		
 		if(fileExtension.equals("jpg")) {

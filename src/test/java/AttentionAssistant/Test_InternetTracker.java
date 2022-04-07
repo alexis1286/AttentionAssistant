@@ -25,14 +25,23 @@ public class Test_InternetTracker {
 	InternetTracker testCopyIT;
 	
 	int testInternetScore;
+	ArrayList<String> testLatestUrls;
+	ArrayList<Integer> testKeywordCounts;
+	ArrayList<Integer> testWordCounts;
+	ArrayList<Integer> testUrlScores;
 	File testTempHistory;
 	
 	@BeforeEach
 	void setup() {
 		testInternetScore = 0;
+		testLatestUrls = new ArrayList<String>();
+		testKeywordCounts = new ArrayList<Integer>();
+		testWordCounts = new ArrayList<Integer>();
+		testUrlScores = new ArrayList<Integer>();
 		testTempHistory = new File(System.getProperty("user.home") + "\\AppData\\Local\\Temp\\tempHistory");
 		testDefaultIT = new InternetTracker();
-		testParameterizedIT = new InternetTracker(testInternetScore, testTempHistory);
+		testParameterizedIT = new InternetTracker(testInternetScore, testLatestUrls, testKeywordCounts, 
+				testWordCounts, testUrlScores, testTempHistory);
 		testCopyIT = new InternetTracker(testParameterizedIT);
 	}
 	
@@ -42,6 +51,10 @@ public class Test_InternetTracker {
 	void InternetTrackerDefaultConstructor() {
 		assertEquals(100, testDefaultIT.getInternetScore(), 
 			        "Expected: 100 | Actual: " + testDefaultIT.getInternetScore());
+		assertTrue(testLatestUrls.isEmpty());
+		assertTrue(testKeywordCounts.isEmpty());
+		assertTrue(testWordCounts.isEmpty());
+		assertTrue(testUrlScores.isEmpty());
 		assertEquals(testTempHistory, testDefaultIT.getTempHistory(), 
 					"Expected: " + testTempHistory + " | Actual: " + testDefaultIT.getTempHistory());
 	}
@@ -52,6 +65,10 @@ public class Test_InternetTracker {
 	void InternetTrackerParamaterizedConstructor() {
 		assertEquals(0, testParameterizedIT.getInternetScore(), 
 			        "Expected: 0 | Actual: " + testParameterizedIT.getInternetScore());
+		assertTrue(testParameterizedIT.getLatestUrls().isEmpty());
+		assertTrue(testParameterizedIT.getKeywordCounts().isEmpty());
+		assertTrue(testParameterizedIT.getWordCounts().isEmpty());
+		assertTrue(testParameterizedIT.getUrlScores().isEmpty());
 		assertEquals(testTempHistory, testParameterizedIT.getTempHistory(), 
 				"Expected: " + testTempHistory + " | Actual: " + testParameterizedIT.getTempHistory());
 	}
@@ -62,6 +79,10 @@ public class Test_InternetTracker {
 	void InternetTrackerCopyConstructor() {
 		assertEquals(testParameterizedIT.getInternetScore(), testCopyIT.getInternetScore(), 
 			        "Expected: 0 | Actual: " + testCopyIT.getInternetScore());
+		assertEquals(testParameterizedIT.getLatestUrls(), testCopyIT.getLatestUrls());
+		assertEquals(testParameterizedIT.getKeywordCounts(), testCopyIT.getKeywordCounts());
+		assertEquals(testParameterizedIT.getWordCounts(), testCopyIT.getWordCounts());
+		assertEquals(testParameterizedIT.getUrlScores(), testCopyIT.getUrlScores());
 		assertEquals(testParameterizedIT.getTempHistory(), testCopyIT.getTempHistory(), 
 				"Expected: " + testParameterizedIT.getTempHistory() + " | Actual: " + testCopyIT.getTempHistory());
 	}
@@ -131,10 +152,9 @@ public class Test_InternetTracker {
 		
 		testDefaultIT.createHistoryCopy();
 		
-		System.out.println("\nURLs accessed since supplied timestamp:");
 		ArrayList<String> testLatestUrls = new ArrayList<String>();
 		testLatestUrls = testDefaultIT.getLatestBrowserHistory(sinceThisTimestamp);
-		System.out.println("\ntestLatestUrls count: " + testLatestUrls.size());
+		System.out.println("Number of URLs accessed since Initial Timestamp: " + testLatestUrls.size());
 		
 		testDefaultIT.getTempHistory().delete();
 		System.out.println("~~ END getLatestBrowserHistory TEST ~~");
@@ -158,14 +178,13 @@ public class Test_InternetTracker {
 		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(15L, TimeUnit.SECONDS);
 		while (System.nanoTime()< endTime){}
 		
-		System.out.println("\nURLs accessed since supplied timestamp:");
 		try {
 			testDefaultIT.startTracking(testKeywords, sinceThisTimestamp);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println("\nFinal InternetScore for all urls sinceThisTimestamp: " + testDefaultIT.getInternetScore());
+		System.out.println("Final InternetScore for all urls since Initial Timestamp: " + testDefaultIT.getInternetScore());
 		System.out.println("~~ END startTracking TEST ~~");
 	}
 }

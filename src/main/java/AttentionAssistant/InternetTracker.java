@@ -19,7 +19,11 @@ import org.sqlite.SQLiteDataSource;
  */
 public class InternetTracker {
 	
-	int internetScore;
+	private int internetScore;
+	private ArrayList<String> latestUrls;
+	private ArrayList<Integer> keywordCounts;
+	private ArrayList<Integer> wordCounts;
+	private ArrayList<Integer> urlScores;
 	File tempHistory;
 	
 	/**
@@ -28,16 +32,25 @@ public class InternetTracker {
 	 */
 	public InternetTracker() {
 		this.internetScore = 100;
+		this.latestUrls = new ArrayList<String>();
+		this.keywordCounts = new ArrayList<Integer>();
+		this.wordCounts = new ArrayList<Integer>();
+		this.urlScores = new ArrayList<Integer>();
 		this.tempHistory = new File(System.getProperty("user.home") + "\\AppData\\Local\\Temp\\tempHistory");
 	}
 	
 	/**
 	 * Create a class InternetTracker with a specified
-	 * internetScore, tempHistory
-	 * @param int, File
+	 * internetScore, latestUrls, keywordCounts, wordCounts, urlScores, tempHistory
+	 * @param int, ArrayList<String>, ArrayList<Integer>, ArrayList<Integer>, ArrayList<Integer>, File
 	 */
-	public InternetTracker(int internetScore, File tempHistory) {
+	public InternetTracker(int internetScore, ArrayList<String> latestUrls, ArrayList<Integer> keywordCounts,
+			ArrayList<Integer> wordCounts, ArrayList<Integer> urlScores, File tempHistory) {
 		this.internetScore = internetScore;
+		this.latestUrls = latestUrls;
+		this.keywordCounts = keywordCounts;
+		this.wordCounts = wordCounts;
+		this.urlScores = urlScores;
 		this.tempHistory = tempHistory;
 	}
 	
@@ -47,12 +60,14 @@ public class InternetTracker {
 	 */
 	public InternetTracker(InternetTracker it) {
 		this.internetScore = it.internetScore;
+		this.latestUrls = it.latestUrls;
+		this.keywordCounts = it.keywordCounts;
+		this.wordCounts = it.wordCounts;
+		this.urlScores = it.urlScores;
 		this.tempHistory = it.tempHistory;
 	}
 	
 	/**
-	 * Start of Encapsulation
-	 * 
 	 * Get internetScore
 	 * @return int
 	 */
@@ -66,6 +81,70 @@ public class InternetTracker {
 	 */
 	public void setInternetScore(int internetScore) {
 		this.internetScore = internetScore;
+	}
+	
+	/**
+	 * Get the latest URLs
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getLatestUrls() {
+		return this.latestUrls;
+	}
+	
+	/**
+	 * Set the latest URLs
+	 * @param urls
+	 */
+	public void setLatestUrls(ArrayList<String> urls) {
+		this.latestUrls = urls;
+	}
+	
+	/**
+	 * Get the number of keywords found for each URL
+	 * @return ArrayList<Integer>
+	 */
+	public ArrayList<Integer> getKeywordCounts() {
+		return this.keywordCounts;
+	}
+	
+	/**
+	 * Set the number of keywords found for each URL
+	 * @param kwCounts
+	 */
+	public void setKeywordCounts(ArrayList<Integer> kwCounts) {
+		this.keywordCounts = kwCounts;
+	}
+	
+	/**
+	 * Get the total number of words found for each URL
+	 * @return ArrayList<Integer>
+	 */
+	public ArrayList<Integer> getWordCounts() {
+		return this.wordCounts;
+	}
+	
+	/**
+	 * Set the total number of words found for each URL
+	 * @param wCounts
+	 */
+	public void setWordCounts(ArrayList<Integer> wCounts) {
+		this.wordCounts = wCounts;
+	}
+	
+	/**
+	 * Get the score for each URL
+	 * @return ArrayList<Integer>
+	 */
+	public ArrayList<Integer> getUrlScores() {
+		return this.urlScores;
+	}
+	
+	/**
+	 * Set the score for each URL
+	 * @param scores
+	 */
+	public void setUrlScores(ArrayList<Integer> scores) {
+		this.urlScores = scores;
 	}
 	
 	/**
@@ -84,36 +163,25 @@ public class InternetTracker {
 	 * @author ehols001
 	 */
 	public void startTracking(ArrayList<String> keywords, long startTime) throws IOException {
+		
 		createHistoryCopy();
 		
-		ArrayList<String> latestUrls = new ArrayList<String>();
 		latestUrls = getLatestBrowserHistory(startTime);
 		
 		if(latestUrls.size() != 0) {
-			int nullUrls = 0; //For demo purposes
 			int urlCount = 0;
 			int combinedScore = 0;
 			String text = "";
 			for(int i = 0; i < latestUrls.size(); i++) {
 				if(parseFromOrigin(latestUrls.get(i)) == null) {
 					//Do nothing, go to next URL
-					
-					/*
-					 * For demo purposes
-					 */
-					nullUrls += 1;
-					urlCount += 1;
-					System.out.println("\nURL #" + urlCount);
-					System.out.println("This URL is either not found or private");
 				}
 				else {
 					urlCount += 1;
 					text = parseFromOrigin(latestUrls.get(i)).toLowerCase();
-					System.out.println("\nURL #" + urlCount); //For demo purposes
 					combinedScore += calculatePageScore(keywords, text);
 				}
 			}
-			urlCount -= nullUrls; //For demo purposes
 			
 			//Accounting for the case where all latestUrls throw an Http 404 error
 			if(urlCount != 0)
@@ -158,14 +226,12 @@ public class InternetTracker {
 			}
 		}
 		
-		System.out.println("Keywords on a Page= " + keywordsAppear);
-		System.out.println("Total Words On a Page= " + wordsOnAPage.length);
+		this.keywordCounts.add((int)keywordsAppear);
+		this.wordCounts.add(wordsOnAPage.length);
 		
 		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
-		System.out.println("Total Calculated Score= " +calculatedScore);
 		
 		int pageScore = 0;
-		//If calculatedScore is greater than 100
 		if (calculatedScore > 100) {
 			pageScore = 100;
 		}
@@ -173,6 +239,7 @@ public class InternetTracker {
 			pageScore = (int)calculatedScore;
 		}
 		
+		this.urlScores.add(pageScore);
 		return pageScore;
 	}
 	
@@ -240,13 +307,6 @@ public class InternetTracker {
     		    while (rs.next()) {
     		    	latestUrls.add(rs.getString("url"));
     		    }
-    		    
-    		    /*
-    		     * For demo purposes
-    		     */
-    			for(int i = 0; i < latestUrls.size(); i++) {
-    				System.out.println(latestUrls.get(i));
-    			}
     			
     	} catch (SQLException e) {
     		e.printStackTrace();

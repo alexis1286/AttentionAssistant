@@ -11,6 +11,7 @@ import org.jnativehook.mouse.NativeMouseInputListener;
  */
 public class MouseTracker implements Runnable, NativeMouseInputListener {
 	int mouseScore;
+	int defaultMouseScore;
 	int currentMovementScore = 1; //Internal Scores.  Mean nothing outside this function
 	int lastMovementScore = 1; //Internal Scores.  Mean nothing outside this function
 	
@@ -19,7 +20,8 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	 * @author jmitchel2
 	 */
 	public MouseTracker(){
-	this.mouseScore = 0;
+	this.mouseScore = 1;
+	this.defaultMouseScore = 1;
 	}
 	
 	/**
@@ -29,7 +31,9 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	 */
 	public MouseTracker(int mouseScore) {
 		this.mouseScore= mouseScore;
+		this.defaultMouseScore = 1;
 	}
+	
 	/**
 	 * Start of Encapsulation
 	 * 
@@ -41,13 +45,13 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		//Calculating a tempt 100 point score
 		int temptScore = 100 * (currentMovementScore - lastMovementScore)/lastMovementScore;
 		
-		//Ensuring that the tempt score is not above 100
+		//Ensuring that the tempt score is not above 100 or below 0
 		if(temptScore < 100 && temptScore > 0) {
 			mouseScore = temptScore;
 		} else if (temptScore >= 100) {
 			mouseScore = 100;
 		} else {
-			mouseScore = 0;
+			mouseScore = 1;
 		}
 		
 		//Updating the lastMovementScore to the currentMovementScore
@@ -75,7 +79,7 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	 */
 	
 	public int getDefaultMouseScore() {
-		return this.mouseScore;
+		return this.defaultMouseScore;
 	}
 	
 	/**
