@@ -2331,7 +2331,7 @@ public class Settings {
 	/**
 	 * RHS display for Pomodoro Timer
 	 */
-	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer, Priority_Manager pm) {
+	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer, DataBase db, Priority_Manager pm) {
 		
 		JPanel pomodoro_panel = new JPanel();
 		pomodoro_panel.setLayout(new BoxLayout(pomodoro_panel, BoxLayout.Y_AXIS));
@@ -2361,7 +2361,7 @@ public class Settings {
 		openPom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement chooseAvatar 
-				pomodoro_timer.run_pomo(settingsChanges,pm);
+				pomodoro_timer.run_pomo(settingsChanges,db,pm);
 			}
 		});
 		
@@ -2764,7 +2764,7 @@ public class Settings {
 		openNTB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open Negative Thought Burner
-				negative_thought_burner.run_ntb();
+				negative_thought_burner.run_ntb(settingsChanges,happy_thought_button,db);
 				Date timestamp = new Date();
         		System.out.println(timestamp);
         		db.AddEvent(userID, timestamp, "ntb");
@@ -2898,7 +2898,7 @@ public class Settings {
 				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db);
-				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer, priority_manager );
+				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer,db, priority_manager );
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db, UserID);								
 				
 				/*
@@ -3222,7 +3222,7 @@ public class Settings {
 							timerVisibleBox.setEnabled(true);
 							openPom.setEnabled(true);
 						}
-						
+						negative_thought_burner.refresh(settingsChanges);
 						navbar.refresh(settings);
 						pomodoro_timer.refresh(settings);
 						db.UpdateSettings(settings);

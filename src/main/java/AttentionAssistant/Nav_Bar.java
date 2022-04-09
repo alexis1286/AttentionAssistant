@@ -367,14 +367,15 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.run_pomo(settings,pm);
+	        		pomo.refresh(settings);
+	        		pomo.run_pomo(settings,db,pm);
 	        }});
 			panel.add(pomoButton);
 		}
 		if(ntb_visible == true && ntb_active == true && ntb_menu == true) {
 			ntbButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        		ntb.run_ntb();
+	        		ntb.run_ntb(settings,htb, db);
 	        		Date timestamp = new Date();
 	        		System.out.println(timestamp);
 	        		db.AddEvent(userID, timestamp, "ntb");

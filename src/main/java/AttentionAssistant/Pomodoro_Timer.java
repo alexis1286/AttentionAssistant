@@ -40,15 +40,13 @@ public class Pomodoro_Timer
 	private JButton lastButtonPressed;  
 	JButton toRefresh;
 	LineBorder line = new LineBorder(aa_purple, 2, true);
-
+	static Notification_System notif;
 	JLabel time = new JLabel("00m:00s");
 	JButton startbut=new JButton("Start");
 	JButton pausebut=new JButton("Pause");
 	JButton endbut=new JButton("Reset");
 	JLabel c=new JLabel("Pomodoro Timer");
 	JLabel b=new JLabel("Break Timer");
-	//JFrame pt_frame = new JFrame("AttentionAssistant Pomodoro Timer");
-
 	
 	private int mouseX;
 	private int mouseY;
@@ -72,13 +70,13 @@ public class Pomodoro_Timer
 		Work,
 		Break,
 		Null,
-		Other
+
 	}
 	public Work_Break getWorkBreakStatus(){
 		
 		  
 		if (BreakTimerRunning == true && MainTimerRunning == false) {
-			System.out.println("break");
+			System.out.println("Break");
 			return Work_Break.Break;
 			 
 		}
@@ -92,7 +90,7 @@ public class Pomodoro_Timer
 		}
 		else {
 			System.out.println("other");
-			return Work_Break.Other;
+			return Work_Break.Null;
 		}
 
 	}
@@ -100,11 +98,9 @@ public class Pomodoro_Timer
 	public void Input(Settings settings) {
 		
 		int maintime;
-		//int mainTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired time in minutes:"));
 		maintime = settings.getWorkPeriod();
 		min = maintime;
 		initalmin = min;
-		//int breakTimer = Integer.parseInt(JOptionPane.showInputDialog(null,"Enter desired break time in minutes:"));
 		int breaktime;
 		breaktime = settings.getBreakPeriod();
 		breakmin = breaktime;
@@ -119,6 +115,12 @@ public class Pomodoro_Timer
 		return list;
 	}
 	
+	public String ActiveTask(Priority_Manager pm) {
+		String taskLabel=new String("Task: " + pm.getActiveTask().getTaskName());
+		
+		return taskLabel;
+	
+	}
 	private JMenuBar titlePanel(JFrame frame) {
 		JMenuBar title_panel = new JMenuBar();
 		title_panel.setBorder(line);
@@ -197,16 +199,18 @@ public class Pomodoro_Timer
 	}
 
 	
-	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm) {
+	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(null);
-		
-		JLabel taskLabel=new JLabel("Task: " + pm.getActiveTask().getTaskName());
+	
+		JLabel taskLabel=new JLabel(ActiveTask(pm));
 		taskLabel.setBounds(215, 130, 400, 100);
 		taskLabel.setForeground(Color.white);
 		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
 		panel.add(taskLabel);
+	
+		
 	
 		time.setBounds(180, 180, 280, 100);
 		time.setForeground(Color.white);
@@ -239,7 +243,7 @@ public class Pomodoro_Timer
             		
             				}
             				else {
-            				MainTimer(pm);
+            				MainTimer(setting,db,pm);
              	
             				}
         				}
@@ -249,7 +253,7 @@ public class Pomodoro_Timer
     			
     			
     			lastButtonPressed = buttonPressed;
-    			//TODO reset to null as one of the reset functions
+    			
         }});
 		panel.add(startbut);
 
@@ -270,7 +274,6 @@ public class Pomodoro_Timer
        			if(e.getSource()==pausebut) {
        				paused = true;
     				if(t == null) {
-    					//TODO inital timer begin pressing pause gives error beacuse min != 0
     					JFrame frame = new JFrame();
     					JOptionPane.showMessageDialog(frame, "Timer has not begun.");
     				}
@@ -283,7 +286,7 @@ public class Pomodoro_Timer
     					else if (MainTimerRunning  == true) {
     						MainTimerRunning = false;
     						getWorkBreakStatus();
-  
+    						
     					}
    
     				}
@@ -370,7 +373,7 @@ public class Pomodoro_Timer
 	/**
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
-	public void BreakTimer(Priority_Manager pm) {
+	public void BreakTimer(Settings setting, DataBase db,Priority_Manager pm) {
 	
 		t = new Timer(1000, new ActionListener() {
 			
@@ -404,7 +407,7 @@ public class Pomodoro_Timer
 					
 
 					 if(breaktimertask==0){  //clicking this button will begin timer
-						 MainTimer(pm);
+						 MainTimer(setting, db,pm);
 							min = initalmin;	
 					 }
 					 }
@@ -450,7 +453,7 @@ public class Pomodoro_Timer
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	
-	public void TaskDropDown(Priority_Manager pm) {
+	public void TaskDropDown(Settings setting, DataBase db, Priority_Manager pm) {
 		   JFrame jFrame = new JFrame();
 		   
 		   String[] array = new String[tasks(pm).size()];
@@ -481,14 +484,31 @@ public class Pomodoro_Timer
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	                String newtask = jComboBox.getItemAt(jComboBox.getSelectedIndex()) + " is your new active task!";
+	                int taskint =jComboBox.getSelectedIndex();
+	                Task thistask;
+	                thistask = tasks(pm).get(taskint);
 	                jLabel.setText(newtask);
-	                //	TODO add lexis function to make a set new active task
+	                int userid =setting.getUserID();
+	                try {
+						pm.observeTask(userid, thistask, db, true);
+						lastButtonPressed = null;
+						BreakTimerRunning = false;
+						MainTimerRunning = false;
+						paused = false;
+						min = initalmin;
+						breakmin = initalbreak;
+						refresh(setting);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	         
 	            }
 	        });
 
 
 	}
-	public void MainTimer(Priority_Manager pm) {
+	public void MainTimer(Settings setting, DataBase db,Priority_Manager pm) {
 	t = new Timer(1000, new ActionListener() {
 			
 			@Override
@@ -520,7 +540,7 @@ public class Pomodoro_Timer
 					             options,
 					             options[1]);  
 
-					 System.out.println(initaltask);  
+					// System.out.println(initaltask);  
 
 					
 
@@ -548,7 +568,7 @@ public class Pomodoro_Timer
 								c.setVisible(false);
 								b.setVisible(false);
 							
-								TaskDropDown(pm);
+								TaskDropDown(setting, db, pm);
 							 
 							 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
 								 //(ask the user to assign a new task via priority manager)
@@ -568,7 +588,7 @@ public class Pomodoro_Timer
 										
 								
 										 if(NonewTaskInt==0){  //for yes
-											 TaskDropDown(pm);
+											 TaskDropDown(setting, db, pm);
 											 lastButtonPressed = null;
 										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
 											System.exit(1);
@@ -583,7 +603,7 @@ public class Pomodoro_Timer
 					
 					 }else if(initaltask==1){ //for no
 						 //break timer repeats; user has not finished inital task. 
-						BreakTimer(pm);
+						BreakTimer(setting, db,pm);
 						MainTimerRunning = false;
 						BreakTimerRunning = true;
 						paused = false;
@@ -636,7 +656,7 @@ public class Pomodoro_Timer
 	 */
 	JPanel icon_panel = new JPanel();
 	int counter;
-	public void run_pomo(Settings settings, Priority_Manager pm) {
+	public void run_pomo(Settings settings,DataBase db, Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
@@ -656,7 +676,7 @@ public class Pomodoro_Timer
 				JMenuBar titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
 				//build table panel
-				icon_panel = timerPanel(frame,cardLayout,pm);
+				icon_panel = timerPanel(frame,cardLayout,pm, settings, db);
 				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 			    panel.add("PT", icon_panel);
 			    cardLayout.show(panel, "iPanel");
@@ -675,7 +695,7 @@ public class Pomodoro_Timer
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(cardLayout,panel, frame, pm);
+		        		rebuildPanel(settings, db, cardLayout,panel, frame, pm);
 		        	}});
 			}
 		});
@@ -706,20 +726,19 @@ public class Pomodoro_Timer
 			toRefresh.doClick();
 		}
 	}
-	public void rebuildPanel(CardLayout cardLayout,JPanel panel, JFrame frame, Priority_Manager pm) {
+	public void rebuildPanel(Settings setting, DataBase db,CardLayout cardLayout,JPanel panel, JFrame frame, Priority_Manager pm) {
 		JPanel new_icon_panel = new JPanel();
 		
 		if(counter % 2 != 0) {
-			
-		
-			new_icon_panel = timerPanel(frame,cardLayout,pm);
+	
+			new_icon_panel = timerPanel(frame,cardLayout,pm, setting, db);
 			panel.add("newIPanel",new_icon_panel);
 			cardLayout.show(panel, "newIPanel");
 			panel.remove(icon_panel);
 	
 		}else {
 			panel.remove(icon_panel);
-			icon_panel = timerPanel(frame,cardLayout, pm);
+			icon_panel = timerPanel(frame,cardLayout, pm, setting, db);
 			panel.add("iPanel",icon_panel);
 			cardLayout.show(panel, "iPanel");
 			panel.remove(new_icon_panel);
