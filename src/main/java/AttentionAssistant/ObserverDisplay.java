@@ -785,7 +785,7 @@ public class ObserverDisplay {
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(200, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
@@ -802,6 +802,10 @@ public class ObserverDisplay {
 		
 				JFrame observer_frame = new JFrame();
 
+				int screenWidth = (int)screen.getWidth();
+				int screenHeight = (int)screen.getHeight();
+				observer_frame.setLocation(screenWidth - width, (screenHeight - height) / 2);
+				
 				observer_frame.setUndecorated(true);
 				observer_frame.setPreferredSize(new Dimension(width, height)); 
 
@@ -1042,7 +1046,6 @@ public class ObserverDisplay {
 				observer_frame.setAlwaysOnTop(false);
 				observer_frame.setVisible(true);
 				observer_frame.setResizable(true);
-				observer_frame.setLocationRelativeTo(null);
 			}
 		});
 	}
