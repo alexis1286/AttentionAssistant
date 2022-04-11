@@ -67,13 +67,13 @@ public class AttentionAssistantDriver {
 		//Observer testObserver = new Observer();
 		//Task testTask = new Task();
 		
-		//MouseTracker testMouse = new MouseTracker();
-		//testMouse.startTracking();
+		MouseTracker testMouse = new MouseTracker();
+		testMouse.startTracking();
 		
 		//testObserver.keywordsGenerator(testTask);
 		
-		//KeyBoardTracker testKeyboard = new KeyBoardTracker();
-		//testKeyboard.startTracking(null);
+		KeyBoardTracker testKeyboard = new KeyBoardTracker();
+		testKeyboard.startTracking(null);
 	
 	}
 		private static JMenuBar titlePanel(JFrame frame) {
