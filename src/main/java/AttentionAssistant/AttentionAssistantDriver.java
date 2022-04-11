@@ -17,6 +17,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -53,6 +55,7 @@ public class AttentionAssistantDriver {
 	static JPanel LoginPanel;
 	static JPanel RegisterPanel;
 	static JPanel ForgotPanel;
+	static JPanel ChangePassPanel;
 	static JPanel cardPane;
     static CardLayout card;
     
@@ -76,6 +79,29 @@ public class AttentionAssistantDriver {
 		testKeyboard.startTracking(null);
 	
 	}
+		//this is a hashing function to hash the user/parents password and their security questions  
+		public static String hash (String password) {
+			try {
+				MessageDigest md = MessageDigest.getInstance("MD5");
+				
+				md.update(password.getBytes());
+				
+				byte[] outputbytearray = md.digest();
+				
+				StringBuilder sb = new StringBuilder();
+				
+				for(byte b :outputbytearray) {
+					sb.append(String.format("%02x", b));
+				}
+				return sb.toString();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			return "";
+			
+		}
+	
+		//this is the top of the panel - decorated and will allow you to move the panel around
 		private static JMenuBar titlePanel(JFrame frame) {
 			JMenuBar title_panel = new JMenuBar();
 			title_panel.setBorder(line);
@@ -153,6 +179,9 @@ public class AttentionAssistantDriver {
 			return title_panel;
 			
 		}
+	
+		
+		//Login screen Card Layout
 		private static JPanel loginpage(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
@@ -230,7 +259,8 @@ public class AttentionAssistantDriver {
 		        	public void actionPerformed(ActionEvent e) {
 		        		
 		        		DataBase db = new DataBase();	
-		        		String pwd = new String(pass.getPassword());
+		        		String pwds = new String(pass.getPassword());
+		        		String pwd = hash(pwds);
 		        		String usr = new String(user.getText());
 		        	
 		        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
@@ -248,8 +278,8 @@ public class AttentionAssistantDriver {
 			        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
-		        				//User_Account UserAccount2 = db.Username_User_Account(usr);
-		        				int userid = UserAccount.getUserID();
+		        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
+		        				int userid = UserAccount2.getUserID();
 		        			
 		        				Settings sett = new Settings(db,userid);
 		        				
@@ -260,8 +290,8 @@ public class AttentionAssistantDriver {
 			        		else if (ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Parent account!! Logging in now...");
-		        				//Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
-		        				int parentid = ParentAccount.getParentID();
+		        				Parent_Account ParentAccount2 = db.UsernameParent_Account(usr);
+		        				int parentid = ParentAccount2.getParentID();
 		        				frame.dispose();
 		        				success.dispose();
 		        				parentPortal(parentid,db);
@@ -342,28 +372,24 @@ public class AttentionAssistantDriver {
 		     //TODO ADD BORDER WITHIN THE PM
 			return panel;
 		}
+	
+		//this is the reset password card layout
 		private static JPanel resetPass(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
 			panel.setLayout(null);
 		
-			//this is looking for an acc with this exact password and username, so i have to check the pass and user
-    		//keep user name
-    		//change password to security 1 &2 
-    		//add one more to display question
-    		//if questoins are right, do popup for change new passwrod
-    		//another popup saying 1-2 questions wrong
-			  String[] optionsToChoose = {"Apple", "Orange", "Banana", "Pineapple", "None of the listed"};
 
-			  String[] optionsToChoose2 = {"Apple", "Orange", "Banana", "Pineapple", "None of the listed"};
+			  String[] optionsToChoose = {"The name of your first pet?", "The name of your best friend?", "Your favorite food?", "Your favorite school subject?"};
+
+			  String[] optionsToChoose2 = {"The street you live on?", "Favorite video game?", "Your favorite teachers name?", "Your favorite animal?"};
 
 
-		     
-			
+
 			JLabel username = new JLabel("Username: ");
-			JLabel oldpass = new JLabel("Security Question 1: ");
+			JLabel sqlabel1 = new JLabel("Security Question 1: ");
 			JLabel ans1 = new JLabel("Answer: ");
-			JLabel password2 = new JLabel("Security Question 2: ");
+			JLabel sqlabel2 = new JLabel("Security Question 2: ");
 			JLabel ans2 = new JLabel("Answer: ");
 			
 		
@@ -371,13 +397,7 @@ public class AttentionAssistantDriver {
 			JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
 			
 			JTextField usernametext = new JTextField();
-			
-			//JTextField oldpasstext = new JTextField(); combo box 1
-
-			
 			JLabel register = new JLabel("Forgot your password?");
-			
-			//JPasswordField passwordtext = new JPasswordField(); combo box 2
 			JPasswordField answer2text = new JPasswordField();
 			JPasswordField answer2text2 = new JPasswordField();
 			
@@ -385,7 +405,7 @@ public class AttentionAssistantDriver {
 		    JButton Parent = new JButton("Parent");
 			JButton accButton = new JButton("Change Password");
 		    JButton backButton = new JButton("Back");
-		    JButton loginButton = new JButton("Login");
+		    JButton loginButton = new JButton("Forgot Your Questions?");
 		    
 		    BufferedImage cat3 = null;
 		    try {
@@ -457,11 +477,11 @@ public class AttentionAssistantDriver {
 	        usernametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
 	        panel.add(usernametext);
 	        
-	        oldpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        oldpass.setBounds(250, 202, 270, 28);
-	        oldpass.setForeground(aa_purple);
-	        oldpass.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-	        panel.add(oldpass);
+	        sqlabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        sqlabel1.setBounds(250, 202, 270, 28);
+	        sqlabel1.setForeground(aa_purple);
+	        sqlabel1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(sqlabel1);
 	        
 	        
 	        security1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -483,11 +503,11 @@ public class AttentionAssistantDriver {
 	        panel.add(answer2text);
 	      
 	       
-	        password2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-	        password2.setBounds(250, 302, 270, 28);
-	        password2.setForeground(aa_purple);
-	        password2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-	        panel.add(password2);
+	        sqlabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        sqlabel2.setBounds(250, 302, 270, 28);
+	        sqlabel2.setForeground(aa_purple);
+	        sqlabel2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(sqlabel2);
 	        
 	        security2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        security2.setBounds(398, 302, 270, 28);
@@ -516,116 +536,125 @@ public class AttentionAssistantDriver {
 	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
 	        accButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        		JLabel jLabel = new JLabel();
-	  		        jLabel.setBounds(397, 500, 200, 37);
+	        		 int SQ1int = security1.getSelectedIndex();
+	        		int SQ2int = security2.getSelectedIndex();
+	  		       
+	  		    DataBase db = new DataBase();	
+        		String usr = new String(usernametext.getText());
+        		String anssqinput1 = new String(answer2text.getPassword());
+        		String anssqinput2 = new String(answer2text2.getPassword());
 
-	  		        String selectedFruit = "You selected " + security1.getItemAt(security1.getSelectedIndex());
-	  		        jLabel.setText(selectedFruit);
-	  		        panel.add(jLabel);
-			        
-//	  			
-//	        		String usr = new String(usernametext.getText());
-//	        		String oldpasst = new String(oldpasstext.getText());
-//	        		String pwd = new String(passwordtext.getPassword());
-//	        		String reenterPwd = new String(answer2text2.getPassword());
-//	        		
-//	        		
-//	        		db.DatabaseSetUp();
-//	        		User_Account UserAccount = db.SearchUser_Account(usr,oldpasst);
-//	        		Parent_Account ParentAccount = db.SearchParent_Account(usr,oldpasst);
-//	        		User_Account addChildUser = new User_Account();
-//	        		Parent_Account addParentUser = new Parent_Account();
-//	        	
-//	        		
-//	        		if(userinput == "Child") {
-//	        			if(pwd.equals(reenterPwd) == false) {
-//	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-//		        			
-//		        		}
-//	        			else {
-//	        				if(UserAccount.getPassword().equals(oldpasst) == true && UserAccount.getUsername().equals(usr) == true) {
-//	        					String firstname = UserAccount.getName();
-//		        				int userid = UserAccount.getUserID();
-//		        				
-//		        				addChildUser.setName(firstname);
-//		        				addChildUser.setUserID(userid);
-//		        				addChildUser.setUsername(usr);
-//		        				addChildUser.setPassword(pwd);
-//		        				
-//		        				db.UpdateUser_Account(addChildUser);
-//		        				
-//		        				JFrame success = new JFrame();
-//		        				JOptionPane.showMessageDialog(success, "Successfully Updated Child Password! Logging in now...");
-//		        				
-//		        				frame.dispose();
-//		        				success.dispose();
-//		        				childPortal(userid);
-//	        					
-//	        				}
-//		        			else  {
-//		        			
-//		        			
-//		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-//		        			}
-//	        			}
-//	        				
-//	        
-//	        		}
-//	        		else if(userinput == "Parent") {
-//	        			if(pwd.equals(reenterPwd) == false) {
-//	        				JOptionPane.showMessageDialog(null, "Password do not match! Please reenter your password!","Confirmation", JOptionPane.WARNING_MESSAGE);
-//		        			
-//		        		}
-//	        			else {
-//	        				if(ParentAccount.getPassword().equals(oldpasst) == true && ParentAccount.getUsername().equals(usr) == true) {
-//	        					
-//		        				int parentid = ParentAccount.getParentID();
-//		        						
-//		        				addParentUser.setParentID(parentid);
-//		        				addParentUser.setUsername(usr);
-//		        				addParentUser.setPassword(pwd);
-//		        				
-//		        				db.UpdateParent_Account(addParentUser);
-//		        				
-//		        				JFrame success = new JFrame();
-//		        				JOptionPane.showMessageDialog(success, "Successfully Updated Parent Password! Logging in now...");
-//		        				
-//		        				frame.dispose();
-//		        				success.dispose();
-//		        				parentPortal(parentid);
-//	        					
-//	        				}
-//		        			else  {
-//		        			
-//		        			
-//		        				JOptionPane.showMessageDialog(null, "Username in use!","Confirmation", JOptionPane.WARNING_MESSAGE);
-//		        			}
-//	        		}
-//	        				
-//	        		
-//	        		}
-//	        		else {
-//	        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to register!","Confirmation", JOptionPane.WARNING_MESSAGE);
-//	        		}
-	        	
+        		String ansinput1 = hash(anssqinput1);
+        		String ansinput2 = hash(anssqinput2);
+        		 
+        		db.DatabaseSetUp();
+    			
+        		User_Account UserAccount = db.UsernameUser_Account(usr);
+        		User_Account addChildUser = new User_Account();
+        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
+        		Parent_Account addParentUser = new Parent_Account();
+        		
+        		
+        		
+        		
+        		if(usr.isEmpty() == true || ansinput1.isEmpty() == true ||  ansinput2.isEmpty() == true) {
+        			JFrame errorframe = new JFrame();
+    				JOptionPane.showMessageDialog(errorframe, "One of your fields are blank, please fill them in.");
+        		}
+        		else if(UserAccount.getUsername().isEmpty() == true  &&  ParentAccount.getUsername().isEmpty() == true ) {
+        			JFrame errorframe = new JFrame();
+    				JOptionPane.showMessageDialog(errorframe, "Username does not exist. Please Try Again.");
+        		}
+        		else {
+
+        			if(userinput == "Child" ) {
+        			
+    	        		int userID = UserAccount.getUserID();
+    	        		String Fn = UserAccount.getName();
+    	        		String pw = UserAccount.getPassword();
+    	        		int sq1 = UserAccount.getSQ_Key();
+    	        		int sq2 = UserAccount.getSQ_Key2();
+    	        		String sq_ans1 = UserAccount.getSQ_Answer();
+    	        		String sq_ans2 = UserAccount.getSQ_Answer2();
+    	        		
+    	        		
+    	        		if((sq1 != SQ1int && sq_ans1.equals(ansinput1) == false) || (sq2 != SQ2int && sq_ans2.equals(ansinput2) == false)) {
+    	        			JFrame errorframe = new JFrame();
+    	    				JOptionPane.showMessageDialog(errorframe, "Security Questions are not correct. Please Try Again.");
+    	        		}
+    	        		else {
+    	        			addChildUser.setName(Fn);
+            				addChildUser.setUserID(userID);
+            				addChildUser.setUsername(usr);
+            				addChildUser.setPassword(pw);
+            				addChildUser.setSQ_Key(sq1);		
+            				addChildUser.setSQ_Key2(sq2); 
+            				//TODO add hash for users ans
+            				addChildUser.setSQ_Answer(sq_ans1);
+            				addChildUser.setSQ_Answer2(sq_ans2); 
+            				
+            				db.UpdateUser_Account(addChildUser);
+            				ChangePasspage(card,usr,userinput);
+            				
+    	        		}
+    	        		
+        				
+        			}
+        			else if(userinput == "Parent"){
+        		
+    	        		int userID = ParentAccount.getParentID();
+    	        		String pw = ParentAccount.getPassword();
+    	        		int sq1 = ParentAccount.getSQ_Key();
+    	        		int sq2 = ParentAccount.getSQ_Key2();
+    	        		String sq_ans1 = ParentAccount.getSQ_Answer();
+    	        		String sq_ans2 = ParentAccount.getSQ_Answer2();
+    	        		
+    	        		
+    	        		if((sq1 != SQ1int && sq_ans1.equals(ansinput1) == false) || (sq2 != SQ2int && sq_ans2.equals(ansinput2) == false)) {
+    	        			JFrame errorframe = new JFrame();
+    	    				JOptionPane.showMessageDialog(errorframe, "Security Questions are not correct. Please Try Again.");
+    	        		}
+    	        		else {
+    	        			addParentUser.setParentID(userID);
+        	        		addParentUser.setUsername(usr);
+        	        		addParentUser.setPassword(pw);
+        	        		addParentUser.setSQ_Key(sq1);		
+        	        		addParentUser.setSQ_Key2(sq2); 
+            				//TODO add hash for users ans
+        	        		addParentUser.setSQ_Answer(sq_ans1);
+        	        		addParentUser.setSQ_Answer2(sq_ans2); 
+            				
+            				db.UpdateParent_Account(addParentUser);
+            				ChangePasspage(card,usr,userinput);
+            				
+    	        		}
+    	        		
+        				
+        			}
+        			else {
+        			JOptionPane.showMessageDialog(null, "You must select a child or parent account to change password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+        			}
+        			
+        			
+        		}
+	  		      
 	        	
 	        }});
 	        panel.add(accButton);
 	        
-//	        loginButton.setBounds(500, 490, 78, 40);
-//	        loginButton.setBorderPainted(false);
-//	        loginButton.setBackground(aa_purple);
-//	        loginButton.setForeground(Color.WHITE);
-//	        loginButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
-//	        loginButton.addActionListener(new ActionListener() {
-//	        	public void actionPerformed(ActionEvent e) {
-//	        	//redirect the user to the login page
-//	        	card.previous(cardPane);
-//	        }});
-//	        panel.add(loginButton);
+	        loginButton.setBounds(450, 490, 215, 40);
+	        loginButton.setBorderPainted(false);
+	        loginButton.setBackground(aa_purple);
+	        loginButton.setForeground(Color.WHITE);
+	        loginButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+	        loginButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		ForgotSQpage(card);
+	        }});
+	        panel.add(loginButton);
 	       
 	        
-	        backButton.setBounds(397, 490, 78, 40);
+	        backButton.setBounds(350, 490, 78, 40);
 	        backButton.setBorderPainted(false);
 	        backButton.setBackground(Color.WHITE);
 	        backButton.setForeground(aa_purple);
@@ -643,6 +672,937 @@ public class AttentionAssistantDriver {
 			return panel;
 		
 		}
+		
+		
+		//this it the panel that will popup if the user inputs their correct security questions so they are able to change their password
+		private static JFrame ChangePasspage(CardLayout card, String user,String userinput) {
+			JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			JMenuBar titlePanel = titlePanel(frame);
+			frame.setUndecorated(true);
+			frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+	        frame.setPreferredSize(new Dimension(700, 600)); 
+			frame.pack();
+			frame.setVisible(true);
+			frame.setResizable(false);
+			frame.setLocationRelativeTo(null);
+			panel.setBackground(aa_grey);
+			panel.setLayout(null);
+			panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+		
+
+			JLabel register = new JLabel("Success! Please Enter a New Password!");
+		//	JLabel oldpasslbl = new JLabel("Old Password: ");
+			JLabel ans1 = new JLabel("New Password: ");
+			JLabel reenterlabel2 = new JLabel("Reenter New Password: ");
+			
+		
+		//	JPasswordField oldpass = new JPasswordField();
+			JPasswordField newpass = new JPasswordField();
+			JPasswordField reenterpass = new JPasswordField();
+		
+			JButton accButton = new JButton("Change Password");
+		    JButton backButton = new JButton("Back");
+		    
+		    BufferedImage cat3 = null;
+		    try {
+				
+		    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		    
+		    JLabel dinopic = new JLabel(new ImageIcon(cat3));
+		    dinopic.setBounds(100, 182, 127, 150);
+		    panel.add(dinopic);
+		
+			register.setBounds(100, 0, 550, 100);
+			register.setForeground(aa_purple);
+			register.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+			register.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(register);
+
+	       
+//	        
+//	        oldpasslbl.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//	        oldpasslbl.setBounds(250, 202, 270, 28);
+//	        oldpasslbl.setForeground(aa_purple);
+//	        oldpasslbl.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+//	        panel.add(oldpasslbl);
+//	        
+//	        
+//	        oldpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//	        oldpass.setBounds(398, 202, 270, 28);
+//	        oldpass.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+//	        oldpass.setForeground(Color.BLACK);
+//	        panel.add(oldpass);
+//	        
+	        ans1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        ans1.setBounds(250, 252, 270, 28);
+	        ans1.setForeground(aa_purple);
+	        ans1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(ans1);
+	        
+	        newpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        newpass.setBounds(398, 252, 270, 28);
+	        newpass.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        newpass.setForeground(Color.BLACK);
+	        panel.add(newpass);
+	      
+	       
+	        reenterlabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        reenterlabel2.setBounds(215, 302, 270, 28);
+	        reenterlabel2.setForeground(aa_purple);
+	        reenterlabel2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(reenterlabel2);
+	        
+	        reenterpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        reenterpass.setBounds(398, 302, 270, 28);
+	        reenterpass.setForeground(Color.BLACK);
+	        reenterpass.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(reenterpass);
+	        
+	        	        
+	        
+	        accButton.setBounds(397, 425, 200, 37);
+	        accButton.setBorderPainted(false);
+	        accButton.setBackground(aa_purple);
+	        accButton.setForeground(Color.WHITE);
+	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        accButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        		
+	  		    DataBase db = new DataBase();	
+        		String usr = new String(user);
+        	
+        		String newpassStr = new String(newpass.getPassword());
+        		String reenterpassStr = new String(reenterpass.getPassword());
+        		String newpassString = hash(newpassStr);
+        		String reenterpassString = hash(reenterpassStr);
+        		
+        		
+        		if(newpassString.equals(reenterpassString) == false) {
+        			JFrame errorframe = new JFrame();
+    				JOptionPane.showMessageDialog(errorframe, "New Passwords do no match! Please try again!.");
+        		}
+        		else {
+        			if(usr.isEmpty() == true || newpassString.isEmpty() == true ||  reenterpassString.isEmpty() == true) {
+            			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "One of your fields are blank, please fill them in.");
+            		}
+            		else {
+
+            			if(userinput == "Child" ) {
+            				db.DatabaseSetUp();
+                			
+        	        		User_Account UserAccount = db.UsernameUser_Account(usr);
+        	        		User_Account addChildUser = new User_Account();
+        	        		int userID = UserAccount.getUserID();
+        	        		String Fn = UserAccount.getName();
+        	        		String pass = UserAccount.getPassword();
+        	        		int sq_key1 = UserAccount.getSQ_Key();
+        	        		int sq_key2 = UserAccount.getSQ_Key2();
+        	        		String sq_ans1 = UserAccount.getSQ_Answer();
+        	        		String sq_ans2 = UserAccount.getSQ_Answer2();
+        	        		
+        	        		addChildUser.setName(Fn);
+            				addChildUser.setUserID(userID);
+            				addChildUser.setUsername(usr);
+            				addChildUser.setPassword(newpassString);
+            				addChildUser.setSQ_Key(sq_key1);
+            				addChildUser.setSQ_Key2(sq_key2);
+            				addChildUser.setSQ_Answer(sq_ans1);
+            				addChildUser.setSQ_Answer2(sq_ans2);
+            				
+            				db.UpdateUser_Account(addChildUser);
+            				
+            				  Object[] options = {"OK"};
+          				    int n = JOptionPane.showOptionDialog(frame,
+          				                   "Successfully Changed Password! You may now login! ","Success",
+          				                 JOptionPane.YES_NO_CANCEL_OPTION,
+        					             JOptionPane.DEFAULT_OPTION,
+          				                   null,
+          				                   options,
+          				                   options[0]);
+          				    if(n == 0) {
+          				    	frame.dispose();
+          				    	card.next(cardPane);
+          				    	card.next(cardPane);
+          				    }
+            			}
+            			else if(userinput == "Parent"){
+            				db.DatabaseSetUp();
+                			
+        	        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
+        	        		Parent_Account addParentUser = new Parent_Account();
+        	        		int userID = ParentAccount.getParentID();
+        	        		int sq_key1 = ParentAccount.getSQ_Key();
+        	        		int sq_key2 = ParentAccount.getSQ_Key2();
+        	        		String sq_ans1 = ParentAccount.getSQ_Answer();
+        	        		String sq_ans2 = ParentAccount.getSQ_Answer2();
+        	        	
+        	        		addParentUser.setParentID(userID);
+        	        		addParentUser.setUsername(usr);
+        	        		addParentUser.setPassword(newpassString);
+        	        		addParentUser.setSQ_Key(sq_key1);
+        	        		addParentUser.setSQ_Key2(sq_key2);
+        	        		addParentUser.setSQ_Answer(sq_ans1);
+        	        		addParentUser.setSQ_Answer2(sq_ans2);
+            				
+            				db.UpdateParent_Account(addParentUser);
+            				
+            				  Object[] options = {"OK"};
+            				    int n = JOptionPane.showOptionDialog(frame,
+            				                   "Successfully Changed Password! You may now login! ","Success",
+            				                   JOptionPane.PLAIN_MESSAGE,
+            				                   JOptionPane.QUESTION_MESSAGE,
+            				                   null,
+            				                   options,
+            				                   options[0]);
+            				    if(n == 0) {
+            				    	frame.dispose();
+              				    	card.next(cardPane);
+              				    	card.next(cardPane);
+            				    }
+            				
+            			}
+            			else {
+            			JOptionPane.showMessageDialog(null, "You must select a child or parent account to change password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+            			}
+            		}
+    	  		      
+        		}
+        		
+	        	
+	        }});
+	        panel.add(accButton);
+	        
+	 
+	        frame.getContentPane().add(panel);
+			return frame;
+		}
+	
+		//this is the pop JFrame if the user has forgotten their security questions
+		private static JFrame ForgotSQpage(CardLayout card) {
+			JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			JMenuBar titlePanel = titlePanel(frame);
+			frame.setUndecorated(true);
+			frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+	        frame.setPreferredSize(new Dimension(700, 600)); 
+			frame.pack();
+			frame.setVisible(true);
+			frame.setResizable(false);
+			frame.setLocationRelativeTo(null);
+			panel.setBackground(aa_grey);
+			panel.setLayout(null);
+			panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+		
+
+			JLabel register = new JLabel("Forgot your Security Questions?");
+			
+
+
+			  	JLabel username = new JLabel("Username: ");
+			  	JLabel password = new JLabel("Password: ");
+
+			
+				
+				JTextField usernametext = new JTextField();
+				JPasswordField passwordtext = new JPasswordField();
+			
+				JButton Child = new JButton("Child");
+			    JButton Parent = new JButton("Parent");
+				JButton accButton = new JButton("Change Questions");
+			    JButton backButton = new JButton("Back");
+			  
+			    BufferedImage cat3 = null;
+			    try {
+					
+			    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+				
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			    
+			    JLabel dinopic = new JLabel(new ImageIcon(cat3));
+			    dinopic.setBounds(100, 182, 127, 150);
+			    panel.add(dinopic);
+			
+				register.setBounds(200, 0, 360, 100);
+				register.setForeground(aa_purple);
+				register.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+				register.setHorizontalAlignment(SwingConstants.CENTER);
+				panel.add(register);
+
+				Child.setBounds(397, 80, 78, 40);
+				Child.setBorderPainted(false);
+				Child.setBackground(aa_purple);
+				Child.setForeground(Color.WHITE);
+				Child.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+				Child.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		//declares the string depending on who is registering
+		        		userinput = "Child";
+		        		//changes the color of button upon click
+		        		Child.setBackground(Color.WHITE);
+		        		Child.setForeground(aa_purple);
+		        		 Parent.setBackground(aa_purple);
+		      	        Parent.setForeground(Color.WHITE);
+		      	        
+		        }});
+		        panel.add(Child);
+		        
+		        Parent.setBounds(525, 80, 95, 40);
+		        Parent.setBorderPainted(false);
+		        Parent.setBackground(aa_purple);
+		        Parent.setForeground(Color.WHITE);
+		        Parent.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+		        Parent.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		//declares the string depending on who is registering
+		        		userinput = "Parent";
+		        		//changes the color of button upon click
+		        		Parent.setBackground(Color.WHITE);
+		        		 Parent.setForeground(aa_purple);
+		        		 Child.setBackground(aa_purple);
+		     			Child.setForeground(Color.WHITE);
+		        		
+		        }});
+		        panel.add(Parent);
+			        
+				
+				username.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				username.setBounds(310, 252, 270, 28);
+				username.setForeground(aa_purple);
+				username.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(username);
+		        
+				usernametext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				usernametext.setBounds(398, 252, 270, 28);
+			    usernametext.setForeground(Color.BLACK);
+		        usernametext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        panel.add(usernametext);
+		    	
+				password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				password.setBounds(310, 302, 270, 28);
+				password.setForeground(aa_purple);
+				password.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(password);
+		        
+		        passwordtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				passwordtext.setBounds(398, 302, 270, 28);
+				passwordtext.setForeground(Color.BLACK);
+				passwordtext.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        panel.add(passwordtext);
+		        
+	        
+	        accButton.setBounds(397, 452, 250, 37);
+	        accButton.setBorderPainted(false);
+	        accButton.setBackground(aa_purple);
+	        accButton.setForeground(Color.WHITE);
+	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        accButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	
+		  		    DataBase db = new DataBase();	
+		  		    String usr = new String(usernametext.getText());
+		        	String pwds = new String(passwordtext.getPassword());
+		        	String pwd = hash(pwds);
+	        	
+		        	db.DatabaseSetUp();
+        			
+	        		User_Account UserAccount = db.UsernameUser_Account(usr);
+	        		User_Account addChildUser = new User_Account();
+	        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
+	        		Parent_Account addParentUser = new Parent_Account();
+	        		
+        			if(usr.isEmpty() == true || pwd.isEmpty() == true ) {
+            			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "One of your fields are blank, please fill them in.");
+            		}
+        			else if (UserAccount.getUsername().isEmpty() == true  &&  ParentAccount.getUsername().isEmpty() == true ) {
+        				JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "Username does not exist.");
+        			}
+            		else {
+
+            			if(userinput == "Child" ) {
+            			
+        	        		int userID = UserAccount.getUserID();
+        	        		String Fn = UserAccount.getName();
+        	        		String pass = UserAccount.getPassword();
+        	        		int SQ1int = UserAccount.getSQ_Key();
+        	        		int SQ2int = UserAccount.getSQ_Key2();
+        	        		String ansinput1 = UserAccount.getSQ_Answer();
+        	        		String ansinput2 = UserAccount.getSQ_Answer2();
+        	        		
+        	        		if(pass.equals(pwd) == false) {
+        	        			JFrame errorframe = new JFrame();
+                				JOptionPane.showMessageDialog(errorframe, "Password is incorrect. Please try again.");
+        	        		}
+        	        		else {
+
+            	        		
+            	        		addChildUser.setName(Fn);
+                				addChildUser.setUserID(userID);
+                				addChildUser.setUsername(usr);
+                				addChildUser.setPassword(pass);
+                				addChildUser.setSQ_Key(SQ1int);
+                				addChildUser.setSQ_Key2(SQ2int);
+                				addChildUser.setSQ_Answer(ansinput1);
+                				addChildUser.setSQ_Answer2(ansinput2);
+                				
+                				db.UpdateUser_Account(addChildUser);
+                				
+                				frame.dispose();
+                				ChangeSQpage(card,usr,userinput);
+                				
+        	        		}
+        	        	
+            			}
+            			else if(userinput == "Parent"){
+            	
+                			
+        	        	
+        	        		String pass = ParentAccount.getPassword();
+        	        		int userID = ParentAccount.getParentID();
+        	        		int SQ1int = ParentAccount.getSQ_Key();
+        	        		int SQ2int = ParentAccount.getSQ_Key2();
+        	        		String ansinput1 = ParentAccount.getSQ_Answer();
+        	        		String ansinput2 = ParentAccount.getSQ_Answer2();
+        	        		
+        	        		
+        	        		if(pass.equals(pwd) == false) {
+        	        			JFrame errorframe = new JFrame();
+                				JOptionPane.showMessageDialog(errorframe, "Password is incorrect. Please try again.");
+        	        		}
+        	        		else {
+
+            	        		addParentUser.setParentID(userID);
+            	        		addParentUser.setUsername(usr);
+            	        		addParentUser.setPassword(pass);
+            	        		addParentUser.setSQ_Key(SQ1int);
+            	        		addParentUser.setSQ_Key2(SQ2int);
+            	        		addParentUser.setSQ_Answer(ansinput1);
+            	        		addParentUser.setSQ_Answer2(ansinput2);
+                				
+                				db.UpdateParent_Account(addParentUser);
+                				frame.dispose();
+                				ChangeSQpage(card,usr,userinput);
+                				
+        	        		}
+        	        	
+            				
+            			}
+            			else {
+            			JOptionPane.showMessageDialog(null, "You must select a child or parent account to change password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+            			}
+            		}
+    	  		      
+	        }});
+	        panel.add(accButton);
+	        frame.getContentPane().add(panel);
+			return frame;
+		}
+		
+		//this is the popup JFrame that will allow the user to change their security  questions (this popup is used in ForgotSQpage
+		private static JFrame ChangeSQpage(CardLayout card, String user,String userinput) {
+			JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			JMenuBar titlePanel = titlePanel(frame);
+			frame.setUndecorated(true);
+			frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+	        frame.setPreferredSize(new Dimension(700, 600)); 
+			frame.pack();
+			frame.setVisible(true);
+			frame.setResizable(false);
+			frame.setLocationRelativeTo(null);
+			panel.setBackground(aa_grey);
+			panel.setLayout(null);
+			panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+		
+
+			JLabel register = new JLabel("Please Input New Security Questions!");
+			  String[] optionsToChoose = {"The name of your first pet?", "The name of your best friend?", "Your favorite food?", "Your favorite school subject?"};
+
+			  String[] optionsToChoose2 = {"The street you live on?", "Favorite video game?", "Your favorite teachers name?", "Your favorite animal?"};
+
+
+
+			  
+				JLabel sqlabel1 = new JLabel("Security Question 1: ");
+				JLabel ans1 = new JLabel("Answer: ");
+				JLabel sqlabel2 = new JLabel("Security Question 2: ");
+				JLabel ans2 = new JLabel("Answer: ");
+				
+			
+				JComboBox<String> security1 = new JComboBox<>(optionsToChoose);
+				JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
+				
+		
+				JPasswordField answer2text = new JPasswordField();
+				JPasswordField answer2text2 = new JPasswordField();
+				
+				
+				JButton accButton = new JButton("Change Questions");
+			    JButton backButton = new JButton("Back");
+			  
+			    BufferedImage cat3 = null;
+			    try {
+					
+			    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+				
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			    
+			    JLabel dinopic = new JLabel(new ImageIcon(cat3));
+			    dinopic.setBounds(100, 182, 127, 150);
+			    panel.add(dinopic);
+			
+				register.setBounds(200, 0, 360, 100);
+				register.setForeground(aa_purple);
+				register.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+				register.setHorizontalAlignment(SwingConstants.CENTER);
+				panel.add(register);
+
+		        sqlabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        sqlabel1.setBounds(250, 152, 270, 28);
+		        sqlabel1.setForeground(aa_purple);
+		        sqlabel1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(sqlabel1);
+		        
+		        
+		        security1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        security1.setBounds(398, 152, 270, 28);
+		        security1.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        security1.setForeground(Color.BLACK);
+		        panel.add(security1);
+		        
+		        ans1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        ans1.setBounds(340, 202, 270, 28);
+		        ans1.setForeground(aa_purple);
+		        ans1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(ans1);
+		        
+		        answer2text.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        answer2text.setBounds(398, 202, 270, 28);
+		        answer2text.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        answer2text.setForeground(Color.BLACK);
+		        panel.add(answer2text);
+		      
+		       
+		        sqlabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        sqlabel2.setBounds(250, 252, 270, 28);
+		        sqlabel2.setForeground(aa_purple);
+		        sqlabel2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(sqlabel2);
+		        
+		        security2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        security2.setBounds(398, 252, 270, 28);
+		        security2.setForeground(Color.BLACK);
+		        security2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        panel.add(security2);
+		        
+		        
+		        ans2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        ans2.setBounds(340, 302, 270, 28);
+		        ans2.setForeground(aa_purple);
+		        ans2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+		        panel.add(ans2);
+		        
+		        answer2text2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		        answer2text2.setBounds(398, 302, 270, 28);
+		        answer2text2.setForeground(Color.BLACK);
+		        answer2text2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+		        panel.add(answer2text2);
+		        
+	        
+	        accButton.setBounds(397, 452, 250, 37);
+	        accButton.setBorderPainted(false);
+	        accButton.setBackground(aa_purple);
+	        accButton.setForeground(Color.WHITE);
+	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        accButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	
+		  		    DataBase db = new DataBase();	
+		  		    String usr = new String(user);
+	        		int SQ1int = security1.getSelectedIndex();
+		        	int SQ2int = security2.getSelectedIndex();
+	        		String ansin1 = new String(answer2text.getPassword());
+	        		String ansin2 = new String(answer2text2.getPassword());
+	        		String ansinput1 = hash(ansin1);
+	        		String ansinput2 = hash(ansin2);
+	  		
+        		
+        		
+        	
+        			if(ansinput1.isEmpty() == true ||  ansinput2.isEmpty() == true) {
+            			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "One of your fields are blank, please fill them in.");
+            		}
+            		else {
+
+            			if(userinput == "Child" ) {
+            				db.DatabaseSetUp();
+                			
+        	        		User_Account UserAccount = db.UsernameUser_Account(usr);
+        	        		User_Account addChildUser = new User_Account();
+        	        		int userID = UserAccount.getUserID();
+        	        		String Fn = UserAccount.getName();
+        	        		String pass = UserAccount.getPassword();
+        	        		
+        	        	
+
+            	        		
+            	        		addChildUser.setName(Fn);
+                				addChildUser.setUserID(userID);
+                				addChildUser.setUsername(usr);
+                				addChildUser.setPassword(pass);
+                				addChildUser.setSQ_Key(SQ1int);
+                				addChildUser.setSQ_Key2(SQ2int);
+                				addChildUser.setSQ_Answer(ansinput1);
+                				addChildUser.setSQ_Answer2(ansinput2);
+                				
+                				db.UpdateUser_Account(addChildUser);
+                				
+                				  Object[] options = {"OK"};
+              				    int n = JOptionPane.showOptionDialog(frame,
+              				                   "Successfully Changed Security Questions! You may now login!","Success",
+              				                 JOptionPane.YES_NO_CANCEL_OPTION,
+            					             JOptionPane.DEFAULT_OPTION,
+              				                   null,
+              				                   options,
+              				                   options[0]);
+              				    if(n == 0) {
+              				  	frame.dispose();
+          				    	card.next(cardPane);
+          				    	card.next(cardPane);
+              				    
+        	        		}
+        	        	
+            			}
+            			else if(userinput == "Parent"){
+            				db.DatabaseSetUp();
+                			
+        	        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
+        	        		Parent_Account addParentUser = new Parent_Account();
+        	        		String pass = ParentAccount.getPassword();
+        	        		int userID = ParentAccount.getParentID();
+        	        		
+        	        		
+        	        		
+        	        		
+
+            	        		addParentUser.setParentID(userID);
+            	        		addParentUser.setUsername(usr);
+            	        		addParentUser.setPassword(pass);
+            	        		addParentUser.setSQ_Key(SQ1int);
+            	        		addParentUser.setSQ_Key2(SQ2int);
+            	        		addParentUser.setSQ_Answer(ansinput1);
+            	        		addParentUser.setSQ_Answer2(ansinput2);
+                				
+                				db.UpdateParent_Account(addParentUser);
+                				
+                				  Object[] options = {"OK"};
+                				    int n = JOptionPane.showOptionDialog(frame,
+                				    				"Successfully Changed Security Questions! You may now login!","Success",
+                				                   JOptionPane.PLAIN_MESSAGE,
+                				                   JOptionPane.QUESTION_MESSAGE,
+                				                   null,
+                				                   options,
+                				                   options[0]);
+                				    if(n == 0) {
+                				    	frame.dispose();
+                  				    	card.next(cardPane);
+                  				    	card.next(cardPane);
+                  				 
+        	        		}
+        	        	
+            				
+            			}
+            			else {
+            			JOptionPane.showMessageDialog(null, "You must select a child or parent account to change password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+            			}
+            		}
+    	  		      
+        		
+        		
+	        	
+	        }});
+	        panel.add(accButton);
+	        frame.getContentPane().add(panel);
+			return frame;
+		}
+	
+		//this is the popup page that is used from the registration page to register security questions for the user/parent account
+		private static JFrame SQpage(CardLayout card, String user,String userinput) {
+			JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			JMenuBar titlePanel = titlePanel(frame);
+			frame.setUndecorated(true);
+			frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+	        frame.setPreferredSize(new Dimension(700, 600)); 
+			frame.pack();
+			frame.setVisible(true);
+			frame.setResizable(false);
+			frame.setLocationRelativeTo(null);
+			panel.setBackground(aa_grey);
+			panel.setLayout(null);
+			panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+		
+
+			JLabel register = new JLabel("Please Fill out Security Questions!");
+			  String[] optionsToChoose = {"The name of your first pet?", "The name of your best friend?", "Your favorite food?", "Your favorite school subject?"};
+
+			  String[] optionsToChoose2 = {"The street you live on?", "Favorite video game?", "Your favorite teachers name?", "Your favorite animal?"};
+
+
+
+			
+			JLabel sqlabel1 = new JLabel("Security Question 1: ");
+			JLabel ans1 = new JLabel("Answer: ");
+			JLabel sqlabel2 = new JLabel("Security Question 2: ");
+			JLabel ans2 = new JLabel("Answer: ");
+			
+		
+			JComboBox<String> security1 = new JComboBox<>(optionsToChoose);
+			JComboBox<String> security2 = new JComboBox<>(optionsToChoose2);
+			
+			JPasswordField answer2text = new JPasswordField();
+			JPasswordField answer2text2 = new JPasswordField();
+			
+			
+			JButton accButton = new JButton("Confirm Security Questions");
+		    JButton backButton = new JButton("Back");
+		    JButton loginButton = new JButton("Login");
+		    
+		    BufferedImage cat3 = null;
+		    try {
+				
+		    	cat3 = ImageIO.read(new File("avatarSelection/avatar_cat3.png"));
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		    
+		    JLabel dinopic = new JLabel(new ImageIcon(cat3));
+		    dinopic.setBounds(100, 182, 127, 150);
+		    panel.add(dinopic);
+		
+			register.setBounds(200, 0, 360, 100);
+			register.setForeground(aa_purple);
+			register.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+			register.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(register);
+	        
+	        sqlabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        sqlabel1.setBounds(250, 202, 270, 28);
+	        sqlabel1.setForeground(aa_purple);
+	        sqlabel1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(sqlabel1);
+	        
+	        
+	        security1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        security1.setBounds(398, 202, 270, 28);
+	        security1.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        security1.setForeground(Color.BLACK);
+	        panel.add(security1);
+	        
+	        ans1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        ans1.setBounds(340, 252, 270, 28);
+	        ans1.setForeground(aa_purple);
+	        ans1.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(ans1);
+	        
+	        answer2text.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        answer2text.setBounds(398, 252, 270, 28);
+	        answer2text.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        answer2text.setForeground(Color.BLACK);
+	        panel.add(answer2text);
+	      
+	       
+	        sqlabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        sqlabel2.setBounds(250, 302, 270, 28);
+	        sqlabel2.setForeground(aa_purple);
+	        sqlabel2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(sqlabel2);
+	        
+	        security2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        security2.setBounds(398, 302, 270, 28);
+	        security2.setForeground(Color.BLACK);
+	        security2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(security2);
+	        
+	        
+	        ans2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        ans2.setBounds(340, 352, 270, 28);
+	        ans2.setForeground(aa_purple);
+	        ans2.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        panel.add(ans2);
+	        
+	        answer2text2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        answer2text2.setBounds(398, 352, 270, 28);
+	        answer2text2.setForeground(Color.BLACK);
+	        answer2text2.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
+	        panel.add(answer2text2);
+	        
+	        	        
+	        
+	        accButton.setBounds(397, 425, 250, 37);
+	        accButton.setBorderPainted(false);
+	        accButton.setBackground(aa_purple);
+	        accButton.setForeground(Color.WHITE);
+	        accButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	        accButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	
+		  		    DataBase db = new DataBase();	
+	        		String usr = new String(user);
+	        		int SQ1int = security1.getSelectedIndex();
+		        	int SQ2int = security2.getSelectedIndex();
+	        		String ansin1 = new String(answer2text.getPassword());
+	        		String ansin2 = new String(answer2text2.getPassword());
+	        		String ansinput1 = hash(ansin1);
+	        		String ansinput2 = hash(ansin2);
+	  		
+        		
+        		
+        	
+        			if(usr.isEmpty() == true || ansinput1.isEmpty() == true ||  ansinput2.isEmpty() == true) {
+            			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "One of your fields are blank, please fill them in.");
+            		}
+            		else {
+
+            			if(userinput == "Child" ) {
+            				db.DatabaseSetUp();
+                			
+        	        		User_Account UserAccount = db.UsernameUser_Account(usr);
+        	        		User_Account addChildUser = new User_Account();
+        	        		int userID = UserAccount.getUserID();
+        	        		String Fn = UserAccount.getName();
+        	        		String pass = UserAccount.getPassword();
+        	        		
+        	        		
+        	        		addChildUser.setName(Fn);
+            				addChildUser.setUserID(userID);
+            				addChildUser.setUsername(usr);
+            				addChildUser.setPassword(pass);
+            				addChildUser.setSQ_Key(SQ1int);
+            				addChildUser.setSQ_Key2(SQ2int);
+            				addChildUser.setSQ_Answer(ansinput1);
+            				addChildUser.setSQ_Answer2(ansinput2);
+            				
+            				db.UpdateUser_Account(addChildUser);
+            				
+            				  Object[] options = {"OK"};
+          				    int n = JOptionPane.showOptionDialog(frame,
+          				                   "Successfully Registered Child Account! Logging in now...","Success",
+          				                 JOptionPane.YES_NO_CANCEL_OPTION,
+        					             JOptionPane.DEFAULT_OPTION,
+          				                   null,
+          				                   options,
+          				                   options[0]);
+          				    if(n == 0) {
+          				  	User_Account UserAccount2 = db.UsernameUser_Account(usr);
+	        				int userid = UserAccount2.getUserID();
+	        				
+	        				//File object for directory
+	        				File directoryPath = new File("happyThoughtMedia");
+	        				
+	        				//List of all files in happyThoughtMedia directory
+	        				String files[] = directoryPath.list();
+	        				
+	        				/*
+	        				 * for all the media that exists in the happyThoughtMediaDirectory
+	        				 * add files to database as pre-loaded library
+	        				 */
+	        				for(int i = 0; i < files.length; i++) {
+	        					Media media = new Media("happyThoughtMedia/" + files[i]);
+	        					db.AddMedia(media, userid);
+	        				}
+	        				
+	        				Settings sett = new Settings(userid);
+	        			
+	        				db.AddSettings(sett, userid);
+	        			
+	        				
+	        				frame.dispose();
+	        				childPortal(userid,sett,db);
+          				    }
+            			}
+            			else if(userinput == "Parent"){
+            				db.DatabaseSetUp();
+                			
+        	        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
+        	        		Parent_Account addParentUser = new Parent_Account();
+        	        		String pass = ParentAccount.getPassword();
+        	        		int userID = ParentAccount.getParentID();
+        	        		
+        	        	
+        	        		addParentUser.setParentID(userID);
+        	        		addParentUser.setUsername(usr);
+        	        		addParentUser.setPassword(pass);
+        	        		addParentUser.setSQ_Key(SQ1int);
+        	        		addParentUser.setSQ_Key2(SQ2int);
+        	        		addParentUser.setSQ_Answer(ansinput1);
+        	        		addParentUser.setSQ_Answer2(ansinput2);
+            				
+            				db.UpdateParent_Account(addParentUser);
+            				
+            				  Object[] options = {"OK"};
+            				    int n = JOptionPane.showOptionDialog(frame,
+            				                   "Successfully Registered Parent Account! Logging in now... ","Success",
+            				                   JOptionPane.PLAIN_MESSAGE,
+            				                   JOptionPane.QUESTION_MESSAGE,
+            				                   null,
+            				                   options,
+            				                   options[0]);
+            				    if(n == 0) {
+            				    	Parent_Account ParentAccount2 = db.UsernameParent_Account(usr);
+			        				int Parentid = ParentAccount2.getParentID();
+			      				
+			        	
+			        				frame.dispose();
+			        				parentPortal(Parentid,db);
+            				    }
+            				
+            			}
+            			else {
+            			JOptionPane.showMessageDialog(null, "You must select a child or parent account to change password!","Confirmation", JOptionPane.WARNING_MESSAGE);
+            			}
+            		}
+    	  		      
+        		
+        		
+	        	
+	        }});
+	        panel.add(accButton);
+	        
+//	        loginButton.setBounds(500, 490, 78, 40);
+//	        loginButton.setBorderPainted(false);
+//	        loginButton.setBackground(aa_purple);
+//	        loginButton.setForeground(Color.WHITE);
+//	        loginButton.setFont(new Font("Dosis SemiBold", Font.BOLD, 14));
+//	        loginButton.addActionListener(new ActionListener() {
+//	        	public void actionPerformed(ActionEvent e) {
+//	        	//redirect the user to the login page
+//	        	card.previous(cardPane);
+//	        }});
+//	        panel.add(loginButton);
+	        frame.getContentPane().add(panel);
+			return frame;
+		}
+		
+		//this is the welcome page cardlayour where the user can choose to register/login to their account
 		private static JPanel welcomepage(CardLayout card, JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
@@ -791,8 +1751,8 @@ public class AttentionAssistantDriver {
 		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 		        			JFrame success = new JFrame();
 	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
-	        				//User_Account UserAccount2 = db.Username_User_Account(usr);
-	        				int userid = UserAccount.getUserID();
+	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
+	        				int userid = UserAccount2.getUserID();
 	        				
 	        				Settings sett = new Settings(db,userid);
 	        				
@@ -807,8 +1767,8 @@ public class AttentionAssistantDriver {
 	        				addChildUser.setName(first);
 	        				db.AddUser_Account(addChildUser);
 	        				
-	        				//User_Account UserAccount2 = db.Username_User_Account(usr);
-	        				int userid = UserAccount.getUserID();
+	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
+	        				int userid = UserAccount2.getUserID();
 	        				
 	        				//File object for directory
 	        				File directoryPath = new File("happyThoughtMedia");
@@ -859,7 +1819,8 @@ public class AttentionAssistantDriver {
 
 			return panel;
 		}
-		
+				
+		//this is the register cardlayout where the user/parent can register for an account
 		private static JPanel Registerpage(CardLayout card,JFrame frame) {
 			JPanel panel = new JPanel();
 			panel.setBackground(aa_grey);
@@ -1003,22 +1964,29 @@ public class AttentionAssistantDriver {
 	        accButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		DataBase db = new DataBase();	
-	        		String pwd = new String(passwordtext.getPassword());
-	        		String reenterPwd = new String(reenterpasswordtext.getPassword());
+	        		String passwords = new String(passwordtext.getPassword());
+	        		String pwd = hash(passwords);
+	        		
+	        		String rPwd = new String(reenterpasswordtext.getPassword());
+	        		String reenterPwd = hash(rPwd);
 	        		String usr = new String(usernametext.getText());
 	        		String fn = new String(firstnametext.getText());
-	        		
-	        		
+	        
 	        		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
 	        			JFrame errorframe = new JFrame();
         				JOptionPane.showMessageDialog(errorframe, "Please input Password or Username");
 	        		}
+	        		else if (pwd.length() < 5) {
+	        			JFrame errorframe = new JFrame();
+        				JOptionPane.showMessageDialog(errorframe, "Password is too short, please make your password over 5 characters.");
+	        		}
 	        		else {
 	        			db.DatabaseSetUp();
 	        			
-		        		User_Account UserAccount = db.SearchUser_Account(usr,pwd);
-		        		
-		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
+	        			
+		    
+		        		User_Account UserAccount =  db.UsernameUser_Account(usr);
+		        		Parent_Account ParentAccount = db.UsernameParent_Account(usr);
 		        		User_Account addChildUser = new User_Account();
 		        		Parent_Account addParentUser = new Parent_Account();
 		        	
@@ -1035,34 +2003,8 @@ public class AttentionAssistantDriver {
 			        				addChildUser.setName(fn);
 	
 			        				db.AddUser_Account(addChildUser);
-			        				//User_Account UserAccount2 = db.Username_User_Account(usr);
-			        				int userid = UserAccount.getUserID();
-			        				
-			        				//File object for directory
-			        				File directoryPath = new File("happyThoughtMedia");
-			        				
-			        				//List of all files in happyThoughtMedia directory
-			        				String files[] = directoryPath.list();
-			        				
-			        				/*
-			        				 * for all the media that exists in the happyThoughtMediaDirectory
-			        				 * add files to database as pre-loaded library
-			        				 */
-			        				for(int i = 0; i < files.length; i++) {
-			        					Media media = new Media("happyThoughtMedia/" + files[i]);
-			        					db.AddMedia(media, userid);
-			        				}
-			        				
-			        				Settings sett = new Settings(userid);
-			        			
-			        				db.AddSettings(sett, userid);
-			        				System.out.print("here is teh useracct" + userid);
-			        				JFrame success = new JFrame();
-			        				JOptionPane.showMessageDialog(success, "Successfully Registered Child Account! Logging in now...");
-			        				
+			        				SQpage(card,usr,userinput);
 			        				frame.dispose();
-			        				success.dispose();
-			        				childPortal(userid,sett,db);
 		        					
 		        				}
 			        			else  {
@@ -1085,15 +2027,9 @@ public class AttentionAssistantDriver {
 			        				addParentUser.setUsername(usr);
 			        				addParentUser.setPassword(pwd);
 			        				db.AddParent_Account(addParentUser);
-			        				//Parent_Account ParentAccount2 = db.Username_Parent_Account(usr);
-			        				int Parentid = ParentAccount.getParentID();
-			      				
-			        				JFrame errorframe = new JFrame();
-			        				JOptionPane.showMessageDialog(errorframe, "Successfully Registered Parent Account! Logging in now...");
 			        				
+			        				SQpage(card,usr,userinput);
 			        				frame.dispose();
-			        				errorframe.dispose();
-			        				parentPortal(Parentid,db);
 		        				} 
 				      			else {
 					      				
@@ -1143,11 +2079,14 @@ public class AttentionAssistantDriver {
 			return panel;
 		}
 		
+		//this initiates the parent portal
 		private static void parentPortal(int userID, DataBase db) {
 			Parent_Account parent = db.SelectParent_Account(userID);//***************************************************************************
 			Parent_Bar parentBar = new Parent_Bar(parent,db);
 			parentBar.run_parent_bar();
 		}
+		
+		//this initiates the child portal
 		static Notification_System notif;
 		static Pomodoro_Timer pomo;
 		static Negative_Thought_Burner ntb;
@@ -1192,6 +2131,7 @@ public class AttentionAssistantDriver {
 		   	 
 		}
 		
+		//this runs the login panel from the driver
 		public static void run_login() {
 			//EventQueue.invokeLater(new Runnable(){
 				//@Override
@@ -1224,6 +2164,7 @@ public class AttentionAssistantDriver {
 	    	
 	    	cardPane.setLayout(card);
 	        cardPane.setBounds(300, 50, 700, 600);
+	        cardPane.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 	    	cardPane.add(WelcomePanel, "Welcome Panel");
 	        cardPane.add(LoginPanel, "Login Panel");
 	        cardPane.add(RegisterPanel, "Register Panel");
@@ -1248,3 +2189,4 @@ public class AttentionAssistantDriver {
 		}
 	
 }
+

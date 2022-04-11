@@ -15,9 +15,13 @@ public class Test_Parent_Account {
 		int testParentID= 999;
 		String testParentUsername= "TestParentUser123";
 		String testParentPassword= "TestParentPass123";
-		
+		int testParentSQ_Key = 40;
+		String testParentSQ_Answer = "TestSecurityQuestionAnswer";
+		int testParentSQ_Key2 = 40;
+		String testParentSQ_Answer2 = "TestSecurityQuestionAnswer2";
+
 		defaultParent= new Parent_Account();
-		nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword);
+		nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword, testParentSQ_Key, testParentSQ_Answer,testParentSQ_Key2,testParentSQ_Answer2);
 		copyParent= new Parent_Account(nonDefaultParent);
 	}
 
@@ -44,6 +48,26 @@ public class Test_Parent_Account {
          */
         assertEquals("", defaultParent.getPassword(), 
         "Default constructor Parent_Account.password should be \"\". Returned: " + defaultParent.getPassword());
+        /**
+         *  Make sure the Parent_Account SQ_Key is 0 for the default constructor
+         */
+        assertEquals(0, defaultParent.getSQ_Key(), 
+        "Default constructor Parent_Account.SQ_Key should be 0. Returned: " + Integer.toString(defaultParent.getSQ_Key()));
+        /**
+         *  Make sure the Parent_Account password is \"\" for the default constructor
+         */
+        assertEquals("", defaultParent.getSQ_Answer(), 
+        "Default constructor Parent_Account.SQ_Answer should be \"\". Returned: " + defaultParent.getSQ_Answer());
+        /**
+         *  Make sure the Parent_Account SQ_Key is 0 for the default constructor
+         */
+        assertEquals(0, defaultParent.getSQ_Key2(), 
+        "Default constructor Parent_Account.SQ_Key2 should be 0. Returned: " + Integer.toString(defaultParent.getSQ_Key2()));
+        /**
+         *  Make sure the Parent_Account password is \"\" for the default constructor
+         */
+        assertEquals("", defaultParent.getSQ_Answer2(), 
+        "Default constructor Parent_Account.SQ_Answer2 should be \"\". Returned: " + defaultParent.getSQ_Answer2());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -69,6 +93,26 @@ public class Test_Parent_Account {
          */
         assertEquals("TestParentPass123", nonDefaultParent.getPassword(), 
         "Parameter constructor Parent_Account.password should be \"TestParentPass123\". Returned: " + nonDefaultParent.getPassword());
+        /**
+         *  Make sure the Parent_Account Security Question Key is 40 for the Parameter constructor
+         */
+        assertEquals(40, nonDefaultParent.getSQ_Key(), 
+        "Parameter constructor Parent_Account.SQ_Key should be 40. Returned: " + nonDefaultParent.getSQ_Key());
+        /**
+         *  Make sure the Parent_Account Security Question Answer is \"TestSecurityQuestionAnswer\" for the Parameter constructor
+         */
+        assertEquals("TestSecurityQuestionAnswer", nonDefaultParent.getSQ_Answer(), 
+        "Parameter constructor Parent_Account.SQ_Answer should be \"TestSecurityQuestionAnswer\". Returned: " + nonDefaultParent.getSQ_Answer());
+        /**
+         *  Make sure the Parent_Account Security Question Key is 40 for the Parameter constructor
+         */
+        assertEquals(40, nonDefaultParent.getSQ_Key2(), 
+        "Parameter constructor Parent_Account.SQ_Key2 should be 40. Returned: " + nonDefaultParent.getSQ_Key2());
+        /**
+         *  Make sure the Parent_Account Security Question Answer is \"TestSecurityQuestionAnswer\" for the Parameter constructor
+         */
+        assertEquals("TestSecurityQuestionAnswer2", nonDefaultParent.getSQ_Answer2(), 
+        "Parameter constructor Parent_Account.SQ_Answer2 should be \"TestSecurityQuestionAnswer2\". Returned: " + nonDefaultParent.getSQ_Answer2());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -94,6 +138,26 @@ public class Test_Parent_Account {
          */
         assertEquals("TestParentPass123", copyParent.getPassword(), 
         "Copy constructor Parent_Account.password should be \"TestParentPass123\". Returned: " + copyParent.getPassword());
+        /**
+         *  Make sure the Parent_Account Security Question Key is 40 for the Parameter constructor
+         */
+        assertEquals(40, copyParent.getSQ_Key(), 
+        "Parameter constructor Parent_Account.SQ_Key should be 40. Returned: " + copyParent.getSQ_Key());
+        /**
+         *  Make sure the Parent_Account Security Question Answer is \"TestSecurityQuestionAnswer\" for the Parameter constructor
+         */
+        assertEquals("TestSecurityQuestionAnswer", copyParent.getSQ_Answer(), 
+        "Parameter constructor Parent_Account.SQ_Answer should be \"TestSecurityQuestionAnswer\". Returned: " + copyParent.getSQ_Answer());
+        /**
+         *  Make sure the Parent_Account Security Question Key is 40 for the Parameter constructor
+         */
+        assertEquals(40, copyParent.getSQ_Key2(), 
+        "Parameter constructor Parent_Account.SQ_Key2 should be 40. Returned: " + copyParent.getSQ_Key2());
+        /**
+         *  Make sure the Parent_Account Security Question Answer is \"TestSecurityQuestionAnswer\" for the Parameter constructor
+         */
+        assertEquals("TestSecurityQuestionAnswer2", copyParent.getSQ_Answer2(), 
+        "Parameter constructor Parent_Account.SQ_Answer2 should be \"TestSecurityQuestionAnswer2\". Returned: " + copyParent.getSQ_Answer2());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -129,11 +193,49 @@ public class Test_Parent_Account {
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @Test
+    @DisplayName("<Parent_Account> SQ_Key")
+    void ParentSetSQ_Key() {
+    	
+    	copyParent.setSQ_Key(40);
+    	assertEquals(40, copyParent.getSQ_Key(), "copyParent SQ_Key should be set to 40 but instead returned: " +  Integer.toString(copyParent.getSQ_Key()));
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Parent_Account> SQ_Answer")
+    void ParentSetSQ_Answer() {
+    	
+    	copyParent.setSQ_Answer("TestSecurityQuestionAnswer");
+    	assertEquals("TestSecurityQuestionAnswer", copyParent.getSQ_Answer(), "copyParent SQ_Answer should be set to \"TestSecurityQuestionAnswer\" but instead returned: " + copyParent.getSQ_Answer());
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Parent_Account> SQ_Key2")
+    void ParentSetSQ_Key2() {
+    	
+    	copyParent.setSQ_Key(40);
+    	assertEquals(40, copyParent.getSQ_Key2(), "copyParent SQ_Key2 should be set to 40 but instead returned: " +  Integer.toString(copyParent.getSQ_Key2()));
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
+    @DisplayName("<Parent_Account> SQ_Answer2")
+    void ParentSetSQ_Answer2() {
+    	
+    	copyParent.setSQ_Answer2("TestSecurityQuestionAnswer2");
+    	assertEquals("TestSecurityQuestionAnswer2", copyParent.getSQ_Answer2(), "copyParent SQ_Answer2 should be set to \"TestSecurityQuestionAnswer2\" but instead returned: " + copyParent.getSQ_Answer2());
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @Test
     @DisplayName("<Parent_Account> toString")
     void ParentToString() {
-        String String1 = "Parent ID= 999 Username= TestParentUser123 Password= TestParentPass123";
+        String String1 = "Parent ID= 999 Username= TestParentUser123 Password= TestParentPass123 SQ_Key= 40 SQ_Answer= TestSecurityQuestionAnswer SQ_Key2= 40 SQ_Answer2= TestSecurityQuestionAnswer2";
         
-        assertEquals(String1, nonDefaultParent.toString(), "String1 should be set to \"Parent ID= 999 Username= TestParentUser123 Password= TestParentPass123\" but instead returned: " + nonDefaultParent.toString());
+        assertEquals(String1, nonDefaultParent.toString(), "String1 should be set to \"Parent ID= 999 Username= TestParentUser123 Password= TestParentPass123 SQ_Key= 40 SQ_Answer= TestSecurityQuestionAnswer SQ_Key2= 40 SQ_Answer2= TestSecurityQuestionAnswer2\" but instead returned: " + nonDefaultParent.toString());
     }    	
 
 }

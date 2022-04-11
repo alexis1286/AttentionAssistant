@@ -168,11 +168,12 @@ public class Observer{
 			
 			long startTime = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 			
+			mouseTracker.startTracking();
+			
 			//Start tracking Objects
 			eyeMovementTracker.startTracking();  
 			
 			//Will uncomment later -jmitchell
-			//mouseTracker.startTracking();
 			//keyBoardTracker.startTracking(keyWords);
 			
 			osEventsTracker.startTracking();
@@ -180,7 +181,7 @@ public class Observer{
 
 			//CODE FOR TESTING WEIGHTS:
 			//Sets the mouseTrackerScore to 100
-			mouseTracker.setMouseScore(-1);
+			//mouseTracker.setMouseScore(-1);
 			
 			//Sets the eyeMovementTrackerScore to 100
 			//eyeMovementTracker.setEyeMovementScore(100);
@@ -203,7 +204,7 @@ public class Observer{
 			//This will eventually be commented out
 			System.out.println("\nMouse Tracker: " + 
 			//this will eventually be changed to mouseTracker.getMouseScore()
-					mouseTracker.getDefaultMouseScore() +
+					mouseTracker.getMouseScore() +
 			//this will eventually be changed to eyeMovementTracker.getWeightedEyeMovementScore()
  					"\nEye Movement Tracker: " + eyeMovementTracker.getEyeMovementScore() +
  					"\nKeyBoard Tracker: " + keyBoardTracker.getKeyBoardScore() + 
@@ -214,7 +215,7 @@ public class Observer{
 			//calculation of the observer score
 			this.setObserverScore(calculateObserverScore(
 			//mouseTracker.getMouseScore(),
-			mouseTracker.getDefaultMouseScore(),
+			mouseTracker.getMouseScore(),
 			eyeMovementTracker.calculateWeightedEyeMovementScore(activeTask, db),
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
@@ -295,6 +296,7 @@ public class Observer{
 		ObserverDisplay monitorDisplay = new ObserverDisplay();
 		
 		monitorInfo.setTask(activeTask);
+		monitorInfo.setTaskDescription(activeTask);
 		monitorInfo.setTaskKeywords(keyWords);
 		monitorInfo.setObserverScore(this.observerScore);
 		
@@ -315,6 +317,12 @@ public class Observer{
 		monitorInfo.setNumTotalWordsURL(internetTracker.getWordCounts());
 		monitorInfo.setScorePerURL(internetTracker.getUrlScores());
 		monitorInfo.setInternetScore(internetTracker.getInternetScore());
+		
+		int currentMScore = mouseTracker.currentMovementScore;
+		int lastMScore = mouseTracker.lastMovementScore;
+		monitorInfo.setCurrentMouseScore(currentMScore);
+		monitorInfo.setLastMouseScore(lastMScore);
+		monitorInfo.setMouseScore(mouseTracker.getMouseScore());
 		
 		monitorDisplay.monitorDetails(monitorInfo);
 	}

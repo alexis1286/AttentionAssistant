@@ -8,6 +8,7 @@ public class ObserverInfo {
 	 * Monitor Overview variables
 	 */
 	private String task;
+	private String taskDescription;
 	private ArrayList<String> taskKeywords;
 	private int observerScore;
 	
@@ -48,6 +49,8 @@ public class ObserverInfo {
 	/*
 	 * Mouse Tracking variables
 	 */
+	private int currentScore;
+	private int lastScore;
 	private int mouseScore;
 	
 	/*
@@ -55,6 +58,7 @@ public class ObserverInfo {
 	 */
 	public ObserverInfo() {
 		this.task = "<No active task>";
+		this.taskDescription = "<No task description>";
 		this.taskKeywords = new ArrayList<String>();
 		this.observerScore = 0;
 		this.groupsOfFrames = 0;
@@ -75,6 +79,8 @@ public class ObserverInfo {
 		this.wordsTyped = "<No keyboard input received>";
 		this.numKeywordsTyped = 0;
 		this.keyboardScore = 0;
+		this.currentScore = 0;
+		this.lastScore = 0;
 		this.mouseScore = 0;
 	}
 	
@@ -102,6 +108,22 @@ public class ObserverInfo {
 	 */
 	public String getTask() {
 		return this.task;
+	}
+	
+	/**
+	 * Set the task description to be displayed
+	 * @param activeTask
+	 */
+	public void setTaskDescription(Task activeTask) {
+		this.taskDescription = activeTask.getDescription();
+	}
+	
+	/**
+	 * Get the task description to be displayed
+	 * @return String task description
+	 */
+	public String getTaskDescription() {
+		return this.taskDescription;
 	}
 	
 	/**
@@ -438,6 +460,38 @@ public class ObserverInfo {
 	
 	
 	/***************************** Mouse Tracking Gets/Sets *****************************/
+	
+	/**
+	 * Set the current mouse score for this monitor period
+	 * @param int score
+	 */
+	public void setCurrentMouseScore(int score) {
+		this.currentScore = score;
+	}
+	
+	/**
+	 * Get the current mouse score for this monitor period
+	 * @return int 
+	 */
+	public int getCurrentMouseScore() {
+		return this.currentScore;
+	}
+	
+	/**
+	 * Set the last mouse score for this monitor period
+	 * @param int score
+	 */
+	public void setLastMouseScore(int score) {
+		this.lastScore = score;
+	}
+	
+	/**
+	 * Get the last mouse score for this monitor period
+	 * @return int 
+	 */
+	public int getLastMouseScore() {
+		return this.lastScore;
+	}
 	
 	/**
 	 * Set the mouse score for this monitor period

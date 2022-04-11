@@ -148,7 +148,11 @@ public class DataBase {
       		 "userID INTEGER PRIMARY KEY, " +
    			 "username TEXT, " +
    			 "password TEXT, " +
-   			 "nickname TEXT)";
+   			 "nickname TEXT, " +
+   			 "SQ_Key INTEGER, " + 
+   			 "SQ_Answer TEXT, " +
+   			 "SQ_Key2 INTEGER, " + 
+  			 "SQ_Answer2 TEXT)";
 
     	/**
     	 * Set up for Table parent
@@ -156,7 +160,11 @@ public class DataBase {
     	String queryParent = "CREATE TABLE IF NOT EXISTS parent ( " +
       		 "parentID INTEGER PRIMARY KEY, " +
    			 "username TEXT, " +
-   			 "password TEXT)";
+   			 "password TEXT, " +
+   			 "SQ_Key INTEGER, " + 
+   			 "SQ_Answer TEXT, " +
+   			 "SQ_Key2 INTEGER, " + 
+  			 "SQ_Answer2 TEXT)";
         
         /**
          * Set up for Table LinkedAccounts
@@ -287,6 +295,10 @@ public class DataBase {
 				"SET username = '" + user.getUsername().replaceAll("'", "''") +
         		"', password = '" + user.getPassword().replaceAll("'", "''") +
         		"', nickname = '" + user.getName().replaceAll("'", "''") +
+        		"', SQ_Key = '" + user.getSQ_Key() +
+        		"', SQ_Answer = '" + user.getSQ_Answer().replaceAll("'", "''") +
+        		"', SQ_Key2 = '" + user.getSQ_Key2() +
+        		"', SQ_Answer2 = '" + user.getSQ_Answer2().replaceAll("'", "''") +
         		"' WHERE userID = '" + user.getUserID() + "'";
         try ( Connection conn = ds.getConnection();
         	Statement stmt = conn.createStatement(); ) {
@@ -336,6 +348,10 @@ public class DataBase {
             user1.setUsername(rs.getString("username"));
             user1.setPassword(rs.getString("password"));
             user1.setName(rs.getString("nickname"));
+            user1.setSQ_Key(rs.getInt("SQ_Key"));
+            user1.setSQ_Answer(rs.getString("SQ_Answer"));
+            user1.setSQ_Key2(rs.getInt("SQ_Key2"));
+            user1.setSQ_Answer2(rs.getString("SQ_Answer2"));
             System.out.println( "SelectUser_Account() returned " + rs );
         	} catch ( SQLException e ) {
             e.printStackTrace();
@@ -360,12 +376,51 @@ public class DataBase {
     		    Statement stmt = conn.createStatement(); ) {
     		    ResultSet rs = stmt.executeQuery( query1 );
     		    if (rs.isClosed()) {
+    		    	
     		    	return tempuser;
     		    }
     		    tempuser.setUserID(rs.getInt("userID"));
     		    tempuser.setUsername(rs.getString("username"));
     		    tempuser.setPassword(rs.getString("password"));
     		    tempuser.setName(rs.getString("nickname"));
+    		    tempuser.setSQ_Key(rs.getInt("SQ_Key"));
+    		    tempuser.setSQ_Answer(rs.getString("SQ_Answer"));
+    		    tempuser.setSQ_Key2(rs.getInt("SQ_Key2"));
+    		    tempuser.setSQ_Answer2(rs.getString("SQ_Answer2"));
+    		    System.out.println( "SearchUser_Account() returned " + rs );
+    		} catch ( SQLException e ) {
+    		    e.printStackTrace();
+    		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);        
+        return tempuser;
+    }
+    
+	
+    /**
+     * Search for a Username in the database.
+     * @param String
+     * @return User_Account
+     */
+    public User_Account UsernameUser_Account(String username) {
+    	User_Account tempuser= new User_Account();
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+    	String query1 = "SELECT * FROM user WHERE username = '"+ username.replaceAll("'", "''") + "'";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    ResultSet rs = stmt.executeQuery( query1 );
+    		    if (rs.isClosed()) {
+    		    	return tempuser;
+    		    }
+    		    tempuser.setUserID(rs.getInt("userID"));
+    		    tempuser.setUsername(rs.getString("username"));
+    		    tempuser.setPassword(rs.getString("password"));
+    		    tempuser.setName(rs.getString("nickname"));
+    		    tempuser.setSQ_Key(rs.getInt("SQ_Key"));
+    		    tempuser.setSQ_Answer(rs.getString("SQ_Answer"));
+    		    tempuser.setSQ_Key2(rs.getInt("SQ_Key2"));
+    		    tempuser.setSQ_Answer2(rs.getString("SQ_Answer2"));
     		    System.out.println( "SearchUser_Account() returned " + rs );
     		} catch ( SQLException e ) {
     		    e.printStackTrace();
@@ -430,6 +485,10 @@ public class DataBase {
 		String query1 = "UPDATE parent " +
 				"SET username = '" + parent.getUsername().replaceAll("'", "''") +
                 "', password = '" + parent.getPassword().replaceAll("'", "''") +
+                "', SQ_Key = '" + parent.getSQ_Key() +
+        		"', SQ_Answer = '" + parent.getSQ_Answer().replaceAll("'", "''") +
+        		"', SQ_Key2 = '" + parent.getSQ_Key2() +
+          		"', SQ_Answer2 = '" + parent.getSQ_Answer2().replaceAll("'", "''") +
                 "' WHERE parentID = '" + parent.getParentID() + "'";
         try ( Connection conn = ds.getConnection();
         		Statement stmt = conn.createStatement(); ) {
@@ -478,6 +537,10 @@ public class DataBase {
                 parent1.setParentID(rs.getInt("parentID"));
                 parent1.setUsername(rs.getString("username"));
                 parent1.setPassword(rs.getString("password"));
+                parent1.setSQ_Key(rs.getInt("SQ_Key"));
+                parent1.setSQ_Answer(rs.getString("SQ_Answer"));
+                parent1.setSQ_Key2(rs.getInt("SQ_Key2"));
+                parent1.setSQ_Answer2(rs.getString("SQ_Answer2"));
                 System.out.println( "SelectParent_Account() returned " + rs );
                 } catch ( SQLException e ) {
                      e.printStackTrace();
@@ -506,6 +569,10 @@ public class DataBase {
     		    tempparent.setParentID(rs.getInt("parentID"));
     		    tempparent.setUsername(rs.getString("username"));
     		    tempparent.setPassword(rs.getString("password"));
+    		    tempparent.setSQ_Key(rs.getInt("SQ_Key"));
+    		    tempparent.setSQ_Answer(rs.getString("SQ_Answer"));
+    		    tempparent.setSQ_Key2(rs.getInt("SQ_Key2"));
+    		    tempparent.setSQ_Answer2(rs.getString("SQ_Answer2"));
     		    System.out.println( "SearchParent_Account() returned " + rs );
     		} catch ( SQLException e ) {
     		    e.printStackTrace();
@@ -515,6 +582,37 @@ public class DataBase {
         return tempparent;
     }
 
+    /**
+     * Search for a parent username in the database.
+     * @param String, String
+     * @return User_Account
+     */
+    public Parent_Account UsernameParent_Account(String username) {
+    	Parent_Account tempparent= new Parent_Account();
+    	sqlCon.enforceForeignKeys(true);
+        ds.setConfig(sqlCon);
+    	String query1 = "SELECT * FROM parent WHERE username = '"+ username.replaceAll("'", "''") + "'";
+    	try ( Connection conn = ds.getConnection();
+    		    Statement stmt = conn.createStatement(); ) {
+    		    ResultSet rs = stmt.executeQuery( query1 );
+    		    if (rs.isClosed()) {
+    		    	return tempparent;
+    		    }
+    		    tempparent.setParentID(rs.getInt("parentID"));
+    		    tempparent.setUsername(rs.getString("username"));
+    		    tempparent.setPassword(rs.getString("password"));
+    		    tempparent.setSQ_Key(rs.getInt("SQ_Key"));
+    		    tempparent.setSQ_Answer(rs.getString("SQ_Answer"));
+    		    tempparent.setSQ_Key2(rs.getInt("SQ_Key2"));
+    		    tempparent.setSQ_Answer2(rs.getString("SQ_Answer2"));
+    		    System.out.println( "SearchParent_Account() returned " + rs );
+    		} catch ( SQLException e ) {
+    		    e.printStackTrace();
+    		}
+		sqlCon.enforceForeignKeys(false);
+        ds.setConfig(sqlCon);
+        return tempparent;
+    }
 	/**
      * Mainly used for JUNIT testing, deletes the parent table at the beginning of testing to remove all test data.
      * 

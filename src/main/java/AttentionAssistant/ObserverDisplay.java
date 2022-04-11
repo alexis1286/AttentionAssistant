@@ -64,17 +64,45 @@ public class ObserverDisplay {
 		task_panel.setBackground(aa_grey);
 		task_panel.setMaximumSize(new Dimension(425, 110));
 		
-		JLabel activeTask = new JLabel("Active Task: ");
+		JLabel activeTask = new JLabel("<html><u>Active Task:</u></html>");
 		activeTask.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		activeTask.setForeground(Color.white);
 		
-		JLabel taskName = new JLabel(monitorInfo.getTask());
+		JLabel taskName = new JLabel(" " + monitorInfo.getTask());
 		taskName.setFont(new Font("Serif", Font.BOLD, 20));
 		taskName.setForeground(Color.white);
 		
 		task_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		task_panel.add(activeTask);
 		task_panel.add(taskName);
+		
+		
+		/*
+		 * everything within the Task Description section
+		 */
+		JPanel descriptionLabel_panel = new JPanel();
+		descriptionLabel_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		descriptionLabel_panel.setBackground(aa_grey);
+		descriptionLabel_panel.setMaximumSize(new Dimension(425, 25));
+		
+		JLabel descriptionLabel = new JLabel("<html><u>Task Description:</u></html>");
+		descriptionLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		descriptionLabel.setForeground(Color.white);
+		
+		descriptionLabel_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		descriptionLabel_panel.add(descriptionLabel);
+		
+		JPanel description_panel = new JPanel();
+		description_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		description_panel.setBackground(aa_grey);
+		description_panel.setMaximumSize(new Dimension(425, 25));
+		
+		JLabel description = new JLabel(monitorInfo.getTaskDescription());
+		description.setFont(new Font("Serif", Font.BOLD, 17));
+		description.setForeground(Color.white);
+		
+		description_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		description_panel.add(description);
 		
 		
 		/*
@@ -85,7 +113,7 @@ public class ObserverDisplay {
 		keywordsLabel_panel.setBackground(aa_grey);
 		keywordsLabel_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel keywordsLabel = new JLabel("Task Keywords:");
+		JLabel keywordsLabel = new JLabel("<html><u>Task Keywords:</u></html>");
 		keywordsLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		keywordsLabel.setForeground(Color.white);
 		
@@ -127,6 +155,8 @@ public class ObserverDisplay {
 		 * add everything to general_panel
 		 */
 		overview_panel.add(task_panel);
+		overview_panel.add(descriptionLabel_panel);
+		overview_panel.add(description_panel);
 		overview_panel.add(keywordsLabel_panel);
 		overview_panel.add(keywords_panel);
 		overview_panel.add(Box.createRigidArea(new Dimension(0, 25)));
@@ -257,7 +287,7 @@ public class ObserverDisplay {
 		urlsLabel_panel.setBackground(aa_grey);
 		urlsLabel_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel urlsLabel = new JLabel("Most Recently Visited URLs:");
+		JLabel urlsLabel = new JLabel("<html><u>Most Recently Visited URLs:</u></html>");
 		urlsLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		urlsLabel.setForeground(Color.white);
 		
@@ -393,7 +423,7 @@ public class ObserverDisplay {
 		wl_panel.setBackground(aa_grey);
 		wl_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel wl = new JLabel("Whitelisted Applications:");
+		JLabel wl = new JLabel("<html><u>Whitelisted Applications:</u></html>");
 		wl.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		wl.setForeground(Color.white);
 		
@@ -424,7 +454,7 @@ public class ObserverDisplay {
 		wlopen_panel.setBackground(aa_grey);
 		wlopen_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel wlopen = new JLabel("Whitelisted Applications Open:");
+		JLabel wlopen = new JLabel("<html><u>Whitelisted Applications Open:</u></html>");
 		wlopen.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		wlopen.setForeground(Color.white);
 		
@@ -455,7 +485,7 @@ public class ObserverDisplay {
 		bl_panel.setBackground(aa_grey);
 		bl_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel bl = new JLabel("Blacklisted Applications:");
+		JLabel bl = new JLabel("<html><u>Blacklisted Applications:</u></html>");
 		bl.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		bl.setForeground(Color.white);
 		
@@ -486,7 +516,7 @@ public class ObserverDisplay {
 		blopen_panel.setBackground(aa_grey);
 		blopen_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel blopen = new JLabel("Blacklisted Applications Open:");
+		JLabel blopen = new JLabel("<html><u>Blacklisted Applications Open:</u></html>");
 		blopen.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		blopen.setForeground(Color.white);
 		
@@ -624,14 +654,47 @@ public class ObserverDisplay {
 		
 		
 		/*
+		 * everything within the Current Mouse Score section
+		 */
+		JPanel currentscore_panel = new JPanel();
+		currentscore_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		currentscore_panel.setBackground(aa_grey);
+		currentscore_panel.setMaximumSize(new Dimension(425, 50));
+		
+		JLabel currentscore = new JLabel("Current Mouse Score: " + monitorInfo.getCurrentMouseScore());
+		currentscore.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		currentscore.setForeground(Color.white);
+		
+		currentscore_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		currentscore_panel.add(currentscore);
+		
+		
+		/*
+		 * everything within the Last Mouse Score section
+		 */
+		JPanel lastscore_panel = new JPanel();
+		lastscore_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		lastscore_panel.setBackground(aa_grey);
+		lastscore_panel.setMaximumSize(new Dimension(425, 50));
+		
+		JLabel lastscore = new JLabel("Last Mouse Score: " + monitorInfo.getLastMouseScore());
+		lastscore.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		lastscore.setForeground(Color.white);
+		
+		lastscore_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+		lastscore_panel.add(lastscore);
+		
+		
+		/*
 		 * everything within the Mouse Score section
 		 */
 		JPanel score_panel = new JPanel();
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
+		score_panel.setMaximumSize(new Dimension(425, 50));
 		
-		JLabel score = new JLabel("Mouse Score:");
-		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		JLabel score = new JLabel("Mouse Score: " + monitorInfo.getMouseScore());
+		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		score.setForeground(Color.white);
 		
 		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -641,6 +704,8 @@ public class ObserverDisplay {
 		/*
 		 * add everything to mouse_panel
 		 */
+		mouse_panel.add(currentscore_panel);
+		mouse_panel.add(lastscore_panel);
 		mouse_panel.add(score_panel);
 		
 		//add to mouse_panel to card_panel

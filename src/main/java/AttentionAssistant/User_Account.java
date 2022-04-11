@@ -14,13 +14,25 @@ public class User_Account{
 	private String password;
 	// name for User Account
 	private String name;
+	// Security key for question user selected
+	private int SQ_Key;
+	// users answer to specific security question
+	private String SQ_Answer;
+	// Security key 2 for question user selected
+	private int SQ_Key2;
+	// users answer to specific security question 2
+	private String SQ_Answer2;
 	
 	//Instantiating empty User_Account Object
 	public User_Account() {
-		this.userID= 1;
+		this.userID= 0;
 		this.username= "";
 		this.password= "";
 		this.name= "";
+		this.SQ_Key = 0;
+		this.SQ_Answer = "";
+		this.SQ_Key2 = 0;
+		this.SQ_Answer2 = "";
 	}
 	
 	/**
@@ -28,11 +40,15 @@ public class User_Account{
 	 * userID, username, password
 	 * @param int, String, String
 	 */
-	public User_Account(int userID, String username, String password,String name) {
+	public User_Account(int userID, String username, String password,String name, int SQ_Key, String SQ_Answer,int SQ_Key2, String SQ_Answer2) {
 		this.userID= userID;
 		this.username= username;
 		this.password= password;
 		this.name= name;
+		this.SQ_Key = SQ_Key;
+		this.SQ_Answer = SQ_Answer;
+		this.SQ_Key2 = SQ_Key2;
+		this.SQ_Answer2 = SQ_Answer2;
 	}
 	
 	//Copy constructor for User_Account
@@ -41,6 +57,10 @@ public class User_Account{
 		this.username= user.username;
 		this.password= user.password;
 		this.name= user.name;
+		this.SQ_Key= user.SQ_Key;
+		this.SQ_Answer = user.SQ_Answer;
+		this.SQ_Key2= user.SQ_Key2;
+		this.SQ_Answer2 = user.SQ_Answer2;
 	}
 	
 	/**
@@ -109,6 +129,71 @@ public class User_Account{
 		this.name = name;
 	}
 	
+	/**
+	 * Get security question key
+	 * @return int
+	 */
+	public int getSQ_Key() {
+		return this.SQ_Key;
+	}
+	
+	/**
+	 * set security question key
+	 * @param int
+	 */
+	public void setSQ_Key(int SQ_Key) {
+		this.SQ_Key = SQ_Key;
+	}
+	
+	/**
+	 * Get Security question answer
+	 * @return String
+	 */
+	public String getSQ_Answer() {
+		return this.SQ_Answer;
+	}
+	
+	/**
+	 * set security question answer
+	 * @param String
+	 */
+	public void setSQ_Answer(String SQ_Answer) {
+		this.SQ_Answer = SQ_Answer;
+	}
+	
+	
+	/**
+	 * Get security question key 2
+	 * @return int
+	 */
+	public int getSQ_Key2() {
+		return this.SQ_Key2;
+	}
+	
+	/**
+	 * set security question key 2
+	 * @param int
+	 */
+	public void setSQ_Key2(int SQ_Key2) {
+		this.SQ_Key2 = SQ_Key2;
+	}
+	
+	/**
+	 * Get Security question answer 2
+	 * @return String
+	 */
+	public String getSQ_Answer2() {
+		return this.SQ_Answer2;
+	}
+	
+	/**
+	 * set security question answer 2
+	 * @param String
+	 */
+	public void setSQ_Answer2(String SQ_Answer2) {
+		this.SQ_Answer2 = SQ_Answer2;
+	}
+	
 	 /** 
 	   * Display User_Account
 	   * @return String
@@ -119,7 +204,11 @@ public class User_Account{
 	 	UserString = "User ID= " + this.userID +
 	 			" Username= " + this.username +
 	 			" Password= " + this.password +
-	 			" Name= " + this.name; 
+	 			" Name= " + this.name + 
+	 			" SQ_Key= " + this.SQ_Key +
+	 			" SQ_Answer= " + this.SQ_Answer +
+	 			" SQ_Key2= " + this.SQ_Key2 +
+	 			" SQ_Answer2= " + this.SQ_Answer2;
 	 	return UserString;	 	
 	 }
 

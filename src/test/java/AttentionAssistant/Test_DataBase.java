@@ -131,8 +131,12 @@ public class Test_DataBase {
 	String testUserUsername= "TestUser123";
 	String testUserPassword= "TestPass123";
 	String testUserName= "TestName123";
+	int testUserSQ_Key= 999;
+	String testUserSQ_Answer= "TestUserSecurityQuestionAnswer";
+	int testUserSQ_Key2= 9992;
+	String testUserSQ_Answer2= "TestUserSecurityQuestionAnswer2";
 	
-	nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword, testUserName);
+	nonDefaultUser= new User_Account(testUserID, testUserUsername, testUserPassword, testUserName, testUserSQ_Key,testUserSQ_Answer,testUserSQ_Key2, testUserSQ_Answer2);
 	
 	/**
 	 * Set up for nonDefault Parent_Account 
@@ -140,8 +144,12 @@ public class Test_DataBase {
 	int testParentID= 999;
 	String testParentUsername= "TestParentUser123";
 	String testParentPassword= "TestParentPass123";
+	int testParentSQ_Key= 999;
+	String testParentSQ_Answer= "TestParentSecurityQuestionAnswer";
+	int testParentSQ_Key2= 2999;
+	String testParentSQ_Answer2= "TestParentSecurityQuestionAnswer2";
 
-	nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword);
+	nonDefaultParent= new Parent_Account(testParentID, testParentUsername, testParentPassword, testParentSQ_Key, testParentSQ_Answer,testParentSQ_Key2,testParentSQ_Answer2);
 	
 	/**
 	 * Set up for nonDefault Notification_System
@@ -223,37 +231,66 @@ public class Test_DataBase {
     	SelectedUser.setUserID(2);
     	SelectedUser.setUsername("SelectedUsername123");
     	SelectedUser.setPassword("SelectedPassword123");
+    	SelectedUser.setSQ_Key(2);
+    	SelectedUser.setSQ_Answer("SelectedSQAnswer");
+    	SelectedUser.setSQ_Key2(22);
+    	SelectedUser.setSQ_Answer2("SelectedSQAnswer2");
+    	
     	db.UpdateUser_Account(SelectedUser);
     	
     	User_Account SelectedUser2 = new User_Account();
     	SelectedUser2 = db.SelectUser_Account(2);
         
-        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123";
-        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123\" but instead returned: " + SelectedUser2.toString());
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedUser2.toString());
     }
 	
     @Test
     @Order(6)
-    @DisplayName("<DataBase> DatabaseSelectUserAccount")
+    @DisplayName("<DataBase> DatabaseSearchUserAccount")
     void DatabaseSearchUserAccount() {
     	User_Account SelectedUser = new User_Account(nonDefaultUser);
     	SelectedUser.setUserID(2);
     	SelectedUser.setUsername("SelectedUsername123");
     	SelectedUser.setPassword("SelectedPassword123");
+    	SelectedUser.setSQ_Key(2);
+    	SelectedUser.setSQ_Answer("SelectedSQAnswer");
+    	SelectedUser.setSQ_Key2(22);
+    	SelectedUser.setSQ_Answer2("SelectedSQAnswer2");
+    	
     	
     	User_Account SelectedUser2 = new User_Account();
     	SelectedUser2 = db.SearchUser_Account(SelectedUser.getUsername(), SelectedUser.getPassword());
         
-        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123";
-        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123\" but instead returned: " + SelectedUser2.toString());
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedUser2.toString());
     }
     
+    @Test
+    @Order(7)
+    @DisplayName("<DataBase> DatabaseUsernameUserAccount")
+    void DatabaseUsernameUserAccount() {
+    	User_Account SelectedUser = new User_Account(nonDefaultUser);
+    	SelectedUser.setUserID(2);
+    	SelectedUser.setUsername("SelectedUsername123");
+    	SelectedUser.setPassword("SelectedPassword123");
+    	SelectedUser.setSQ_Key(2);
+    	SelectedUser.setSQ_Answer("SelectedSQAnswer");
+    	SelectedUser.setSQ_Key2(22);
+    	SelectedUser.setSQ_Answer2("SelectedSQAnswer2");
+    	
+    	User_Account SelectedUser2 = new User_Account();
+    	SelectedUser2 = db.UsernameUser_Account(SelectedUser.getUsername());
+        
+        String String1 = "User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedUser2.toString(), "SelectedUser2 should be set to \"User ID= 2 Username= SelectedUsername123 Password= SelectedPassword123 Name= TestName123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedUser2.toString());
+    }
     /**
      ***************** END OF TEST USER_ACCOUNT CRUD *****************
 	 */
 	
     /**
-     ***************** START OF TEST USER_ACCOUNT CRUD *****************
+     ***************** START OF TEST PARENT_ACCOUNT CRUD *****************
 	 */
 	
     @Test
@@ -298,31 +335,58 @@ public class Test_DataBase {
     	SelectedParent.setParentID(2);
     	SelectedParent.setUsername("SelectedParentUser123");
     	SelectedParent.setPassword("SelectedParentPass123");
+    	SelectedParent.setSQ_Key(2);
+    	SelectedParent.setSQ_Answer("SelectedSQAnswer");
+    	SelectedParent.setSQ_Key2(22);
+    	SelectedParent.setSQ_Answer2("SelectedSQAnswer2");
     	db.UpdateParent_Account(SelectedParent);
     	
     	Parent_Account SelectedParent2 = new Parent_Account();
     	SelectedParent2 = db.SelectParent_Account(2);
         
-        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123";
-        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123\" but instead returned: " + SelectedParent2.toString());
+        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedParent2.toString());
     }
 	
     @Test
     @Order(11)
+    @DisplayName("<DataBase> DatabaseUsernameParentAccount")
+    void DatabaseUsernameParentAccount() {
+    	Parent_Account SelectedParent = new Parent_Account(nonDefaultParent);
+    	SelectedParent.setParentID(2);
+    	SelectedParent.setUsername("SelectedParentUser123");
+    	SelectedParent.setPassword("SelectedParentPass123");
+    	SelectedParent.setSQ_Key(2);
+    	SelectedParent.setSQ_Answer("SelectedSQAnswer");
+    	SelectedParent.setSQ_Key2(22);
+    	SelectedParent.setSQ_Answer2("SelectedSQAnswer2");
+    	
+    	Parent_Account SelectedParent2 = new Parent_Account();
+    	SelectedParent2 = db.UsernameParent_Account(SelectedParent.getUsername());
+        
+        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedParent2.toString());
+    }
+
+    @Test
+    @Order(12)
     @DisplayName("<DataBase> DatabaseSelectParentAccount")
     void DatabaseSearchParentAccount() {
     	Parent_Account SelectedParent = new Parent_Account(nonDefaultParent);
     	SelectedParent.setParentID(2);
     	SelectedParent.setUsername("SelectedParentUser123");
     	SelectedParent.setPassword("SelectedParentPass123");
+    	SelectedParent.setSQ_Key(2);
+    	SelectedParent.setSQ_Answer("SelectedSQAnswer");
+    	SelectedParent.setSQ_Key2(22);
+    	SelectedParent.setSQ_Answer2("SelectedSQAnswer2");
     	
     	Parent_Account SelectedParent2 = new Parent_Account();
     	SelectedParent2 = db.SearchParent_Account(SelectedParent.getUsername(), SelectedParent.getPassword());
         
-        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123";
-        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123\" but instead returned: " + SelectedParent2.toString());
+        String String1 = "Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2";
+        assertEquals(String1, SelectedParent2.toString(), "SelectedUser2 should be set to \"Parent ID= 2 Username= SelectedParentUser123 Password= SelectedParentPass123 SQ_Key= 2 SQ_Answer= SelectedSQAnswer SQ_Key2= 22 SQ_Answer2= SelectedSQAnswer2\" but instead returned: " + SelectedParent2.toString());
     }
-    
     
     /**
      ***************** END OF TEST PARENT_ACCOUNT CRUD *****************
@@ -885,14 +949,17 @@ public class Test_DataBase {
     	linkParent2.setParentID(2);
     	ArrayList<User_Account> testDBlinkedUsersList2= new ArrayList<User_Account>();
     	testDBlinkedUsersList2= db.Select_All_Users_Linked_Account(linkParent2);
-
     	ArrayList<User_Account> testLinkedUsersList1= new ArrayList<User_Account>();
     	ArrayList<User_Account> testLinkedUsersList2= new ArrayList<User_Account>();
-
+  
     	User_Account UpdatedUser= new User_Account(nonDefaultUser);
     	UpdatedUser.setUserID(1);
     	UpdatedUser.setUsername("UpdatedUsername123");
     	UpdatedUser.setPassword("UpdatedPassword123");
+    	UpdatedUser.setSQ_Key(1);
+    	UpdatedUser.setSQ_Answer("UpdatedSQAnswer");
+    	UpdatedUser.setSQ_Key2(12);
+    	UpdatedUser.setSQ_Answer2("UpdatedSQAnswer2");
     	testLinkedUsersList1.add(UpdatedUser);
     	testLinkedUsersList2.add(UpdatedUser);
 
@@ -900,18 +967,21 @@ public class Test_DataBase {
     	SelectedUser.setUserID(2);
     	SelectedUser.setUsername("SelectedUsername123");
     	SelectedUser.setPassword("SelectedPassword123");
+    	SelectedUser.setSQ_Key(2);
+    	SelectedUser.setSQ_Answer("SelectedSQAnswer");
+    	SelectedUser.setSQ_Key2(22);
+    	SelectedUser.setSQ_Answer2("SelectedSQAnswer2");
     	testLinkedUsersList1.add(SelectedUser);
-    	
+     
     	User_Account DefaultUser= new User_Account(nonDefaultUser);
     	DefaultUser.setUserID(4);
     	testLinkedUsersList2.add(DefaultUser);
     	
-
     	for (int i =0; i< testDBlinkedUsersList1.size(); i++) {        
     		assertEquals(testLinkedUsersList1.get(i).toString(), testDBlinkedUsersList1.get(i).toString(), "testDBlinkedUsersList " + i + " should be set to " + testLinkedUsersList1.get(i).toString() + " but instead returned: " + testDBlinkedUsersList1.get(i).toString());
         }
     	
-    	for (int i2 =0; i2< testDBlinkedUsersList2.size(); i2++) {        
+    	for (int i2 =0; i2< testDBlinkedUsersList2.size(); i2++) {    
     		assertEquals(testLinkedUsersList2.get(i2).toString(), testDBlinkedUsersList2.get(i2).toString(), "testDBlinkedUsersList " + i2 + " should be set to " + testLinkedUsersList2.get(i2).toString() + " but instead returned: " + testDBlinkedUsersList2.get(i2).toString());
         }
 

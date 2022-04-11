@@ -15,6 +15,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -25,6 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 public class Negative_Thought_Burner {
@@ -42,11 +47,9 @@ public class Negative_Thought_Burner {
 	private int mouseY;
 	int height = 600;
 	int width = 600;
-	JFrame frame;
-	JPanel WelcomePanel;
-	CardLayout card;
-	JPanel cardPane;
-	 
+	 int x =195;
+	Timer t;
+	JButton toRefresh;
 	private JMenuBar titlePanel(JFrame frame) {
 		JMenuBar title_panel = new JMenuBar();
 		title_panel.setBorder(line);
@@ -125,8 +128,8 @@ public class Negative_Thought_Burner {
 		
 	}
 
-	private JPanel welcomepage(CardLayout card, JFrame frame) {
-		JPanel panel = new JPanel();
+	private JLayeredPane welcomepage(CardLayout card,JFrame frame, Settings settings, Happy_Thought_Button happy_thought_button, DataBase db) {
+		JLayeredPane  panel = new JLayeredPane();
 		panel.setBackground(aa_grey);
 		panel.setLayout(null);
 		JButton burnbut=new JButton("Burn!");
@@ -148,13 +151,23 @@ public class Negative_Thought_Burner {
 		
 		JTextArea firstnametext = new JTextArea();
 		firstnametext.setBounds(100, 200, 500, 250);
-	    firstnametext.setBackground(new Color(237,221,246));
+	    firstnametext.setBackground(new Color(195,195,195));
 	    firstnametext.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
         firstnametext.setLineWrap(true);
+        firstnametext.setCaretColor(Color.red);
         firstnametext.setWrapStyleWord(true);
         panel.add(firstnametext);
-        
-        
+
+        String path = "images/fire.gif";
+		JPanel fire = generateNewGIF(path);
+		fire.setVisible(false);
+		panel.add(fire);
+		panel.setPosition(fire, 0);
+		
+			JPanel fire2 = generateNewGIF2(path);
+			fire2.setVisible(false);
+			panel.add(fire2);
+			//panel.setPosition(fire2, -1);
 
         burnbut.setBounds(300, 480, 97, 35);
         burnbut.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -165,67 +178,212 @@ public class Negative_Thought_Burner {
 		 burnbut.setForeground(aa_purple);
 		 burnbut.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
-	        	//burn thought 
-	        	
+	        		
+	        		t = new Timer(50, new ActionListener() {
+	        			  @Override
+	        			  public void actionPerformed(ActionEvent arg0) {
+
+	        				   if(e.getSource() == burnbut) {
+	        					
+	        					   fire.setVisible(true);
+	        					  fire.setBackground(new Color(0,0,0,125)); 
+	        					   fire.setOpaque(false);
+	        					
+	        					   
+		        					
+	        					   fire2.setVisible(true);
+	        					   fire2.setBackground(new Color(0,0,0,125)); 
+	        					   fire2.setOpaque(false);
+	        					
+	        					   firstnametext.setBackground(new Color(x--,x--,x--));
+	        						
+	        		                if(x==51 && settings.getIsAutoLinked() == false) { 
+	        		                	
+	        		                		t.stop();
+		        		                	x=195;
+		        		                	firstnametext.setVisible(true);
+		        		                	firstnametext.setBackground(new Color(x,x,x));
+		        		                	firstnametext.selectAll();
+		    	        		       		firstnametext.replaceSelection("");
+		    	        		       			
+		    	        		       		fire2.setVisible(false);
+		        		                	 fire.setVisible(false);
+		        		                	//middle_panel.setVisible(false);
+	        		                }
+	        		                else if(x==51 && settings.getIsAutoLinked() == true) {
+	        		                		int userID = settings.getUserID();
+	        		                		
+	        		                		t.stop();
+		        		                	x=195;
+		        		                	firstnametext.setVisible(true);
+		        		                	firstnametext.setBackground(new Color(x,x,x));
+		        		                	firstnametext.selectAll();
+		    	        		       		firstnametext.replaceSelection("");
+		    	        		       			
+		    	        		       		fire2.setVisible(false);
+		        		                	 fire.setVisible(false);
+		        		                	
+		        		                	happy_thought_button.open_htb(db, userID);
+		        		    				Date timestamp = new Date();
+		        		            		System.out.println(timestamp);
+		        		            		db.AddEvent(userID, timestamp, "htb");
+		        		                	
+		        		            		frame.dispose();
+	        		                	}
+	        		                }
+	        		               
+	        		       		
+	        		       		}
+	        			  
+	        			});
+	        			t.start();
+             
+	        			//https://java-demos.blogspot.com/2013/10/fade-effect-for-jlabel-using-timer.html
 	        }});
 		 panel.add(burnbut);
-		 
-        
+		
+			if(settings.getIsAutoLinked() == false) {
+      
+            	
+            	
+            	JButton Happythought=new JButton("Happy Thought Button");
+            	Happythought.setBounds(10, 500, 230, 35);
+            	Happythought.setHorizontalTextPosition(SwingConstants.CENTER);
+            	Happythought.setVerticalTextPosition(SwingConstants.CENTER);
+            	Happythought.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
+            	Happythought.setBorderPainted(false);
+            	Happythought.setForeground(Color.WHITE);
+            	Happythought.setBackground(aa_purple);
+            	Happythought.addActionListener(new ActionListener() {
+                	public void actionPerformed(ActionEvent e) {
+                		int userID = settings.getUserID();
+                		happy_thought_button.open_htb(db, userID);
+	    				Date timestamp = new Date();
+	            		System.out.println(timestamp);
+	            		db.AddEvent(userID, timestamp, "htb");
+	                	
+	            		frame.dispose();
+                	
+                }});
+        		panel.add(Happythought);
+			}
         //TODO if autolink is enabled in settings it opens right into htb 
+		 
+		 //onclik in ntb for htb button 
+		 //one line in nav bar where htb is ran onclick
+		 //loggin when its autolinked when it autoopens for onclick also
 		return panel;
 	}
-	JPanel icon_panel;
-	public void run_ntb() {
+	
+	
+	public JPanel generateNewGIF(String filepath) {
+		JPanel mediaPanel = new JPanel();
+	
+	
+		mediaPanel.setMaximumSize(new Dimension(500, 260));
+		
+		JLabel label = new JLabel();
+		label.setMaximumSize(new Dimension(500, 260));
+		ImageIcon imageIcon = new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(500, 260, Image.SCALE_FAST));
+		label.setIcon(imageIcon);
+		mediaPanel.setBounds(100, 200, 500, 250);
+	//	mediaPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+		mediaPanel.add(label);
+		
+		return mediaPanel;
+	}
+
+	
+	public JPanel generateNewGIF2(String filepath) {
+		JPanel mediaPanel = new JPanel();
+	
+	
+		mediaPanel.setMaximumSize(new Dimension(500, 220));
+		
+		JLabel label = new JLabel();
+		label.setMaximumSize(new Dimension(500, 220));
+		ImageIcon imageIcon = new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(500, 220, Image.SCALE_FAST));
+		label.setIcon(imageIcon);
+		mediaPanel.setBounds(100, 200, 500, 220);
+	//	mediaPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+		mediaPanel.add(label);
+		
+		return mediaPanel;
+	}
+
+	JLayeredPane icon_panel = new JLayeredPane();
+	int counter;
+	public void run_ntb(Settings settings, Happy_Thought_Button htb, DataBase db) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-		
-				
+				counter = 1;
+				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				// TODO add title panel frame.setUndecorated(true);
-				frame.setTitle("The Attention Assistant");
-		        frame.setBackground(aa_grey);
-		        frame.setPreferredSize(new Dimension(700, 600)); 
-		        //makes frame and contents visible
-		    
-		        
-		        JMenuBar titlePanel = titlePanel(frame);
-		        
-		        card = new CardLayout();
-		        WelcomePanel = new JPanel();
-		        cardPane = new JPanel();
-		        
-		        WelcomePanel = welcomepage(card,frame);
-		    	
-		    	
-		    	cardPane.setLayout(card);
-		        cardPane.setBounds(300, 50, 700, 600);
-		    	cardPane.add(WelcomePanel, "Welcome Panel");
-		        
-		            
-		        
-		        cardPane.addMouseListener(new MouseAdapter(){
-					@Override 
-					public void mousePressed(MouseEvent e) {
-						mouseX = e.getX();
-						mouseY = e.getY();
-					}
-				});
-		    	frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
-		        frame.getContentPane().add(cardPane);
-		        frame.setPreferredSize(new Dimension(700, 600)); 
+				//sets window width and height
+			
+				CardLayout cardLayout = new CardLayout();
+				JPanel panel = new JPanel();
+				panel.setBackground(aa_grey);
+				panel.setLayout(cardLayout);
+				//build title panel
+				JMenuBar titlePanel = titlePanel(frame);
+				titlePanel.setBorder(line);
+				//build table panel
+				icon_panel = welcomepage(cardLayout,frame,settings,htb,db);
+				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+			    panel.add("PT", icon_panel);
+			    cardLayout.show(panel, "iPanel");
+			    panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+				frame.getContentPane().add(panel,BorderLayout.CENTER);
+				frame.setPreferredSize(new Dimension(700, 600)); 
+
 				frame.pack();
 				frame.setVisible(true);
-				frame.setResizable(false);
+				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
+				
 
+				toRefresh = new JButton();
+		        toRefresh.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		rebuildPanel(settings, db, cardLayout,panel, frame, settings, htb);
+		        	}});
 				
 			}
 		});
 	}
+	public void refresh(Settings settings){
+
+		
+		if (counter != 0 ) {
+			toRefresh.doClick();
+		}
+	}
+	public void rebuildPanel(Settings setting, DataBase db,CardLayout cardLayout,JPanel panel, JFrame frame, Settings settings, Happy_Thought_Button htb) {
+		JLayeredPane new_icon_panel = new JLayeredPane();
+		
+		if(counter % 2 != 0) {
 	
+			new_icon_panel = welcomepage(cardLayout,frame,settings,htb,db);
+			panel.add("newIPanel",new_icon_panel);
+			cardLayout.show(panel, "newIPanel");
+			panel.remove(icon_panel);
 	
+		}else {
+			panel.remove(icon_panel);
+			icon_panel = welcomepage(cardLayout,frame,settings,htb,db);
+			panel.add("iPanel",icon_panel);
+			cardLayout.show(panel, "iPanel");
+			panel.remove(new_icon_panel);
+		}
+		counter++;
+		panel.revalidate();
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+	}
 	
 }
