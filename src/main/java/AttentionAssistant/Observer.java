@@ -47,7 +47,7 @@ public class Observer implements Runnable {
 		this.dT_Gathered= null;
 		this.defaultEyeScore=0;
 		this.currentTaskActive = false;
-		this.observerDelayInterval = 60;
+		this.observerDelayInterval = 180;
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class Observer implements Runnable {
 		this.dT_Gathered = dT_Gathered;
 		this.defaultEyeScore = defaultEyeScore;
 		this.currentTaskActive = false;
-		this.observerDelayInterval = 60;
+		this.observerDelayInterval = 180;
 	}
 	
 	public Observer(Task activeTask ,DataBase db, Notification_System notification_System, Pomodoro_Timer pTimer) {
@@ -70,6 +70,13 @@ public class Observer implements Runnable {
 		this.db = db;
 		this.notification_System = notification_System;
 		this.pTimer = pTimer;
+		this.observer_ID= 0;
+		this.observerScore= 0;
+		this.threshold= 0;
+		this.dT_Gathered= null;
+		this.defaultEyeScore=0;
+		this.currentTaskActive = false;
+		this.observerDelayInterval = 180;
 	}
 
 	/**
