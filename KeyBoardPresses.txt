@@ -25,3 +25,22 @@ DOG
 AND
 CATLeft ControlLeft ControlLeft ControlLeft ControlLeft ControlV
 Left ControlV
+HELLO
+
+WORDL
+
+
+
+
+
+
+
+
+
+
+1
+
+HELLO
+CAT
+AND
+DOG
