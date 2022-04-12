@@ -70,13 +70,13 @@ public class AttentionAssistantDriver {
 		//Observer testObserver = new Observer();
 		//Task testTask = new Task();
 		
-		MouseTracker testMouse = new MouseTracker();
-		testMouse.startTracking();
+		//MouseTracker testMouse = new MouseTracker();
+		//testMouse.startTracking();
 		
 		//testObserver.keywordsGenerator(testTask);
 		
-		KeyBoardTracker testKeyboard = new KeyBoardTracker();
-		testKeyboard.startTracking(null);
+		//KeyBoardTracker testKeyboard = new KeyBoardTracker();
+		//testKeyboard.startTracking(null);
 	
 	}
 		//this is a hashing function to hash the user/parents password and their security questions  
@@ -274,7 +274,7 @@ public class AttentionAssistantDriver {
 			        		//this is looking for an acc with this exact password and username, so i have to check the pass and user
 			        
 			        		
-			        		//TODO dispose frame when sucessful login
+			        		//TODO dispose frame when successful login
 			        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
 			        			JFrame success = new JFrame();
 		        				JOptionPane.showMessageDialog(success, "Sucessfully Logged into Child account!! Logging in now...");
