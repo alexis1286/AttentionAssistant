@@ -226,7 +226,7 @@ public class Notification_System {
 	
 	public void isNull() {
 		//if off-task & null OR off-task & in break period
-		String text = " We are paused on on break";
+		String text = " We are paused and on break";
 		displayNotif(text,"paused");
 	}
 	

@@ -171,11 +171,11 @@ public class Free_Thought_Space {
 					JFrame tFrame = new JFrame();
 					tFrame.setAlwaysOnTop(true);
 					tFrame.setLocation(clickX,clickY);
-					tFrame.setPreferredSize(new Dimension(190,250));
+					tFrame.setPreferredSize(new Dimension(180,250));
 					tFrame.setBackground(aa_grey);
 					tFrame.setForeground(Color.white);
 					
-					 tFrame.setUndecorated(true);
+					tFrame.setUndecorated(true);
 					
 					JMenuBar close = new JMenuBar();
 					close.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -211,6 +211,7 @@ public class Free_Thought_Space {
 					panel.setLayout(null);
 					panel.setBackground(aa_grey);
 					panel.setForeground(Color.white);
+					panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 										
 					JLabel textLabel = new JLabel("Text: ");
 					textLabel.setBounds(10,10,50,30);
@@ -269,7 +270,7 @@ public class Free_Thought_Space {
 					okay.setBackground(aa_purple);
 					okay.setForeground(Color.white);
 					okay.setBorder(purpLine);
-					okay.setBounds(10,170,50,40);
+					okay.setBounds(10,170,50,30);
 					okay.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -295,7 +296,7 @@ public class Free_Thought_Space {
 					cancel.setBackground(aa_purple);
 					cancel.setForeground(Color.white);
 					cancel.setBorder(purpLine);
-					cancel.setBounds(65,170,90,40);
+					cancel.setBounds(65,170,85,30);
 					cancel.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
