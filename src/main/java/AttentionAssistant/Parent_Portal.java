@@ -1117,6 +1117,7 @@ public class Parent_Portal {
 				 */
 				JPanel bottomButtons = new JPanel();
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
+				bottomButtons.setMaximumSize(new Dimension(500,35));
 				bottomButtons.add(Box.createRigidArea(new Dimension(415, 0)));
 				bottomButtons.add(apply);
 				bottomButtons.add(Box.createRigidArea(new Dimension(15, 0)));
