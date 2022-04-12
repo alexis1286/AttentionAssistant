@@ -95,11 +95,11 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		}
 		
 		// Construct the example object.
-		MouseTracker mouseTracker = new MouseTracker();
+		//MouseTracker mouseTracker = new MouseTracker();
 
 		// Add the appropriate listeners.
-		GlobalScreen.addNativeMouseListener(mouseTracker);
-		GlobalScreen.addNativeMouseMotionListener(mouseTracker);
+		GlobalScreen.addNativeMouseListener(this);
+		GlobalScreen.addNativeMouseMotionListener(this);
 	}
 
 	/**
