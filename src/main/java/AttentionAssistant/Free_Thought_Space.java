@@ -170,23 +170,57 @@ public class Free_Thought_Space {
 				else if (activeTool == "text"){
 					JFrame tFrame = new JFrame();
 					tFrame.setAlwaysOnTop(true);
-					//set window background to black
-					tFrame.setBackground(Color.black);
-					//remove default title bar
-					tFrame.setVisible(true);
 					tFrame.setLocation(clickX,clickY);
 					tFrame.setPreferredSize(new Dimension(190,250));
+					tFrame.setBackground(aa_grey);
+					tFrame.setForeground(Color.white);
+					
+					 tFrame.setUndecorated(true);
+					
+					JMenuBar close = new JMenuBar();
+					close.setLayout(new FlowLayout(FlowLayout.RIGHT));
+					close.setBackground(aa_grey);
+					close.setBorder(BorderFactory.createMatteBorder(2,2,0,2,aa_purple));
+					
+					BufferedImage exit = null;
+					try {
+						exit = ImageIO.read(new File("images/exit_circle.png"));
+					}catch(Exception e1){
+						e1.printStackTrace();
+						System.exit(1);
+					}
+					
+					Image c_img = exit.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+					
+					JButton exitButton = new JButton();
+					exitButton.setIcon(new ImageIcon(c_img));
+					exitButton.setContentAreaFilled(false);
+					exitButton.setFocusable(false);
+					exitButton.setBorderPainted(false);
+					exitButton.addActionListener(new ActionListener() {
+			        	public void actionPerformed(ActionEvent e) {
+			        		//close window without saving 
+			        		tFrame.dispose();
+			        	
+			        }});
+					
+					close.add(exitButton);
+					tFrame.setJMenuBar(close);
 					
 					JPanel panel = new JPanel();
 					panel.setLayout(null);
+					panel.setBackground(aa_grey);
+					panel.setForeground(Color.white);
 										
 					JLabel textLabel = new JLabel("Text: ");
 					textLabel.setBounds(10,10,50,30);
+					textLabel.setForeground(Color.white);
 					JTextArea text = new JTextArea();
 					text.setBounds(60,10,80,30);
 					
 					
 					JLabel fontLabel = new JLabel("Font: ");
+					fontLabel.setForeground(Color.white);
 					fontLabel.setBounds(10,50,50,30);
 					String[] fontStrings = {"Dialog","DialogInput","Monospaced","Serif","SansSerif"};
 					JComboBox<String> fonts = new JComboBox<String>(fontStrings);
@@ -194,6 +228,7 @@ public class Free_Thought_Space {
 					
 										
 					JLabel sizeLabel = new JLabel("Size: ");
+					sizeLabel.setForeground(Color.white);
 					sizeLabel.setBounds(10,90,50,30);
 					JTextArea size = new JTextArea();
 					size.setBounds(60,90,80,30);
@@ -202,7 +237,11 @@ public class Free_Thought_Space {
 										
 					JCheckBox bold = new JCheckBox("Bold");
 					bold.setBounds(10,130,80,30);
+					bold.setForeground(Color.white);
+					bold.setBackground(aa_grey);
 					JCheckBox italic = new JCheckBox("Italic");
+					italic.setForeground(Color.white);
+					italic.setBackground(aa_grey);
 					italic.setBounds(100,130,80,30);
 					bold.addChangeListener(new ChangeListener() {
 						@Override
@@ -227,6 +266,9 @@ public class Free_Thought_Space {
 					
 					
 					JButton okay = new JButton("ok");
+					okay.setBackground(aa_purple);
+					okay.setForeground(Color.white);
+					okay.setBorder(purpLine);
 					okay.setBounds(10,170,50,40);
 					okay.addActionListener(new ActionListener() {
 						@Override
@@ -250,6 +292,9 @@ public class Free_Thought_Space {
 					});
 					
 					JButton cancel = new JButton("cancel");
+					cancel.setBackground(aa_purple);
+					cancel.setForeground(Color.white);
+					cancel.setBorder(purpLine);
 					cancel.setBounds(65,170,90,40);
 					cancel.addActionListener(new ActionListener() {
 						@Override
@@ -258,7 +303,7 @@ public class Free_Thought_Space {
 							tFrame.dispose();
 						}
 						
-					});
+					}); 
 					
 					panel.add(textLabel);
 					panel.add(text);
@@ -271,7 +316,8 @@ public class Free_Thought_Space {
 					panel.add(okay);
 					panel.add(cancel);
 					
-					tFrame.add(panel);
+					tFrame.setVisible(true);
+					tFrame.add(panel,BorderLayout.CENTER);
 					tFrame.pack();
 				}
 				
