@@ -177,7 +177,15 @@ public class Pomodoro_Timer
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//close window without saving 
-        		frame.dispose();
+        		Work_Break wb = getWorkBreakStatus();
+    			
+        		if(wb.toString() == "Work" || wb.toString() == "Break") {
+        			frame.setExtendedState(JFrame.ICONIFIED);
+        		}
+        		else {
+        			frame.dispose();
+        		}
+        	
         	
         }});
 		

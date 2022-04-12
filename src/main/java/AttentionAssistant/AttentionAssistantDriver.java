@@ -1664,9 +1664,12 @@ public class AttentionAssistantDriver {
 			parentportal.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        		DataBase db = new DataBase();	
-		        		String pwd = new String("1");
+		        		String password = new String("1");
 		        		String usr = new String("Test");
-		        		
+		  
+
+		        		String pwd = hash(password);
+		       
 		        		
 		        		db.DatabaseSetUp();
 		        		
@@ -1731,9 +1734,11 @@ public class AttentionAssistantDriver {
 		        	public void actionPerformed(ActionEvent e) {
 		        		DataBase db = new DataBase();	
 		        		//open child portal
-		        		String pwd = new String("1");
+		        		String password = new String("1");
 		        		String usr = new String("Test");
 		        		String first = new String("TestChild");
+		        		
+		        		String pwd = hash(password);
 		        		
 		        		
 		        		
