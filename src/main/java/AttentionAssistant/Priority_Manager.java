@@ -97,12 +97,8 @@ public class Priority_Manager {
 		task.setPriority(true);
 		
 		if(isParent == false) {
-//			observer = new Observer();
-//			observer.monitor(task, db, notifSystem, pomo);
-			/** Paul's code to make the observer a separate thread */
-			observer = new Observer(task, db, notifSystem, pomo);
-			Thread observerThread = new Thread(observer);
-			observerThread.start();
+			observer = new Observer();
+			observer.monitor(task, db, notifSystem, pomo);
 		}
 		
 		Date timestamp = new Date();
