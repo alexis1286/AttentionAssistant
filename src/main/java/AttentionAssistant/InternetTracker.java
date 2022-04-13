@@ -229,7 +229,7 @@ public class InternetTracker {
 		this.keywordCounts.add((int)keywordsAppear);
 		this.wordCounts.add(wordsOnAPage.length);
 		
-		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
+		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*5000;
 		
 		int pageScore = 0;
 		if (calculatedScore > 100) {
