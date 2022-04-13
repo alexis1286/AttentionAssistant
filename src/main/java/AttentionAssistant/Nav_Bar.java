@@ -3,19 +3,13 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.*;
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.*;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 
 public class Nav_Bar{
@@ -28,8 +22,6 @@ public class Nav_Bar{
 	JButton toRefresh;
 	JButton menuButton;
 	DecimalFormat df = new DecimalFormat("#.#"); 
-	private int mouseX;
-	private int mouseY;
 	private int count;
 		
 	/*
@@ -156,7 +148,8 @@ public class Nav_Bar{
 		        	public void actionPerformed(ActionEvent e) {
 		        		rebuildPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, pr, panel,frame);
 		        	}});
-		        startObserver(userID,pm,db);
+		        pm.open_pm(userID, db);
+		        //startObserver(userID,pm,db);
 			}
 		});
 	}

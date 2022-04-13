@@ -445,6 +445,12 @@ public class Priority_Manager {
 		//add button panel to panel
 		panel.add(bpane);
 		panel.setBackground(Color.black);
+		
+		if(observableTasks().size() == 0) {
+			Task fTask = new Task();
+			taskWindow(userID, fTask, false, db, model, table, frame);
+		}
+		
 		return panel;
 	}
 	
@@ -501,7 +507,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
+	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -931,7 +937,7 @@ public class Priority_Manager {
 		switch (key) {
         case 'P':  t = "Priority Manager";
                  break;
-        case 'A':  t = "Add Task";
+        case 'A':  t = "Add Task                                       ";
                  break;
         case 'O':  t = "Add Observable Task";
                  break;
@@ -1005,7 +1011,7 @@ public class Priority_Manager {
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(30, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(250, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
