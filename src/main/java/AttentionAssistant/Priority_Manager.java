@@ -801,8 +801,7 @@ public class Priority_Manager {
 		dd.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		dd.setForeground(aa_purple);
 		
-		//creates text area for date input
-		Format f = new SimpleDateFormat("MM/dd/yyyy");
+		new SimpleDateFormat("MM/dd/yyyy");
 		String stringDate = "";
 		JTextArea date = new JTextArea(stringDate);
 		date.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
@@ -977,12 +976,10 @@ public class Priority_Manager {
 		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
-		BufferedImage exit = null;
-		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
-			exit = ImageIO.read(new File("images/AA_exit.png"));
+			ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);

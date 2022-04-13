@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.io.*;
-import java.text.DecimalFormat;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -344,9 +344,13 @@ public class Parent_Bar{
         	public void actionPerformed(ActionEvent e) {
         		JFrame errorframe = new JFrame();
         		String t;
-        		String opwd = new String(oldPwText.getPassword());
-        		String npwd = new String(newPwText.getPassword());
-        		String rnpwd = new String(newPwReText.getPassword());
+        		
+        		String oldPassword = new String(oldPwText.getPassword());
+        		String newPassword = new String(newPwText.getPassword());
+        		String rNewPassword = new String(newPwReText.getPassword());
+        		String opwd = hash(oldPassword);
+        		String npwd = hash(newPassword);
+        		String rnpwd = hash(rNewPassword);
         		if(opwd.isEmpty() == true || npwd.isEmpty() == true || rnpwd.isEmpty() == true) {
         			
     				t = "Please retry, 1 or more password fields left blank.";
@@ -378,8 +382,9 @@ public class Parent_Bar{
         
         link.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		// add child account        		
-        		String pwd = new String(childPwText.getPassword());
+        		// add child account  
+        		String password = new String(childPwText.getPassword());
+        		String pwd = hash(password);
         		String usr = new String(childNameText.getText());
         	
         		if(pwd.isEmpty() == true || usr.isEmpty() == true) {
@@ -631,12 +636,9 @@ public class Parent_Bar{
 		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
-		BufferedImage exit = null;
-		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
-			exit = ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -671,6 +673,27 @@ public class Parent_Bar{
 		
 		//returns panel
 		return title_panel;
+		
+	}
+	
+	public static String hash (String password) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			
+			md.update(password.getBytes());
+			
+			byte[] outputbytearray = md.digest();
+			
+			StringBuilder sb = new StringBuilder();
+			
+			for(byte b :outputbytearray) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
 		
 	}
 }

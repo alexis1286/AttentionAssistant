@@ -23,11 +23,10 @@ public class Free_Thought_Space {
 	private LineBorder lineSelected = new LineBorder(Color.white, 2, true);
 	private LineBorder purpLine = new LineBorder(aa_purple, 1, true);
 	private LineBorder purpLine2 = new LineBorder(aa_purple, 2, true);
-	private Color selectedColor,colorToChange;
+	private Color selectedColor;
 	private boolean isFilled;
 	private Stack<Layer> addedLayers;
 	private Stack<Layer> removedLayers;
-	private Stack<Layer> paintLayers;
 	private Color primary,secondary;
 	private static int mouseX;
 	private static int mouseY;
@@ -567,8 +566,6 @@ public class Free_Thought_Space {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		int right = 20;
-		int left = 10;
 		JButton pencil = new JButton();
 		pencil.setIcon(new ImageIcon(pencilImg));
 		pencil.setContentAreaFilled(false);
@@ -1333,12 +1330,10 @@ public class Free_Thought_Space {
 		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
-		BufferedImage exit = null;
-		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
-			exit = ImageIO.read(new File("images/AA_exit.png"));
+			ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
