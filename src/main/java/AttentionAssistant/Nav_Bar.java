@@ -112,7 +112,7 @@ public class Nav_Bar{
 	int counter;
 	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts, Progress_Report pr) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+			public void run() {				
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
@@ -257,8 +257,7 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.refresh(settings);
-	        		pomo.run_pomo(settings,db,pm);
+	        		pomo.makeVisible();
 	        }});
 			panel.add(pomoButton);
 		}

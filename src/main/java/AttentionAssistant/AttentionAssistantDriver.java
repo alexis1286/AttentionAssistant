@@ -2104,7 +2104,7 @@ public class AttentionAssistantDriver {
 			Nav_Bar navbar = new Nav_Bar(settings,db);
 			//db.DatabaseSetUp();
 					
-			pomo = new Pomodoro_Timer();
+			
 			ntb = new Negative_Thought_Burner();
 			htb = new Happy_Thought_Button(db);
 			fts = new Free_Thought_Space();
@@ -2128,8 +2128,13 @@ public class AttentionAssistantDriver {
 			//db.AddSettings(settings, userID); 
 			
 			try {
-				notif = new Notification_System(userID,db,pomo);
-				pm = new Priority_Manager(userID,db,pomo);
+				notif = new Notification_System(userID,db);
+				pm = new Priority_Manager(userID,db);
+				
+				pomo = new Pomodoro_Timer(settings,db,pm);
+				pm.setPomo(pomo);
+				notif.setPomo(pomo);
+				
 				navbar.run_nav_bar(userID,notif,db,navbar,settings,pm,pomo,ntb,htb,fts, pr);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

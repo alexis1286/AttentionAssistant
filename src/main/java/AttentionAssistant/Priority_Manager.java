@@ -44,9 +44,9 @@ public class Priority_Manager {
 	
 	private ArrayList<Task> Task_List;
 	
-	public Priority_Manager(int userID,DataBase db) {
+	public Priority_Manager(int userID,DataBase db,boolean isParent) {
 		this.Task_List = new ArrayList<Task>();
-		this.isParent = true;
+		this.isParent = isParent;
 	}
 	
 	public Priority_Manager(int userID, DataBase db,Notification_System notifSystem) throws IOException {
@@ -56,11 +56,14 @@ public class Priority_Manager {
 		this.isParent = false;
 	}
 	
-	public Priority_Manager(int userID,DataBase db,Pomodoro_Timer pomo) throws IOException {
+	public Priority_Manager(int userID,DataBase db) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		this.pomo = pomo;
-		this.notifSystem = new Notification_System(userID,db,pomo);
+		this.notifSystem = new Notification_System(userID,db);
 		this.isParent = false;
+	}
+	
+	public void setPomo(Pomodoro_Timer pomo) {
+		this.pomo = pomo;
 	}
 	
 	public Task getActiveTask() {
@@ -103,6 +106,7 @@ public class Priority_Manager {
             observer = new Observer(task, db, notifSystem, pomo);
             Thread observerThread = new Thread(observer);
             observerThread.start();
+            pomo.clickStart();
 		}
 		
 		Date timestamp = new Date();
@@ -451,6 +455,7 @@ public class Priority_Manager {
 			taskWindow(userID, fTask, false, db, model, table, frame);
 		}
 		
+		
 		return panel;
 	}
 	
@@ -579,7 +584,7 @@ public class Priority_Manager {
 		observe.setFocusPainted(false);
 		
 		//create check box for if task is a priority task
-		JCheckBox priority = new JCheckBox("priority");
+		JCheckBox priority = new JCheckBox("active");
 		priority.setSelected(task.getPriority());
 		priority.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		priority.setForeground(aa_purple);
@@ -673,13 +678,8 @@ public class Priority_Manager {
 	        		database.AddEvent(userID, timestamp, "add");
         		}
         		if(new_task.getPriority() == true) {
-        			try {
-						observeTask(userID, new_task, database, true);
-						activeTask = new_task;
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+        			//observeTask(userID, new_task, database, true);
+					activeTask = new_task;
         		}
         		
         		//gets table to display changes
@@ -816,7 +816,7 @@ public class Priority_Manager {
 		observe.setFocusPainted(false);
 		
 		//create check box for if task is a priority task
-		JCheckBox priority = new JCheckBox("priority");
+		JCheckBox priority = new JCheckBox("active");
 		priority.setSelected(task.getPriority());
 		priority.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		priority.setForeground(aa_purple);

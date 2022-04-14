@@ -2361,7 +2361,7 @@ public class Settings {
 		openPom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement chooseAvatar 
-				pomodoro_timer.run_pomo(settingsChanges,db,pm);
+				pomodoro_timer.makeVisible();
 			}
 		});
 		

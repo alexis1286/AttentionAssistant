@@ -101,7 +101,7 @@ public class Parent_Bar{
 	        	int childID = childAccounts.get(i).getUserID();
 	        	Settings settings = new Settings(db,childID);
 	        	Parent_Portal menu = new Parent_Portal();
-	        	pm = new Priority_Manager(childID,db);
+	        	pm = new Priority_Manager(childID,db,true);
 	        	JButton button = createButton(childAccounts.get(i).getName());
 	        	button.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent e) {
