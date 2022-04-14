@@ -575,7 +575,7 @@ public class Progress_Report {
 		
 		DefaultTableModel model = new DefaultTableModel(Task_List.size(), 0);
 		JTable addedTable = new JTable(model);
-		model.addColumn("Task");
+		model.addColumn("Tasks Added");
 		model.addColumn("ID");
 		
 		addedTable.setFillsViewportHeight(true);
@@ -678,7 +678,7 @@ public class Progress_Report {
 		
 		DefaultTableModel model = new DefaultTableModel(Task_List.size(), 0);
 		JTable completedTable = new JTable(model);
-		model.addColumn("Task");
+		model.addColumn("Tasks Completed");
 		model.addColumn("ID");
 		
 		completedTable.setFillsViewportHeight(true);
