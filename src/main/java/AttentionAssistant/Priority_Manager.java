@@ -112,6 +112,7 @@ public class Priority_Manager {
 		Date timestamp = new Date();
 		db.AddEvent(userID, timestamp, "started");
 		activeTask = task;
+		pomo.labelRefresh();
 		System.out.println("Task "+task.getTaskName()+" activated");
 		//refresh table
 	}
@@ -680,6 +681,7 @@ public class Priority_Manager {
         		if(new_task.getPriority() == true) {
         			//observeTask(userID, new_task, database, true);
 					activeTask = new_task;
+					pomo.labelRefresh();
         		}
         		
         		//gets table to display changes

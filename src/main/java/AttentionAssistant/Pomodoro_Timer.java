@@ -197,16 +197,7 @@ public class Pomodoro_Timer
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//close window without saving 
-        		Work_Break wb = getWorkBreakStatus();
-    			
-        		if(wb.toString() == "Work" || wb.toString() == "Break") {
-        			frame.setExtendedState(JFrame.ICONIFIED);
-        		}
-        		else {
-        			frame.dispose();
-        		}
-        	
-        	
+    			frame.setVisible(false);
         }});
 		
 		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -230,12 +221,18 @@ public class Pomodoro_Timer
 		startbut.doClick();
 	}
 	
+	public void labelRefresh() {
+		taskLabel.revalidate();
+		taskLabel.repaint();
+	}
+	
+	JLabel taskLabel;
 	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(null);
 	
-		JLabel taskLabel=new JLabel(ActiveTask(pm));
+		taskLabel=new JLabel(ActiveTask(pm));
 		taskLabel.setBounds(215, 130, 400, 100);
 		taskLabel.setForeground(Color.white);
 		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
