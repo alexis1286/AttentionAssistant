@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -31,6 +33,8 @@ public class Progress_Report {
 	
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
+	Color medium_grey = new Color(153,153,153);
+	Color darkRed = new Color(204,0,0);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	private int height = 700; 
@@ -41,6 +45,9 @@ public class Progress_Report {
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
+	long DAY_IN_MS = 1000 * 60 * 60 * 24;
+	Date dt_End = new Date();
+	Date dt_Start = new Date(dt_End.getTime() - (7 * DAY_IN_MS));
 	
 	/**
 	 * creates title bar
@@ -178,6 +185,10 @@ public class Progress_Report {
 		apply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//refresh frame to reflect selected dates
+				
+				dt_Start = (Date) beginDatePicker.getModel().getValue();
+				dt_End = (Date) finishDatePicker.getModel().getValue();
+				
 			}
 		});
 		
@@ -196,6 +207,25 @@ public class Progress_Report {
 		summaryPanel.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));
 		summaryPanel.setMaximumSize(new Dimension(600, 550));
 		
+		JPanel datesPanel = new JPanel();
+		datesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		datesPanel.setMaximumSize(new Dimension(550, 50));
+		datesPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, aa_purple));
+		
+		Calendar startCalendar = Calendar.getInstance();
+		startCalendar.setTime(dt_Start);
+		
+		Calendar endCalendar = Calendar.getInstance();
+		endCalendar.setTime(dt_End); 
+		
+		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
+		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 35));
+		dates.setBackground(Color.black);
+		dates.setForeground(aa_grey);
+		
+		datesPanel.add(Box.createRigidArea(new Dimension(110, 0)));
+		datesPanel.add(dates);
+		
 		JPanel tasks = new JPanel();
 		tasks.setLayout(new BoxLayout(tasks, BoxLayout.Y_AXIS));
 		tasks.setMaximumSize(new Dimension(550, 500));
@@ -208,7 +238,20 @@ public class Progress_Report {
 		tasksHeader.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 30));
 		tasksHeader.setBackground(Color.black);
 		
+		JLabel taskOverdue = new JLabel("overdue tasks: ");
+		taskOverdue.setFont(new Font("Serif", Font.BOLD, 16));
+		taskOverdue.setBackground(Color.black);
+		
+		//placeholder until database call is put in.
+		JLabel totalOverdue = new JLabel("2");
+		totalOverdue.setFont(new Font("Serif", Font.BOLD, 22));
+		totalOverdue.setBackground(Color.black);
+		totalOverdue.setForeground(darkRed);
+		
 		taskHeaderPanel.add(tasksHeader);
+		taskHeaderPanel.add(Box.createRigidArea(new Dimension(320, 0)));
+		taskHeaderPanel.add(taskOverdue);
+		taskHeaderPanel.add(totalOverdue);
 		
 		JPanel taskTotals = new JPanel();
 		taskTotals.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -495,6 +538,7 @@ public class Progress_Report {
 		hyperfocus.add(hF_headerPanel);
 		hyperfocus.add(hF_Totals);
 		
+		summaryPanel.add(datesPanel);
 		summaryPanel.add(tasks);
 		summaryPanel.add(features);
 		summaryPanel.add(hyperfocus);
@@ -502,8 +546,214 @@ public class Progress_Report {
 		return summaryPanel;
 	}
 	
-	private JPanel createCenterPanel(CardLayout cardLayout) {
+	private JPanel createTasksAddedPanel(int userID, DataBase db) {
+		
+		ArrayList<Task> Task_List = db.SelectAllAddedTasks(userID, dt_Start, dt_End); 
+		
+		JPanel tasksAdded = new JPanel();
+		tasksAdded.setLayout(new BoxLayout(tasksAdded, BoxLayout.Y_AXIS));
+		tasksAdded.setMaximumSize(new Dimension(600, 500));
+		
+		JPanel datesPanel = new JPanel();
+		datesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		datesPanel.setMaximumSize(new Dimension(600, 50));
+		datesPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, aa_purple));
+		
+		Calendar startCalendar = Calendar.getInstance();
+		startCalendar.setTime(dt_Start);
+		
+		Calendar endCalendar = Calendar.getInstance();
+		endCalendar.setTime(dt_End); 
+		
+		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
+		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 34));
+		dates.setBackground(Color.black);
+		dates.setForeground(aa_grey);
+		
+		datesPanel.add(Box.createRigidArea(new Dimension(135, 0)));
+		datesPanel.add(dates);
+		
+		DefaultTableModel model = new DefaultTableModel(Task_List.size(), 0);
+		JTable addedTable = new JTable(model);
+		model.addColumn("Task");
+		model.addColumn("ID");
+		
+		addedTable.setFillsViewportHeight(true);
+		addedTable.setBorder(BorderFactory.createEmptyBorder());
+		addedTable.getTableHeader().setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		addedTable.getTableHeader().setBackground(aa_purple);
+		addedTable.getTableHeader().setForeground(Color.white);
+		addedTable.setGridColor(aa_purple);
+		addedTable.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		
+		for(int i = 0; i < Task_List.size(); i++) {
+			for (int j = 0; j < 2; j++) {
+				if (j == 0) {
+					addedTable.setValueAt(Task_List.get(i).getTaskName(), i, j);
+				}else if (j == 1) {
+					addedTable.setValueAt(Task_List.get(i).getTaskID(), i, j);
+				}
+			}
+		}
+		
+		addedTable.removeColumn(addedTable.getColumnModel().getColumn(1));
+		addedTable.setBackground(Color.white);
+		addedTable.setForeground(Color.black);
+		addedTable.setBorder(null);
+		
+		JScrollPane table_pane = new JScrollPane(addedTable);
+		table_pane.setBackground(Color.GRAY);
+		
+		Border empty = new EmptyBorder(0,0,0,0);
+		table_pane.setBorder(empty);
+		//sets dimensions for table panel
+		table_pane.setPreferredSize(new Dimension(550,400));
+		
+		JPanel graphPanel = new JPanel();
+		graphPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		graphPanel.setMaximumSize(new Dimension(600, 35));
+		graphPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, aa_purple));
+		
+		JButton graph = new JButton(" graph task ");
+		graph.setForeground(Color.white);
+		graph.setFont(new Font("Serif", Font.BOLD, 16));
+		graph.setContentAreaFilled(true);
+		graph.setBorderPainted(true);
+		graph.setBorder(new LineBorder(aa_grey));
+		graph.setFocusPainted(false);
+		graph.setBackground(aa_purple);
+		graph.setMaximumSize(new Dimension(75,30));
+		graph.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//refresh frame to reflect selected dates
+				
+				int row = addedTable.getSelectedRow();
+				int id = (int) addedTable.getModel().getValueAt(row, 1);
+				
+				for(Task task : Task_List) {
+					if(task.getTaskID() == id) {
+						Progress_Report_TaskGraph graph = new Progress_Report_TaskGraph(task.getTaskName());
+						graph.Make_TaskGraph(db, task);
+					}
+				}
+			}
+		});
+		
+		graphPanel.add(Box.createRigidArea(new Dimension(500, 0)));
+		graphPanel.add(graph);
+		
+		tasksAdded.add(datesPanel);
+		tasksAdded.add(table_pane);
+		tasksAdded.add(graphPanel);
+		
+		return tasksAdded; 
+	}
 	
+	private JPanel createTasksCompletedPanel(int userID, DataBase db) {
+		
+		ArrayList<Task> Task_List = db.SelectAllCompletedTasks(userID, dt_Start, dt_End); 
+		
+		JPanel tasksCompleted = new JPanel();
+		tasksCompleted.setLayout(new BoxLayout(tasksCompleted, BoxLayout.Y_AXIS));
+		tasksCompleted.setMaximumSize(new Dimension(600, 500));
+		
+		JPanel datesPanel = new JPanel();
+		datesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		datesPanel.setMaximumSize(new Dimension(600, 50));
+		datesPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, aa_purple));
+		
+		Calendar startCalendar = Calendar.getInstance();
+		startCalendar.setTime(dt_Start);
+		
+		Calendar endCalendar = Calendar.getInstance();
+		endCalendar.setTime(dt_End); 
+		
+		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
+		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 34));
+		dates.setBackground(Color.black);
+		dates.setForeground(aa_grey);
+		
+		datesPanel.add(Box.createRigidArea(new Dimension(135, 0)));
+		datesPanel.add(dates);
+		
+		DefaultTableModel model = new DefaultTableModel(Task_List.size(), 0);
+		JTable completedTable = new JTable(model);
+		model.addColumn("Task");
+		model.addColumn("ID");
+		
+		completedTable.setFillsViewportHeight(true);
+		completedTable.setBorder(BorderFactory.createEmptyBorder());
+		completedTable.getTableHeader().setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		completedTable.getTableHeader().setBackground(aa_purple);
+		completedTable.getTableHeader().setForeground(Color.white);
+		completedTable.setGridColor(aa_purple);
+		completedTable.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
+		
+		for(int i = 0; i < Task_List.size(); i++) {
+			for (int j = 0; j < 2; j++) {
+				if (j == 0) {
+					completedTable.setValueAt(Task_List.get(i).getTaskName(), i, j);
+				}else if (j == 1) {
+					completedTable.setValueAt(Task_List.get(i).getTaskID(), i, j);
+				}
+			}
+		}
+		
+		completedTable.removeColumn(completedTable.getColumnModel().getColumn(1));
+		completedTable.setBackground(Color.white);
+		completedTable.setForeground(Color.black);
+		completedTable.setBorder(null);
+		
+		JScrollPane table_pane = new JScrollPane(completedTable);
+		table_pane.setBackground(Color.GRAY);
+		
+		Border empty = new EmptyBorder(0,0,0,0);
+		table_pane.setBorder(empty);
+		//sets dimensions for table panel
+		table_pane.setPreferredSize(new Dimension(550,400));
+		
+		JPanel graphPanel = new JPanel();
+		graphPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		graphPanel.setMaximumSize(new Dimension(600, 35));
+		graphPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, aa_purple));
+		
+		JButton graph = new JButton(" graph task ");
+		graph.setForeground(Color.white);
+		graph.setFont(new Font("Serif", Font.BOLD, 16));
+		graph.setContentAreaFilled(true);
+		graph.setBorderPainted(true);
+		graph.setBorder(new LineBorder(aa_grey));
+		graph.setFocusPainted(false);
+		graph.setBackground(aa_purple);
+		graph.setMaximumSize(new Dimension(75,30));
+		graph.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//refresh frame to reflect selected dates
+				
+				int row = completedTable.getSelectedRow();
+				int id = (int) completedTable.getModel().getValueAt(row, 1);
+				
+				for(Task task : Task_List) {
+					if(task.getTaskID() == id) {
+						Progress_Report_TaskGraph graph = new Progress_Report_TaskGraph(task.getTaskName());
+						graph.Make_TaskGraph(db, task);
+					}
+				}
+			}
+		});
+		
+		graphPanel.add(Box.createRigidArea(new Dimension(500, 0)));
+		graphPanel.add(graph);
+		
+		tasksCompleted.add(datesPanel);
+		tasksCompleted.add(table_pane);
+		tasksCompleted.add(graphPanel);
+		
+		return tasksCompleted; 
+	}
+	
+	private JPanel createCenterPanel(CardLayout cardLayout, JPanel reportViews, int userID, DataBase db) {
+		
 		JPanel center_panel = new JPanel();
 		center_panel.setLayout(new BoxLayout(center_panel, BoxLayout.Y_AXIS));
 		center_panel.setBackground(Color.black);
@@ -511,27 +761,20 @@ public class Progress_Report {
 		JPanel datePanel = createDatePickers();
 		
 		//add card layout that will toggle between summary and two tables
-		JPanel reportViews = new JPanel();
 		reportViews.setLayout(cardLayout);
 		reportViews.setMaximumSize(new Dimension(600, 600));
 		
-		//add scrollable panel to have all the summary stuff
+		//add summary panel to have all the summary stuff
 		JPanel summaryPanel = createSummaryPanel();
-		
-		/*
-		JScrollPane summary_pane = new JScrollPane(summaryPanel);
-		//summary_pane.setBackground(Color.black);
-		Border empty = new EmptyBorder(0,0,0,0);
-		summary_pane.setBorder(empty);
-		summary_pane.setPreferredSize(new Dimension(600,500));
-		*/
-		
 		reportViews.add("summary", summaryPanel);
 		
-		//add scrollable panel that will have table for all tasks added
+		//add tasksAdded panel that will have table for all tasks added
+		JPanel tasksAddedPanel = createTasksAddedPanel(userID, db); 
+		reportViews.add("tasksAdded", tasksAddedPanel);
 		
-		//add scrollable panel that will have table for all tasked completed
-		
+		//add tasksCompleted panel that will have table for all tasked completed
+		JPanel tasksCompletedPanel = createTasksCompletedPanel(userID, db);
+		reportViews.add("tasksCompleted", tasksCompletedPanel);
 		
 		
 		center_panel.add(datePanel);
@@ -539,7 +782,7 @@ public class Progress_Report {
 		return center_panel;		
 	}
 	
-	private JPanel createButtonPanel(CardLayout cardLayout) {
+	private JPanel createButtonPanel(CardLayout cardLayout, JPanel reportViews) {
 		
 		JPanel bottomButtons = new JPanel();
 		bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
@@ -562,6 +805,7 @@ public class Progress_Report {
 		summary.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardlayout to summary panel
+				cardLayout.show(reportViews, "summary");
 			}
 		});
 		
@@ -577,6 +821,7 @@ public class Progress_Report {
 		addedTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardLayout to tasks added table
+				cardLayout.show(reportViews, "tasksAdded");
 			}
 		});
 		
@@ -592,6 +837,7 @@ public class Progress_Report {
 		completedTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardLayout to tasks completed table
+				cardLayout.show(reportViews, "tasksCompleted");
 			}
 		});
 		
@@ -624,10 +870,11 @@ public class Progress_Report {
 				masterPanel.setBackground(Color.black);
 				
 				CardLayout cardLayout = new CardLayout();
+				JPanel reportViews = new JPanel();
 					
 				JMenuBar title_panel = createTitlePanel(pr_frame);
-				JPanel center_panel = createCenterPanel(cardLayout);
-				JPanel bottomButtons = createButtonPanel(cardLayout);
+				JPanel center_panel = createCenterPanel(cardLayout, reportViews, userID, db);
+				JPanel bottomButtons = createButtonPanel(cardLayout, reportViews);
 				
 				/*
 				 * populates master panel 

@@ -37,6 +37,9 @@ public class Progress_Report_TaskGraph extends JFrame {
     plot.setRangeGridlinesVisible(true);
     ChartPanel panel = new ChartPanel(lineChart);  
     setContentPane(panel);  
+    //pack the jframe and set it to visible so that is displays to the user
+    pack();
+    setVisible(true); 
   }  
   
   private DefaultCategoryDataset createDataset(DataBase db, Task task) {  
