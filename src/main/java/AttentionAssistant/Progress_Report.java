@@ -3,6 +3,7 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.jdatepicker.impl.*;
 import org.jdatepicker.util.*;
@@ -48,6 +50,59 @@ public class Progress_Report {
 	long DAY_IN_MS = 1000 * 60 * 60 * 24;
 	Date dt_End = new Date();
 	Date dt_Start = new Date(dt_End.getTime() - (7 * DAY_IN_MS));
+	int monitorInterval = 5; 
+	
+	/*
+	 * adjusts color and/or opacity of specified icon image to specified color/opacity
+	 */
+	public BufferedImage colorFeatureIcon(DataBase db, int userID, BufferedImage image, String feature) {
+		
+		int red = 0; 
+		int green = 0;
+		int blue = 0;
+
+		Color greenThreshold = new Color(0, 153, 0);
+		Color yellowThreshold = new Color(255, 204, 0);
+		Color redThreshold = new Color(204, 0, 0);
+		
+		long diffInMilliseconds = dt_End.getTime() - dt_Start.getTime();
+		long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
+		
+		long avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (hours);
+		
+		//System.out.println("hours is: " + hours);
+		
+		if(avg <= 1) {
+			red = greenThreshold.getRed();
+			green = greenThreshold.getGreen();
+			blue = greenThreshold.getBlue();
+		}else if (avg > 1 && avg <= 2) {
+			red = yellowThreshold.getRed();
+			green = yellowThreshold.getGreen();
+			blue = yellowThreshold.getBlue();
+		}else if(avg > 2) {
+			red = redThreshold.getRed();
+			green = redThreshold.getGreen();
+			blue = redThreshold.getBlue();
+		}
+		
+		//get height and width of image to be altered
+	    int width = image.getWidth();
+	    int height = image.getHeight();
+	    WritableRaster raster = image.getRaster();
+
+	    //recolors image to new rgb values
+	    for (int xx = 0; xx < width; xx++) {
+	      for (int yy = 0; yy < height; yy++) {
+	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
+	        pixels[0] = red;
+	        pixels[1] = green;
+	        pixels[2] = blue;
+	        raster.setPixel(xx, yy, pixels);
+	      }
+	    }
+	    return image;
+	  }
 	
 	/**
 	 * creates title bar
@@ -201,7 +256,7 @@ public class Progress_Report {
 		return datePanel;
 	}
 	
-	private JPanel createSummaryPanel() {
+	private JPanel createSummaryPanel(int userID, DataBase db) {
 		
 		JPanel summaryPanel = new JPanel();
 		summaryPanel.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));
@@ -242,8 +297,16 @@ public class Progress_Report {
 		taskOverdue.setFont(new Font("Serif", Font.BOLD, 16));
 		taskOverdue.setBackground(Color.black);
 		
-		//placeholder until database call is put in.
-		JLabel totalOverdue = new JLabel("2");
+		ArrayList<Task> Task_List = db.SelectAllAddedTasks(userID, dt_Start, dt_End); 
+		int overDueTasks = 0; 
+		
+		for(Task task : Task_List) {
+			if(task.getStatus() == TaskStatus.OVERDUE) {
+				overDueTasks++;
+			}
+		}
+		
+		JLabel totalOverdue = new JLabel(Integer.toString(overDueTasks));
 		totalOverdue.setFont(new Font("Serif", Font.BOLD, 22));
 		totalOverdue.setBackground(Color.black);
 		totalOverdue.setForeground(darkRed);
@@ -256,7 +319,7 @@ public class Progress_Report {
 		JPanel taskTotals = new JPanel();
 		taskTotals.setLayout(new FlowLayout(FlowLayout.LEFT));
 		taskTotals.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, aa_purple));
-		taskTotals.setMaximumSize(new Dimension(550, 140));
+		taskTotals.setMaximumSize(new Dimension(600, 140));
 		
 		BufferedImage star = null;
 		try {
@@ -277,13 +340,12 @@ public class Progress_Report {
 		JPanel taskRow1 = new JPanel();
 		taskRow1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//placeholder until database call is put in.
-		JLabel totalCompleted = new JLabel("8");
+		JLabel totalCompleted = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "complete")));
 		totalCompleted.setFont(new Font("Serif", Font.BOLD, 25));
 		totalCompleted.setBackground(Color.black);
 		
 		JLabel taskCompleted = new JLabel("completed");
-		taskCompleted.setFont(new Font("Serif", Font.BOLD, 20));
+		taskCompleted.setFont(new Font("Serif", Font.BOLD, 19));
 		taskCompleted.setBackground(Color.black);
 		
 		taskRow1.add(totalCompleted);
@@ -292,13 +354,12 @@ public class Progress_Report {
 		JPanel taskRow2 = new JPanel();
 		taskRow2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//placeholder until database call is put in.
-		JLabel totalAdded = new JLabel("25");
+		JLabel totalAdded = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "add")));
 		totalAdded.setFont(new Font("Serif", Font.BOLD, 25));
 		totalAdded.setBackground(Color.black);
 		
 		JLabel taskAdded = new JLabel("added");
-		taskAdded.setFont(new Font("Serif", Font.BOLD, 20));
+		taskAdded.setFont(new Font("Serif", Font.BOLD, 19));
 		taskAdded.setBackground(Color.black);
 		
 		taskRow2.add(totalAdded);
@@ -314,13 +375,12 @@ public class Progress_Report {
 		JPanel taskRow3 = new JPanel();
 		taskRow3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//placeholder until database call is put in.
-		JLabel totalStarted = new JLabel("11");
+		JLabel totalStarted = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "started")));
 		totalStarted.setFont(new Font("Serif", Font.BOLD, 25));
 		totalStarted.setBackground(Color.black);
 		
 		JLabel taskStarted = new JLabel("started");
-		taskStarted.setFont(new Font("Serif", Font.BOLD, 20));
+		taskStarted.setFont(new Font("Serif", Font.BOLD, 19));
 		taskStarted.setBackground(Color.black);
 		
 		taskRow3.add(totalStarted);
@@ -329,13 +389,14 @@ public class Progress_Report {
 		JPanel taskRow4 = new JPanel();
 		taskRow4.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//placeholder until database call is put in.
-		JLabel totalInProgress = new JLabel("3");
+		int inProgressTotal = db.CountEvents(userID, dt_Start, dt_End, "started") - db.CountEvents(userID, dt_Start, dt_End, "complete"); 
+		
+		JLabel totalInProgress = new JLabel(Integer.toString(inProgressTotal));
 		totalInProgress.setFont(new Font("Serif", Font.BOLD, 25));
 		totalInProgress.setBackground(Color.black);
 		
 		JLabel taskProgress = new JLabel("in progress");
-		taskProgress.setFont(new Font("Serif", Font.BOLD, 20));
+		taskProgress.setFont(new Font("Serif", Font.BOLD, 19));
 		taskProgress.setBackground(Color.black);
 		
 		taskRow4.add(totalInProgress);
@@ -351,11 +412,14 @@ public class Progress_Report {
 		taskRow5.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JLabel timeOnTask = new JLabel("on task: ");
-		timeOnTask.setFont(new Font("Serif", Font.BOLD, 20));
+		timeOnTask.setFont(new Font("Serif", Font.BOLD, 19));
 		timeOnTask.setBackground(Color.black);
 		
-		//placeholder until database call is put in.
-		JLabel totalOnTask = new JLabel("9hr 23min");
+		int onTaskTotal = db.CountEvents(userID, dt_Start, dt_End, "focus") * monitorInterval;
+		int onTaskHours = onTaskTotal / 60; 
+		int onTaskMinutes = onTaskTotal - (60 * onTaskHours); 
+		
+		JLabel totalOnTask = new JLabel(Integer.toString(onTaskHours) + "hr " + Integer.toString(onTaskMinutes) + "min");
 		totalOnTask.setFont(new Font("Serif", Font.BOLD, 20));
 		totalOnTask.setBackground(Color.black);
 		
@@ -366,11 +430,14 @@ public class Progress_Report {
 		taskRow6.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JLabel timeOffTask = new JLabel("off task: ");
-		timeOffTask.setFont(new Font("Serif", Font.BOLD, 20));
+		timeOffTask.setFont(new Font("Serif", Font.BOLD, 19));
 		timeOffTask.setBackground(Color.black);
 		
-		//placeholder until database call is put in.
-		JLabel totalOffTask = new JLabel("1hr 5min");
+		int offTaskTotal = db.CountEvents(userID, dt_Start, dt_End, "distract") * monitorInterval;
+		int offTaskHours = offTaskTotal / 60; 
+		int offTaskMinutes = offTaskTotal - (60 * offTaskHours); 
+		
+		JLabel totalOffTask = new JLabel(Integer.toString(offTaskHours) + "hr " + Integer.toString(offTaskMinutes) + "min");
 		totalOffTask.setFont(new Font("Serif", Font.BOLD, 20));
 		totalOffTask.setBackground(Color.black);
 		
@@ -418,12 +485,12 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, flames, "ntb");
 		Image flames_img = flames.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon ntbIcon = new ImageIcon(flames_img);
 		JLabel ntb_Label = new JLabel(ntbIcon);
 		
-		//placeholder until database call is put in.
-		JLabel totalNTB = new JLabel("2 times");
+		JLabel totalNTB = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "ntb")) + " times");
 		totalNTB.setFont(new Font("Serif", Font.BOLD, 25));
 		totalNTB.setBackground(Color.black);
 		
@@ -435,12 +502,12 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, happyFace, "htb");
 		Image happyFace_img = happyFace.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon htbIcon = new ImageIcon(happyFace_img);
 		JLabel htb_Label = new JLabel(htbIcon);
 		
-		//placeholder until database call is put in.
-		JLabel totalHTB = new JLabel("51 times");
+		JLabel totalHTB = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "htb")) + " times");
 		totalHTB.setFont(new Font("Serif", Font.BOLD, 25));
 		totalHTB.setBackground(Color.black);
 
@@ -464,12 +531,12 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, paint, "fts");
 		Image thought_img = paint.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon ftsIcon = new ImageIcon(thought_img);
 		JLabel fts_Label = new JLabel(ftsIcon);
 		
-		//placeholder until database call is put in.
-		JLabel totalFTS = new JLabel("24 times");
+		JLabel totalFTS = new JLabel(Integer.toString(db.CountEvents(userID, dt_Start, dt_End, "fts")) + " times");
 		totalFTS.setFont(new Font("Serif", Font.BOLD, 25));
 		totalFTS.setBackground(Color.black);
 		
@@ -517,8 +584,10 @@ public class Progress_Report {
 		JPanel hF_Row1 = new JPanel();
 		hF_Row1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//placeholder until database call is put in.
-		JLabel totalHF = new JLabel("5");
+		ArrayList<Notification> selfCareNotifications = db.SelectAllNotificationsType(userID, "selfCare", dt_Start, dt_End);
+		int notificationCount = selfCareNotifications.size(); 		
+		
+		JLabel totalHF = new JLabel(Integer.toString(notificationCount));
 		totalHF.setFont(new Font("Serif", Font.BOLD, 35));
 		totalHF.setBackground(Color.black);
 		totalHF.setForeground(aa_purple);
@@ -765,7 +834,7 @@ public class Progress_Report {
 		reportViews.setMaximumSize(new Dimension(600, 600));
 		
 		//add summary panel to have all the summary stuff
-		JPanel summaryPanel = createSummaryPanel();
+		JPanel summaryPanel = createSummaryPanel(userID, db);
 		reportViews.add("summary", summaryPanel);
 		
 		//add tasksAdded panel that will have table for all tasks added
