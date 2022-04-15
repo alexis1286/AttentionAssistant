@@ -51,6 +51,7 @@ public class Progress_Report {
 	Date dt_End = new Date();
 	Date dt_Start = new Date(dt_End.getTime() - (7 * DAY_IN_MS));
 	int monitorInterval = 5; 
+	int loggedInInterval = 5;
 	String currentCard = "summary";
 	
 	public void rebuildPanel(CardLayout cardLayout, JPanel reportViews, int userID, DataBase db, JPanel oldSummaryPanel, JPanel oldTasksAddedPanel, JPanel oldTasksCompletedPanel) {
@@ -76,7 +77,6 @@ public class Progress_Report {
 		reportViews.repaint();
 	}
 	
-	
 	/*
 	 * adjusts color and/or opacity of specified icon image to specified color/opacity
 	 */
@@ -90,12 +90,13 @@ public class Progress_Report {
 		Color yellowThreshold = new Color(255, 204, 0);
 		Color redThreshold = new Color(204, 0, 0);
 		
-		long diffInMilliseconds = dt_End.getTime() - dt_Start.getTime();
-		long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
+		//long diffInMilliseconds = dt_End.getTime() - dt_Start.getTime();
+		//long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
 		
-		long avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (hours);
+		double loggedInTotal = db.CountEvents(userID, dt_Start, dt_End, "loggedIn") * loggedInInterval;
+		double loggedInHours = loggedInTotal / 60; 
 		
-		//System.out.println("hours is: " + hours);
+		double avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (loggedInHours);
 		
 		if(avg <= 1) {
 			red = greenThreshold.getRed();
