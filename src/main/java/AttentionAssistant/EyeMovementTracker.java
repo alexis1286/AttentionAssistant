@@ -205,7 +205,7 @@ public class EyeMovementTracker {
     		double facesFound=0;
             
     		//grabs the time 0 minutes 10 seconds in the future
-    		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(60L, TimeUnit.SECONDS);
+    		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(20L, TimeUnit.SECONDS);
     		
     		//grabs the time 4 minutes 45 seconds in the future
     		//long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(4L, TimeUnit.MINUTES) + TimeUnit.NANOSECONDS.convert(45L, TimeUnit.SECONDS);
