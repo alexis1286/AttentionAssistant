@@ -70,7 +70,7 @@ public class Free_Thought_Space {
 
 		frame.getContentPane().add(title,BorderLayout.PAGE_START);
 		//add toolbar
-		
+		frame.getContentPane().add(toolBar(),BorderLayout.WEST);
 		
 		//add draw space
 		ds = drawingSpace();
@@ -79,7 +79,7 @@ public class Free_Thought_Space {
 		
 		//add colorbar
 		frame.getContentPane().add(createColorBar(db,userID),BorderLayout.PAGE_END);
-		frame.getContentPane().add(toolBar(),BorderLayout.WEST);
+		
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -571,49 +571,49 @@ public class Free_Thought_Space {
 		pencil.setContentAreaFilled(false);
 		pencil.setFocusPainted(false);
 		pencil.setBorderPainted(false);
-		pencil.setBounds(25,30,50,50);
+		pencil.setBounds(25,15,50,50);
 		
 		JButton spray = new JButton();
 		spray.setIcon(new ImageIcon(sprayImg));
 		spray.setContentAreaFilled(false);
 		spray.setFocusPainted(false);
 		spray.setBorderPainted(false);
-		spray.setBounds(25,90,50,50);
+		spray.setBounds(25,70,50,50);
 		
 		JButton line = new JButton();
 		line.setIcon(new ImageIcon(lineImg));
 		line.setContentAreaFilled(false);
 		line.setFocusPainted(false);
 		line.setBorderPainted(false);
-		line.setBounds(25,150,50,50);
+		line.setBounds(25,125,50,50);
 		
 		JButton rectangle = new JButton();
 		rectangle.setIcon(new ImageIcon(rectangleImg));
 		rectangle.setContentAreaFilled(false);
 		rectangle.setFocusPainted(false);
 		rectangle.setBorderPainted(false);
-		rectangle.setBounds(25,210,50,50);
+		rectangle.setBounds(25,180,50,50);
 		
 		JButton oval = new JButton();
 		oval.setIcon(new ImageIcon(ovalImg));
 		oval.setContentAreaFilled(false);
 		oval.setFocusPainted(false);
 		oval.setBorderPainted(false);
-		oval.setBounds(25,270,50,50);
+		oval.setBounds(25,235,50,50);
 		
 		JButton text = new JButton();
 		text.setIcon(new ImageIcon(textImg));
 		text.setContentAreaFilled(false);
 		text.setFocusPainted(false);
 		text.setBorderPainted(false);
-		text.setBounds(25,330,50,50);
+		text.setBounds(25,290,50,50);
 		
 		JButton erase = new JButton();
 		erase.setIcon(new ImageIcon(eraseImg));
 		erase.setContentAreaFilled(false);
 		erase.setFocusPainted(false);
 		erase.setBorderPainted(false);
-		erase.setBounds(25,390,50,50);		
+		erase.setBounds(25,345,50,50);		
 		
 		pencil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -713,7 +713,7 @@ public class Free_Thought_Space {
 		clear.setContentAreaFilled(false);
 		clear.setFocusPainted(false);
 		clear.setBorderPainted(false);
-		clear.setBounds(25,450,50,50);
+		clear.setBounds(25,400,50,50);
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clear();
@@ -725,7 +725,7 @@ public class Free_Thought_Space {
 		undo.setContentAreaFilled(false);
 		undo.setFocusPainted(false);
 		undo.setBorderPainted(false);
-		undo.setBounds(25,510,50,50);
+		undo.setBounds(25,455,50,50);
 		undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				undo();
@@ -737,7 +737,7 @@ public class Free_Thought_Space {
 		redo.setContentAreaFilled(false);
 		redo.setFocusPainted(false);
 		redo.setBorderPainted(false);
-		redo.setBounds(25,570,50,50);
+		redo.setBounds(25,510,50,50);
 		redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				redo();
