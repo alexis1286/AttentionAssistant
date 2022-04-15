@@ -2798,7 +2798,7 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space, Progress_Report progress_report) {
+	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -3056,6 +3056,7 @@ public class Settings {
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
+						Progress_Report progress_report = new Progress_Report();
 						progress_report.downloadProgressReport(userID, db); 
 					}
 				});

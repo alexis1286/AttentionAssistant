@@ -2097,7 +2097,6 @@ public class AttentionAssistantDriver {
 		static Negative_Thought_Burner ntb;
 		static Happy_Thought_Button htb;
 		static Free_Thought_Space fts;
-		static Progress_Report pr;
 		private static void childPortal(int userID,Settings settings,DataBase db) {
 			
 			//Settings settings = new Settings(userID);
@@ -2108,7 +2107,6 @@ public class AttentionAssistantDriver {
 			ntb = new Negative_Thought_Burner();
 			htb = new Happy_Thought_Button(db);
 			fts = new Free_Thought_Space();
-			pr = new Progress_Report();
 			/**
 			 * loading default happy media library into database 
 			 * this will take place just once during user registration
@@ -2135,7 +2133,7 @@ public class AttentionAssistantDriver {
 				pm.setPomo(pomo);
 				notif.setPomo(pomo);
 				
-				navbar.run_nav_bar(userID,notif,db,navbar,settings,pm,pomo,ntb,htb,fts, pr);
+				navbar.run_nav_bar(userID,notif,db,navbar,settings,pm,pomo,ntb,htb,fts);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

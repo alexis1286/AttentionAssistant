@@ -40,7 +40,6 @@ public class Progress_Report {
 	private int width = 625; 
 	private int mouseX;
 	private int mouseY;
-	JLabel displayAvatar;
 	JPanel summaryPanel;
 	JFrame pr_frame; 
 	public JFileChooser fileChooser = null;
@@ -97,20 +96,26 @@ public class Progress_Report {
 		double loggedInHours = loggedInTotal / 60; 
 		
 		double avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (loggedInHours);
-		
-		if(avg <= 1) {
-			red = greenThreshold.getRed();
-			green = greenThreshold.getGreen();
-			blue = greenThreshold.getBlue();
-		}else if (avg > 1 && avg <= 2) {
+		if(loggedInHours > 1) {
 			red = yellowThreshold.getRed();
 			green = yellowThreshold.getGreen();
 			blue = yellowThreshold.getBlue();
-		}else if(avg > 2) {
-			red = redThreshold.getRed();
-			green = redThreshold.getGreen();
-			blue = redThreshold.getBlue();
+		}else {
+			if(avg <= 1) {
+				red = greenThreshold.getRed();
+				green = greenThreshold.getGreen();
+				blue = greenThreshold.getBlue();
+			}else if (avg > 1 && avg <= 2) {
+				red = yellowThreshold.getRed();
+				green = yellowThreshold.getGreen();
+				blue = yellowThreshold.getBlue();
+			}else if(avg > 2) {
+				red = redThreshold.getRed();
+				green = redThreshold.getGreen();
+				blue = redThreshold.getBlue();
+			}
 		}
+		
 		
 		//get height and width of image to be altered
 	    int width = image.getWidth();
@@ -302,7 +307,7 @@ public class Progress_Report {
 		endCalendar.setTime(dt_End); 
 		endCalendar.add(Calendar.MONTH, 1);
 		
-		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
+		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)+" "); 
 		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 35));
 		dates.setBackground(Color.black);
 		dates.setForeground(aa_grey);
@@ -959,7 +964,6 @@ public class Progress_Report {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				
 				pr_frame = new JFrame("Progress Report");
 				
 				pr_frame.setUndecorated(true);
