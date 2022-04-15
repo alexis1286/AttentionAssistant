@@ -7,6 +7,9 @@ import java.awt.image.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.*;
 import javax.swing.*;
@@ -112,7 +115,15 @@ public class Nav_Bar{
 	int counter;
 	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts, Progress_Report pr) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {				
+			public void run() {
+				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+				Runnable timeLoop = () -> {
+					System.out.println("minute logged");
+					Date timestamp = new Date();
+				    db.AddEvent(userID, timestamp, "loggedIn");
+				};
+				executor.scheduleWithFixedDelay(timeLoop, 0, 5, TimeUnit.MINUTES);
+				
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
