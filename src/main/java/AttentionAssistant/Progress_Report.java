@@ -5,24 +5,21 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
 import org.jdatepicker.impl.*;
-import org.jdatepicker.util.*;
-import org.jdatepicker.*;
-import org.jdatepicker.graphics.*;
+
 
 /**
  * Class that encompasses Progress Report whenever Progress Report is opened 
@@ -44,6 +41,9 @@ public class Progress_Report {
 	private int mouseX;
 	private int mouseY;
 	JLabel displayAvatar;
+	JPanel summaryPanel;
+	JFrame pr_frame; 
+	public JFileChooser fileChooser = null;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
 	final static boolean RIGHT_TO_LEFT = false; 
@@ -285,7 +285,7 @@ public class Progress_Report {
 	
 	private JPanel createSummaryPanel(int userID, DataBase db) {
 		
-		JPanel summaryPanel = new JPanel();
+		summaryPanel = new JPanel();
 		summaryPanel.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));
 		summaryPanel.setMaximumSize(new Dimension(600, 550));
 		
@@ -958,7 +958,7 @@ public class Progress_Report {
 			@Override
 			public void run() {
 				
-				JFrame pr_frame = new JFrame("Progress Report");
+				pr_frame = new JFrame("Progress Report");
 				
 				pr_frame.setUndecorated(true);
 				pr_frame.setPreferredSize(new Dimension(width, height));
@@ -995,4 +995,58 @@ public class Progress_Report {
 		});
 	}
 	
+	public JFileChooser getFileChooser()
+    {
+        if (fileChooser ==null)
+        {
+            fileChooser = new JFileChooser();  //create file chooser
+            
+            fileChooser.setFileFilter(new PNGFileFilter());  //set file extension to .png
+        }
+        return fileChooser;
+    }
+	
+	public static BufferedImage getScreenShot(Component component)    //used to get the current progress report displayed on the screen
+    {
+        BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB);
+        component.paint(image.getGraphics());   // paints into image's Graphics
+        return image;
+    }
+	
+	private static class PNGFileFilter extends FileFilter
+    {
+        public boolean accept(File file) //filter files to display
+        {
+            return file.getName().toLowerCase().endsWith(".png") || file.isDirectory();
+        }
+
+        public String getDescription()
+        {
+            return "PNG image  (*.png) ";
+        }
+    }
+	
+	/**
+	 * downloads a screenshot of the progress report
+	 */
+	public void downloadProgressReport(int userID, DataBase db) {
+		
+		open_progressReport(userID, db);
+		
+		//save as png 
+		JFileChooser jFileChooser = getFileChooser();
+		int result = jFileChooser.showSaveDialog(summaryPanel); 
+		if (result == JFileChooser.APPROVE_OPTION) {
+			try {
+				File selectedFile = jFileChooser.getSelectedFile();
+				selectedFile = new File(selectedFile.getAbsolutePath() + ".png");
+				BufferedImage img = getScreenShot(summaryPanel);
+				ImageIO.write(img, "png", selectedFile);
+			} catch (IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Could not save file"); 
+			}
+		}
+		pr_frame.dispose();
+	}
 }
+

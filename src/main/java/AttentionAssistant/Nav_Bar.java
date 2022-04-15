@@ -250,7 +250,7 @@ public class Nav_Bar{
 	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts);
+	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts, pr);
 	        }});
 	    	panel.add(settingsButton);
 		}

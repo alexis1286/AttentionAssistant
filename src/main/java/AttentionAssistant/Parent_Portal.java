@@ -943,6 +943,7 @@ public class Parent_Portal {
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
+						pr.downloadProgressReport(userID, db); 
 					}
 				});
 				
