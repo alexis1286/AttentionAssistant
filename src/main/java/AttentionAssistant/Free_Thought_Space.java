@@ -70,7 +70,7 @@ public class Free_Thought_Space {
 
 		frame.getContentPane().add(title,BorderLayout.PAGE_START);
 		//add toolbar
-		frame.getContentPane().add(toolBar(),BorderLayout.WEST);
+		
 		
 		//add draw space
 		ds = drawingSpace();
@@ -79,7 +79,7 @@ public class Free_Thought_Space {
 		
 		//add colorbar
 		frame.getContentPane().add(createColorBar(db,userID),BorderLayout.PAGE_END);
-		
+		frame.getContentPane().add(toolBar(),BorderLayout.WEST);
 		frame.pack();
 		frame.setVisible(true);
 	}
