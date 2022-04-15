@@ -122,7 +122,7 @@ public class Nav_Bar{
 					Date timestamp = new Date();
 				    db.AddEvent(userID, timestamp, "loggedIn");
 				};
-				executor.scheduleWithFixedDelay(timeLoop, 0, 5, TimeUnit.MINUTES);
+				executor.scheduleWithFixedDelay(timeLoop, 1, 1, TimeUnit.MINUTES);
 				
 				counter = 1;
 				count = 0;
