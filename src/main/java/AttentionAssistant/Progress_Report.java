@@ -61,16 +61,16 @@ public class Progress_Report {
 		int green = 0;
 		int blue = 0;
 
-		Color greenThreshold = new Color(0, 204, 0);
-		Color yellowThreshold = new Color(255, 255, 0);
-		Color redThreshold = new Color(255, 0, 0);
+		Color greenThreshold = new Color(0, 153, 0);
+		Color yellowThreshold = new Color(255, 204, 0);
+		Color redThreshold = new Color(204, 0, 0);
 		
 		long diffInMilliseconds = dt_End.getTime() - dt_Start.getTime();
 		long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
 		
-		long avg = (db.CountEvents(userID, dt_Start, dt_End, "ntb")) / (hours);
+		long avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (hours);
 		
-		System.out.println("hours is: " + hours);
+		//System.out.println("hours is: " + hours);
 		
 		if(avg <= 1) {
 			red = greenThreshold.getRed();
