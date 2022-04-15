@@ -56,9 +56,9 @@ public class Free_Thought_Space {
 		drawn = null;
 		JFrame frame = new JFrame("Free Thought Space");
 		frame.setBackground(Color.BLACK);
-		frame.setSize(new Dimension(dim.width-200,dim.height-150));
-		frame.setPreferredSize(new Dimension(dim.width-200,dim.height-150));
-		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+		frame.setSize(new Dimension(dim.width-200,dim.height-100));
+		frame.setPreferredSize(new Dimension(dim.width-200,dim.height-100));
+		frame.setLocation((dim.width-frame.getWidth())/2,20);
 		frame.setUndecorated(true);
 		
 		dsW = frame.getWidth()-100;
