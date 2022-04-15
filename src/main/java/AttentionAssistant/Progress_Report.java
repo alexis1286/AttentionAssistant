@@ -3,6 +3,7 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.jdatepicker.impl.*;
 import org.jdatepicker.util.*;
@@ -49,6 +51,58 @@ public class Progress_Report {
 	Date dt_End = new Date();
 	Date dt_Start = new Date(dt_End.getTime() - (7 * DAY_IN_MS));
 	int monitorInterval = 5; 
+	
+	/*
+	 * adjusts color and/or opacity of specified icon image to specified color/opacity
+	 */
+	public BufferedImage colorFeatureIcon(DataBase db, int userID, BufferedImage image, String feature) {
+		
+		int red = 0; 
+		int green = 0;
+		int blue = 0;
+
+		Color greenThreshold = new Color(0, 204, 0);
+		Color yellowThreshold = new Color(255, 255, 0);
+		Color redThreshold = new Color(255, 0, 0);
+		
+		long diffInMilliseconds = dt_End.getTime() - dt_Start.getTime();
+		long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
+		
+		long avg = (db.CountEvents(userID, dt_Start, dt_End, "ntb")) / (hours);
+		
+		System.out.println("hours is: " + hours);
+		
+		if(avg <= 1) {
+			red = greenThreshold.getRed();
+			green = greenThreshold.getGreen();
+			blue = greenThreshold.getBlue();
+		}else if (avg > 1 && avg <= 2) {
+			red = yellowThreshold.getRed();
+			green = yellowThreshold.getGreen();
+			blue = yellowThreshold.getBlue();
+		}else if(avg > 2) {
+			red = redThreshold.getRed();
+			green = redThreshold.getGreen();
+			blue = redThreshold.getBlue();
+		}
+		
+		//get height and width of image to be altered
+	    int width = image.getWidth();
+	    int height = image.getHeight();
+	    WritableRaster raster = image.getRaster();
+
+	    //recolors image to new rgb values
+	    for (int xx = 0; xx < width; xx++) {
+	      for (int yy = 0; yy < height; yy++) {
+	        int[] pixels = raster.getPixel(xx, yy, (int[]) null);
+	        pixels[0] = red;
+	        pixels[1] = green;
+	        pixels[2] = blue;
+	        raster.setPixel(xx, yy, pixels);
+	      }
+	    }
+	    return image;
+	  }
 	
 	/**
 	 * creates title bar
@@ -431,6 +485,7 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, flames, "ntb");
 		Image flames_img = flames.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon ntbIcon = new ImageIcon(flames_img);
 		JLabel ntb_Label = new JLabel(ntbIcon);
@@ -447,6 +502,7 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, happyFace, "htb");
 		Image happyFace_img = happyFace.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon htbIcon = new ImageIcon(happyFace_img);
 		JLabel htb_Label = new JLabel(htbIcon);
@@ -475,6 +531,7 @@ public class Progress_Report {
 			System.exit(1);
 		}
 		
+		colorFeatureIcon(db, userID, paint, "fts");
 		Image thought_img = paint.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		Icon ftsIcon = new ImageIcon(thought_img);
 		JLabel fts_Label = new JLabel(ftsIcon);
