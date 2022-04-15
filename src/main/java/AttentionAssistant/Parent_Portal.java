@@ -64,7 +64,7 @@ public class Parent_Portal {
 		return lock_feature; 
 	}
 	
-	private void createSettingsPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager pm, DataBase db) throws MalformedURLException {
+	private void createSettingsPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager pm, DataBase db, int userID, Progress_Report pr) throws MalformedURLException {
 		JPanel settings_panel = new JPanel();
 		settings_panel.setLayout(new BoxLayout(settings_panel, BoxLayout.Y_AXIS));
 		settings_panel.setBackground(aa_grey);
@@ -549,7 +549,7 @@ public class Parent_Portal {
 		progressReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open progress report
-				
+				pr.open_progressReport(userID, db);
 			}
 		});
 		
@@ -784,7 +784,7 @@ public class Parent_Portal {
 		card_panel.add("monitor", monitor_panel);
 	}
 	
-	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm) {
+	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm, Progress_Report pr, int userID) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -878,7 +878,7 @@ public class Parent_Portal {
 				card_panel.setLayout(card_layout);
 				
 				try {
-					createSettingsPanel(card_panel, settingsChanges, pm, db);
+					createSettingsPanel(card_panel, settingsChanges, pm, db, userID, pr);
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

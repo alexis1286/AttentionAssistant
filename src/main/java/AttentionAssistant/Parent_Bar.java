@@ -101,12 +101,13 @@ public class Parent_Bar{
 	        	int childID = childAccounts.get(i).getUserID();
 	        	Settings settings = new Settings(db,childID);
 	        	Parent_Portal menu = new Parent_Portal();
+	        	Progress_Report pr = new Progress_Report(); 
 	        	pm = new Priority_Manager(childID,db,true);
 	        	JButton button = createButton(childAccounts.get(i).getName());
 	        	button.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent e) {
 	            		
-	            		menu.open_parentPortal(db, settings, pm);
+	            		menu.open_parentPortal(db, settings, pm, pr, childID);
 	            	}});
 	        	cPanel.add(button);
 	        }
