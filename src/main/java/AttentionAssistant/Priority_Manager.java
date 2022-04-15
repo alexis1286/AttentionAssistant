@@ -107,10 +107,10 @@ public class Priority_Manager {
             Thread observerThread = new Thread(observer);
             observerThread.start();
             pomo.clickStart();
+            Date timestamp = new Date();
+            db.AddEvent(userID, timestamp, "started");
 		}
 		
-		Date timestamp = new Date();
-		db.AddEvent(userID, timestamp, "started");
 		activeTask = task;
 		pomo.labelRefresh();
 		System.out.println("Task "+task.getTaskName()+" activated");
