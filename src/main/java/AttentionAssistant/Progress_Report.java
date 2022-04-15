@@ -51,6 +51,31 @@ public class Progress_Report {
 	Date dt_End = new Date();
 	Date dt_Start = new Date(dt_End.getTime() - (7 * DAY_IN_MS));
 	int monitorInterval = 5; 
+	String currentCard = "summary";
+	
+	public void rebuildPanel(CardLayout cardLayout, JPanel reportViews, int userID, DataBase db, JPanel oldSummaryPanel, JPanel oldTasksAddedPanel, JPanel oldTasksCompletedPanel) {
+			
+		reportViews.remove(oldSummaryPanel);
+		reportViews.remove(oldTasksAddedPanel);
+		reportViews.remove(oldTasksCompletedPanel);
+		
+		//rebuild summary panel
+		JPanel summaryPanel = createSummaryPanel(userID, db);
+		reportViews.add("summary", summaryPanel);
+		
+		//rebuild tasksAddedPanel
+		JPanel tasksAddedPanel = createTasksAddedPanel(userID, db); 
+		reportViews.add("tasksAdded", tasksAddedPanel);
+		
+		//rebuild tasksCompletedPanel
+		JPanel tasksCompletedPanel = createTasksCompletedPanel(userID, db);
+		reportViews.add("tasksCompleted", tasksCompletedPanel);
+		
+		cardLayout.show(reportViews, currentCard); 
+		reportViews.revalidate();
+		reportViews.repaint();
+	}
+	
 	
 	/*
 	 * adjusts color and/or opacity of specified icon image to specified color/opacity
@@ -182,7 +207,7 @@ public class Progress_Report {
 		
 	}
 	
-	private JPanel createDatePickers(){
+	private JPanel createDatePickers(CardLayout cardLayout, JPanel reportViews, int userID, DataBase db, JPanel summaryPanel, JPanel tasksAddedPanel, JPanel tasksCompletedPanel){
 		
 		JPanel datePanel = new JPanel();
 		datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
@@ -244,6 +269,7 @@ public class Progress_Report {
 				dt_Start = (Date) beginDatePicker.getModel().getValue();
 				dt_End = (Date) finishDatePicker.getModel().getValue();
 				
+				rebuildPanel(cardLayout, reportViews, userID, db, summaryPanel, tasksAddedPanel, tasksCompletedPanel);
 			}
 		});
 		
@@ -694,7 +720,7 @@ public class Progress_Report {
 		graph.setMaximumSize(new Dimension(75,30));
 		graph.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//refresh frame to reflect selected dates
+				//graph selected task
 				
 				int row = addedTable.getSelectedRow();
 				int id = (int) addedTable.getModel().getValueAt(row, 1);
@@ -797,7 +823,7 @@ public class Progress_Report {
 		graph.setMaximumSize(new Dimension(75,30));
 		graph.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//refresh frame to reflect selected dates
+				//graph selected task
 				
 				int row = completedTable.getSelectedRow();
 				int id = (int) completedTable.getModel().getValueAt(row, 1);
@@ -827,8 +853,6 @@ public class Progress_Report {
 		center_panel.setLayout(new BoxLayout(center_panel, BoxLayout.Y_AXIS));
 		center_panel.setBackground(Color.black);
 		
-		JPanel datePanel = createDatePickers();
-		
 		//add card layout that will toggle between summary and two tables
 		reportViews.setLayout(cardLayout);
 		reportViews.setMaximumSize(new Dimension(600, 600));
@@ -845,6 +869,7 @@ public class Progress_Report {
 		JPanel tasksCompletedPanel = createTasksCompletedPanel(userID, db);
 		reportViews.add("tasksCompleted", tasksCompletedPanel);
 		
+		JPanel datePanel = createDatePickers(cardLayout, reportViews, userID, db, summaryPanel, tasksAddedPanel, tasksCompletedPanel);
 		
 		center_panel.add(datePanel);
 		center_panel.add(reportViews);
@@ -856,7 +881,6 @@ public class Progress_Report {
 		JPanel bottomButtons = new JPanel();
 		bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
 		bottomButtons.setBackground(aa_grey);
-		//bottomButtons.setBorder(BorderFactory.createLineBorder(aa_purple));
 		
 		JLabel view = new JLabel("Select View: ");
 		view.setForeground(Color.white);
@@ -874,6 +898,7 @@ public class Progress_Report {
 		summary.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardlayout to summary panel
+				currentCard = "summary";
 				cardLayout.show(reportViews, "summary");
 			}
 		});
@@ -890,6 +915,7 @@ public class Progress_Report {
 		addedTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardLayout to tasks added table
+				currentCard = "tasksAdded";
 				cardLayout.show(reportViews, "tasksAdded");
 			}
 		});
@@ -906,6 +932,7 @@ public class Progress_Report {
 		completedTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//open cardLayout to tasks completed table
+				currentCard = "tasksCompleted";
 				cardLayout.show(reportViews, "tasksCompleted");
 			}
 		});
