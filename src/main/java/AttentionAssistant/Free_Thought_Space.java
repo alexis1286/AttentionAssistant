@@ -1364,7 +1364,7 @@ public class Free_Thought_Space {
 		title_panel.add(file);
 		title_panel.add(Box.createRigidArea(new Dimension(500, 0)));
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(500, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(450, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
