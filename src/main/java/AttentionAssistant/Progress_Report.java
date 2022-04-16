@@ -40,7 +40,6 @@ public class Progress_Report {
 	private int width = 625; 
 	private int mouseX;
 	private int mouseY;
-	JLabel displayAvatar;
 	JPanel summaryPanel;
 	JFrame pr_frame; 
 	public JFileChooser fileChooser = null;
@@ -97,20 +96,26 @@ public class Progress_Report {
 		double loggedInHours = loggedInTotal / 60; 
 		
 		double avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (loggedInHours);
-		
-		if(avg <= 1) {
-			red = greenThreshold.getRed();
-			green = greenThreshold.getGreen();
-			blue = greenThreshold.getBlue();
-		}else if (avg > 1 && avg <= 2) {
+		if(loggedInHours > 1) {
 			red = yellowThreshold.getRed();
 			green = yellowThreshold.getGreen();
 			blue = yellowThreshold.getBlue();
-		}else if(avg > 2) {
-			red = redThreshold.getRed();
-			green = redThreshold.getGreen();
-			blue = redThreshold.getBlue();
+		}else {
+			if(avg <= 1) {
+				red = greenThreshold.getRed();
+				green = greenThreshold.getGreen();
+				blue = greenThreshold.getBlue();
+			}else if (avg > 1 && avg <= 2) {
+				red = yellowThreshold.getRed();
+				green = yellowThreshold.getGreen();
+				blue = yellowThreshold.getBlue();
+			}else if(avg > 2) {
+				red = redThreshold.getRed();
+				green = redThreshold.getGreen();
+				blue = redThreshold.getBlue();
+			}
 		}
+		
 		
 		//get height and width of image to be altered
 	    int width = image.getWidth();
@@ -296,11 +301,13 @@ public class Progress_Report {
 		
 		Calendar startCalendar = Calendar.getInstance();
 		startCalendar.setTime(dt_Start);
+		startCalendar.add(Calendar.MONTH, 1);
 		
 		Calendar endCalendar = Calendar.getInstance();
 		endCalendar.setTime(dt_End); 
+		endCalendar.add(Calendar.MONTH, 1);
 		
-		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
+		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)+" "); 
 		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 35));
 		dates.setBackground(Color.black);
 		dates.setForeground(aa_grey);
@@ -957,7 +964,6 @@ public class Progress_Report {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				
 				pr_frame = new JFrame("Progress Report");
 				
 				pr_frame.setUndecorated(true);
@@ -965,6 +971,7 @@ public class Progress_Report {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				CardLayout cardLayout = new CardLayout();
 				JPanel reportViews = new JPanel();
@@ -1026,27 +1033,186 @@ public class Progress_Report {
         }
     }
 	
+	private void downloadDateSelectionWindow(int userID, DataBase db) {
+		//create window for user to select progress report dates
+		JFrame dates_window = new JFrame("Select Dates for Download");
+		dates_window.setAlwaysOnTop(true);
+		dates_window.setBackground(Color.black);
+		dates_window.setUndecorated(true);
+		dates_window.setVisible(true);
+		
+		JPanel title_panel = new JPanel();
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		title_panel.setBackground(Color.black);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		JLabel title = new JLabel("Select Dates for Progress Report Download");
+		title.setForeground(Color.white);
+		title.setFont(new Font("Serif", Font.BOLD, 18));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				dates_window.setLocation(dates_window.getX() + e.getX() - mouseX, dates_window.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+		
+		//reads in image for the close button
+		BufferedImage ci = null;
+		
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		//creates close button with close icon and no background
+		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		Icon close = new ImageIcon(c_img);
+		JButton close_window = new JButton(close);
+		close_window.setBorderPainted(false);
+		close_window.setContentAreaFilled(false);
+		close_window.setFocusPainted(false);
+		close_window.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving info
+        		dates_window.dispose();
+        	}
+        });
+		
+		//adds title JLabel, empty space, then guide button and close button
+		title_panel.add(title);
+		//title_panel.add(Box.createRigidArea(new Dimension(200, 0)));
+		title_panel.add(close_window);
+		
+		JPanel dateChoices = new JPanel(); 
+		dateChoices.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
+		dateChoices.setBackground(Color.black);
+		dateChoices.setLayout(new BoxLayout(dateChoices, BoxLayout.Y_AXIS));
+		dateChoices.setMaximumSize(new Dimension(300, 300));
+		dateChoices.setBackground(Color.black); 
+		
+		JPanel startDateIntervalPanel = new JPanel();
+		startDateIntervalPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		startDateIntervalPanel.setMaximumSize(new Dimension(300, 45));
+		startDateIntervalPanel.setBackground(Color.black); 
+		
+		JLabel startDate = new JLabel("Start Date: ");
+		startDate.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		startDate.setBackground(Color.black);
+		startDate.setForeground(Color.white);
+		
+		UtilDateModel model = new UtilDateModel();
+		Properties properties = new Properties();
+		properties.put("text.today", "Today");
+		properties.put("text.month", "Month");
+		properties.put("text.year", "Year"); 
+		
+		JDatePanelImpl beginDatePanel = new JDatePanelImpl(model, properties);
+		JDatePickerImpl beginDatePicker = new JDatePickerImpl(beginDatePanel, new DateLabelFormatter());
+		
+		startDateIntervalPanel.add(startDate);
+		startDateIntervalPanel.add(beginDatePicker);
+		
+		JPanel endDateIntervalPanel = new JPanel();
+		endDateIntervalPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		endDateIntervalPanel.setMaximumSize(new Dimension(300, 45));
+		endDateIntervalPanel.setBackground(Color.black); 
+		
+		JLabel endDate = new JLabel("End Date:  ");
+		endDate.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		endDate.setBackground(Color.black);
+		endDate.setForeground(Color.white);
+		
+		UtilDateModel model2 = new UtilDateModel();
+		Properties properties2 = new Properties();
+		properties2.put("text.today", "Today");
+		properties2.put("text.month", "Month");
+		properties2.put("text.year", "Year"); 
+		
+		JDatePanelImpl finishDatePanel = new JDatePanelImpl(model2, properties2);
+		JDatePickerImpl finishDatePicker = new JDatePickerImpl(finishDatePanel, new DateLabelFormatter());
+		
+		endDateIntervalPanel.add(endDate);
+		endDateIntervalPanel.add(finishDatePicker);
+		
+		dateChoices.add(startDateIntervalPanel);
+		dateChoices.add(endDateIntervalPanel); 
+		
+		JPanel applyPanel = new JPanel();
+		applyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		applyPanel.setMaximumSize(new Dimension(300, 35));
+		applyPanel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
+		applyPanel.setBackground(aa_grey);
+		
+		JButton apply = new JButton(" apply ");
+		apply.setForeground(Color.white);
+		apply.setFont(new Font("Serif", Font.BOLD, 16));
+		apply.setContentAreaFilled(true);
+		apply.setBorderPainted(true);
+		apply.setBorder(new LineBorder(aa_grey));
+		apply.setFocusPainted(false);
+		apply.setBackground(aa_purple);
+		apply.setMaximumSize(new Dimension(75,30));
+		apply.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				dt_Start = (Date) beginDatePicker.getModel().getValue();
+				dt_End = (Date) finishDatePicker.getModel().getValue();
+				
+				dates_window.dispose();
+				
+				open_progressReport(userID, db);
+				
+				//save as png 
+				JFileChooser jFileChooser = getFileChooser();
+				int result = jFileChooser.showSaveDialog(summaryPanel); 
+				if (result == JFileChooser.APPROVE_OPTION) {
+					try {
+						File selectedFile = jFileChooser.getSelectedFile();
+						selectedFile = new File(selectedFile.getAbsolutePath() + ".png");
+						BufferedImage img = getScreenShot(summaryPanel);
+						ImageIO.write(img, "png", selectedFile);
+					} catch (IOException ioe) {
+						JOptionPane.showMessageDialog(null, "Could not save file"); 
+					}
+				}
+				pr_frame.dispose();
+			}
+		});
+		
+		applyPanel.add(Box.createRigidArea(new Dimension(340, 0)));
+		applyPanel.add(apply);
+		
+		//sets location and dimensions of task window
+		int x = (int) ((screen.getWidth() - dates_window.getWidth()) /2);
+		int y = (int) ((screen.getHeight() - dates_window.getHeight()) /2);
+		dates_window.setLocation(x, y);
+		
+		dates_window.add(title_panel, BorderLayout.PAGE_START); 
+		dates_window.add(dateChoices, BorderLayout.CENTER);
+		dates_window.add(applyPanel, BorderLayout.PAGE_END);
+		dates_window.pack();
+		
+	}
+	
 	/**
 	 * downloads a screenshot of the progress report
 	 */
 	public void downloadProgressReport(int userID, DataBase db) {
 		
-		open_progressReport(userID, db);
-		
-		//save as png 
-		JFileChooser jFileChooser = getFileChooser();
-		int result = jFileChooser.showSaveDialog(summaryPanel); 
-		if (result == JFileChooser.APPROVE_OPTION) {
-			try {
-				File selectedFile = jFileChooser.getSelectedFile();
-				selectedFile = new File(selectedFile.getAbsolutePath() + ".png");
-				BufferedImage img = getScreenShot(summaryPanel);
-				ImageIO.write(img, "png", selectedFile);
-			} catch (IOException ioe) {
-				JOptionPane.showMessageDialog(null, "Could not save file"); 
-			}
-		}
-		pr_frame.dispose();
+		downloadDateSelectionWindow(userID, db);
 	}
 }
 

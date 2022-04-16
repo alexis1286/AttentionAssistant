@@ -2798,7 +2798,7 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space, Progress_Report progress_report) {
+	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -2816,6 +2816,7 @@ public class Settings {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				
 				JMenuBar title_panel = new JMenuBar();
@@ -3056,6 +3057,7 @@ public class Settings {
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
+						Progress_Report progress_report = new Progress_Report();
 						progress_report.downloadProgressReport(userID, db); 
 					}
 				});
@@ -3274,11 +3276,13 @@ public class Settings {
 				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
 				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
+				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
 				
 				/*
 				 * creates split center panel
 				 */
 				JPanel center_panel = new JPanel(new BorderLayout());
+				center_panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, aa_purple));
 				center_panel.setBackground(Color.black);
 				center_panel.add(card_panel, BorderLayout.CENTER);
 				center_panel.add(sideMenu, BorderLayout.WEST);
