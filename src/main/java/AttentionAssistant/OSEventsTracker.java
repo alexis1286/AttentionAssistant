@@ -3,8 +3,14 @@ package AttentionAssistant;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 import java.util.stream.Stream;
+
+import org.sqlite.SQLiteDataSource;
 
 /**
  * Tracks the currently running OS processes to determine if the user is using programs that are distracting 
@@ -25,11 +31,13 @@ public class OSEventsTracker {
 	ArrayList<String> wlistOpen;
 	
 	private int osEventsScore;
+	private int id;
 		
 	/**
-	 * ProcessHandling default Constructor
+	 * OSEventsTracker default Constructor
 	 */
 	public OSEventsTracker() {
+		this.id = 0;
 		this.osEventsScore = 100;
 		this.names = new HashSet<>();
 		this.blacklist = new ArrayList<String>();
@@ -41,49 +49,35 @@ public class OSEventsTracker {
 	/**
 	 * Collects and stores all currently running processes into a Set
 	 * with no duplicates
+	 * 
+	 * @param activeTask -> for getting the user id
+	 * @param db
 	 */
-	public void startTracking() {
+	public void startTracking(Task activeTask, DataBase db) {
+		//gets user id from active task
+		setID(activeTask);
+		
+		whitelist = db.SelectAllFromWBList(this.id, true);
+		whitelist.replaceAll(String::toLowerCase);
+		
+		blacklist = db.SelectAllFromWBList(this.id, false);
+		blacklist.replaceAll(String::toLowerCase);
+		
 		//Retrieving all currently running processes
 		Stream<ProcessHandle> processes = ProcessHandle.allProcesses();
 					
 		//For each of the processes, add only the process name to the Set
 		processes.forEach(process -> names.add(processDetails(text(process.info().command()))));
-					
-		BufferedReader bl_reader, wl_reader;
-		try {
-			
-			//Storing each line from the blacklist into an array list
-			bl_reader = new BufferedReader(new FileReader("src/main/resources/OSBlacklist.txt"));
-			String bline = bl_reader.readLine();
-			while(bline != null) {
-				String lcLine = bline.toLowerCase();
-				blacklist.add(lcLine);
-				bline = bl_reader.readLine();
-			}
-
-			//Storing each line from the whitelist into an array list
-			wl_reader = new BufferedReader(new FileReader("src/main/resources/OSWhitelist.txt"));
-			String wline = wl_reader.readLine();
-			while(wline != null) {
-				String lcLine = wline.toLowerCase();
-				whitelist.add(lcLine);
-				wline = wl_reader.readLine();
-			}
-			
-			int blCount = 0;
-			int wlCount = 0;
-			//Iterate over Set names until a process name is found on the blacklist
-			for(String name : names) {
-				blCount += getBlacklistCount(name, blacklist);
-				wlCount += getWhitelistCount(name, whitelist);
-			}
-			
-			osEventsScore = calculateOSEventsScore(blCount, wlCount);
-			bl_reader.close();
-			wl_reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		int blCount = 0;
+		int wlCount = 0;
+		//Iterate over Set names until a process name is found on the blacklist
+		for(String name : names) {
+			blCount += getBlacklistCount(name, blacklist);
+			wlCount += getWhitelistCount(name, whitelist);
 		}
+		
+		osEventsScore = calculateOSEventsScore(blCount, wlCount);
 	}
 
 	/**
@@ -149,6 +143,38 @@ public class OSEventsTracker {
 			return 0;
 		float weight = 3.0f;
 		return (int)(blCount == 0 ? 100 : Math.min(100, (wlCount / (wlCount + blCount * weight)) * 100));
+	}
+	
+	/**
+	 * Set user id
+	 * @param activeTask
+	 */
+	public void setID(Task activeTask) {
+		
+		SQLiteDataSource ds = new SQLiteDataSource();
+		String aaDb = "jdbc:sqlite:bin/Attention_Assistant.db";
+		ds.setUrl(aaDb);
+		
+		int taskID = activeTask.getTaskID();
+    	String query = "SELECT fk_userID FROM task WHERE taskID = " + taskID;
+    	try (Connection conn = ds.getConnection(); 
+    			Statement stmt = conn.createStatement();) {
+    		    ResultSet rs = stmt.executeQuery(query);
+    		    while (rs.next()) {
+    		    	this.id = rs.getInt("fk_userID");
+    		    }
+    			
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+	}
+	
+	/**
+	 * Get user id
+	 * @return int
+	 */
+	public int getID() {
+		return this.id;
 	}
 	
 	/**

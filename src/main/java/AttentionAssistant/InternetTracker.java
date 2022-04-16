@@ -298,7 +298,6 @@ public class InternetTracker {
 		String history = "jdbc:sqlite:" + tempHistory.toString();
 		ds.setUrl(history);
 		
-		//ArrayList<String> latestUrls = new ArrayList<String>();
     	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + startTime;
     	try (Connection conn = ds.getConnection(); 
     			Statement stmt = conn.createStatement();) {

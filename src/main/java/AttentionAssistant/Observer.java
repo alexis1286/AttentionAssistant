@@ -201,7 +201,7 @@ public class Observer implements Runnable {
 			//Will uncomment later -jmitchell
 			//keyBoardTracker.startTracking(keyWords);
 			
-			osEventsTracker.startTracking();
+			osEventsTracker.startTracking(activeTask, db);
 			internetTracker.startTracking(keyWords, startTime);
 
 			//CODE FOR TESTING WEIGHTS:
@@ -241,6 +241,10 @@ public class Observer implements Runnable {
 			//write to database
 			db.AddObserver(this, activeTask.getTaskID());
 			
+			
+			//Function call to display the Observer Monitor data GUI
+			displayObserver(activeTask, keyWords, mouseTracker, eyeMovementTracker, 
+					keyBoardTracker, osEventsTracker, internetTracker);
 			
 			/**
 			 * Check if user is focused on task when they should be working or
@@ -285,10 +289,6 @@ public class Observer implements Runnable {
 					notification_System.isNull();
 				}
 			}
-			
-			//Function call to display the Observer Monitor data GUI
-			displayObserver(activeTask, keyWords, mouseTracker, eyeMovementTracker, 
-					keyBoardTracker, osEventsTracker, internetTracker);
 	}
 	
 	/**
