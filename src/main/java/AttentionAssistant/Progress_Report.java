@@ -971,6 +971,7 @@ public class Progress_Report {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				CardLayout cardLayout = new CardLayout();
 				JPanel reportViews = new JPanel();
