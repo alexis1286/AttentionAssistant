@@ -798,6 +798,7 @@ public class Parent_Portal {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				
 				JMenuBar title_panel = new JMenuBar();
@@ -1104,6 +1105,7 @@ public class Parent_Portal {
 				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
 				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
+				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
 				
 				/*
 				 * creates split center panel
@@ -1112,6 +1114,7 @@ public class Parent_Portal {
 				center_panel.setBackground(Color.black);
 				center_panel.add(card_panel, BorderLayout.CENTER);
 				center_panel.add(sideMenu, BorderLayout.WEST);
+				center_panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, aa_purple));
 			
 				/*
 				 * creates layout for panel and buttons along bottom of frame
