@@ -627,7 +627,7 @@ public class Parent_Bar{
 			}
 		});
 
-		JLabel title = new JLabel("The Attention Assistant");
+		JLabel title = new JLabel("Account Management");
 		title.setForeground(Color.white);
 		title.setBounds(0,0,200,200);
 		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
