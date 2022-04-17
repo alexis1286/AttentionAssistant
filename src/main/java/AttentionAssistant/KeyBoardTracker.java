@@ -14,13 +14,15 @@ import org.jnativehook.keyboard.NativeKeyListener;
 public class KeyBoardTracker implements Runnable, NativeKeyListener {
 
 	int keyBoardScore; //Final keyboard score
+	ArrayList<String> keyWords;
 	
 	/**
  	 * Instantiating empty KeyBoardTracker object
  	 * @author jmitchel2
  	 */
-	public KeyBoardTracker(){
+	public KeyBoardTracker(ArrayList<String> keyWords){
 		this.keyBoardScore= 0;
+		this.keyWords = keyWords;
 	}
 	
 	/**
@@ -28,8 +30,9 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 	 * KeyBoardScore
 	 * @param int 
 	 */
-	public KeyBoardTracker(int keyBoardScore) {
+	public KeyBoardTracker(ArrayList<String> keyWords, int keyBoardScore) {
 		this.keyBoardScore= keyBoardScore;
+		this.keyWords = keyWords;
 	}
 
 	/**
