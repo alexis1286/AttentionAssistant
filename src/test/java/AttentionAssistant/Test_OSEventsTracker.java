@@ -39,6 +39,8 @@ public class Test_OSEventsTracker {
 	@DisplayName("<OSEventsTracker> OSEventsDefaultConstructor")
 	void OSEventsDefaultConstructor() {
 		OSEventsTracker testDefault = new OSEventsTracker();
+		assertEquals(0, testDefault.getID(), "Expected: 0 | Actual: "
+				+ testDefault.getID());
 		assertEquals(100, testDefault.getOSEventsScore(), "Expected: 100 | Actual: "
 				+ testDefault.getOSEventsScore());
 		assertTrue(testDefault.getNames().isEmpty());

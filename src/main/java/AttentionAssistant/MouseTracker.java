@@ -1,9 +1,12 @@
 package AttentionAssistant;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
+
 
 /**
  * This class checks the position every #DELAY milliseconds and 
@@ -94,6 +97,9 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 			System.exit(1);
 		}
 
+		Logger log = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        log.setLevel(Level.OFF);
+        
 		// Add the appropriate listeners.
 		GlobalScreen.addNativeMouseListener(this);
 		GlobalScreen.addNativeMouseMotionListener(this);
@@ -142,7 +148,6 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		// TODO Auto-generated method stub
 		//System.out.println(e.paramString());
 		currentMovementScore++;
-		System.out.println("current score = " + currentMovementScore);
 	}
 
 	//Ignored for the most part

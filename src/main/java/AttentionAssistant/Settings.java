@@ -2,8 +2,7 @@ package AttentionAssistant;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.net.URL;
 import java.net.MalformedURLException;
 import javax.accessibility.AccessibleContext;
@@ -37,14 +40,14 @@ public class Settings {
 	/*
 	 * global variables for the Settings GUI
 	 */
-	Color aa_grey = new Color(51,51,51);
-	Color aa_purple = new Color(137,31,191);
-	LineBorder line = new LineBorder(aa_purple, 2, true);
+	static Color aa_grey = new Color(51,51,51);
+	static Color aa_purple = new Color(137,31,191);
+	static LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	private int height = 700; 
 	private int width = 550; 
-	private int mouseX;
-	private int mouseY;
+	private static int mouseX;
+	private static int mouseY;
 	JLabel displayAvatar;
 	final static boolean shouldFill = true; 
 	final static boolean shouldWeightX = true; 
@@ -2361,7 +2364,7 @@ public class Settings {
 		openPom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement chooseAvatar 
-				pomodoro_timer.run_pomo(settingsChanges,db,pm);
+				pomodoro_timer.makeVisible();
 			}
 		});
 		
@@ -2813,6 +2816,7 @@ public class Settings {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				
 				JMenuBar title_panel = new JMenuBar();
@@ -3053,6 +3057,8 @@ public class Settings {
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
+						Progress_Report progress_report = new Progress_Report();
+						progress_report.downloadProgressReport(userID, db); 
 					}
 				});
 				
@@ -3122,6 +3128,7 @@ public class Settings {
 				accountManagment.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//open Account Management
+						accountManagement(UserID, db);
 					}
 				});
 				
@@ -3269,11 +3276,13 @@ public class Settings {
 				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
 				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
+				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
 				
 				/*
 				 * creates split center panel
 				 */
 				JPanel center_panel = new JPanel(new BorderLayout());
+				center_panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, aa_purple));
 				center_panel.setBackground(Color.black);
 				center_panel.add(card_panel, BorderLayout.CENTER);
 				center_panel.add(sideMenu, BorderLayout.WEST);
@@ -3311,5 +3320,234 @@ public class Settings {
 				
 			}
 		});
+	}
+	
+	private void accountManagement(int userID,DataBase db) {
+		JFrame frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBackground(Color.black);
+		frame.setPreferredSize(new Dimension(575, 250));
+		JMenuBar titlePanel = titlePanel(frame);
+		
+		
+		int x = (int) ((screen.getWidth() - 570) /2);
+		int y = (int) ((screen.getHeight() - 250) /2);
+		frame.setLocation(x,y);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBackground(aa_grey);
+		panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+		
+		JLabel changePassword = new JLabel("Change Password");
+		JLabel oldPw = new JLabel("Old Password: ");
+		JLabel newPw = new JLabel("New Password: ");
+		JLabel newPwRe = new JLabel("Re-Enter Password: ");
+		
+		JPasswordField oldPwText = new JPasswordField();
+		JPasswordField newPwText = new JPasswordField();
+		JPasswordField newPwReText = new JPasswordField();
+		
+		JButton pwChange = new JButton("Change");
+		
+		Font font = new Font("Dosis SemiBold", Font.BOLD, 15);
+		Font font2 = new Font("Dosis SemiBold", Font.BOLD, 18);
+		
+		Map<TextAttribute,Object> att = new HashMap<>(font2.getAttributes());
+		att.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		
+		changePassword.setFont(font2.deriveFont(att));
+        changePassword.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        changePassword.setBounds(190,15,250,30);
+        changePassword.setForeground(aa_purple);
+		panel.add(changePassword);
+        
+        oldPw.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        oldPw.setBounds(50,60,150,30);
+        oldPw.setForeground(aa_purple);
+        oldPw.setFont(font);
+        panel.add(oldPw);
+        
+        oldPwText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        oldPwText.setBounds(250,60,250,30);
+        oldPwText.setForeground(aa_purple);
+        oldPwText.setFont(font);
+        oldPwText.setCaretColor(aa_purple);
+        panel.add(oldPwText);
+                
+        newPw.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        newPw.setBounds(50,100,150,30);
+        newPw.setForeground(aa_purple);
+        newPw.setFont(font);
+        panel.add(newPw);
+        
+        newPwText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        newPwText.setBounds(250,100,250,30);
+        newPwText.setForeground(aa_purple);
+        newPwText.setFont(font);
+        newPwText.setCaretColor(aa_purple);
+        panel.add(newPwText);
+        
+        
+        newPwRe.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        newPwRe.setBounds(50,140,160,30);
+        newPwRe.setForeground(aa_purple);
+        newPwRe.setFont(font);
+        panel.add(newPwRe);
+        
+        newPwReText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        newPwReText.setBounds(250,140,250,30);
+        newPwReText.setForeground(aa_purple);
+        newPwReText.setFont(font);
+        newPwReText.setCaretColor(aa_purple);
+        panel.add(newPwReText);
+        
+        
+        pwChange.setBackground(aa_purple);
+        pwChange.setForeground(Color.white);
+        pwChange.setFont(font);
+        pwChange.setBorderPainted(false);
+        pwChange.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		User_Account user = db.SelectUser_Account(userID);
+        		JFrame errorframe = new JFrame();
+        		String t;
+        		
+        		String oldPassword = new String(oldPwText.getPassword());
+        		String newPassword = new String(newPwText.getPassword());
+        		String rNewPassword = new String(newPwReText.getPassword());
+        		String opwd = hash(oldPassword);
+        		String npwd = hash(newPassword);
+        		String rnpwd = hash(rNewPassword);
+        		if(opwd.isEmpty() == true || npwd.isEmpty() == true || rnpwd.isEmpty() == true) {
+        			
+    				t = "Please retry, 1 or more password fields left blank.";
+        		}
+        		else if(opwd.equals(user.getPassword()) == true && npwd.equals(rnpwd)) {
+    				user.setPassword(npwd);
+        			db.UpdateUser_Account(user);
+        			t = "Password updated!";
+        		}else {
+        			if(opwd.equals(user.getPassword()) == false) {
+        				t = "Old password is incorrect.";
+        			}else if(npwd != rnpwd) {
+        				t = "New password does not match re-entered new password.";
+        			}else {
+        				t = "Password error.";
+        			}
+        		}
+				JOptionPane.showMessageDialog(errorframe, t);
+				errorframe.dispose();
+        		
+        		oldPwText.setText("");
+        		newPwText.setText("");
+        		newPwReText.setText("");
+        	}
+        });
+        pwChange.setBounds(400,180,100,30);
+        panel.add(pwChange);
+        
+        frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
+		frame.setResizable(false);
+	}
+	
+	private static JMenuBar titlePanel(JFrame frame) {
+		JMenuBar title_panel = new JMenuBar();
+		title_panel.setBorder(line);
+		title_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));	
+		title_panel.setBackground(aa_grey);
+		title_panel.setBorder(BorderFactory.createLineBorder(aa_purple));
+		
+		/*
+		 * allows drag and drop of frame
+		 */
+		title_panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				frame.setLocation(frame.getX() + e.getX() - mouseX, frame.getY() + e.getY() - mouseY);
+			}
+		});
+		
+		title_panel.addMouseListener(new MouseAdapter(){
+			@Override 
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+
+		JLabel title = new JLabel("Account Management");
+		title.setForeground(Color.white);
+		title.setBounds(0,0,200,200);
+		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
+		
+		/*
+		 * create icons to use as buttons for title bar
+		 */
+		BufferedImage ci = null;
+		BufferedImage gi = null;
+		try {
+			ci = ImageIO.read(new File("images/exit_circle.png"));
+			gi = ImageIO.read(new File("images/guide.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		Image c_img = ci.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		Icon close = new ImageIcon(c_img);
+		
+		JButton close_window = new JButton(close);
+		close_window.setBorderPainted(false);
+		close_window.setContentAreaFilled(false);
+		close_window.setFocusPainted(false);
+		close_window.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//close window without saving 
+        		frame.dispose();
+        	
+        }});
+		
+		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Icon guideIcon = new ImageIcon(g_img);
+		
+		JButton guide = new JButton(guideIcon);
+		guide.setBorderPainted(false);
+		guide.setContentAreaFilled(false);
+		guide.setFocusPainted(false);
+		
+		title_panel.add(title);
+		title_panel.add(Box.createRigidArea(new Dimension(225, 0)));
+		title_panel.add(guide);
+		title_panel.add(close_window);
+		
+		//returns panel
+		return title_panel;
+		
+	}
+	
+	private static String hash (String password) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			
+			md.update(password.getBytes());
+			
+			byte[] outputbytearray = md.digest();
+			
+			StringBuilder sb = new StringBuilder();
+			
+			for(byte b :outputbytearray) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
+		
 	}
 }

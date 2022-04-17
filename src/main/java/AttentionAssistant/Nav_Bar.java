@@ -3,19 +3,16 @@ package AttentionAssistant;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.*;
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.*;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 
 public class Nav_Bar{
@@ -28,8 +25,6 @@ public class Nav_Bar{
 	JButton toRefresh;
 	JButton menuButton;
 	DecimalFormat df = new DecimalFormat("#.#"); 
-	private int mouseX;
-	private int mouseY;
 	private int count;
 		
 	/*
@@ -121,6 +116,14 @@ public class Nav_Bar{
 	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+				Runnable timeLoop = () -> {
+					System.out.println("minute logged");
+					Date timestamp = new Date();
+				    db.AddEvent(userID, timestamp, "loggedIn");
+				};
+				executor.scheduleWithFixedDelay(timeLoop, 1, 5, TimeUnit.MINUTES);
+				
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
@@ -154,116 +157,14 @@ public class Nav_Bar{
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts,panel,frame);
+		        		rebuildPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, panel,frame);
 		        	}});
-		        startObserver(userID,pm,db);
+		        pm.open_pm(userID, db);
 			}
 		});
 	}
 	
-	private void startObserver(int userID,Priority_Manager pm,DataBase db) {
-		// create a frame
-        JFrame f = new JFrame();
-        f.setAlwaysOnTop(true);
-        f.setBackground(aa_grey);
-        f.setUndecorated(true);
-		
-		JMenuBar close = new JMenuBar();
-		close.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		close.setBackground(aa_grey);
-		close.setBorder(BorderFactory.createMatteBorder(2,2,0,2,aa_purple));
-		
-		BufferedImage exit = null;
-		try {
-			exit = ImageIO.read(new File("images/exit_circle.png"));
-		}catch(Exception e){
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		Image c_img = exit.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton exitButton = new JButton();
-		exitButton.setIcon(new ImageIcon(c_img));
-		exitButton.setContentAreaFilled(false);
-		exitButton.setFocusable(false);
-		exitButton.setBorderPainted(false);
-		exitButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//close window without saving 
-        		f.dispose();
-        	
-        }});
-		
-		close.add(exitButton);
-		f.setJMenuBar(close);
-		
-		
-		
-		Task task = new Task();
-		try {
-			pm.observeTask(userID, task, db, false);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        task = pm.getActiveTask();
-        
-        // create a panel
-        JPanel panel = new JPanel();
-        panel.setBackground(aa_grey);
-        panel.setBorder(BorderFactory.createMatteBorder(0,2,0,2,aa_purple));
-        
-        
-        JLabel label = new JLabel("<html><center>Your current task is "+task.getTaskName()+"."+"<br/>  Please visit the Priority Manager to work on a different task.  "+"<br/>  </center></html>");
-        label.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
-        label.setForeground(Color.white);
-        label.setBackground(aa_grey);
-        
-        panel.add(label);
-        
-        JPanel buttons = new JPanel();
-        buttons.setBackground(aa_grey);
-        buttons.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
-        
-        // create a button
-        JButton okay = new JButton("okay");
-        okay.setBackground(aa_purple);
-        okay.setForeground(Color.white);
-        okay.setFocusable(false);
-        okay.setBorderPainted(false);
-        
-        JButton pmButton = new JButton("Priority Manager");
-        pmButton.setBackground(aa_purple);
-        pmButton.setForeground(Color.white);
-        pmButton.setFocusable(false);
-        pmButton.setBorderPainted(false);
- 
-        // add action listener
-        okay.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		f.dispose();
-        	}
-        });
-        
-        pmButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		pm.open_pm(userID, db);
-        		f.dispose();
-        	}
-        });
-        
-        buttons.add(okay);
-        buttons.add(pmButton);
-        
-		f.setLocation(300, 400);
-		f.setVisible(true);
-		f.add(panel,BorderLayout.PAGE_START);
-		f.add(buttons,BorderLayout.PAGE_END);
-		f.pack();
-	}
-	
-	private void rebuildPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JPanel panel,JFrame frame) {
+	private void rebuildPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts, JPanel panel,JFrame frame) {
 		JPanel new_icon_panel = new JPanel();
 		if(counter % 2 != 0) {
 			new_icon_panel = iconPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, frame);
@@ -286,7 +187,7 @@ public class Nav_Bar{
 	/*
 	 * create panel that houses active & visible feature icons
 	 */
-	private JPanel iconPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts,JFrame frame) {
+	private JPanel iconPanel(int userID,CardLayout cardLayout,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm, Pomodoro_Timer pomo, Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts, JFrame frame) {
 		JPanel panel = new JPanel();
 		//displays buttons vertically if true, horizontally is false
 		if(isVert == true) {
@@ -367,8 +268,7 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.refresh(settings);
-	        		pomo.run_pomo(settings,db,pm);
+	        		pomo.makeVisible();
 	        }});
 			panel.add(pomoButton);
 		}
@@ -408,6 +308,8 @@ public class Nav_Bar{
 			progressButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open progress report
+	        		Progress_Report pr = new Progress_Report();
+	        		pr.open_progressReport(userID, db);
 	        }});
 			panel.add(progressButton);
 		}

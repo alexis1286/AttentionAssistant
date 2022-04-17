@@ -23,11 +23,10 @@ public class Free_Thought_Space {
 	private LineBorder lineSelected = new LineBorder(Color.white, 2, true);
 	private LineBorder purpLine = new LineBorder(aa_purple, 1, true);
 	private LineBorder purpLine2 = new LineBorder(aa_purple, 2, true);
-	private Color selectedColor,colorToChange;
+	private Color selectedColor;
 	private boolean isFilled;
 	private Stack<Layer> addedLayers;
 	private Stack<Layer> removedLayers;
-	private Stack<Layer> paintLayers;
 	private Color primary,secondary;
 	private static int mouseX;
 	private static int mouseY;
@@ -57,9 +56,9 @@ public class Free_Thought_Space {
 		drawn = null;
 		JFrame frame = new JFrame("Free Thought Space");
 		frame.setBackground(Color.BLACK);
-		frame.setSize(new Dimension(dim.width-200,dim.height-150));
-		frame.setPreferredSize(new Dimension(dim.width-200,dim.height-150));
-		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+		frame.setSize(new Dimension(dim.width-200,dim.height-100));
+		frame.setPreferredSize(new Dimension(dim.width-200,dim.height-100));
+		frame.setLocation((dim.width-frame.getWidth())/2,20);
 		frame.setUndecorated(true);
 		
 		dsW = frame.getWidth()-100;
@@ -170,23 +169,58 @@ public class Free_Thought_Space {
 				else if (activeTool == "text"){
 					JFrame tFrame = new JFrame();
 					tFrame.setAlwaysOnTop(true);
-					//set window background to black
-					tFrame.setBackground(Color.black);
-					//remove default title bar
-					tFrame.setVisible(true);
 					tFrame.setLocation(clickX,clickY);
-					tFrame.setPreferredSize(new Dimension(190,250));
+					tFrame.setPreferredSize(new Dimension(180,250));
+					tFrame.setBackground(aa_grey);
+					tFrame.setForeground(Color.white);
+					
+					tFrame.setUndecorated(true);
+					
+					JMenuBar close = new JMenuBar();
+					close.setLayout(new FlowLayout(FlowLayout.RIGHT));
+					close.setBackground(aa_grey);
+					close.setBorder(BorderFactory.createMatteBorder(2,2,0,2,aa_purple));
+					
+					BufferedImage exit = null;
+					try {
+						exit = ImageIO.read(new File("images/exit_circle.png"));
+					}catch(Exception e1){
+						e1.printStackTrace();
+						System.exit(1);
+					}
+					
+					Image c_img = exit.getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+					
+					JButton exitButton = new JButton();
+					exitButton.setIcon(new ImageIcon(c_img));
+					exitButton.setContentAreaFilled(false);
+					exitButton.setFocusable(false);
+					exitButton.setBorderPainted(false);
+					exitButton.addActionListener(new ActionListener() {
+			        	public void actionPerformed(ActionEvent e) {
+			        		//close window without saving 
+			        		tFrame.dispose();
+			        	
+			        }});
+					
+					close.add(exitButton);
+					tFrame.setJMenuBar(close);
 					
 					JPanel panel = new JPanel();
 					panel.setLayout(null);
+					panel.setBackground(aa_grey);
+					panel.setForeground(Color.white);
+					panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 										
 					JLabel textLabel = new JLabel("Text: ");
 					textLabel.setBounds(10,10,50,30);
+					textLabel.setForeground(Color.white);
 					JTextArea text = new JTextArea();
 					text.setBounds(60,10,80,30);
 					
 					
 					JLabel fontLabel = new JLabel("Font: ");
+					fontLabel.setForeground(Color.white);
 					fontLabel.setBounds(10,50,50,30);
 					String[] fontStrings = {"Dialog","DialogInput","Monospaced","Serif","SansSerif"};
 					JComboBox<String> fonts = new JComboBox<String>(fontStrings);
@@ -194,6 +228,7 @@ public class Free_Thought_Space {
 					
 										
 					JLabel sizeLabel = new JLabel("Size: ");
+					sizeLabel.setForeground(Color.white);
 					sizeLabel.setBounds(10,90,50,30);
 					JTextArea size = new JTextArea();
 					size.setBounds(60,90,80,30);
@@ -202,7 +237,11 @@ public class Free_Thought_Space {
 										
 					JCheckBox bold = new JCheckBox("Bold");
 					bold.setBounds(10,130,80,30);
+					bold.setForeground(Color.white);
+					bold.setBackground(aa_grey);
 					JCheckBox italic = new JCheckBox("Italic");
+					italic.setForeground(Color.white);
+					italic.setBackground(aa_grey);
 					italic.setBounds(100,130,80,30);
 					bold.addChangeListener(new ChangeListener() {
 						@Override
@@ -227,7 +266,10 @@ public class Free_Thought_Space {
 					
 					
 					JButton okay = new JButton("ok");
-					okay.setBounds(10,170,50,40);
+					okay.setBackground(aa_purple);
+					okay.setForeground(Color.white);
+					okay.setBorder(purpLine);
+					okay.setBounds(10,170,50,30);
 					okay.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -250,7 +292,10 @@ public class Free_Thought_Space {
 					});
 					
 					JButton cancel = new JButton("cancel");
-					cancel.setBounds(65,170,90,40);
+					cancel.setBackground(aa_purple);
+					cancel.setForeground(Color.white);
+					cancel.setBorder(purpLine);
+					cancel.setBounds(65,170,85,30);
 					cancel.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -258,7 +303,7 @@ public class Free_Thought_Space {
 							tFrame.dispose();
 						}
 						
-					});
+					}); 
 					
 					panel.add(textLabel);
 					panel.add(text);
@@ -271,7 +316,8 @@ public class Free_Thought_Space {
 					panel.add(okay);
 					panel.add(cancel);
 					
-					tFrame.add(panel);
+					tFrame.setVisible(true);
+					tFrame.add(panel,BorderLayout.CENTER);
 					tFrame.pack();
 				}
 				
@@ -520,56 +566,54 @@ public class Free_Thought_Space {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		int right = 20;
-		int left = 10;
 		JButton pencil = new JButton();
 		pencil.setIcon(new ImageIcon(pencilImg));
 		pencil.setContentAreaFilled(false);
 		pencil.setFocusPainted(false);
 		pencil.setBorderPainted(false);
-		pencil.setBounds(25,30,50,50);
+		pencil.setBounds(25,15,50,50);
 		
 		JButton spray = new JButton();
 		spray.setIcon(new ImageIcon(sprayImg));
 		spray.setContentAreaFilled(false);
 		spray.setFocusPainted(false);
 		spray.setBorderPainted(false);
-		spray.setBounds(25,90,50,50);
+		spray.setBounds(25,70,50,50);
 		
 		JButton line = new JButton();
 		line.setIcon(new ImageIcon(lineImg));
 		line.setContentAreaFilled(false);
 		line.setFocusPainted(false);
 		line.setBorderPainted(false);
-		line.setBounds(25,150,50,50);
+		line.setBounds(25,125,50,50);
 		
 		JButton rectangle = new JButton();
 		rectangle.setIcon(new ImageIcon(rectangleImg));
 		rectangle.setContentAreaFilled(false);
 		rectangle.setFocusPainted(false);
 		rectangle.setBorderPainted(false);
-		rectangle.setBounds(25,210,50,50);
+		rectangle.setBounds(25,180,50,50);
 		
 		JButton oval = new JButton();
 		oval.setIcon(new ImageIcon(ovalImg));
 		oval.setContentAreaFilled(false);
 		oval.setFocusPainted(false);
 		oval.setBorderPainted(false);
-		oval.setBounds(25,270,50,50);
+		oval.setBounds(25,235,50,50);
 		
 		JButton text = new JButton();
 		text.setIcon(new ImageIcon(textImg));
 		text.setContentAreaFilled(false);
 		text.setFocusPainted(false);
 		text.setBorderPainted(false);
-		text.setBounds(25,330,50,50);
+		text.setBounds(25,290,50,50);
 		
 		JButton erase = new JButton();
 		erase.setIcon(new ImageIcon(eraseImg));
 		erase.setContentAreaFilled(false);
 		erase.setFocusPainted(false);
 		erase.setBorderPainted(false);
-		erase.setBounds(25,390,50,50);		
+		erase.setBounds(25,345,50,50);		
 		
 		pencil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -669,7 +713,7 @@ public class Free_Thought_Space {
 		clear.setContentAreaFilled(false);
 		clear.setFocusPainted(false);
 		clear.setBorderPainted(false);
-		clear.setBounds(25,450,50,50);
+		clear.setBounds(25,400,50,50);
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clear();
@@ -681,7 +725,7 @@ public class Free_Thought_Space {
 		undo.setContentAreaFilled(false);
 		undo.setFocusPainted(false);
 		undo.setBorderPainted(false);
-		undo.setBounds(25,510,50,50);
+		undo.setBounds(25,455,50,50);
 		undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				undo();
@@ -693,7 +737,7 @@ public class Free_Thought_Space {
 		redo.setContentAreaFilled(false);
 		redo.setFocusPainted(false);
 		redo.setBorderPainted(false);
-		redo.setBounds(25,570,50,50);
+		redo.setBounds(25,510,50,50);
 		redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				redo();
@@ -1286,12 +1330,10 @@ public class Free_Thought_Space {
 		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
-		BufferedImage exit = null;
-		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
-			exit = ImageIO.read(new File("images/AA_exit.png"));
+			ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -1322,7 +1364,7 @@ public class Free_Thought_Space {
 		title_panel.add(file);
 		title_panel.add(Box.createRigidArea(new Dimension(500, 0)));
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(500, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(450, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		

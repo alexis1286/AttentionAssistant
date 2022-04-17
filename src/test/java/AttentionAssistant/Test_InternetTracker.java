@@ -140,21 +140,30 @@ public class Test_InternetTracker {
 	
 	@Test
 	@Order(8)
-	@DisplayName("<InternetTracker> getLatestBrowserHistory")
-	void InternetTrackerGetLatestBrowserHistory() {
+	@DisplayName("<InternetTracker> setLatestBrowserHistory")
+	void InternetTrackerSetLatestBrowserHistory() {
 		
 		System.out.println("\n~~ BEGIN getLatestBrowserHistory TEST ~~");
 		
 		long sinceThisTimestamp = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 		System.out.println("Initial Timestamp: " + sinceThisTimestamp);
+		
 		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(15L, TimeUnit.SECONDS);
 		while (System.nanoTime()< endTime){}
 		
 		testDefaultIT.createHistoryCopy();
+		testDefaultIT.setLatestBrowserHistory(sinceThisTimestamp);
 		
 		ArrayList<String> testLatestUrls = new ArrayList<String>();
-		testLatestUrls = testDefaultIT.getLatestBrowserHistory(sinceThisTimestamp);
-		System.out.println("Number of URLs accessed since Initial Timestamp: " + testLatestUrls.size());
+		testLatestUrls = testDefaultIT.getLatestUrls();
+		
+		for(int i = 0; i < testLatestUrls.size(); i++) {
+			if(testLatestUrls.size() == 0) {
+				System.out.println("No URLs accessed");
+			}
+			assertEquals(testLatestUrls.get(i), testDefaultIT.getLatestUrls().get(i));
+			System.out.println("URL "+ (i + 1) + ": " + testLatestUrls.get(i));
+		}
 		
 		testDefaultIT.getTempHistory().delete();
 		System.out.println("~~ END getLatestBrowserHistory TEST ~~");
@@ -175,6 +184,7 @@ public class Test_InternetTracker {
 		
 		long sinceThisTimestamp = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 		System.out.println("Initial Timestamp: " + sinceThisTimestamp);
+		
 		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(15L, TimeUnit.SECONDS);
 		while (System.nanoTime()< endTime){}
 		
@@ -184,7 +194,27 @@ public class Test_InternetTracker {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Final InternetScore for all urls since Initial Timestamp: " + testDefaultIT.getInternetScore());
+		ArrayList<String> urlList = new ArrayList<String>();
+		ArrayList<Integer> kwCounts = new ArrayList<Integer>();
+		ArrayList<Integer> wCounts = new ArrayList<Integer>();
+		ArrayList<Integer> urlScores = new ArrayList<Integer>();
+		
+		urlList = testDefaultIT.getLatestUrls();
+		kwCounts = testDefaultIT.getKeywordCounts();
+		wCounts = testDefaultIT.getWordCounts();
+		urlScores = testDefaultIT.getUrlScores();
+		
+		for(int i = 0; i < urlList.size(); i++) {
+			if(urlList.size() == 0) {
+				System.out.println("No URLs accessed");
+			}
+			System.out.println("\nURL "+ (i + 1) + ": " + urlList.get(i));
+			System.out.println("# of keywords : " + kwCounts.get(i));
+			System.out.println("# of words: " + wCounts.get(i));
+			System.out.println("URL score: " + urlScores.get(i));
+		}
+		
+		System.out.println("\nFinal InternetScore: " + testDefaultIT.getInternetScore());
 		System.out.println("~~ END startTracking TEST ~~");
 	}
 }

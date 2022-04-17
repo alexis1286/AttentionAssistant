@@ -503,7 +503,8 @@ public class Happy_Thought_Button {
 				JPanel center_panel = generateCenterPanel(cardLayout, middle_panel, htb, happyMedia);
 				JPanel bottom_panel = generateBottomPanel(middle_panel, cardLayout, htb, db, happyMedia);
 				JPanel media_viewer = generateMediaViewer(title_panel, center_panel, bottom_panel);
-			
+				media_viewer.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
+				
 				/*
 				 * adds main panel to frame
 				 */

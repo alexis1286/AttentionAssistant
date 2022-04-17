@@ -58,12 +58,26 @@ public class Pomodoro_Timer
 	/*
 	 * instantiating empty timer object
 	 */
+	public Pomodoro_Timer(Settings settings,DataBase db,Priority_Manager pm) {
+		this.MainTimerRunning = false;
+		this.BreakTimerRunning = false;
+		this.paused = false;
+		this.pomodoro_active = false;
+		this.lastButtonPressed = null;
+		
+		run_pomo(settings,db,pm);
+	}
+	
 	public Pomodoro_Timer() {
 		this.MainTimerRunning = false;
 		this.BreakTimerRunning = false;
 		this.paused = false;
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
+	}
+	
+	public void makeVisible() {
+		visibleButton.doClick();
 	}
 	
 	public enum Work_Break {
@@ -116,7 +130,13 @@ public class Pomodoro_Timer
 	}
 	
 	public String ActiveTask(Priority_Manager pm) {
-		String taskLabel=new String("Task: " + pm.getActiveTask().getTaskName());
+		String taskLabel;
+		
+		if(pm.getActiveTask() == null) {
+			taskLabel = " ";
+		}else {
+			taskLabel = new String("Task: " + pm.getActiveTask().getTaskName());
+		}
 		
 		return taskLabel;
 	
@@ -177,8 +197,7 @@ public class Pomodoro_Timer
 		close_window.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		//close window without saving 
-        		frame.dispose();
-        	
+    			frame.setVisible(false);
         }});
 		
 		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -198,13 +217,22 @@ public class Pomodoro_Timer
 		return title_panel;
 	}
 
+	public void clickStart() {
+		startbut.doClick();
+	}
 	
+	public void labelRefresh() {
+		taskLabel.revalidate();
+		taskLabel.repaint();
+	}
+	
+	JLabel taskLabel;
 	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(null);
 	
-		JLabel taskLabel=new JLabel(ActiveTask(pm));
+		taskLabel=new JLabel(ActiveTask(pm));
 		taskLabel.setBounds(215, 130, 400, 100);
 		taskLabel.setForeground(Color.white);
 		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
@@ -224,38 +252,15 @@ public class Pomodoro_Timer
 		startbut.setFont(new Font("San Francisco", Font.BOLD, 15));
 		startbut.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		
-    		
-        		JButton buttonPressed = (JButton) e.getSource();
-    			if(lastButtonPressed == buttonPressed)
-    			{
-    				//JOptionPane.showMessageDialog(frame, "Please do not push the same button twice.");
-    				System.out.print(1);
-    			
-    			}
-    			else {
-    				
-        			if(e.getSource()==startbut) {		
-        				paused = false;
-        			
-        					if (b.isVisible()  == true) {
-            					t.start();
-            		
-            				}
-            				else {
-            				MainTimer(setting,db,pm);
-             	
-            				}
-        				}
-        			
-        		
-        			}	
-    			
-    			
-    			lastButtonPressed = buttonPressed;
-    			
-        }});
-		panel.add(startbut);
+				paused = false;
+				MainTimer(setting,db,pm);
+				/*if (b.isVisible()  == true) {
+					t.start();
+				}else {
+					
+				}*/
+        	}});
+			panel.add(startbut);
 
 		pausebut.setBounds(230, 325, 85, 35);
 		pausebut.setBorderPainted(false);
@@ -656,6 +661,7 @@ public class Pomodoro_Timer
 	 */
 	JPanel icon_panel = new JPanel();
 	int counter;
+	JButton visibleButton;
 	public void run_pomo(Settings settings,DataBase db, Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
@@ -686,7 +692,7 @@ public class Pomodoro_Timer
 				frame.setPreferredSize(new Dimension(width, height)); 
 
 				frame.pack();
-				frame.setVisible(true);
+				frame.setVisible(false);
 				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
 				getWorkBreakStatus();
@@ -697,6 +703,17 @@ public class Pomodoro_Timer
 		        	public void actionPerformed(ActionEvent e) {
 		        		rebuildPanel(settings, db, cardLayout,panel, frame, pm);
 		        	}});
+		        
+		        visibleButton = new JButton();
+		        visibleButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						frame.setVisible(true);
+					}
+		        	
+		        });
 			}
 		});
 	}

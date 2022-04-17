@@ -44,9 +44,9 @@ public class Priority_Manager {
 	
 	private ArrayList<Task> Task_List;
 	
-	public Priority_Manager(int userID,DataBase db) {
+	public Priority_Manager(int userID,DataBase db,boolean isParent) {
 		this.Task_List = new ArrayList<Task>();
-		this.isParent = true;
+		this.isParent = isParent;
 	}
 	
 	public Priority_Manager(int userID, DataBase db,Notification_System notifSystem) throws IOException {
@@ -56,11 +56,14 @@ public class Priority_Manager {
 		this.isParent = false;
 	}
 	
-	public Priority_Manager(int userID,DataBase db,Pomodoro_Timer pomo) throws IOException {
+	public Priority_Manager(int userID,DataBase db) throws IOException {
 		this.Task_List = new ArrayList<Task>();
-		this.pomo = pomo;
-		this.notifSystem = new Notification_System(userID,db,pomo);
+		this.notifSystem = new Notification_System(userID,db);
 		this.isParent = false;
+	}
+	
+	public void setPomo(Pomodoro_Timer pomo) {
+		this.pomo = pomo;
 	}
 	
 	public Task getActiveTask() {
@@ -97,17 +100,19 @@ public class Priority_Manager {
 		task.setPriority(true);
 		
 		if(isParent == false) {
-//			observer = new Observer();
-//			observer.monitor(task, db, notifSystem, pomo);
+			//observer = new Observer();
+			//observer.monitor(task, db, notifSystem, pomo);
 			/** Paul's code to make the observer a separate thread */
-			observer = new Observer(task, db, notifSystem, pomo);
-			Thread observerThread = new Thread(observer);
-			observerThread.start();
+            observer = new Observer(task, db, notifSystem, pomo);
+            Thread observerThread = new Thread(observer);
+            observerThread.start();
+            pomo.clickStart();
+            Date timestamp = new Date();
+            db.AddEvent(userID, timestamp, "started");
 		}
 		
-		Date timestamp = new Date();
-		db.AddEvent(userID, timestamp, "started");
 		activeTask = task;
+		pomo.labelRefresh();
 		System.out.println("Task "+task.getTaskName()+" activated");
 		//refresh table
 	}
@@ -445,6 +450,13 @@ public class Priority_Manager {
 		//add button panel to panel
 		panel.add(bpane);
 		panel.setBackground(Color.black);
+		
+		if(observableTasks().size() == 0) {
+			Task fTask = new Task();
+			taskWindow(userID, fTask, false, db, model, table, frame);
+		}
+		
+		
 		return panel;
 	}
 	
@@ -501,7 +513,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	private void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
+	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -573,7 +585,7 @@ public class Priority_Manager {
 		observe.setFocusPainted(false);
 		
 		//create check box for if task is a priority task
-		JCheckBox priority = new JCheckBox("priority");
+		JCheckBox priority = new JCheckBox("active");
 		priority.setSelected(task.getPriority());
 		priority.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		priority.setForeground(aa_purple);
@@ -667,13 +679,9 @@ public class Priority_Manager {
 	        		database.AddEvent(userID, timestamp, "add");
         		}
         		if(new_task.getPriority() == true) {
-        			try {
-						observeTask(userID, new_task, database, true);
-						activeTask = new_task;
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+        			//observeTask(userID, new_task, database, true);
+					activeTask = new_task;
+					pomo.labelRefresh();
         		}
         		
         		//gets table to display changes
@@ -795,8 +803,7 @@ public class Priority_Manager {
 		dd.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		dd.setForeground(aa_purple);
 		
-		//creates text area for date input
-		Format f = new SimpleDateFormat("MM/dd/yyyy");
+		new SimpleDateFormat("MM/dd/yyyy");
 		String stringDate = "";
 		JTextArea date = new JTextArea(stringDate);
 		date.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
@@ -811,7 +818,7 @@ public class Priority_Manager {
 		observe.setFocusPainted(false);
 		
 		//create check box for if task is a priority task
-		JCheckBox priority = new JCheckBox("priority");
+		JCheckBox priority = new JCheckBox("active");
 		priority.setSelected(task.getPriority());
 		priority.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		priority.setForeground(aa_purple);
@@ -931,7 +938,7 @@ public class Priority_Manager {
 		switch (key) {
         case 'P':  t = "Priority Manager";
                  break;
-        case 'A':  t = "Add Task";
+        case 'A':  t = "Add Task                                       ";
                  break;
         case 'O':  t = "Add Observable Task";
                  break;
@@ -971,12 +978,10 @@ public class Priority_Manager {
 		 */
 		BufferedImage ci = null;
 		BufferedImage gi = null;
-		BufferedImage exit = null;
-		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
 			gi = ImageIO.read(new File("images/guide.png"));
-			exit = ImageIO.read(new File("images/AA_exit.png"));
+			ImageIO.read(new File("images/AA_exit.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -1005,7 +1010,7 @@ public class Priority_Manager {
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(30, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(250, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		

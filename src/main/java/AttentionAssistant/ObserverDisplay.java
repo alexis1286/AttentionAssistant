@@ -382,12 +382,23 @@ public class ObserverDisplay {
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
 		
-		JLabel score = new JLabel("Internet Score: " + monitorInfo.getInternetScore());
-		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
-		score.setForeground(Color.white);
-		
-		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
-		score_panel.add(score);
+		JLabel score;
+		if(monitorInfo.getInternetScore() == -1) {
+			score = new JLabel("Internet Score: <Not taken into account>");
+			score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+			score.setForeground(Color.white);
+			
+			score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+			score_panel.add(score);
+		}
+		else {
+			score = new JLabel("Internet Score: " + monitorInfo.getInternetScore());
+			score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+			score.setForeground(Color.white);
+			
+			score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
+			score_panel.add(score);
+		}
 		
 		
 		/*
@@ -591,10 +602,10 @@ public class ObserverDisplay {
 		JPanel words_panel = new JPanel();
 		words_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		words_panel.setBackground(aa_grey);
-		words_panel.setMaximumSize(new Dimension(400, 400));
+		words_panel.setMaximumSize(new Dimension(425, 25));
 		
 		JLabel words = new JLabel("Words Typed:");
-		words.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		words.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		words.setForeground(Color.white);
 		
 		words_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -607,10 +618,10 @@ public class ObserverDisplay {
 		JPanel keywords_panel = new JPanel();
 		keywords_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		keywords_panel.setBackground(aa_grey);
-		keywords_panel.setMaximumSize(new Dimension(400, 110));
+		keywords_panel.setMaximumSize(new Dimension(425, 25));
 		
 		JLabel keywords = new JLabel("Number of Keywords:");
-		keywords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		keywords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		keywords.setForeground(Color.white);
 		
 		keywords_panel.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -625,7 +636,7 @@ public class ObserverDisplay {
 		score_panel.setBackground(aa_grey);
 		
 		JLabel score = new JLabel("Keyboard Score:");
-		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		score.setForeground(Color.white);
 		
 		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));

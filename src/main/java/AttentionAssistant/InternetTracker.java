@@ -166,19 +166,19 @@ public class InternetTracker {
 		
 		createHistoryCopy();
 		
-		latestUrls = getLatestBrowserHistory(startTime);
+		setLatestBrowserHistory(startTime);
 		
-		if(latestUrls.size() != 0) {
+		if(this.latestUrls.size() != 0) {
 			int urlCount = 0;
 			int combinedScore = 0;
 			String text = "";
-			for(int i = 0; i < latestUrls.size(); i++) {
-				if(parseFromOrigin(latestUrls.get(i)) == null) {
+			for(int i = 0; i < this.latestUrls.size(); i++) {
+				if(parseFromOrigin(this.latestUrls.get(i)) == null) {
 					//Do nothing, go to next URL
 				}
 				else {
 					urlCount += 1;
-					text = parseFromOrigin(latestUrls.get(i)).toLowerCase();
+					text = parseFromOrigin(this.latestUrls.get(i)).toLowerCase();
 					combinedScore += calculatePageScore(keywords, text);
 				}
 			}
@@ -229,7 +229,7 @@ public class InternetTracker {
 		this.keywordCounts.add((int)keywordsAppear);
 		this.wordCounts.add(wordsOnAPage.length);
 		
-		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*7500;
+		calculatedScore = (keywordsAppear/Double.valueOf(wordsOnAPage.length))*5000;
 		
 		int pageScore = 0;
 		if (calculatedScore > 100) {
@@ -288,30 +288,27 @@ public class InternetTracker {
 	}
 	
 	/**
-	 * Retrieves the latest urls visited from the user's chrome browser history
+	 * Retrieves and sets the latest urls visited from the user's chrome browser history
 	 * 
 	 * @param long startTime -> timestamp of when the Observer monitor function begins
-	 * @return ArrayList<String> -> list of urls accessed since previous latest visit
 	 * @author ehols001
 	 */
-	public ArrayList<String> getLatestBrowserHistory(long startTime) {
+	public void setLatestBrowserHistory(long startTime) {
 		SQLiteDataSource ds = new SQLiteDataSource();
 		String history = "jdbc:sqlite:" + tempHistory.toString();
 		ds.setUrl(history);
 		
-		ArrayList<String> latestUrls = new ArrayList<String>();
     	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + startTime;
     	try (Connection conn = ds.getConnection(); 
     			Statement stmt = conn.createStatement();) {
     		    ResultSet rs = stmt.executeQuery(query);
     		    while (rs.next()) {
-    		    	latestUrls.add(rs.getString("url"));
+    		    	this.latestUrls.add(rs.getString("url"));
     		    }
     			
     	} catch (SQLException e) {
     		e.printStackTrace();
     	}
-    	return latestUrls;
 	}
 	
 }

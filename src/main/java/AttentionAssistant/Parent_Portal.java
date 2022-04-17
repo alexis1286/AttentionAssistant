@@ -64,7 +64,7 @@ public class Parent_Portal {
 		return lock_feature; 
 	}
 	
-	private void createSettingsPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager pm, DataBase db) throws MalformedURLException {
+	private void createSettingsPanel(JPanel card_panel, Settings settingsChanges, Priority_Manager pm, DataBase db, int userID, Progress_Report pr) throws MalformedURLException {
 		JPanel settings_panel = new JPanel();
 		settings_panel.setLayout(new BoxLayout(settings_panel, BoxLayout.Y_AXIS));
 		settings_panel.setBackground(aa_grey);
@@ -549,7 +549,7 @@ public class Parent_Portal {
 		progressReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//call to open progress report
-				
+				pr.open_progressReport(userID, db);
 			}
 		});
 		
@@ -784,7 +784,7 @@ public class Parent_Portal {
 		card_panel.add("monitor", monitor_panel);
 	}
 	
-	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm) {
+	public void open_parentPortal(DataBase db, Settings settings, Priority_Manager pm, Progress_Report pr, int userID) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -798,6 +798,7 @@ public class Parent_Portal {
 				
 				JPanel masterPanel = new JPanel(new BorderLayout());
 				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, aa_purple));
 				
 				
 				JMenuBar title_panel = new JMenuBar();
@@ -878,7 +879,7 @@ public class Parent_Portal {
 				card_panel.setLayout(card_layout);
 				
 				try {
-					createSettingsPanel(card_panel, settingsChanges, pm, db);
+					createSettingsPanel(card_panel, settingsChanges, pm, db, userID, pr);
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -943,6 +944,7 @@ public class Parent_Portal {
 				progressReport.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//download progress report
+						pr.downloadProgressReport(userID, db); 
 					}
 				});
 				
@@ -1103,6 +1105,7 @@ public class Parent_Portal {
 				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
 				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
+				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
 				
 				/*
 				 * creates split center panel
@@ -1111,12 +1114,14 @@ public class Parent_Portal {
 				center_panel.setBackground(Color.black);
 				center_panel.add(card_panel, BorderLayout.CENTER);
 				center_panel.add(sideMenu, BorderLayout.WEST);
+				center_panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, aa_purple));
 			
 				/*
 				 * creates layout for panel and buttons along bottom of frame
 				 */
 				JPanel bottomButtons = new JPanel();
 				bottomButtons.setLayout(new BoxLayout(bottomButtons, BoxLayout.X_AXIS));
+				bottomButtons.setMaximumSize(new Dimension(500,35));
 				bottomButtons.add(Box.createRigidArea(new Dimension(415, 0)));
 				bottomButtons.add(apply);
 				bottomButtons.add(Box.createRigidArea(new Dimension(15, 0)));
