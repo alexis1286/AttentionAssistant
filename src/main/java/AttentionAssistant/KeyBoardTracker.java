@@ -20,9 +20,8 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
  	 * Instantiating empty KeyBoardTracker object
  	 * @author jmitchel2
  	 */
-	public KeyBoardTracker(ArrayList<String> keyWords){
+	public KeyBoardTracker(){
 		this.keyBoardScore= 0;
-		this.keyWords = keyWords;
 	}
 	
 	/**
