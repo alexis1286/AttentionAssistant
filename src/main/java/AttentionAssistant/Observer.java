@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import AttentionAssistant.Pomodoro_Timer.Work_Break;
 import edu.mit.jwi.Dictionary;
@@ -31,6 +32,7 @@ public class Observer implements Runnable {
 	private DataBase db; 
 	private Notification_System notification_System;
 	private Pomodoro_Timer pTimer;
+	private int observerDelayInterval = 60; //interval when the observer will check on the user's active (IN SECONDS)
 
 	/**
 	 * Instantiating empty Observer object
@@ -187,7 +189,7 @@ public class Observer implements Runnable {
 
 			MouseTracker mouseTracker = new MouseTracker();
 			EyeMovementTracker eyeMovementTracker = new EyeMovementTracker();
-			KeyBoardTracker keyBoardTracker = new KeyBoardTracker();
+			KeyBoardTracker keyBoardTracker = new KeyBoardTracker(keyWords);
 			OSEventsTracker osEventsTracker = new OSEventsTracker();
 			InternetTracker internetTracker = new InternetTracker();
 			
@@ -199,8 +201,9 @@ public class Observer implements Runnable {
 			eyeMovementTracker.startTracking();  
 			
 			//Will uncomment later -jmitchell
-			//keyBoardTracker.startTracking(keyWords);
 			
+			
+			keyBoardTracker.startTracking();
 			osEventsTracker.startTracking(activeTask, db);
 			internetTracker.startTracking(keyWords, startTime);
 
@@ -226,9 +229,17 @@ public class Observer implements Runnable {
 			//Set up for Eye-movement-tracker profile
 			this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
 			
+			//Adding a delay before calculating the score to allow the trackers some time to collect
+			try {
+				System.out.print("Observer waiting " + observerDelayInterval + " seconds to pass");
+				TimeUnit.SECONDS.sleep(observerDelayInterval);
+			} catch (InterruptedException e) {
+				System.out.print("!!!Issue with the TimeUnit in Obsevers!!!");
+				e.printStackTrace();
+			}
+			
 			//calculation of the observer score
 			this.setObserverScore(calculateObserverScore(
-			//mouseTracker.getMouseScore(),
 			mouseTracker.getMouseScore(),
 			eyeMovementTracker.calculateWeightedEyeMovementScore(activeTask, db),
 			keyBoardTracker.getKeyBoardScore(),

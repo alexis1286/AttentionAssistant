@@ -11,17 +11,25 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-public class KeyBoardTracker implements Runnable, NativeKeyListener {
+public class KeyBoardTracker implements NativeKeyListener {
 
 	int keyBoardScore; //Final keyboard score
 	ArrayList<String> keyWords;
+	int currentKeyPressScore = 1; //Internal Scores.  Means nothing outside this function
+	int lastKeyPressScore = 1; //Internal Scores.  Means nothing outside this function
+	int keyBoardScoreKeyPressed = 1; //Internal Score for amount of keys pressed.
+	int keyBoardScoreKeyWords = 1; //Internal Score for amount of keys pressed.
+	ArrayList<String> allWordsInputed; //List that holds all the key words that were typed in
+	StringBuilder inputWord = new StringBuilder(); //Internal stringbuilder for creating a list of words
+	int toldWordsInputted = 0;
 	
 	/**
  	 * Instantiating empty KeyBoardTracker object
  	 * @author jmitchel2
  	 */
-	public KeyBoardTracker(){
+	public KeyBoardTracker(ArrayList<String> keywords){
 		this.keyBoardScore= 0;
+		this.keyWords = keywords;
 	}
 	
 	/**
@@ -41,6 +49,29 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 	 * @return int
 	 */
 	public int getKeyBoardScore() {
+		//Calculating a tempt 50 point scale
+		int temptKeyPressedScore = 50 * (currentKeyPressScore - lastKeyPressScore)/lastKeyPressScore;
+				
+		//Ensuring that the tempt key pressed score is not above 50 or below 1
+		if(temptKeyPressedScore < 50 && temptKeyPressedScore > 0) {
+			keyBoardScoreKeyPressed = temptKeyPressedScore;
+		} else if (temptKeyPressedScore >= 50) {
+			keyBoardScoreKeyPressed = 50;
+		} else {
+			keyBoardScoreKeyPressed = 1;
+		}
+				
+		//Updating the lastMovementScore to the currentMovementScore
+		//Reseting the lastMovementScore and currentMovementScore before they get to close to the int limit size
+		if(currentKeyPressScore < 1147483647) {
+			lastKeyPressScore = currentKeyPressScore;
+		} else {
+			lastKeyPressScore = 1;
+			currentKeyPressScore = 1;
+		}
+
+		//Adding the two keyboard scores
+		keyBoardScore = keyBoardScoreKeyPressed + keyBoardScoreKeyWords;
 		return this.keyBoardScore;
 	}
 
@@ -49,6 +80,8 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 	 * @param int
 	 */
 	public void setKeyBoardScore(int keyBoardScore) {
+		
+		
 		this.keyBoardScore = keyBoardScore;
 	}
 
@@ -57,7 +90,7 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 	 * Start Tracking Keyboard
 	 * @param ArrayList<String>
 	 */
-	protected void startTracking(ArrayList<String> keywords) {
+	protected void startTracking() {
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException ey) {
@@ -69,18 +102,25 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 		GlobalScreen.addNativeKeyListener(this);
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	//Ignored for the most part
+	/**
+	 * method that captures all keys pressed
+	 */
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		System.out.println("Same Something!");
 		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		currentKeyPressScore++; //Updating key pressed count
 		
+		if(NativeKeyEvent.getKeyText(e.getKeyCode()).length() == 1) {
+			inputWord.append(NativeKeyEvent.getKeyText(e.getKeyCode()));
+		} else {
+			allWordsInputed.add(inputWord.toString()); //Adding the inputWord to the list
+			inputWord.setLength(0); //Resetting the inputWord variable
+			toldWordsInputted++; //Keeping track of the all the words inputed.
+		}
+		
+		//Use this code only if you need to store the key words in a text file
+		/**
 		try {
 			File outPutFile = new File("KeyBoardPresses.txt");
 			if(!outPutFile.exists()) {
@@ -99,18 +139,16 @@ public class KeyBoardTracker implements Runnable, NativeKeyListener {
 			System.out.println("An error occurred.");
 		    e1.printStackTrace();
 		}
+		*/
 	}
 
 	//Ignored for the most part
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
-	/**
-	 * method that captures all keys pressed
-	 */
+
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent e) {
 		// TODO Auto-generated method stub
