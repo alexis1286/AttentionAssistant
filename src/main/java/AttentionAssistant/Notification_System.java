@@ -229,7 +229,7 @@ public class Notification_System {
 	}
 	
 	
-	public void distracted() {
+	public void distracted(Task task) {
 		//in work period & off-task
 		String text = "";
 		
@@ -238,11 +238,11 @@ public class Notification_System {
 		switch (randoNum) {
 	        case 1:  text = " Hey buddy! Let's get \n back to work!";
 	                 break;
-	        case 2: text = " Brotato-Chip! Why \n don't we get back to \n "+pm.getActiveTask().getTaskName()+"?";
+	        case 2: text = " Brotato-Chip! Why \n don't we get back to \n "+ task.getTaskName()+"?";
 	                 break;
 	        case 3:  text = " Hey "+userName+"! \n we should get back \n on task!";
 	                 break;
-	        case 4: text = " "+userName+"! \n We gotta finish \n "+pm.getActiveTask().getTaskName()+"!";
+	        case 4: text = " "+userName+"! \n We gotta finish \n "+ task.getTaskName()+"!";
 	                 break;
 	        default: text = " Distracted - randoNum \n out of range";
     				break;
@@ -255,14 +255,14 @@ public class Notification_System {
 	}
 	
 	
-	public void selfCare() {
+	public void selfCare(Task task) {
 		//on-task for too long with no break
 		String text = "";
 		
 		Random randomGenerator=new Random();
 		int randoNum = randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
-	        case 1:  text = " "+userName+", you've \n been working on "+pm.getActiveTask().getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
+	        case 1:  text = " "+userName+", you've \n been working on "+ task.getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
 	                 break;
 	        case 2: text = " You are KILLING it! \n You've definitely \n earned a break!";
 	                 break;

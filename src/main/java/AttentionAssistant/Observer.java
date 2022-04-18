@@ -275,14 +275,14 @@ public class Observer implements Runnable {
 				}
 				//off task
 				else{
-					notification_System.distracted();
+					notification_System.distracted(activeTask);
 				}
 			}
 			//pomo is on break timer
 			else if (observerWB.toString() == "Break") {
 				//on task
 				if(this.observerScore >= this.threshold){
-					notification_System.selfCare();
+					notification_System.selfCare(activeTask);
 				}
 				//off task
 				else{
