@@ -54,6 +54,7 @@ public class Notification_System {
 		this.db = db;
 		user = db.SelectUser_Account(userID);
 		userName = user.getName();
+		this.pm = new Priority_Manager(userID,db,false);
 	}
 	
 	public void setPomo(Pomodoro_Timer pomo) {
@@ -64,12 +65,6 @@ public class Notification_System {
 	int height = (int) screen.getHeight();
 	
 	private void displayNotif(String text,String type) {
-		try {
-			this.pm = new Priority_Manager(userID,db);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		JFrame frame = new JFrame();
 		frame.setAlwaysOnTop(true);
 		frame.setUndecorated(true);
