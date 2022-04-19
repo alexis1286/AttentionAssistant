@@ -552,7 +552,7 @@ public class Priority_Manager {
 		name.setBorder(new LineBorder(Color.black,5,false));
 		
 		//creates label for description input
-		JLabel d = new JLabel("   Descrition: (key words, separated by commas (,))");
+		JLabel d = new JLabel("   Description: (key words, separated by commas (,))");
 		d.setFont(new Font("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		d.setForeground(aa_purple);
 		
