@@ -3093,7 +3093,8 @@ public class Settings {
 				logOutButton.setMaximumSize(new Dimension(170, 30));
 				logOutButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//call run_logout();
+						Logout l = new Logout();
+						l.run_logout();
 					}
 				});
 				

@@ -352,24 +352,6 @@ public class AttentionAssistantDriver {
 		        }});
 		     panel.add(backButton);
 
-		     //SearchUser_account feed in the username and password they inptu as string db.searchuser_Acc doesnt already exist - esp the username
-		     //SearchParent_accountr same thing -  return null if its not there 
-		     //if it doesnt return from either - make an account -DONE
-		     //checkbox for user or parent acc -DONE
-		   
-		     ////adduser_Account for adolecencts create user acc object construcotr at line 31 in useraccount.java try to pass null in userID if not passing 1 or soemthing and work from there 
-		     
-		     
-		     //once a user has been added, either login or w autologin, it has to search for that user via the userid so they can open the parent or child portal 
-		     //parent acc does not have a section for a name so just disregaurd for checking 
-		  
-		     
-		     //forgot password registration form needs to have sercuirty questions that they can choose from around 6 can do 2-3 and they have a key organized store the hashes from the look for hacking alogrithms 
-		     //to make sure they are the user, do secruity questions store the hash of the answers and store a key of the users answers questions key and answers 2-3 secruity questons
-		     //also add a hash for their password and store them into the db 
-		     //maybe make parent/child button to push into the parent or child portals -DONE
-		     
-		     //TODO ADD BORDER WITHIN THE PM
 			return panel;
 		}
 	
@@ -724,21 +706,6 @@ public class AttentionAssistantDriver {
 			register.setHorizontalAlignment(SwingConstants.CENTER);
 			panel.add(register);
 
-	       
-//	        
-//	        oldpasslbl.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-//	        oldpasslbl.setBounds(250, 202, 270, 28);
-//	        oldpasslbl.setForeground(aa_purple);
-//	        oldpasslbl.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-//	        panel.add(oldpasslbl);
-//	        
-//	        
-//	        oldpass.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-//	        oldpass.setBounds(398, 202, 270, 28);
-//	        oldpass.setFont(new Font("Dosis SemiBold", Font.PLAIN, 15));
-//	        oldpass.setForeground(Color.BLACK);
-//	        panel.add(oldpass);
-//	        
 	        ans1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        ans1.setBounds(250, 252, 270, 28);
 	        ans1.setForeground(aa_purple);
