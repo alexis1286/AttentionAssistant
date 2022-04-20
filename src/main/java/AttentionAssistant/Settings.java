@@ -1599,7 +1599,7 @@ public class Settings {
 		
 		//only displaying media that is NOT flagged in database
 		for(Media media : htb.getMediaList()) {
-			if(media.getFlagged() != true){
+			if(media.getFlagged() != true && media.getRating() != 0){
 				happyMedia.add(media.getMedia_ID_Tag()); 
 			}
 		}

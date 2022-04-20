@@ -77,7 +77,7 @@ public class Happy_Thought_Button {
 	 */
 	public void getHappyMedia(Happy_Thought_Button htb, ArrayList<String> happyMedia) {		
 		for(Media media : htb.Media_List) {
-			if(media.getFlagged() != true){
+			if(media.getFlagged() != true && media.getRating() != 0){
 				happyMedia.add(media.getMedia_ID_Tag());
 			}
 		}
@@ -389,6 +389,52 @@ public class Happy_Thought_Button {
 		dislikeMedia.setMaximumSize(new Dimension(35, 35)); 
 		dislikeMedia.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		/////////////////////////
+        		
+        		UIManager.put("Button.foreground", aa_purple);
+				UIManager.put("Button.background", aa_grey);
+				UIManager.put("OptionPane.background", Color.black);
+				UIManager.put("Panel.setOpaque", true);
+				UIManager.put("Panel.background", aa_grey);
+				UIManager.put("TextField.selectionBackground", Color.WHITE);
+				UIManager.put("OptionPane.messageForeground", Color.WHITE);
+        		
+				JLabel dislikeLabel = new JLabel("<html><center>Sorry you didn't like this one! It will no longer appear in the Happy Thought Button.</center></html>");
+				dislikeLabel.setFont(new Font("Serif", Font.BOLD, 16));
+				dislikeLabel.setForeground(Color.white);
+				
+				int response = JOptionPane.showConfirmDialog(null, dislikeLabel, "Dislike Media", JOptionPane.OK_CANCEL_OPTION);
+				switch (response) {
+				case JOptionPane.OK_OPTION:
+					for(Media media : htb.Media_List) {
+	        			if(media.getMedia_ID_Tag().equals(happyMedia.get(current))) {
+	        				media.setRating(0); 
+            				db.UpdateMedia(media);
+	        			}
+					}	       
+	        		
+					/**
+					 * flip to next image once current media is flagged
+					 * unless its last image, then flip to previous
+					 */
+					if(current < happyMedia.size() - 1) {
+						current++;
+						populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
+						happyMedia.remove(current - 1);
+					}else if(current >= happyMedia.size() - 1) {
+						current--;
+						populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
+						happyMedia.remove(current + 1);
+					}
+				case JOptionPane.CANCEL_OPTION:
+					break;
+        		}
+				
+				
+        		
+        		/**
+        		 * old method of dislike rating without removing from view
+        		
         		//dislike media actions
         		if(dislikeMedia.isBorderPainted() == false) {
         			likeMedia.setBorderPainted(false); 
@@ -409,6 +455,7 @@ public class Happy_Thought_Button {
             			}
             		}
         		}
+        		*/
         	}
         });
 		
