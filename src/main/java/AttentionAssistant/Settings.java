@@ -2373,7 +2373,7 @@ public class Settings {
 		pomToggle.setBackground(aa_grey);
 		pomToggle.setMaximumSize(new Dimension(400, 35));
 		
-		JCheckBox toggleTimer = new JCheckBox("<html><cente>Timer <i><u>Active</u></i></center></html>", settingsChanges.pomodoroIsActive);
+		JCheckBox toggleTimer = new JCheckBox("<html><center>Pomodoro Timer</center></html>", settingsChanges.pomodoroIsActive);
 		if(settingsChanges.pomodoroIsLocked) {
 			toggleTimer.setEnabled(false);
 		}else {
@@ -2539,7 +2539,7 @@ public class Settings {
 		checkBoxes.setBackground(aa_grey);
 		checkBoxes.setMaximumSize(new Dimension(350, 160));
 		
-		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought Space <i><u>Active</u></i></center></html>", settingsChanges.ftsIsActive);
+		JCheckBox ftsBox = new JCheckBox("<html><center>Free Thought Space</center></html>", settingsChanges.ftsIsActive);
 		if(settingsChanges.ftsIsLocked) {
 			ftsBox.setEnabled(false);
 		}else {
@@ -2573,7 +2573,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought Burner <i><u>Active</u></i></center></html>", settingsChanges.ntbIsActive);
+		JCheckBox ntbBox = new JCheckBox("<html><center>Negative Thought Burner</center></html>", settingsChanges.ntbIsActive);
 		if(settingsChanges.ntbIsLocked) {
 			ntbBox.setEnabled(false);
 		}else {
@@ -2596,7 +2596,7 @@ public class Settings {
 			}
 		});
 		
-		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought Button <i><u>Active</u></i></center></html>", settingsChanges.htbIsActive);
+		JCheckBox htbBox = new JCheckBox("<html><center>Happy Thought Button</center></html>", settingsChanges.htbIsActive);
 		if(settingsChanges.htbIsLocked) {
 			htbBox.setEnabled(false);
 		}else {
