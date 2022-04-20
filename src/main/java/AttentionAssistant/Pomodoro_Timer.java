@@ -39,6 +39,7 @@ public class Pomodoro_Timer
 	private boolean pomodoro_active;
 	private JButton lastButtonPressed;  
 	JButton toRefresh;
+	JButton taskRefresh;
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	static Notification_System notif;
 	JLabel time = new JLabel("00m:00s");
@@ -221,25 +222,28 @@ public class Pomodoro_Timer
 		startbut.doClick();
 	}
 	
-	public void labelRefresh() {
-		taskLabel.revalidate();
-		taskLabel.repaint();
+	
+	private JPanel taskPanel(Priority_Manager pm) {
+		JPanel panel = new JPanel();
+		panel.setBackground(aa_grey);
+		panel.setLayout(null);
+		panel.setMaximumSize(new Dimension(100,50));
+		panel.setPreferredSize(new Dimension(100,50));
+		JLabel taskLabel=new JLabel(ActiveTask(pm));
+		taskLabel.setPreferredSize(new Dimension(85,30));
+		//taskLabel.setBounds(215, 130, 400, 100);
+		taskLabel.setForeground(Color.white);
+		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
+		panel.add(taskLabel);
+		return panel;
 	}
 	
-	JLabel taskLabel;
+	
 	private JPanel timerPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(null);
-	
-		taskLabel=new JLabel(ActiveTask(pm));
-		taskLabel.setBounds(215, 130, 400, 100);
-		taskLabel.setForeground(Color.white);
-		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
-		panel.add(taskLabel);
-	
-		
-	
+
 		time.setBounds(180, 180, 280, 100);
 		time.setForeground(Color.white);
 		time.setFont(new Font("Dosis SemiBold",Font.BOLD,50));
@@ -659,36 +663,50 @@ public class Pomodoro_Timer
 	/**
 	 * initializes the buttons and adds them to the frame, and initializes the labels that are used depending on what timer is running
 	 */
-	JPanel icon_panel = new JPanel();
+	JPanel icon_panel;
+	JPanel task_panel;
 	int counter;
+	int count;
 	JButton visibleButton;
 	public void run_pomo(Settings settings,DataBase db, Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
 				counter = 1;
+				count = 1;
 				
 				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
+				frame.setBackground(aa_grey);
 				//sets window width and height
-			
-				CardLayout cardLayout = new CardLayout();
-				JPanel panel = new JPanel();
-				//panel.setBounds(1000, 1000, width, height);
-				panel.setBackground(aa_grey);
-				panel.setLayout(cardLayout);
+				
 				//build title panel
 				JMenuBar titlePanel = titlePanel(frame);
 				titlePanel.setBorder(line);
-				//build table panel
+			
+				CardLayout cardLayout = new CardLayout();
+				CardLayout cardLayout2 = new CardLayout();
+				
+				task_panel = taskPanel(pm);
 				icon_panel = timerPanel(frame,cardLayout,pm, settings, db);
+				
+				JPanel taskPanel = new JPanel();
+				JPanel iconPanel = new JPanel();
+				
+				taskPanel.setLayout(cardLayout2);
+				iconPanel.setLayout(cardLayout);
+				
+				taskPanel.add("tPanel",task_panel);
+				iconPanel.add("iPanel",icon_panel);
+				
 				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
-			    panel.add("PT", icon_panel);
-			    cardLayout.show(panel, "iPanel");
-			    panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
+			    cardLayout.show(iconPanel, "iPanel");
+			    cardLayout2.show(taskPanel, "tPanel");
+			    //panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
-				frame.getContentPane().add(panel,BorderLayout.CENTER);
+				frame.getContentPane().add(taskPanel,BorderLayout.CENTER);
+				frame.getContentPane().add(iconPanel,BorderLayout.AFTER_LAST_LINE);
 				frame.setPreferredSize(new Dimension(width, height)); 
 
 				frame.pack();
@@ -701,15 +719,21 @@ public class Pomodoro_Timer
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
-		        		rebuildPanel(settings, db, cardLayout,panel, frame, pm);
+		        		rebuildPanel(settings, db, cardLayout,iconPanel, frame, pm);
+		        	}});
+		        
+		        taskRefresh = new JButton();
+		        taskRefresh.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent f) {
+		        		rebuildTaskPanel(pm, cardLayout2,taskPanel, frame);
 		        	}});
 		        
 		        visibleButton = new JButton();
 		        visibleButton.addActionListener(new ActionListener() {
-
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent g) {
 						// TODO Auto-generated method stub
+						System.out.println("visible button clicked");
 						frame.setVisible(true);
 					}
 		        	
@@ -717,6 +741,27 @@ public class Pomodoro_Timer
 			}
 		});
 	}
+	
+	private void rebuildTaskPanel(Priority_Manager pm,CardLayout cardLayout,JPanel panel,JFrame frame) {
+		JPanel new_task_panel = new JPanel();
+		if(counter % 2 != 0) {
+			new_task_panel = taskPanel(pm);
+			panel.add("newTPanel",new_task_panel);
+			cardLayout.show(panel, "newTPanel");
+			panel.remove(task_panel);
+		}else {
+			task_panel = taskPanel(pm);
+			panel.add("tPanel",task_panel);
+			cardLayout.show(panel, "tPanel");
+			panel.remove(new_task_panel);
+		}
+		counter++;
+		panel.revalidate();
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+	}
+	
 	
 	public void refresh(Settings settings){
 		min = 0;
