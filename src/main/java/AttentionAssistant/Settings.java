@@ -2853,11 +2853,13 @@ public class Settings {
 				BufferedImage ci = null;
 				BufferedImage gi = null;
 				BufferedImage exit = null;
+				BufferedImage lo = null;
 				
 				try {
 					ci = ImageIO.read(new File("images/exit_circle.png"));
 					gi = ImageIO.read(new File("images/guide.png"));
 					exit = ImageIO.read(new File("images/AA_exit.png"));
+					lo = ImageIO.read(new File("images/logout.png"));
 				}catch(Exception e) {
 					e.printStackTrace();
 					System.exit(1);
@@ -3077,6 +3079,24 @@ public class Settings {
 					}
 				});
 				
+				Image logOut_img = lo.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+				Icon logOutIcon = new ImageIcon(logOut_img);
+				
+				JButton logOutButton = new JButton(logOutIcon);
+				logOutButton.setText("<html><center>Log Out" + "<br/>       </center></html>");
+				logOutButton.setForeground(Color.white);
+				logOutButton.setFont(new Font("Serif", Font.BOLD, 16));
+				logOutButton.setContentAreaFilled(true);
+				logOutButton.setBorderPainted(false);
+				logOutButton.setFocusPainted(false);
+				logOutButton.setBackground(aa_purple);
+				logOutButton.setMaximumSize(new Dimension(170, 30));
+				logOutButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//call run_logout();
+					}
+				});
+				
 				Image ex_img = exit.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 				Icon exitIcon = new ImageIcon(ex_img);
 				
@@ -3269,11 +3289,13 @@ public class Settings {
 				sideMenu.add(pomTimer);
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(thoughts);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,135)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,105)));
 				sideMenu.add(progressReport);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,10)));
 				sideMenu.add(guideButton);
-				sideMenu.add(Box.createRigidArea(new Dimension(0,20)));
+				sideMenu.add(Box.createRigidArea(new Dimension(0,10)));
+				sideMenu.add(logOutButton);
+				sideMenu.add(Box.createRigidArea(new Dimension(0,10)));
 				sideMenu.add(exit_AA);
 				sideMenu.setBackground(Color.black);
 				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
