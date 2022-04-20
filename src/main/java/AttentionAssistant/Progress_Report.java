@@ -93,10 +93,12 @@ public class Progress_Report {
 		//long hours = TimeUnit.HOURS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS);
 		
 		double loggedInTotal = db.CountEvents(userID, dt_Start, dt_End, "loggedIn") * loggedInInterval;
+		System.out.println(loggedInTotal+" minutes");
 		double loggedInHours = loggedInTotal / 60; 
+		System.out.println(loggedInHours+" hours");
 		
 		double avg = (db.CountEvents(userID, dt_Start, dt_End, feature)) / (loggedInHours);
-		if(loggedInHours > 1) {
+		if(loggedInHours < 1) {
 			red = yellowThreshold.getRed();
 			green = yellowThreshold.getGreen();
 			blue = yellowThreshold.getBlue();
