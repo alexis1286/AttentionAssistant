@@ -430,29 +430,38 @@ public class Happy_Thought_Button {
 				UIManager.put("TextField.selectionBackground", Color.WHITE);
 				UIManager.put("OptionPane.messageForeground", Color.WHITE);
         		
-        		JFrame flagFrame = new JFrame();
-        		JOptionPane.showMessageDialog(flagFrame,"Media has been flagged! It will no longer appear in the Happy Thought Button.","Alert",JOptionPane.WARNING_MESSAGE);
-        		
-        		for(Media media : htb.Media_List) {
-        			if(media.getMedia_ID_Tag().equals(happyMedia.get(current))) {
-        				media.setFlagged(true); 
-        				db.UpdateMedia(media);
-        			}
+        		//JFrame flagFrame = new JFrame();
+        		//JOptionPane.showMessageDialog(flagFrame,"Media has been flagged! It will no longer appear in the Happy Thought Button.","Alert",JOptionPane.WARNING_MESSAGE);
+				JLabel flagLabel = new JLabel("<html><center>Media has been flagged! It will no longer appear in the Happy Thought Button.</center></html>");
+				flagLabel.setFont(new Font("Serif", Font.BOLD, 16));
+				flagLabel.setForeground(Color.white);
+				
+				int response = JOptionPane.showConfirmDialog(null, flagLabel, "Flag Media", JOptionPane.OK_CANCEL_OPTION);
+				switch (response) {
+				case JOptionPane.OK_OPTION:
+					for(Media media : htb.Media_List) {
+	        			if(media.getMedia_ID_Tag().equals(happyMedia.get(current))) {
+	        				media.setFlagged(true); 
+	        				db.UpdateMedia(media);
+	        			}
+					}	       
+	        		
+					/**
+					 * flip to next image once current media is flagged
+					 * unless its last image, then flip to previous
+					 */
+					if(current < happyMedia.size() - 1) {
+						current++;
+						populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
+						happyMedia.remove(current - 1);
+					}else if(current >= happyMedia.size() - 1) {
+						current--;
+						populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
+						happyMedia.remove(current + 1);
+					}
+				case JOptionPane.CANCEL_OPTION:
+					break;
         		}
-        		
-				/**
-				 * flip to next image once current media is flagged
-				 * unless its last image, then flip to previous
-				 */
-				if(current < happyMedia.size() - 1) {
-					current++;
-					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
-					happyMedia.remove(current - 1);
-				}else if(current >= happyMedia.size() - 1) {
-					current--;
-					populateMiddlePanel(middle_panel, cardLayout, happyMedia); 
-					happyMedia.remove(current + 1);
-				}
         	}
         });
 		
