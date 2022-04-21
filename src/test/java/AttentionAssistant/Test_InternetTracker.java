@@ -143,7 +143,7 @@ public class Test_InternetTracker {
 	@DisplayName("<InternetTracker> setLatestBrowserHistory")
 	void InternetTrackerSetLatestBrowserHistory() {
 		
-		System.out.println("\n~~ BEGIN getLatestBrowserHistory TEST ~~");
+		System.out.println("\n~~ BEGIN setLatestBrowserHistory TEST ~~");
 		
 		long sinceThisTimestamp = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 		System.out.println("Initial Timestamp: " + sinceThisTimestamp);
@@ -166,7 +166,7 @@ public class Test_InternetTracker {
 		}
 		
 		testDefaultIT.getTempHistory().delete();
-		System.out.println("~~ END getLatestBrowserHistory TEST ~~");
+		System.out.println("~~ END setLatestBrowserHistory TEST ~~");
 	}
 	
 	@Test
