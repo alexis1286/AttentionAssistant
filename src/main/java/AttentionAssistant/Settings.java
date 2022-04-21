@@ -263,9 +263,9 @@ public class Settings {
 		this.avatarSize = 100; 
 		this.pomodoroIsActive = true; 
 		this.pomodoroIsLocked = false;
-		this.workPeriod = 45; 
+		this.workPeriod = 1; 
 		this.workPeriodIsLocked = false;
-		this.breakPeriod = 15; 
+		this.breakPeriod = 1; 
 		this.breakPeriodIsLocked = false;
 		this.timeShowing = true; 
 		this.ftsIsActive = true; 

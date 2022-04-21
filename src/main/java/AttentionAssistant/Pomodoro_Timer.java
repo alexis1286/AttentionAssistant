@@ -41,7 +41,6 @@ public class Pomodoro_Timer
 	JButton toRefresh;
 	JButton taskRefresh;
 	LineBorder line = new LineBorder(aa_purple, 2, true);
-	static Notification_System notif;
 	JLabel time = new JLabel("00m:00s");
 	JButton startbut=new JButton("Start");
 	JButton pausebut=new JButton("Pause");
@@ -252,7 +251,6 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
 		panel.setPreferredSize(new Dimension(600,80));
 		
 	//	startbut.setPreferredSize(new Dimension(55,55));
@@ -332,7 +330,6 @@ public class Pomodoro_Timer
     				
     			}
        		}
-       			
         		paused = false;
         		lastButtonPressed = buttonPressed;
         		
@@ -424,12 +421,19 @@ public class Pomodoro_Timer
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	public void BreakTimer(Settings setting, DataBase db,Priority_Manager pm) {
-	
+		Notification_System notif;
+		try {
+			notif = new Notification_System(setting.getUserID(),db);
+			notif.breakTime();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		t = new Timer(1000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+			
 				String  ddsecond,ddminute;
 				DecimalFormat dformat = new DecimalFormat("00");
 				
@@ -441,6 +445,14 @@ public class Pomodoro_Timer
 				if(breakmin == 0 && sec==0) {
 					t.stop();
 					b.setVisible(false);
+					Notification_System notifs;
+					try {
+						notifs = new Notification_System(setting.getUserID(),db);
+						notifs.workTime();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					 Object[] options = {"Begin Timer"};
 					 int breaktimertask = JOptionPane.showOptionDialog(null,
@@ -595,6 +607,15 @@ public class Pomodoro_Timer
 					
 
 					 if(initaltask==0){  //for yes; the user has finished their initial task and will need to pick/assign a new task, or terminate the timer
+						 
+						 Notification_System notif;
+							try {
+								notif = new Notification_System(setting.getUserID(),db);
+								 notif.taskCompleted(pm.getActiveTask());
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						 Object[] NewTask = {"Yes","No"}; //new option button to ask user if they have any other tasks to work on
 						 int NewTaskInt = JOptionPane.showOptionDialog(null,
 						             "Do you have any other tasks to work on?",
