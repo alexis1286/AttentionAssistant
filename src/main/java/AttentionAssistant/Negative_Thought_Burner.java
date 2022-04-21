@@ -75,7 +75,7 @@ public class Negative_Thought_Burner {
 			}
 		});
 
-		JLabel title = new JLabel("Negative Thought Burner");
+		JLabel title = new JLabel("Negative Thought Burner      ");
 		title.setForeground(Color.white);
 		title.setBounds(0,0,200,200);
 		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
@@ -119,7 +119,7 @@ public class Negative_Thought_Burner {
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(295, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		

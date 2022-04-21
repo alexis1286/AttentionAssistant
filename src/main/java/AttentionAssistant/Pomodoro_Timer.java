@@ -166,7 +166,7 @@ public class Pomodoro_Timer
 			}
 		});
 
-		JLabel title = new JLabel("Pomodoro Timer");
+		JLabel title = new JLabel("Pomodoro Timer   ");
 		title.setForeground(Color.white);
 		title.setBounds(0,0,100,100);
 		title.setFont(new Font("San Francisco", Font.BOLD, 20));
@@ -209,7 +209,7 @@ public class Pomodoro_Timer
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(285, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
