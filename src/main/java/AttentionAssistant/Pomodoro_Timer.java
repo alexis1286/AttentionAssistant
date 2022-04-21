@@ -23,7 +23,6 @@ import java.io.File;
 
 //pomodoro_timer.refresh
 //TODO loggin system for how much user is using timer ie. get count/get timer
-
 //TODO get status for timer
 
 
@@ -165,11 +164,10 @@ public class Pomodoro_Timer
 				mouseY = e.getY();
 			}
 		});
-
-		JLabel title = new JLabel("Pomodoro Timer   ");
+		JLabel title = new JLabel("Pomodoro Timer      ");
 		title.setForeground(Color.white);
-		title.setBounds(0,0,100,100);
-		title.setFont(new Font("San Francisco", Font.BOLD, 20));
+		title.setBounds(0,0,200,200);
+		title.setFont(new Font("Dosis SemiBold", Font.BOLD, 20));
 		
 		/*
 		 * create icons to use as buttons for title bar
@@ -209,7 +207,7 @@ public class Pomodoro_Timer
 		guide.setFocusPainted(false);
 		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(285, 0)));
+		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
 		title_panel.add(guide);
 		title_panel.add(close_window);
 		
@@ -226,24 +224,27 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);	
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panel.setPreferredSize(new Dimension(600,30));
+		panel.setPreferredSize(new Dimension(500,190));
 		
 		JLabel taskLabel=new JLabel(ActiveTask(pm));
 		taskLabel.setForeground(Color.white);
 		taskLabel.setFont(new Font("Dosis SemiBold",Font.BOLD,22));
 		panel.add(taskLabel);
+		
+		panel.add(Box.createRigidArea(new Dimension(0,350)));
+		
 		return panel;
 	}
 	private JPanel clockPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panel.setPreferredSize(new Dimension(600,50));
+		panel.setPreferredSize(new Dimension(500,60));
 		
 		time.setForeground(Color.white);
 		time.setFont(new Font("Dosis SemiBold",Font.BOLD,50));
 		panel.add(time);
-		
+
 		return panel;
 	}
 	
@@ -251,7 +252,7 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panel.setPreferredSize(new Dimension(600,80));
+		panel.setPreferredSize(new Dimension(500,80));
 		
 	//	startbut.setPreferredSize(new Dimension(55,55));
 		startbut.setBorderPainted(false);
@@ -398,6 +399,7 @@ public class Pomodoro_Timer
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panel.setPreferredSize(new Dimension(500,30));
 		
 	
 			//c.setPreferredSize(new Dimension(80,75));
@@ -412,7 +414,7 @@ public class Pomodoro_Timer
 				c.setVisible(false);
 				b.setVisible(false);
 				
-				panel.add(Box.createRigidArea(new Dimension(0,275)));
+				//panel.add(Box.createRigidArea(new Dimension(0,15)));
 				
 				return panel;
 	}
@@ -772,29 +774,29 @@ public class Pomodoro_Timer
 				iconPanel.setLayout(cardLayout);
 				
 				JPanel master = new JPanel();
-				master.setLayout(new BoxLayout(master,BoxLayout.Y_AXIS));
+				//master.setLayout(new BoxLayout(master,BoxLayout.Y_AXIS));
 				//master.setLayout(null);
 				master.setBackground(aa_grey);
 		
-				labelPanel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
-				
+			
 				taskPanel.add("tPanel",task_panel);
 				iconPanel.add("iPanel",icon_panel);
 				buttonPanel.add("bPanel",button_panel);
 				labelPanel.add("lPanel",label_panel);
 				
-				master.add(Box.createRigidArea(new Dimension(0, 100)));
+				master.add(Box.createRigidArea(new Dimension(0, 115)));
 				master.add(taskPanel);
 				master.add(iconPanel);
+				master.add(labelPanel);
 				master.add(buttonPanel);
+			
 				master.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
-				//icon_panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 			    cardLayout.show(iconPanel, "iPanel");
 			    cardLayout2.show(taskPanel, "tPanel");
 			    //panel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
 				frame.getContentPane().add(master,BorderLayout.CENTER);
-				frame.getContentPane().add(labelPanel,BorderLayout.AFTER_LAST_LINE);
+				//frame.getContentPane().add(labelPanel,BorderLayout.AFTER_LAST_LINE);
 			
 				frame.setPreferredSize(new Dimension(width, height)); 
 
