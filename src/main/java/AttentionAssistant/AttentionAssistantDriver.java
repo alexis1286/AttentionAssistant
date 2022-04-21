@@ -1633,7 +1633,10 @@ public class AttentionAssistantDriver {
 		        		DataBase db = new DataBase();	
 		        		String password = new String("1");
 		        		String usr = new String("Test");
-		  
+		        		int sq1 = 1;
+		        		String sqanswer1 = new String("1");
+		        		int sq2 = 1;
+		        		String sqanswer2 = new String("2");
 
 		        		String pwd = hash(password);
 		       
@@ -1658,6 +1661,10 @@ public class AttentionAssistantDriver {
 		        			
 		        			addParentUser.setUsername(usr);
 		        			addParentUser.setPassword(pwd);
+		        			addParentUser.setSQ_Key(sq1);
+		        			addParentUser.setSQ_Answer(sqanswer1);
+		        			addParentUser.setSQ_Key2(sq2);
+		        			addParentUser.setSQ_Answer2(sqanswer2);
 		        			db.AddParent_Account(addParentUser);
 		        			
 		        			//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
@@ -1704,7 +1711,10 @@ public class AttentionAssistantDriver {
 		        		String password = new String("1");
 		        		String usr = new String("Test");
 		        		String first = new String("TestChild");
-		        		
+		        		int sq1 = 1;
+		        		String sqanswer1 = new String("1");
+		        		int sq2 = 1;
+		        		String sqanswer2 = new String("2");
 		        		String pwd = hash(password);
 		        		
 		        		
@@ -1737,6 +1747,10 @@ public class AttentionAssistantDriver {
 		        			addChildUser.setUsername(usr);
 	        				addChildUser.setPassword(pwd);
 	        				addChildUser.setName(first);
+	        				addChildUser.setSQ_Key(sq1);
+	        				addChildUser.setSQ_Answer(sqanswer1);
+	        				addChildUser.setSQ_Key2(sq2);
+	        				addChildUser.setSQ_Answer2(sqanswer2);
 	        				db.AddUser_Account(addChildUser);
 	        				
 	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
