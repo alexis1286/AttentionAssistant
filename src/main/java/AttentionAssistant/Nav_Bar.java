@@ -113,6 +113,7 @@ public class Nav_Bar{
 	
 	JPanel icon_panel;
 	int counter;
+	Monitoring_Bar mb;
 	public void run_nav_bar(int userID,Notification_System notifSystem,DataBase db,Nav_Bar navbar,Settings settings,Priority_Manager pm,Pomodoro_Timer pomo,Negative_Thought_Burner ntb,Happy_Thought_Button htb,Free_Thought_Space fts) throws Exception {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -123,6 +124,8 @@ public class Nav_Bar{
 				    db.AddEvent(userID, timestamp, "loggedIn");
 				};
 				executor.scheduleWithFixedDelay(timeLoop, 1, 5, TimeUnit.MINUTES);
+				mb = new Monitoring_Bar();
+				mb.monitorBar(userID, db, pomo, pm);
 				
 				counter = 1;
 				count = 0;
