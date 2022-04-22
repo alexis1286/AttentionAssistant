@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.HttpStatusException;
@@ -298,14 +300,21 @@ public class InternetTracker {
 		String history = "jdbc:sqlite:" + tempHistory.toString();
 		ds.setUrl(history);
 		
+		HashMap<Long, String> tempUrls = new HashMap<>();
     	String query = "SELECT url, last_visit_time FROM urls WHERE last_visit_time > " + startTime;
     	try (Connection conn = ds.getConnection(); 
     			Statement stmt = conn.createStatement();) {
     		    ResultSet rs = stmt.executeQuery(query);
     		    while (rs.next()) {
-    		    	this.latestUrls.add(rs.getString("url"));
+    		    	tempUrls.put(rs.getLong("last_visit_time"), rs.getString("url"));
     		    }
-    			
+    		    
+    		    ArrayList<Long> sortedKeys = new ArrayList<Long>(tempUrls.keySet());
+    		    Collections.sort(sortedKeys);
+    		    for(long key : sortedKeys) {
+    		    	this.latestUrls.add(tempUrls.get(key));
+    		    }
+    		    
     	} catch (SQLException e) {
     		e.printStackTrace();
     	}

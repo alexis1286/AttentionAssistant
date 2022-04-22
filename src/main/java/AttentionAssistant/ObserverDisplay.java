@@ -34,8 +34,8 @@ import javax.swing.border.LineBorder;
 
 public class ObserverDisplay {
 	
-	Color aa_grey = new Color(51,51,51);
-	Color aa_purple = new Color(137,31,191);
+	Color aa_grey = new Color(120,120,120);
+	Color aa_purple = new Color(0,0,255);
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	private int height = 650; 
@@ -764,11 +764,9 @@ public class ObserverDisplay {
 		 * create icons to use as buttons for title bar
 		 */
 		BufferedImage ci = null;
-		BufferedImage gi = null;
 		
 		try {
 			ci = ImageIO.read(new File("images/exit_circle.png"));
-			gi = ImageIO.read(new File("images/guide.png"));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -787,17 +785,8 @@ public class ObserverDisplay {
         	
         }});
 		
-		Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon guideIcon = new ImageIcon(g_img);
-		
-		JButton guide = new JButton(guideIcon);
-		guide.setBorderPainted(false);
-		guide.setContentAreaFilled(false);
-		guide.setFocusPainted(false);
-		
 		title_panel.add(title);
-		title_panel.add(Box.createRigidArea(new Dimension(200, 0)));
-		title_panel.add(guide);
+		title_panel.add(Box.createRigidArea(new Dimension(250, 0)));
 		title_panel.add(close_window);
 		
 		return title_panel;
@@ -821,7 +810,8 @@ public class ObserverDisplay {
 				observer_frame.setPreferredSize(new Dimension(width, height)); 
 
 				JPanel masterPanel = new JPanel(new BorderLayout());
-				masterPanel.setBackground(Color.black);
+				masterPanel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
+				masterPanel.setBackground(new Color(51, 51, 51));
 				
 				JMenuBar titlePanel = titlePanel(observer_frame);
 				titlePanel.setBorder(line);
@@ -1032,13 +1022,14 @@ public class ObserverDisplay {
 				sideMenu.add(keyboard);
 				sideMenu.add(Box.createRigidArea(new Dimension(0,15)));
 				sideMenu.add(mouse);
-				sideMenu.setBackground(Color.black);
+				sideMenu.setBackground(new Color(51, 51, 51));
+				sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, aa_purple));
 				
 				/*
 				 * creates split center panel
 				 */
 				JPanel center_panel = new JPanel(new BorderLayout());
-				center_panel.setBackground(Color.black);
+				center_panel.setBackground(new Color(51, 51, 51));
 				center_panel.add(card_panel, BorderLayout.CENTER);
 				center_panel.add(sideMenu, BorderLayout.WEST);
 				
@@ -1052,7 +1043,7 @@ public class ObserverDisplay {
 				 * adds master panel to frame
 				 */
 				observer_frame.getContentPane().add(masterPanel); 
-				observer_frame.getContentPane().setBackground(Color.black);
+				observer_frame.getContentPane().setBackground(new Color(51, 51, 51));
 				observer_frame.pack();
 				observer_frame.setAlwaysOnTop(false);
 				observer_frame.setVisible(true);
