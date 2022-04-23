@@ -1,10 +1,11 @@
 package AttentionAssistant;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+//import java.io.BufferedWriter;
+//import java.io.File;
+//import java.io.FileWriter;
+//import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -17,8 +18,8 @@ public class KeyBoardTracker implements NativeKeyListener {
 	ArrayList<String> keyWords;
 	int currentKeyPressScore = 1; //Internal Scores.  Means nothing outside this function
 	int lastKeyPressScore = 1; //Internal Scores.  Means nothing outside this function
-	int keyBoardScoreKeyPressed = 1; //Internal Score for amount of keys pressed.
-	int keyBoardScoreKeyWords = 1; //Internal Score for amount of keys pressed.
+	int keysPressedScore = 1; //Internal Score for amount of keys pressed.
+	int keyWordsFoundScore = 1; //Internal Score for amount of keys pressed.
 	ArrayList<String> allWordsInputed; //List that holds all the key words that were typed in
 	StringBuilder inputWord = new StringBuilder(); //Internal stringbuilder for creating a list of words
 	int toldWordsInputted = 0;
@@ -41,6 +42,14 @@ public class KeyBoardTracker implements NativeKeyListener {
 		this.keyBoardScore= keyBoardScore;
 		this.keyWords = keyWords;
 	}
+	
+	public int getKeystrokes(){
+		return this.keysPressedScore;
+	}
+	
+	public int getKeywordCount() {
+		return this.keyWordsFoundScore; 
+	}
 
 	/**
 	 * Start of Encapsulation
@@ -49,29 +58,65 @@ public class KeyBoardTracker implements NativeKeyListener {
 	 * @return int
 	 */
 	public int getKeyBoardScore() {
+		
+		/**
+		 * First Half of the score
+		 * Based on key presses
+		 */
 		//Calculating a tempt 50 point scale
 		int temptKeyPressedScore = 50 * (currentKeyPressScore - lastKeyPressScore)/lastKeyPressScore;
 				
 		//Ensuring that the tempt key pressed score is not above 50 or below 1
 		if(temptKeyPressedScore < 50 && temptKeyPressedScore > 0) {
-			keyBoardScoreKeyPressed = temptKeyPressedScore;
+			keysPressedScore = temptKeyPressedScore;
 		} else if (temptKeyPressedScore >= 50) {
-			keyBoardScoreKeyPressed = 50;
+			keysPressedScore = 50;
 		} else {
-			keyBoardScoreKeyPressed = 1;
+			keysPressedScore = 1;
 		}
 				
-		//Updating the lastMovementScore to the currentMovementScore
-		//Reseting the lastMovementScore and currentMovementScore before they get to close to the int limit size
+		//Updating the lastKeyPressScore to the currentKeyPressScore
+		//Reseting the lastKeyPressScore and currentKeyPressScore before they get to close to the int limit size
 		if(currentKeyPressScore < 1147483647) {
 			lastKeyPressScore = currentKeyPressScore;
 		} else {
 			lastKeyPressScore = 1;
 			currentKeyPressScore = 1;
 		}
+		
+		/**
+		 * Second Half of the score
+		 * Based on key words
+		 */
+		
+		//Finding out how many times the keywords occurred in the list
+		int occurrences = 0;
+		for(String keyword : keyWords) {
+			occurrences += Collections.frequency(allWordsInputed, keyword);
+		}
+		
+		//Updating the keyBoardScoreKeyWords based on the occurrences
+		for(int i = 0; i < occurrences; i++) {
+			keyWordsFoundScore += 10;
+			if(keyWordsFoundScore > 50) {
+				break;
+			}
+		}
+		
+		//Making sure that the keyBoardScoreKeyWords is not above 50
+		if(keyWordsFoundScore > 50) {
+			keyWordsFoundScore = 50;
+		}
+		
+		System.out.println("keyBoardScoreKeyWords = " + keyWordsFoundScore);
+		System.out.println("keyBoardScoreKeyPressed = " + keyWordsFoundScore);
 
 		//Adding the two keyboard scores
-		keyBoardScore = keyBoardScoreKeyPressed + keyBoardScoreKeyWords;
+		keyBoardScore = keysPressedScore + keyWordsFoundScore;
+		
+		System.out.println("keyBoardScore = " + keyBoardScore);
+		System.out.println(allWordsInputed.toString());
+		
 		return this.keyBoardScore;
 	}
 
