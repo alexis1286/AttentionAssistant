@@ -127,6 +127,7 @@ public class Nav_Bar{
 				mb = new Monitoring_Bar();
 				mb.monitorBar(userID, db, pomo, pm);
 				
+				pomo.monitorbar(mb);
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
@@ -253,7 +254,7 @@ public class Nav_Bar{
 	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts, mb);
+	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts);
 	        }});
 	    	panel.add(settingsButton);
 		}
@@ -271,7 +272,7 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.makeVisible(mb);
+	        		pomo.makeVisible();
 	        }});
 			panel.add(pomoButton);
 		}
