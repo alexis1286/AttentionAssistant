@@ -110,6 +110,28 @@ public class Pomodoro_Timer
 		}
 
 	}
+	public Work_Break getWBMonitor(){
+		  
+		if (BreakTimerRunning == true && MainTimerRunning == false) {
+			System.out.println("Break");
+			return Work_Break.Break;
+			 
+		}
+		else if (MainTimerRunning == true && BreakTimerRunning == false){
+			System.out.println("Work");
+			return Work_Break.Work;
+		}
+		else if (paused == true){
+			System.out.println("Paused");
+			return Work_Break.Work;	
+		}
+		else {
+			System.out.println("other");
+			return Work_Break.Work;
+		}
+
+	}
+	
 
 	public void Input(Settings settings) {
 		
