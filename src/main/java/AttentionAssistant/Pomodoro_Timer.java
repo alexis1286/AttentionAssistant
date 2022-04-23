@@ -32,7 +32,7 @@ public class Pomodoro_Timer
 {
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
-	Monitoring_Bar mb = new Monitoring_Bar();
+	Monitoring_Bar mb;
 	int initalbreak = 0, initalmin = 0, breakmin =0,min= 0,sec=0;
 	private boolean MainTimerRunning;
 	private boolean BreakTimerRunning;
@@ -77,8 +77,11 @@ public class Pomodoro_Timer
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
 	}
-	
-	public void makeVisible(Monitoring_Bar mb) {
+	public void monitorbar(Monitoring_Bar monitoring) {
+		mb = monitoring;
+		
+	}
+	public void makeVisible() {
 		visibleButton.doClick();
 	}
 	
@@ -454,7 +457,6 @@ public class Pomodoro_Timer
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	public void BreakTimer(Settings setting, DataBase db,Priority_Manager pm) {
-		Monitoring_Bar mb = new Monitoring_Bar();
 		Notification_System notif;
 		try {
 			notif = new Notification_System(setting.getUserID(),db);
