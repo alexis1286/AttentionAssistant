@@ -34,9 +34,18 @@ public class Monitoring_Bar {
 	JButton toRefresh;
 	int counter;
 	JPanel buttonPanel;
+	boolean isWork;
 	
 	
 	public void monitorBar(int userID,DataBase db,Pomodoro_Timer pomo,Priority_Manager pm) {
+		
+		if(pomo.getWBMonitor() == Work_Break.Work) {
+			isWork = true;
+		}else {
+			isWork = false;
+		}
+		
+		
 		counter = 1;
 		JFrame frame = new JFrame();
 		//removes default title bar from frame 
@@ -56,7 +65,7 @@ public class Monitoring_Bar {
         panel.setLayout(cardLayout);
         
         //panel for buttons
-        buttonPanel = buttons(userID,db,pomo,pm);
+        buttonPanel = buttons(userID,db,pomo,pm,frame);
         panel.add("iPanel", buttonPanel);
         cardLayout.show(panel, "iPanel");
         frame.getContentPane().add(panel);
@@ -73,18 +82,19 @@ public class Monitoring_Bar {
 	}
 	
 	public void refreshBar() {
+		isWork = !isWork;
 		toRefresh.doClick();
 	}
 	
 	private void rebuildPanel(int userID,DataBase db,CardLayout cardLayout,JPanel panel,JFrame frame,Pomodoro_Timer pomo,Priority_Manager pm) {
 		JPanel newButtonPanel = new JPanel();
 		if(counter % 2 != 0) {
-			newButtonPanel = buttons(userID,db,pomo,pm);
+			newButtonPanel = buttons(userID,db,pomo,pm,frame);
 			panel.add("newIPanel",newButtonPanel);
 			cardLayout.show(panel, "newIPanel");
 			panel.remove(buttonPanel);
 		}else {
-			buttonPanel = buttons(userID,db,pomo,pm);
+			buttonPanel = buttons(userID,db,pomo,pm,frame);
 			panel.add("iPanel",buttonPanel);
 			cardLayout.show(panel, "iPanel");
 			panel.remove(newButtonPanel);
@@ -96,19 +106,23 @@ public class Monitoring_Bar {
 		frame.repaint();
 	}
 	
-	private JPanel buttons(int userID,DataBase db,Pomodoro_Timer pomo,Priority_Manager pm) {
+	private JPanel buttons(int userID,DataBase db,Pomodoro_Timer pomo,Priority_Manager pm,JFrame frame) {
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(120,120,120));
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+		JButton minimize = new JButton();
 		JButton pomoButton = new JButton();
 		JButton monitorButton = new JButton();
 		int size = 50;
 		
+		BufferedImage mini = null;
 		BufferedImage workP = null;
 		BufferedImage breakP = null;
 		BufferedImage monitor = null;
 		BufferedImage square = null;
 		try {
-			
+			mini = ImageIO.read(new File("images/minimize.png"));
+			mini.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
 			workP = ImageIO.read(new File("images/case.png"));
 			workP.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
 			breakP = ImageIO.read(new File("images/mug.png"));
@@ -123,6 +137,11 @@ public class Monitoring_Bar {
 			System.exit(1);
 		}
 		
+		colorSquare(workP,Color.black);
+		colorSquare(breakP,Color.black);
+		colorSquare(monitor,Color.black);
+		colorSquare(square,new Color(5,100,255));
+		
 		// create new image of icon image on top of circle image
         BufferedImage newImg = new BufferedImage(size, size,square.getType());
         Graphics2D graphic = newImg.createGraphics();
@@ -130,7 +149,22 @@ public class Monitoring_Bar {
         graphic.drawImage(monitor, 0, 0, size, size, 0, 0, monitor.getWidth(), monitor.getHeight(), null);
         graphic.dispose();
 		
-		//creates an ImageIcon
+      //creates an ImageIcon
+        ImageIcon miniIcon = new ImageIcon(mini);
+        minimize.setIcon(miniIcon);
+        //make non-icon area of button invisible
+        minimize.setContentAreaFilled(false);
+        //remove button border
+        minimize.setBorderPainted(false);
+        minimize.setFocusPainted(false);
+        minimize.setRolloverEnabled(false);
+        minimize.setMargin(new Insets(0,0,0,0));
+        minimize.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		frame.setState(JFrame.ICONIFIED);
+        	}});
+        
+        //creates an ImageIcon
         ImageIcon icon = new ImageIcon(newImg);
         monitorButton.setIcon(icon);
         //make non-icon area of button invisible
@@ -161,7 +195,7 @@ public class Monitoring_Bar {
                 pomo.taskrefresh();
         	}});
         Color color;
-        if(pomo.getWorkBreakStatus() == Work_Break.Break) {
+        if(isWork == false) {
         	color = Color.red;
         }else {
         	color = Color.green;
@@ -173,7 +207,7 @@ public class Monitoring_Bar {
         Graphics2D graphic2 = pomoImg.createGraphics();
         graphic2.drawImage(square, 0, 0, size, size, 0, 0, square.getWidth(), square.getHeight(), null);
         
-        if(pomo.getWorkBreakStatus() == Work_Break.Break) {
+        if(isWork == false) {
         	graphic2.drawImage(breakP, 0, 0, size, size, 0, 0, breakP.getWidth(), breakP.getHeight(), null);
         }else {
         	graphic2.drawImage(workP, 0, 0, size, size, 0, 0, workP.getWidth(), workP.getHeight(), null);
@@ -193,16 +227,10 @@ public class Monitoring_Bar {
         pomoButton.setMargin(new Insets(0,0,0,0));
         pomoButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		if(pomo.getWorkBreakStatus() == Work_Break.Break) {
-        			pomo.setWorkBreak(Work_Break.Work);
-        			toRefresh.doClick();
-        		}else {
-        			pomo.setWorkBreak(Work_Break.Break);
-        			toRefresh.doClick();
-        		}
-        		
+        		pomo.setbuttonto0();
+        		refreshBar();
         	}});
-        
+        panel.add(minimize);
         panel.add(pomoButton);
         panel.add(monitorButton);
 		return panel;
