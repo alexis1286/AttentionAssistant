@@ -255,7 +255,6 @@ public class Pomodoro_Timer
 		pausebut.doClick();
 	}
 	
-	
 	private JPanel taskPanel(Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);	
@@ -460,6 +459,7 @@ public class Pomodoro_Timer
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	public void BreakTimer(Settings setting, DataBase db,Priority_Manager pm) {
+		mb.refreshBar();
 		Notification_System notif;
 		try {
 			notif = new Notification_System(setting.getUserID(),db);
@@ -472,7 +472,6 @@ public class Pomodoro_Timer
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mb.refreshBar();
 				String  ddsecond,ddminute;
 				DecimalFormat dformat = new DecimalFormat("00");
 				
@@ -619,11 +618,11 @@ public class Pomodoro_Timer
 	
 	
 	public void MainTimer(Settings setting, DataBase db,Priority_Manager pm) {
+		mb.refreshBar();
 	t = new Timer(1000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mb.refreshBar();
 				String  ddsecond,ddminute;
 				DecimalFormat dformat = new DecimalFormat("00");
 				
