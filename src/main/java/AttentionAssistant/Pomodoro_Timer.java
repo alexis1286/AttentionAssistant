@@ -251,7 +251,9 @@ public class Pomodoro_Timer
 	public void clickStart() {
 		startbut.doClick();
 	}
-	
+	public void clickPause() {
+		pausebut.doClick();
+	}
 	
 	private JPanel taskPanel(Priority_Manager pm) {
 		JPanel panel = new JPanel();
