@@ -3077,7 +3077,7 @@ public class Settings {
 					public void actionPerformed(ActionEvent e) {
 						//open guide
 						Guide guide = new Guide();
-						guide.open_Guide();
+						guide.open_Guide("Settings");
 					}
 				});
 				

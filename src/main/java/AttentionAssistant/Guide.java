@@ -32,7 +32,7 @@ public class Guide {
 	/**
 	 * creates title bar
 	 */
-	private JMenuBar createTitlePanel(Frame pr_frame, CardLayout guideCards, JPanel guideViews) {
+	private JMenuBar createTitlePanel(Frame pr_frame, CardLayout guideCards, JPanel guideViews, String guideCard) {
 		
 		JMenuBar title_panel = new JMenuBar();
 		title_panel.setBorder(line);
@@ -89,7 +89,7 @@ public class Guide {
         	
         }});
 		
-		JPanel selectionPanel = createGuideSelectionPanel(guideCards, guideViews); 
+		JPanel selectionPanel = createGuideSelectionPanel(guideCards, guideViews, guideCard); 
 		
 		title_panel.add(title);
 		title_panel.add(Box.createRigidArea(new Dimension(20, 0)));
@@ -101,7 +101,7 @@ public class Guide {
 		
 	}
 	
-	private JPanel createGuideSelectionPanel(CardLayout guideCards, JPanel guideViews) {
+	private JPanel createGuideSelectionPanel(CardLayout guideCards, JPanel guideViews, String guideCard) {
 		
 		JPanel selectionPanel = new JPanel(); 
 		selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.X_AXIS)); 
@@ -110,6 +110,7 @@ public class Guide {
 		
 		String guideOptions[] = {"Navigation Bar", "Settings", "Priority Manager", "Pomodoro Timer", "Negative Thought Burner", "Happy Thought Button", "Free Thought Space", "Progress Report", "Notification System", "Child Selection Bar", "Parent Portal", "PP Account Management"};
 		
+		int index = 0; 
 		
 		JComboBox<String> guideDropDown = new JComboBox<>(guideOptions);
 		guideDropDown.setEnabled(true); 
@@ -120,6 +121,13 @@ public class Guide {
 		guideList.setSelectionBackground(aa_purple); 
 		guideDropDown.setBackground(Color.black);
 		guideDropDown.setForeground(Color.white);
+		for(String guideTitle : guideOptions) {
+			if(guideTitle.equals(guideCard)) {
+				guideDropDown.setSelectedIndex(index);
+			}else {
+				index++;
+			}
+		}
 		guideDropDown.setFont(new Font("Serif", Font.BOLD, 18));
 		((JLabel)guideDropDown.getRenderer()).setHorizontalAlignment(JLabel.LEFT);
 		guideDropDown.setMaximumSize(new Dimension(300,25));
@@ -709,7 +717,7 @@ public class Guide {
 		return ppamGuide; 
 	}
 	
-	private JPanel createCenterPanel(CardLayout guideCards, JPanel guideViews) {
+	private JPanel createCenterPanel(CardLayout guideCards, JPanel guideViews, String guideCard) {
 		
 		JPanel center_panel = new JPanel(); 
 		center_panel.setLayout(new BoxLayout(center_panel, BoxLayout.Y_AXIS));
@@ -767,11 +775,13 @@ public class Guide {
 		JPanel ppamGuide = createPPAMGuidePanel(); 
 		guideViews.add("PP Account Management", ppamGuide); 
 		
+		guideCards.show(guideViews, guideCard);
+		
 		center_panel.add(guideViews); 
 		return center_panel; 
 	}
 
-	public void open_Guide() {
+	public void open_Guide(String guideCard) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -788,8 +798,8 @@ public class Guide {
 				CardLayout guideCards = new CardLayout();
 				JPanel guideViews = new JPanel(); 
 				
-				JMenuBar title_panel = createTitlePanel(guide_frame, guideCards, guideViews); 
-				JPanel center_panel = createCenterPanel(guideCards, guideViews); 
+				JMenuBar title_panel = createTitlePanel(guide_frame, guideCards, guideViews, guideCard); 
+				JPanel center_panel = createCenterPanel(guideCards, guideViews, guideCard); 
 				
 				masterPanel.add(title_panel, BorderLayout.PAGE_START); 
 				masterPanel.add(center_panel, BorderLayout.CENTER);
