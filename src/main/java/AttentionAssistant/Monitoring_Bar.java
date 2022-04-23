@@ -45,6 +45,8 @@ public class Monitoring_Bar {
 			isWork = false;
 		}
 		
+		pomo.clickStart();
+		pomo.clickPause();
 		
 		counter = 1;
 		JFrame frame = new JFrame();
@@ -229,6 +231,7 @@ public class Monitoring_Bar {
         	public void actionPerformed(ActionEvent e) {
         		pomo.setbuttonto0();
         		refreshBar();
+        		
         	}});
         panel.add(minimize);
         panel.add(pomoButton);
