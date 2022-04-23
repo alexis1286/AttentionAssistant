@@ -2888,7 +2888,7 @@ public class Settings {
 				guide.setFocusPainted(false);
 				
 				title_panel.add(title);
-				title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
+				title_panel.add(Box.createRigidArea(new Dimension(345, 0)));
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
@@ -3076,6 +3076,8 @@ public class Settings {
 				guideButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//open guide
+						Guide guide = new Guide();
+						guide.open_Guide();
 					}
 				});
 				

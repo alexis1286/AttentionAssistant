@@ -1158,7 +1158,7 @@ public class Progress_Report {
 		applyPanel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
 		applyPanel.setBackground(aa_grey);
 		
-		JButton apply = new JButton(" apply ");
+		JButton apply = new JButton(" select ");
 		apply.setForeground(Color.white);
 		apply.setFont(new Font("Serif", Font.BOLD, 16));
 		apply.setContentAreaFilled(true);
