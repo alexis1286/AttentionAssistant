@@ -459,7 +459,6 @@ public class Pomodoro_Timer
 	 * break timer function. Creates the break  timer from user input and also ensures that the timer stops properly at 00:00
 	 */
 	public void BreakTimer(Settings setting, DataBase db,Priority_Manager pm) {
-		mb.refreshBar();
 		Notification_System notif;
 		try {
 			notif = new Notification_System(setting.getUserID(),db);
@@ -481,8 +480,6 @@ public class Pomodoro_Timer
 				ddminute = dformat.format(breakmin);
 				time.setText(String.valueOf(ddminute+"m:"+ddsecond+"s"));
 				if(breakmin == 0 && sec==0) {
-					
-
 					t.stop();
 					b.setVisible(false);
 					Notification_System notifs;
@@ -495,8 +492,10 @@ public class Pomodoro_Timer
 					}
 					if (breakboolean == true) {
 						breakboolean = false;
+						mb.refreshBar();
 					}
 					else {
+						mb.refreshBar();
 						 Object[] options = {"Begin Timer"};
 						 int breaktimertask = JOptionPane.showOptionDialog(null,
 						             "Break is up! Time to begin your work again!",
@@ -553,8 +552,6 @@ public class Pomodoro_Timer
 			min = initalmin;
 			breakmin = initalbreak;
 		}
-	
-
 	}
 	/**
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
@@ -618,16 +615,11 @@ public class Pomodoro_Timer
 	
 	
 	public void MainTimer(Settings setting, DataBase db,Priority_Manager pm) {
-		mb.refreshBar();
 	t = new Timer(1000, new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String  ddsecond,ddminute;
-				DecimalFormat dformat = new DecimalFormat("00");
-				
-			
-				
+				DecimalFormat dformat = new DecimalFormat("00");	
 				sec--;
 				
 				ddsecond = dformat.format(sec);
@@ -640,9 +632,11 @@ public class Pomodoro_Timer
 					t.stop();
 					c.setVisible(false);
 					if (breakboolean == true) {
+						mb.refreshBar();
 						breakboolean = false;
 					}
 					else {
+						mb.refreshBar();
 						 Object[] options = {"Yes","No"};
 						 int initaltask = JOptionPane.showOptionDialog(null,
 						             "Have you completed your task?",
@@ -990,9 +984,7 @@ public class Pomodoro_Timer
 		   	    lastButtonPressed = null;
 		   	    min = initalmin;
 		   	    breakmin = initalbreak;
-			
-				BreakTimer(setting,db,pm);
-				
+				BreakTimer(setting,db,pm);				
 				
 		}
 		else if(b.isVisible() == true) {
@@ -1009,7 +1001,6 @@ public class Pomodoro_Timer
 	   	    lastButtonPressed = null;
 	   	    min = initalmin;
 	   	    breakmin = initalbreak;
-			
 			MainTimer(setting,db,pm);
 		}
 	}
