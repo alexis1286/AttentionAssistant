@@ -159,6 +159,7 @@ public class Parent_Bar{
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(aa_grey);
+		panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
 		
 		JLabel linkChild = new JLabel("Link Child Account");
 		JLabel unlinkChild = new JLabel("Unlink Child Account");
