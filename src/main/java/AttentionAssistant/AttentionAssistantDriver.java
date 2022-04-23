@@ -171,8 +171,8 @@ public class AttentionAssistantDriver {
 			guide.setFocusPainted(false);
 			
 			title_panel.add(title);
-			title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
-			title_panel.add(guide);
+			title_panel.add(Box.createRigidArea(new Dimension(400, 0)));
+			//title_panel.add(guide);
 			title_panel.add(close_window);
 			
 			//returns panel
