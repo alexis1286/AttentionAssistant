@@ -89,9 +89,11 @@ public class Free_Thought_Space {
 	JLabel drawing;
 	private JPanel drawingSpace() {
 		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, aa_purple));
 		drawing = new JLabel();
 		drawing.setFocusable(false);
 		drawing.setBackground(Color.white);
+		drawing.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, aa_purple));
 		if (canvasShow == null) {
 			canvasShow = new BufferedImage(dsW,dsH,BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = canvasShow.createGraphics();  // Graphics context for isDrawing to OSI.
@@ -528,6 +530,7 @@ public class Free_Thought_Space {
 		panel.setLayout(null);
 		//panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		panel.setBackground(Color.black);
+		panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 2, aa_purple));
 		
 		panel.add(Box.createRigidArea(new Dimension(0,15)));
 		ArrayList<JButton> tools = toolButtons();
@@ -763,6 +766,7 @@ public class Free_Thought_Space {
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.black);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
 		JPanel palette = colorPalette(db,userID);
 		JPanel selection = colorSelection(db,userID);
 		
