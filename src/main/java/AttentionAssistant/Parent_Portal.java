@@ -868,6 +868,12 @@ public class Parent_Portal {
 				guide.setBorderPainted(false);
 				guide.setContentAreaFilled(false);
 				guide.setFocusPainted(false);
+				guide.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		//opens guide
+		        		Guide guide = new Guide();
+						guide.open_Guide("Parent Portal");
+		        }});
 				
 				title_panel.add(title);
 				title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
@@ -960,10 +966,11 @@ public class Parent_Portal {
 				guideButton.setBackground(aa_purple);
 				guideButton.setMaximumSize(new Dimension(170, 30));
 				guideButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						//open guide
-					}
-				});
+		        	public void actionPerformed(ActionEvent e) {
+		        		//opens guide
+		        		Guide guide = new Guide();
+						guide.open_Guide("Child Selection Bar");
+		        }});
 				
 				Image logOut_img = lo.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 				Icon logOutIcon = new ImageIcon(logOut_img);

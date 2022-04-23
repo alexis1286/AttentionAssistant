@@ -1360,6 +1360,12 @@ public class Free_Thought_Space {
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Free Thought Space");
+        }});
 		
 		title_panel.add(file);
 		title_panel.add(Box.createRigidArea(new Dimension(500, 0)));
