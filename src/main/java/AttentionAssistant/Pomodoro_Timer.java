@@ -255,6 +255,7 @@ public class Pomodoro_Timer
 		pausebut.doClick();
 	}
 	
+	
 	private JPanel taskPanel(Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);	
