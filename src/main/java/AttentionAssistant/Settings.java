@@ -2334,7 +2334,7 @@ public class Settings {
 	/**
 	 * RHS display for Pomodoro Timer
 	 */
-	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer, DataBase db, Priority_Manager pm) {
+	private void createPomodoroTimerPanel(JPanel card_panel, Settings settingsChanges, Pomodoro_Timer pomodoro_timer, DataBase db, Priority_Manager pm,Monitoring_Bar mb) {
 		
 		JPanel pomodoro_panel = new JPanel();
 		pomodoro_panel.setLayout(new BoxLayout(pomodoro_panel, BoxLayout.Y_AXIS));
@@ -2364,7 +2364,7 @@ public class Settings {
 		openPom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//implement chooseAvatar 
-				pomodoro_timer.makeVisible();
+				pomodoro_timer.makeVisible(mb);
 			}
 		});
 		
@@ -2798,7 +2798,7 @@ public class Settings {
 	 * creates/display Settings GUI
 	 * @param db
 	 */
-	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space) {
+	public void open_settings(int UserID, DataBase db,Nav_Bar navbar,Settings settings, Priority_Manager priority_manager,Pomodoro_Timer pomodoro_timer,Negative_Thought_Burner negative_thought_burner,Happy_Thought_Button happy_thought_button, Free_Thought_Space free_thought_space,Monitoring_Bar mb) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override 
 			public void run() {
@@ -2904,7 +2904,7 @@ public class Settings {
 				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db);
-				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer,db, priority_manager );
+				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer,db, priority_manager,mb);
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db, UserID);								
 				
 				/*

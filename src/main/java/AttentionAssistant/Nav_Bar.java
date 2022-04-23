@@ -253,7 +253,7 @@ public class Nav_Bar{
 	    	settingsButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open settings
-	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts);
+	        		settings.open_settings(userID, db, navbar, settings, pm, pomo, ntb, htb, fts, mb);
 	        }});
 	    	panel.add(settingsButton);
 		}
@@ -271,7 +271,7 @@ public class Nav_Bar{
 			pomoButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pomo
-	        		pomo.makeVisible();
+	        		pomo.makeVisible(mb);
 	        }});
 			panel.add(pomoButton);
 		}
