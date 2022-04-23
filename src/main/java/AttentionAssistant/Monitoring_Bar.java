@@ -45,9 +45,6 @@ public class Monitoring_Bar {
 			isWork = false;
 		}
 		
-		pomo.clickStart();
-		pomo.clickPause();
-		
 		counter = 1;
 		JFrame frame = new JFrame();
 		//removes default title bar from frame 
@@ -86,6 +83,7 @@ public class Monitoring_Bar {
 	public void refreshBar() {
 		isWork = !isWork;
 		toRefresh.doClick();
+		System.out.print(isWork);
 	}
 	
 	private void rebuildPanel(int userID,DataBase db,CardLayout cardLayout,JPanel panel,JFrame frame,Pomodoro_Timer pomo,Priority_Manager pm) {

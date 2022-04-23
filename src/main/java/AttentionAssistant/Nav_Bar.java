@@ -128,6 +128,11 @@ public class Nav_Bar{
 				mb.monitorBar(userID, db, pomo, pm);
 				
 				pomo.monitorbar(mb);
+				
+				pomo.clickStart();
+				pomo.clickPause();
+				
+				
 				counter = 1;
 				count = 0;
 				JFrame frame = new JFrame();
