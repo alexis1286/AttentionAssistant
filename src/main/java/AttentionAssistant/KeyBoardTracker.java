@@ -23,6 +23,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 	ArrayList<String> allWordsInputed = new ArrayList<String>(); //List that holds all the key words that were typed in
 	StringBuilder inputWord = new StringBuilder(); //Internal stringbuilder for creating a list of words
 	int toldWordsInputted = 0;
+	int keyWordOccurrences = 0; //Number of keywords found.
 	
 	/**
  	 * Instantiating empty KeyBoardTracker object
@@ -48,7 +49,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 	}
 	
 	public int getKeywordCount() {
-		return this.keyWordsFoundScore; 
+		return this.keyWordOccurrences; 
 	}
 
 	/**
@@ -65,6 +66,8 @@ public class KeyBoardTracker implements NativeKeyListener {
 		 */
 		//Calculating a tempt 50 point scale
 		int temptKeyPressedScore = 50 * (currentKeyPressScore - lastKeyPressScore)/lastKeyPressScore;
+		
+		System.out.println("temptKeyPressedScore = " + temptKeyPressedScore);
 				
 		//Ensuring that the tempt key pressed score is not above 50 or below 1
 		if(temptKeyPressedScore < 50 && temptKeyPressedScore > 0) {
@@ -74,6 +77,8 @@ public class KeyBoardTracker implements NativeKeyListener {
 		} else {
 			keysPressedScore = 1;
 		}
+		
+		System.out.println("keysPressedScore = " + keysPressedScore);
 				
 		//Updating the lastKeyPressScore to the currentKeyPressScore
 		//Reseting the lastKeyPressScore and currentKeyPressScore before they get to close to the int limit size
@@ -90,14 +95,17 @@ public class KeyBoardTracker implements NativeKeyListener {
 		 */
 		
 		//Finding out how many times the keywords occurred in the list
-		int occurrences = 0;
 		for(String keyword : keyWords) {
+			keyword = keyword.toUpperCase();
 			System.out.println("curent keyword " + keyword);
-			occurrences += Collections.frequency(allWordsInputed, keyword);
+			keyWordOccurrences += Collections.frequency(allWordsInputed, keyword);
+			System.out.println("Current keyword occurrences " + keyWordOccurrences);
 		}
 		
+		System.out.println("How Many Key Words Were Found " + keyWordOccurrences);
+		
 		//Updating the keyBoardScoreKeyWords based on the occurrences
-		for(int i = 0; i < occurrences; i++) {
+		for(int i = 0; i < keyWordOccurrences; i++) {
 			keyWordsFoundScore += 10;
 			if(keyWordsFoundScore > 50) {
 				break;
@@ -110,7 +118,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 		}
 		
 		System.out.println("keyBoardScoreKeyWords = " + keyWordsFoundScore);
-		System.out.println("keyBoardScoreKeyPressed = " + keyWordsFoundScore);
+		System.out.println("keyBoardScoreKeyPressed = " + currentKeyPressScore);
 
 		//Adding the two keyboard scores
 		keyBoardScore = keysPressedScore + keyWordsFoundScore;
@@ -119,6 +127,14 @@ public class KeyBoardTracker implements NativeKeyListener {
 		System.out.println(allWordsInputed.toString());
 		
 		return this.keyBoardScore;
+	}
+	
+	/**
+	 * Gets all the words typed by the user
+	 * @return String
+	 */
+	public String getWordsTyped() {
+		return this.allWordsInputed.toString();
 	}
 
 	/**

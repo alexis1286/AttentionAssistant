@@ -34,7 +34,7 @@ public class Observer implements Runnable {
 	private DataBase db; 
 	private Notification_System notification_System;
 	private Pomodoro_Timer pTimer;
-	private int observerDelayInterval = 10; //interval when the observer will check on the user's active (IN SECONDS)
+	private int observerDelayInterval = 15; //interval when the observer will check on the user's active (IN SECONDS)
 
 	/**
 	 * Instantiating empty Observer object
@@ -349,7 +349,7 @@ public class Observer implements Runnable {
 		monitorInfo.setScorePerURL(internetTracker.getUrlScores());
 		monitorInfo.setInternetScore(internetTracker.getInternetScore());
 		
-		//monitorInfo.setWordsTyped(keyBoardTracker.getKeystrokes());
+		monitorInfo.setWordsTyped(keyBoardTracker.getWordsTyped());
 		monitorInfo.setNumKeywordsTyped(keyBoardTracker.getKeywordCount());
 		monitorInfo.setKeyboardScore(keyBoardTracker.getKeyBoardScore());
 		
