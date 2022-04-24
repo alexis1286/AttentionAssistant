@@ -2300,7 +2300,7 @@ public class Settings {
 		openPM.setForeground(Color.WHITE);
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				priority_manager.open_pm(userID,db);
+				priority_manager.open_pm(userID,db,priority_manager);
 			}
 		});
 		

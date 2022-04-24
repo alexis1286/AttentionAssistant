@@ -41,12 +41,17 @@ public class Priority_Manager {
 	int row;
 	Task activeTask;
 	boolean isParent;
+	DefaultTableModel model;
+	int userID;
+	DataBase db;
 	
 	private ArrayList<Task> Task_List;
 	
 	public Priority_Manager(int userID,DataBase db,boolean isParent) {
 		this.Task_List = new ArrayList<Task>();
 		this.isParent = isParent;
+		this.userID = userID;
+		this.db = db;
 	}
 	
 	public Priority_Manager(int userID, DataBase db,Notification_System notifSystem) throws IOException {
@@ -54,12 +59,16 @@ public class Priority_Manager {
 		this.notifSystem = notifSystem;
 		this.pomo = new Pomodoro_Timer();
 		this.isParent = false;
+		this.userID = userID;
+		this.db = db;
 	}
 	
 	public Priority_Manager(int userID,DataBase db) throws IOException {
 		this.Task_List = new ArrayList<Task>();
 		this.notifSystem = new Notification_System(userID,db);
 		this.isParent = false;
+		this.userID = userID;
+		this.db = db;
 	}
 	
 	public void setPomo(Pomodoro_Timer pomo) {
@@ -138,7 +147,7 @@ public class Priority_Manager {
 		return list;
 	}
 	
-	public void open_pm(int userID,DataBase db) {
+	public void open_pm(int userID,DataBase db,Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
@@ -153,11 +162,11 @@ public class Priority_Manager {
 				titlePanel.setBorder(line);
 				
 				//build table panel
-				JPanel taskPanel = taskPanel(userID,db,frame);
+				JPanel taskPanel = taskPanel(userID,db,frame,pm);
 				taskPanel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				
 				//build button panel
-				JPanel buttonPanel = buttonPanel(frame);
+				JPanel buttonPanel = buttonPanel(pm,frame);
 				buttonPanel.setBorder(BorderFactory.createMatteBorder(0,2,2,2,aa_purple));
 				
 				frame.getContentPane().add(titlePanel,BorderLayout.PAGE_START);
@@ -172,7 +181,7 @@ public class Priority_Manager {
 	}
 	
 	//******************************************************************************************************************
-	private JPanel buttonPanel(JFrame frame) {
+	private JPanel buttonPanel(Priority_Manager pm,JFrame frame) {
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -187,7 +196,15 @@ public class Priority_Manager {
 		integration.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		integration.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//initiate calendar integration
+        		
+        		Calendar_Integration cal = new Calendar_Integration();
+        		
+        		try {
+					cal.importCal(userID, db, model, table, frame, pm);
+				} catch (IOException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
         		
         }});
 
@@ -225,7 +242,7 @@ public class Priority_Manager {
 	/*
 	 * create panel that contains task list and buttons to edit/interact with task list
 	 */
-	private JPanel taskPanel(int userID,DataBase db,JFrame frame) {
+	private JPanel taskPanel(int userID,DataBase db,JFrame frame,Priority_Manager pm) {
 		JPanel panel = new JPanel();
 		
 		/*
@@ -237,7 +254,7 @@ public class Priority_Manager {
 		/*
 		 * Create JTable to display task
 		 */
-		DefaultTableModel model = new DefaultTableModel(Task_List.size(),0);
+		model = new DefaultTableModel(Task_List.size(),0);
 		//create table model and add columns
 		table = new JTable(model);
 		model.addColumn("Task");
@@ -343,7 +360,7 @@ public class Priority_Manager {
 		add_button.setFocusPainted(false);
 		add_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		addTask(userID,db,model,table,frame);
+        		addTask(userID,db,model,table,frame,pm);
         }});
 		
 		
@@ -358,7 +375,7 @@ public class Priority_Manager {
 		edit_button.setFocusPainted(false);
 		edit_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		editTask(userID,db,model,table,frame);
+        		editTask(userID,db,model,table,frame,pm);
         }});
 		
 		
@@ -451,7 +468,7 @@ public class Priority_Manager {
 		
 		if(observableTasks().size() == 0) {
 			Task fTask = new Task();
-			taskWindow(userID, fTask, false, db, model, table, frame);
+			taskWindow(userID, fTask, false, db, model, table, frame,pm);
 		}
 		
 		
@@ -483,7 +500,7 @@ public class Priority_Manager {
 	/*
 	 * Edit task
 	 */
-	private void editTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame) {
+	private void editTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
 		//get task info and pass it to the task window
 		row = table.getSelectedRow();
 		int id = (int) table.getModel().getValueAt(row, 5);
@@ -491,7 +508,7 @@ public class Priority_Manager {
 			if(Task_List.get(i).getTaskID() == id) {
 				Task task = Task_List.get(i);
 				boolean isAnEdit = true;
-				taskWindow(userID,task,isAnEdit,db,model,table,frame);
+				taskWindow(userID,task,isAnEdit,db,model,table,frame,pm);
 			}
 		}
 	}
@@ -499,10 +516,10 @@ public class Priority_Manager {
 	/*
 	 * Add Task
 	 */
-	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame) {
+	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
 		Task task = new Task();
 		boolean isAnEdit = false;
-		taskWindow(userID,task,isAnEdit,db,model,table,frame);
+		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm);
 	}
 	
 	//******************************************************************************************************************
@@ -511,7 +528,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame) {
+	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -685,7 +702,7 @@ public class Priority_Manager {
         		//gets table to display changes
         		table.revalidate();
         		frame.dispose();
-        		open_pm(userID,database);
+        		open_pm(userID,database,pm);
         		task_window.dispose();
         		
         }});
