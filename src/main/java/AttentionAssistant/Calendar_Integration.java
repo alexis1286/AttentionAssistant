@@ -77,31 +77,41 @@ public class Calendar_Integration {
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
 		String strLine;
-
+		
+		Task toAdd = new Task();
 		//Read File Line By Line
 		while ((strLine = br.readLine()) != null)   {
-			Task toAdd = new Task();
+			
 			if (strLine.contains("BEGIN:VEVENT")) {
+//				System.out.println("Begin");
 				toAdd = new Task();
 			}
 			else if (strLine.contains("DTSTART")) {
 				
 				String oldstr = strLine.substring(8, 16);
-				String newstr = oldstr.substring(0, 4) + "-" + oldstr.substring(4,6) + "-" + oldstr.substring(6, 8);
+				String newstr = oldstr.substring(4,6) + "/" + oldstr.substring(6, 8) + "/" + oldstr.substring(0, 4);
+//				System.out.println("Descripton");
+//				System.out.println(newstr);
 				
-				Date start = new SimpleDateFormat("yyyy-mm-dd").parse(newstr);
+				Date start = new SimpleDateFormat("MM/dd/yyyy").parse(newstr);
+				
+				System.out.println(start);
 				
 				toAdd.setDueDate(start);
+				System.out.println(toAdd.getDueDate());
 			}
 			else if (strLine.contains("DESCRIPTION")) {
 				toAdd.setDescription(strLine.substring(12));
+//				System.out.println("Descripton");
 			}
 			else if (strLine.contains("SUMMARY")) {
 				toAdd.setTaskName(strLine.substring(8));
+//				System.out.println("Summary");
 			}
 			else if (strLine.contains("END:VEVENT")) {
 				boolean isAnEdit = true; 
-				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame);
+				System.out.println(toAdd.getDueDate());
+				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame, pm);
 			}
 			else {
 				
