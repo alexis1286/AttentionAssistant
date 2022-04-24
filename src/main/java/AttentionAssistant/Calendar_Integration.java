@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Calendar_Integration {
 	
-	Priority_Manager defaultPM;
+	//Priority_Manager defaultPM;
 	
 	//*****************************************************************************************************************
 	/*
@@ -96,19 +96,23 @@ public class Calendar_Integration {
 			else if (strLine.contains("DESCRIPTION")) {
 				toAdd.setDescription(strLine.substring(12));
 			}
+			
 			else if (strLine.contains("SUMMARY")) {
 				toAdd.setTaskName(strLine.substring(8));
 			}
 			else if (strLine.contains("END:VEVENT")) {
-				boolean isAnEdit = false; 
-				boolean isIntegr = true;
-				System.out.println(toAdd.getDueDate());
-				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame, pm, isIntegr);
+				
+				toAdd.setPriority(false);
+				toAdd.setStatus(TaskStatus.OPEN);
+				toAdd.setObservable(false);
+				
+				System.out.println(toAdd.toString());
+				
+				db.AddTask(toAdd, userID);
 			}
 			else {
-				
-				fstream.close();
 			}
 		}
+		fstream.close();
 	}	
 }
