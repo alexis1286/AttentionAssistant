@@ -71,9 +71,9 @@ public class Calendar_Integration {
 	 * Integrate Calendar
 	 */
 	
-	private void importCal(int userID, DataBase db, DefaultTableModel model, JTable table, JFrame frame) throws IOException, ParseException{
+	void importCal(int userID, DataBase db, DefaultTableModel model, JTable table, JFrame frame) throws IOException, ParseException{
 	
-		FileInputStream fstream = new FileInputStream(grabCalFile().toString());
+		FileInputStream fstream = new FileInputStream(grabCalFile());
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
 		String strLine;
