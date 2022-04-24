@@ -108,7 +108,9 @@ public class Calendar_Integration {
 				
 				System.out.println(toAdd.toString());
 				
-				db.AddTask(toAdd, userID);
+				pm.taskWindow(userID, toAdd, false, db, model, table, frame, pm, true);
+				
+				//db.AddTask(toAdd, userID);
 			}
 			else {
 			}
