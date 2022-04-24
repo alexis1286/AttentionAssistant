@@ -430,7 +430,7 @@ public class Observer implements Runnable {
 							//Makes sure the word only contains alphabetical chars before adding to keywords list
 							if(w.getLemma().matches("[a-zA-Z]+")) {
 								keywords.add(w.getLemma());
-								keywords.add(English.plural(w.getLemma()));
+								keywords.add(English.plural(w.getLemma())); //adds the plural version of the word
 							}
 						}
 					}
