@@ -67,6 +67,27 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 		}
 		return this.mouseScore;
 	}
+	
+	/**
+	 * Returns the final mouse score 
+	 */
+	public int getFinalMouseScore() {
+		return this.mouseScore;
+	}
+	
+	/**
+	 * Returns the current mouse movements 
+	 */
+	public int getCurrentMovements() {
+		return this.currentMovementScore;
+	}
+	
+	/**
+	 * Dummy return for previous movement since demo is not continuous 
+	 */
+	public int getLastMovements() {
+		return 1;
+	}
 
 	/**
 	 * Set MouseScore

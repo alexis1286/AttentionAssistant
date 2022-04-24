@@ -350,11 +350,10 @@ public class Observer implements Runnable {
 		monitorInfo.setNumKeywordsTyped(keyBoardTracker.getKeywordCount());
 		monitorInfo.setKeyboardScore(keyBoardTracker.getFinalKBScore());
 		
-		int currentMScore = mouseTracker.currentMovementScore;
-		int lastMScore = mouseTracker.lastMovementScore;
-		monitorInfo.setCurrentMouseScore(currentMScore);
-		monitorInfo.setLastMouseScore(lastMScore);
-		monitorInfo.setMouseScore(mouseTracker.getMouseScore());
+
+		monitorInfo.setCurrentMouseScore(mouseTracker.getCurrentMovements());
+		monitorInfo.setLastMouseScore(mouseTracker.getLastMovements());
+		monitorInfo.setMouseScore(mouseTracker.getFinalMouseScore());
 		
 		monitorDisplay.monitorDetails(monitorInfo);
 	}
