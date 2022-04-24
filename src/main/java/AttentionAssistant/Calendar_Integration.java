@@ -71,7 +71,7 @@ public class Calendar_Integration {
 	 * Integrate Calendar
 	 */
 	
-	void importCal(int userID, DataBase db, DefaultTableModel model, JTable table, JFrame frame) throws IOException, ParseException{
+	void importCal(int userID, DataBase db, DefaultTableModel model, JTable table, JFrame frame, Priority_Manager pm) throws IOException, ParseException{
 	
 		FileInputStream fstream = new FileInputStream(grabCalFile().toString());
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -101,7 +101,7 @@ public class Calendar_Integration {
 			}
 			else if (strLine.contains("END:VEVENT")) {
 				boolean isAnEdit = true; 
-				defaultPM.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame);
+				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame);
 			}
 			else {
 				
