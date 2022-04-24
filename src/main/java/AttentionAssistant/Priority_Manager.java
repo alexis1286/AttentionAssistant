@@ -360,7 +360,8 @@ public class Priority_Manager {
 		add_button.setFocusPainted(false);
 		add_button.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		addTask(userID,db,model,table,frame,pm);
+        		boolean isInt = false;
+        		addTask(userID,db,model,table,frame,pm,isInt);
         }});
 		
 		
@@ -518,10 +519,9 @@ public class Priority_Manager {
 	/*
 	 * Add Task
 	 */
-	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
+	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm,boolean isInt) {
 		Task task = new Task();
 		boolean isAnEdit = false;
-		boolean isInt = false;
 		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm,isInt);
 	}
 	
