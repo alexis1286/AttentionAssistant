@@ -73,7 +73,7 @@ public class Calendar_Integration {
 	
 	void importCal(int userID, DataBase db, DefaultTableModel model, JTable table, JFrame frame) throws IOException, ParseException{
 	
-		FileInputStream fstream = new FileInputStream(grabCalFile());
+		FileInputStream fstream = new FileInputStream(grabCalFile().toString());
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
 		String strLine;
@@ -106,7 +106,6 @@ public class Calendar_Integration {
 			else {
 				
 				fstream.close();
-				
 			}
 		}
 	}	

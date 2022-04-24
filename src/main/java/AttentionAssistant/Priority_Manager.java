@@ -187,7 +187,10 @@ public class Priority_Manager {
 		integration.setFont(new Font ("TimesRoman", Font.BOLD | Font.PLAIN, 16));
 		integration.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//initiate calendar integration
+        		
+        		Calendar_Integration cal = new Calendar_Integration();
+        		
+        		cal.importCal(userID, db, model, table, frame);
         		
         }});
 
