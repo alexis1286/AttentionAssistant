@@ -231,12 +231,14 @@ public class Observer implements Runnable {
 			
 			//Adding a delay before calculating the score to allow the trackers some time to collect
 			try {
-				System.out.print("Observer waiting " + observerDelayInterval + " seconds to pass");
+				System.out.println("Observer waiting " + observerDelayInterval + " seconds to pass");
 				TimeUnit.SECONDS.sleep(observerDelayInterval);
 			} catch (InterruptedException e) {
-				System.out.print("!!!Issue with the TimeUnit in Obsevers!!!");
+				System.out.println("!!!Issue with the TimeUnit in Obsevers!!!");
 				e.printStackTrace();
 			}
+			
+			System.out.println("Observer is done waiting!!!");
 			
 			//calculation of the observer score
 			this.setObserverScore(calculateObserverScore(

@@ -20,7 +20,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 	int lastKeyPressScore = 1; //Internal Scores.  Means nothing outside this function
 	int keysPressedScore = 1; //Internal Score for amount of keys pressed.
 	int keyWordsFoundScore = 1; //Internal Score for amount of keys pressed.
-	ArrayList<String> allWordsInputed; //List that holds all the key words that were typed in
+	ArrayList<String> allWordsInputed = new ArrayList<String>(); //List that holds all the key words that were typed in
 	StringBuilder inputWord = new StringBuilder(); //Internal stringbuilder for creating a list of words
 	int toldWordsInputted = 0;
 	
@@ -92,6 +92,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 		//Finding out how many times the keywords occurred in the list
 		int occurrences = 0;
 		for(String keyword : keyWords) {
+			System.out.println("curent keyword " + keyword);
 			occurrences += Collections.frequency(allWordsInputed, keyword);
 		}
 		
