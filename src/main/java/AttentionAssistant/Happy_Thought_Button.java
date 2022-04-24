@@ -180,6 +180,12 @@ public class Happy_Thought_Button {
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Happy Thought Button");
+        }});
 		
 		title_panel.add(title);
 		title_panel.add(Box.createRigidArea(new Dimension(290, 0)));

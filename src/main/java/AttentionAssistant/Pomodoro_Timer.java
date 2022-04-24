@@ -16,6 +16,8 @@ import javax.swing.UIManager.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.io.File;
@@ -30,7 +32,7 @@ public class Pomodoro_Timer
 {
 	Color aa_grey = new Color(51,51,51);
 	Color aa_purple = new Color(137,31,191);
-
+	Monitoring_Bar mb;
 	int initalbreak = 0, initalmin = 0, breakmin =0,min= 0,sec=0;
 	private boolean MainTimerRunning;
 	private boolean BreakTimerRunning;
@@ -39,6 +41,7 @@ public class Pomodoro_Timer
 	private JButton lastButtonPressed;  
 	JButton toRefresh;
 	JButton taskRefresh;
+	JButton tobreak;
 	LineBorder line = new LineBorder(aa_purple, 2, true);
 	JLabel time = new JLabel("00m:00s");
 	JButton startbut=new JButton("Start");
@@ -46,7 +49,7 @@ public class Pomodoro_Timer
 	JButton endbut=new JButton("Reset");
 	JLabel c=new JLabel("Work Timer");
 	JLabel b=new JLabel("Break Timer");
-	
+	private boolean breakboolean = false;
 	private int mouseX;
 	private int mouseY;
 	int height = 600;
@@ -74,7 +77,10 @@ public class Pomodoro_Timer
 		this.pomodoro_active = false;
 		this.lastButtonPressed = null;
 	}
-	
+	public void monitorbar(Monitoring_Bar monitoring) {
+		mb = monitoring;
+		
+	}
 	public void makeVisible() {
 		visibleButton.doClick();
 	}
@@ -107,6 +113,33 @@ public class Pomodoro_Timer
 		}
 
 	}
+	public Work_Break getWBMonitor(){
+		  
+		if (BreakTimerRunning == true && MainTimerRunning == false) {
+			return Work_Break.Break;
+			 
+		}
+		else if (MainTimerRunning == true && BreakTimerRunning == false){
+			return Work_Break.Work;
+		}
+		else if (paused == true){
+			if(getWorkBreakStatus() == Work_Break.Null) {
+				return Work_Break.Work;	
+			}else {
+				return null;
+			}
+		}
+		else {
+			if(getWorkBreakStatus() == Work_Break.Null) {
+				return Work_Break.Work;	
+			}
+			else {
+				return null;
+			}
+		}
+
+	}
+	
 
 	public void Input(Settings settings) {
 		
@@ -205,6 +238,12 @@ public class Pomodoro_Timer
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Pomodoro Timer");
+        }});
 		
 		title_panel.add(title);
 		title_panel.add(Box.createRigidArea(new Dimension(275, 0)));
@@ -218,7 +257,9 @@ public class Pomodoro_Timer
 	public void clickStart() {
 		startbut.doClick();
 	}
-	
+	public void clickPause() {
+		pausebut.doClick();
+	}
 	
 	private JPanel taskPanel(Priority_Manager pm) {
 		JPanel panel = new JPanel();
@@ -249,6 +290,7 @@ public class Pomodoro_Timer
 	}
 	
 	private JPanel ButtonPanel(JFrame frame,CardLayout cardLayout, Priority_Manager pm,Settings setting, DataBase db) {
+	
 		JPanel panel = new JPanel();
 		panel.setBackground(aa_grey);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -435,7 +477,6 @@ public class Pomodoro_Timer
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
 				String  ddsecond,ddminute;
 				DecimalFormat dformat = new DecimalFormat("00");
 				
@@ -455,25 +496,32 @@ public class Pomodoro_Timer
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
-					 Object[] options = {"Begin Timer"};
-					 int breaktimertask = JOptionPane.showOptionDialog(null,
-					             "Break is up! Time to begin your work again!",
-					             "Break Timer is up!",
-					             JOptionPane.YES_NO_CANCEL_OPTION,
-					             JOptionPane.DEFAULT_OPTION,
-					             null,
-					             options,
-					             options[0]);  
+					if (breakboolean == true) {
+						breakboolean = false;
+						mb.refreshBar();
+					}
+					else {
+						mb.refreshBar();
+						 Object[] options = {"Begin Timer"};
+						 int breaktimertask = JOptionPane.showOptionDialog(null,
+						             "Break is up! Time to begin your work again!",
+						             "Break Timer is up!",
+						             JOptionPane.YES_NO_CANCEL_OPTION,
+						             JOptionPane.DEFAULT_OPTION,
+						             null,
+						             options,
+						             options[0]);  
 
-					 System.out.println(breaktimertask);  
+						 System.out.println(breaktimertask);  
 
-					
+						
 
-					 if(breaktimertask==0){  //clicking this button will begin timer
-						 MainTimer(setting, db,pm);
-							min = initalmin;	
-					 }
+						 if(breaktimertask==0){  //clicking this button will begin timer
+							 MainTimer(setting, db,pm);
+								min = initalmin;	
+						 }
+					}
+				
 					 }
 				
 
@@ -510,8 +558,6 @@ public class Pomodoro_Timer
 			min = initalmin;
 			breakmin = initalbreak;
 		}
-	
-
 	}
 	/**
 	 * main timer function. Creates the main pomodoro timer from user input and also ensures that the timer stops properly at 00:00
@@ -572,16 +618,14 @@ public class Pomodoro_Timer
 
 
 	}
+	
+	
 	public void MainTimer(Settings setting, DataBase db,Priority_Manager pm) {
 	t = new Timer(1000, new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String  ddsecond,ddminute;
-				DecimalFormat dformat = new DecimalFormat("00");
-				
-			
-				
+				DecimalFormat dformat = new DecimalFormat("00");	
 				sec--;
 				
 				ddsecond = dformat.format(sec);
@@ -591,100 +635,107 @@ public class Pomodoro_Timer
 					MainTimerRunning = false;
 					BreakTimerRunning = false;
 					paused = false;
-					getWorkBreakStatus();
 					t.stop();
 					c.setVisible(false);
-					 Object[] options = {"Yes","No"};
-					 int initaltask = JOptionPane.showOptionDialog(null,
-					             "Have you completed your task?",
-					             "Tasks",
-					             JOptionPane.YES_NO_CANCEL_OPTION,
-					             JOptionPane.DEFAULT_OPTION,
-					             null,
-					             options,
-					             options[1]);  
-
-					// System.out.println(initaltask);  
-
-					
-
-					 if(initaltask==0){  //for yes; the user has finished their initial task and will need to pick/assign a new task, or terminate the timer
-						 
-						 Notification_System notif;
-							try {
-								notif = new Notification_System(setting.getUserID(),db);
-								 notif.taskCompleted(pm.getActiveTask());
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						 Object[] NewTask = {"Yes","No"}; //new option button to ask user if they have any other tasks to work on
-						 int NewTaskInt = JOptionPane.showOptionDialog(null,
-						             "Do you have any other tasks to work on?",
-						             "Other Tasks",
+					if (breakboolean == true) {
+						mb.refreshBar();
+						breakboolean = false;
+					}
+					else {
+						mb.refreshBar();
+						 Object[] options = {"Yes","No"};
+						 int initaltask = JOptionPane.showOptionDialog(null,
+						             "Have you completed your task?",
+						             "Tasks",
 						             JOptionPane.YES_NO_CANCEL_OPTION,
 						             JOptionPane.DEFAULT_OPTION,
 						             null,
-						             NewTask,
-						             NewTask[1]);  
+						             options,
+						             options[1]);  
 
-				
-						 if(NewTaskInt==0){ //for yes; i.e. user has another tasks to work on
-							  //ask the user to assign what task they are currently working on (pulled from database) 
-							 //TODO add another button where they can select their new task
-							 //prompt the user to input a new break and work timespan allotment
-							    t.stop();
-								sec=min=0;
-								time.setText(String.valueOf("00m:00s"));
-								//Maininput(); //TODO this is going to need to redirect the user back to the setting
-								//Breakinput(); //this prompts the user for new work timespan allotments, will need to occur after new task is assigned
-								c.setVisible(false);
-								b.setVisible(false);
-							
-								TaskDropDown(setting, db, pm);
+						// System.out.println(initaltask);  
+
+						
+
+						 if(initaltask==0){  //for yes; the user has finished their initial task and will need to pick/assign a new task, or terminate the timer
 							 
-							 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
-								 //(ask the user to assign a new task via priority manager)
-								 //or terminate the pomodoro timer
-										 Object[] NoNewTask = {"Add New Task","Close Pomodoro Timer"};
-										 int NonewTaskInt = JOptionPane.showOptionDialog(null,
-										             "Tasks",
-										             "Have you completed your task?",
-										             JOptionPane.YES_NO_CANCEL_OPTION,
-										             JOptionPane.DEFAULT_OPTION,
-										             null,
-										             NoNewTask,
-										             NoNewTask[1]);  
-							
-									 
-								
-										
-								
-										 if(NonewTaskInt==0){  //for yes
-											 TaskDropDown(setting, db, pm);
-											 lastButtonPressed = null;
-										 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
-											System.exit(1);
-										 }else{ //none selected
-										     System.out.println("no option choosen");
-										 }
-									
-							 }else{ //none selected
-							     System.out.println("no option choosen");
-							 }
+							 Notification_System notif;
+								try {
+									notif = new Notification_System(setting.getUserID(),db);
+									 notif.taskCompleted(pm.getActiveTask());
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							 Object[] NewTask = {"Yes","No"}; //new option button to ask user if they have any other tasks to work on
+							 int NewTaskInt = JOptionPane.showOptionDialog(null,
+							             "Do you have any other tasks to work on?",
+							             "Other Tasks",
+							             JOptionPane.YES_NO_CANCEL_OPTION,
+							             JOptionPane.DEFAULT_OPTION,
+							             null,
+							             NewTask,
+							             NewTask[1]);  
 
 					
-					 }else if(initaltask==1){ //for no
-						 //break timer repeats; user has not finished inital task. 
-						BreakTimer(setting, db,pm);
-						MainTimerRunning = false;
-						BreakTimerRunning = true;
-						paused = false;
-						lastButtonPressed = null;
-						getWorkBreakStatus();
-					 }else{ //none selected
-					     System.out.println("no option choosen");
-					 }
+							 if(NewTaskInt==0){ //for yes; i.e. user has another tasks to work on
+								  //ask the user to assign what task they are currently working on (pulled from database) 
+								 //TODO add another button where they can select their new task
+								 //prompt the user to input a new break and work timespan allotment
+								    t.stop();
+									sec=min=0;
+									time.setText(String.valueOf("00m:00s"));
+									//Maininput(); //TODO this is going to need to redirect the user back to the setting
+									//Breakinput(); //this prompts the user for new work timespan allotments, will need to occur after new task is assigned
+									c.setVisible(false);
+									b.setVisible(false);
+								
+									TaskDropDown(setting, db, pm);
+								 
+								 }else if(NewTaskInt==1){ //for no, meaning that they have no new tasks to work on...
+									 //(ask the user to assign a new task via priority manager)
+									 //or terminate the pomodoro timer
+											 Object[] NoNewTask = {"Add New Task","Close Pomodoro Timer"};
+											 int NonewTaskInt = JOptionPane.showOptionDialog(null,
+											             "Tasks",
+											             "Have you completed your task?",
+											             JOptionPane.YES_NO_CANCEL_OPTION,
+											             JOptionPane.DEFAULT_OPTION,
+											             null,
+											             NoNewTask,
+											             NoNewTask[1]);  
+								
+										 
+									
+											
+									
+											 if(NonewTaskInt==0){  //for yes
+												 TaskDropDown(setting, db, pm);
+												 lastButtonPressed = null;
+											 }else if(NonewTaskInt==1){ //for Close Pomodoro Timer
+												System.exit(1);
+											 }else{ //none selected
+											     System.out.println("no option choosen");
+											 }
+										
+								 }else{ //none selected
+								     System.out.println("no option choosen");
+								 }
+
+						
+						 }else if(initaltask==1){ //for no
+							 //break timer repeats; user has not finished inital task. 
+							BreakTimer(setting, db,pm);
+							MainTimerRunning = false;
+							BreakTimerRunning = true;
+							paused = false;
+							lastButtonPressed = null;
+							getWorkBreakStatus();
+						 }else{ //none selected
+						     System.out.println("no option choosen");
+						 }
+						
+					}
 					
 				
 				}
@@ -804,9 +855,15 @@ public class Pomodoro_Timer
 				frame.setVisible(false);
 				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
-				getWorkBreakStatus();
 				Input(settings);
 			
+				
+				tobreak = new JButton();
+				tobreak.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		tobreak(settings,db,pm);
+		        	}});
+		        
 				toRefresh = new JButton();
 		        toRefresh.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
@@ -910,6 +967,50 @@ public class Pomodoro_Timer
 		frame.revalidate();
 		frame.repaint();
 	}
+	
+	public void setbuttonto0() {
+
+		tobreak.doClick();
+	
+	}
+	
+	public void tobreak(Settings setting, DataBase db,Priority_Manager pm) {
+		breakboolean = true;
+		if(c.isVisible() == true) { //worktimer is true
+				t.stop();
+				sec= 0;
+				min=0;
+				breakmin =0;
+				c.setVisible(false);
+				b.setVisible(false);
+				MainTimerRunning = false;
+				BreakTimerRunning = true;
+				paused = false;
+				time.setText(String.valueOf("00m:00s"));
+		   	    lastButtonPressed = null;
+		   	    min = initalmin;
+		   	    breakmin = initalbreak;
+				BreakTimer(setting,db,pm);				
+				
+		}
+		else if(b.isVisible() == true) {
+			t.stop();
+			sec= 0;
+			min=0;
+			breakmin =0;
+			c.setVisible(false);
+			b.setVisible(false);
+			MainTimerRunning = true;
+			BreakTimerRunning = false;
+			paused = false;
+			time.setText(String.valueOf("00m:00s"));
+	   	    lastButtonPressed = null;
+	   	    min = initalmin;
+	   	    breakmin = initalbreak;
+			MainTimer(setting,db,pm);
+		}
+	}
+	
 	
 
 }

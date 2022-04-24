@@ -1243,6 +1243,12 @@ public class Settings {
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Settings");
+        }});
 		
 		//adds title JLabel, empty space, then guide button and close button
 		title_panel.add(title);
@@ -1575,9 +1581,10 @@ public class Settings {
 		guide.setFocusPainted(false);
 		guide.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//call to open guide when ready
-        	}
-        });
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Settings");
+        }});
 		
 		//adds title JLabel, empty space, then guide button and close button
 		title_panel.add(title);
@@ -2875,8 +2882,7 @@ public class Settings {
 				close_window.addActionListener(new ActionListener() {
 		        	public void actionPerformed(ActionEvent e) {
 		        		//close window without saving 
-		        		settings_frame.dispose();
-		        	
+		        		settings_frame.dispose();	        	
 		        }});
 				
 				Image g_img = gi.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -2886,9 +2892,15 @@ public class Settings {
 				guide.setBorderPainted(false);
 				guide.setContentAreaFilled(false);
 				guide.setFocusPainted(false);
+				guide.addActionListener(new ActionListener() {
+		        	public void actionPerformed(ActionEvent e) {
+		        		//opens guide
+		        		Guide guide = new Guide();
+						guide.open_Guide("Settings");
+		        }});
 				
 				title_panel.add(title);
-				title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
+				title_panel.add(Box.createRigidArea(new Dimension(345, 0)));
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
@@ -2904,7 +2916,7 @@ public class Settings {
 				createGeneralPanel(card_panel, settingsChanges);
 				createNotificationsPanel(card_panel, settingsChanges);
 				createPriorityManagerPanel(card_panel, settingsChanges, priority_manager, db);
-				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer,db, priority_manager );
+				createPomodoroTimerPanel(card_panel, settingsChanges, pomodoro_timer,db, priority_manager);
 				createThoughtPanel(card_panel, settingsChanges, negative_thought_burner, happy_thought_button, free_thought_space, db, UserID);								
 				
 				/*
@@ -3076,6 +3088,8 @@ public class Settings {
 				guideButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//open guide
+						Guide guide = new Guide();
+						guide.open_Guide("Navigation Bar");
 					}
 				});
 				

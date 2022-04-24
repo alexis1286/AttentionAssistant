@@ -215,7 +215,7 @@ public class Observer implements Runnable {
 			//eyeMovementTracker.setEyeMovementScore(100);
 			
 			//Sets the keyboardTrackerScore to 100
-			keyBoardTracker.setKeyBoardScore(-1);
+			//keyBoardTracker.setKeyBoardScore(-1);
 			
 			//Sets the osEventsScore to 100
 			//osEventsTracker.setOSEventsScore(100);
@@ -245,6 +245,8 @@ public class Observer implements Runnable {
 			keyBoardTracker.getKeyBoardScore(),
 			osEventsTracker.getOSEventsScore(),
 			internetTracker.getInternetScore()));
+			
+			System.out.println("observerScore = " + observerScore);
 			
 			//set the Date and Time the score was Gathered
 			this.setDTGathered(new Date(System.currentTimeMillis()));
@@ -344,8 +346,8 @@ public class Observer implements Runnable {
 		monitorInfo.setInternetScore(internetTracker.getInternetScore());
 		
 		//monitorInfo.setWordsTyped(keyBoardTracker.getKeystrokes());
-		//monitorInfo.setNumKeywordsTyped(keyBoardTracker.getKeywordCount());
-		//monitorInfo.setKeyboardScore(keyBoardTracker.getKeyBoardScore());
+		monitorInfo.setNumKeywordsTyped(keyBoardTracker.getKeywordCount());
+		monitorInfo.setKeyboardScore(keyBoardTracker.getKeyBoardScore());
 		
 		int currentMScore = mouseTracker.currentMovementScore;
 		int lastMScore = mouseTracker.lastMovementScore;

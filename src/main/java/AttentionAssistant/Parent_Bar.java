@@ -159,6 +159,7 @@ public class Parent_Bar{
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(aa_grey);
+		panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
 		
 		JLabel linkChild = new JLabel("Link Child Account");
 		JLabel unlinkChild = new JLabel("Unlink Child Account");
@@ -666,6 +667,12 @@ public class Parent_Bar{
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("PP Account Management");
+        }});
 		
 		title_panel.add(title);
 		title_panel.add(Box.createRigidArea(new Dimension(225, 0)));

@@ -205,6 +205,12 @@ public class Progress_Report {
 		guide.setBorderPainted(false);
 		guide.setContentAreaFilled(false);
 		guide.setFocusPainted(false);
+		guide.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//opens guide
+        		Guide guide = new Guide();
+				guide.open_Guide("Progress Report");
+        }});
 		
 		title_panel.add(title);
 		title_panel.add(Box.createRigidArea(new Dimension(335, 0)));
@@ -1158,7 +1164,7 @@ public class Progress_Report {
 		applyPanel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, aa_purple));
 		applyPanel.setBackground(aa_grey);
 		
-		JButton apply = new JButton(" apply ");
+		JButton apply = new JButton(" select ");
 		apply.setForeground(Color.white);
 		apply.setFont(new Font("Serif", Font.BOLD, 16));
 		apply.setContentAreaFilled(true);
