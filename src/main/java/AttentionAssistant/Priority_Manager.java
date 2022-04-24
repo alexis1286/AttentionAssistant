@@ -525,6 +525,12 @@ public class Priority_Manager {
 		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm,isInt);
 	}
 	
+	public void calAddTask(int userID,Task task1,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm,boolean isInt) {
+		Task task = task1;
+		boolean isAnEdit = false;
+		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm,isInt);
+	}
+	
 	//******************************************************************************************************************
 	/*
 	 * Task Window
