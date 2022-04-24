@@ -169,8 +169,8 @@ public class KeyBoardTracker implements NativeKeyListener {
 	 */
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {
-		System.out.println("Same Something!");
-		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		//System.out.println("Same Something!");
+		//System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
 		currentKeyPressScore++; //Updating key pressed count
 		
 		if(NativeKeyEvent.getKeyText(e.getKeyCode()).length() == 1) {

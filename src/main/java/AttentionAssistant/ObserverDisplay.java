@@ -604,12 +604,27 @@ public class ObserverDisplay {
 		words_panel.setBackground(aa_grey);
 		words_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel words = new JLabel("Words Typed:");
+		JLabel words = new JLabel("<html><u>Words Typed:</u></html>");
 		words.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		words.setForeground(Color.white);
 		
 		words_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		words_panel.add(words);
+		
+		JPanel wordsTyped_panel = new JPanel();
+		wordsTyped_panel.setLayout(new GridLayout(0, 3));
+		wordsTyped_panel.setBackground(aa_grey);
+		wordsTyped_panel.setMaximumSize(new Dimension(425, 425));
+		
+		JLabel wordsTyped;
+		String[] input = monitorInfo.getWordsTyped().split("\\s+");;
+		for(int i = 0; i < input.length; i++) {
+			wordsTyped = new JLabel("       " + input[i]);
+			wordsTyped.setFont(new Font("Serif", Font.BOLD, 17));
+			wordsTyped.setForeground(Color.white);
+
+			wordsTyped_panel.add(wordsTyped);	
+		}
 		
 		
 		/*
@@ -620,7 +635,7 @@ public class ObserverDisplay {
 		keywords_panel.setBackground(aa_grey);
 		keywords_panel.setMaximumSize(new Dimension(425, 25));
 		
-		JLabel keywords = new JLabel("Number of Keywords:");
+		JLabel keywords = new JLabel("Number of Keywords: " + monitorInfo.getNumKeywordsTyped());
 		keywords.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		keywords.setForeground(Color.white);
 		
@@ -635,7 +650,7 @@ public class ObserverDisplay {
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
 		
-		JLabel score = new JLabel("Keyboard Score:");
+		JLabel score = new JLabel("Keyboard Score: " + monitorInfo.getKeyboardScore());
 		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		score.setForeground(Color.white);
 		
@@ -647,7 +662,10 @@ public class ObserverDisplay {
 		 * add everything to keyboard_panel
 		 */
 		keyboard_panel.add(words_panel);
+		keyboard_panel.add(wordsTyped_panel);
+		keyboard_panel.add(Box.createRigidArea(new Dimension(0, 25)));
 		keyboard_panel.add(keywords_panel);
+		keyboard_panel.add(Box.createRigidArea(new Dimension(0, 25)));
 		keyboard_panel.add(score_panel);
 		
 		//add to keyboard_panel to card_panel

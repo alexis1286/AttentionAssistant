@@ -197,15 +197,12 @@ public class Observer implements Runnable {
 			
 			long startTime = ((System.currentTimeMillis() * 1000) + (11644473600000L * 1000));
 			
-			mouseTracker.startTracking();
-			
 			//Start tracking Objects
+			mouseTracker.startTracking();
+			keyBoardTracker.startTracking();
+			
 			eyeMovementTracker.startTracking();  
 			
-			//Will uncomment later -jmitchell
-			
-			
-			keyBoardTracker.startTracking();
 			osEventsTracker.startTracking(activeTask, db);
 			internetTracker.startTracking(keyWords, startTime);
 
@@ -430,7 +427,7 @@ public class Observer implements Runnable {
 							//Makes sure the word only contains alphabetical chars before adding to keywords list
 							if(w.getLemma().matches("[a-zA-Z]+")) {
 								keywords.add(w.getLemma());
-								keywords.add(English.plural(w.getLemma())); //adds the plural version of the word
+								//keywords.add(English.plural(w.getLemma())); //adds the plural version of the word
 							}
 						}
 					}
