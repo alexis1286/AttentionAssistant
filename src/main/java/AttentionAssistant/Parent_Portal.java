@@ -516,7 +516,7 @@ public class Parent_Portal {
 		openPM.setForeground(Color.WHITE);
 		openPM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pm.open_pm(settingsChanges.getUserID(),db);
+				pm.open_pm(settingsChanges.getUserID(),db,pm);
 			}
 		});
 		

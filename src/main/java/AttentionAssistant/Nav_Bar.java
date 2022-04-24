@@ -168,7 +168,7 @@ public class Nav_Bar{
 		        	public void actionPerformed(ActionEvent e) {
 		        		rebuildPanel(userID,cardLayout,db, navbar, settings, pm, pomo, ntb, htb, fts, panel,frame);
 		        	}});
-		        pm.open_pm(userID, db);
+		        pm.open_pm(userID, db,pm);
 			}
 		});
 	}
@@ -268,7 +268,7 @@ public class Nav_Bar{
 	    	pmButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
 	        		//open pm
-	        		pm.open_pm(userID,db);
+	        		pm.open_pm(userID,db,pm);
 	        }});
 			panel.add(pmButton);
 	    }
