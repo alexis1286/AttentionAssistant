@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.atteo.evo.inflector.English;
+
 import AttentionAssistant.Pomodoro_Timer.Work_Break;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -32,7 +34,7 @@ public class Observer implements Runnable {
 	private DataBase db; 
 	private Notification_System notification_System;
 	private Pomodoro_Timer pTimer;
-	private int observerDelayInterval = 60; //interval when the observer will check on the user's active (IN SECONDS)
+	private int observerDelayInterval = 10; //interval when the observer will check on the user's active (IN SECONDS)
 
 	/**
 	 * Instantiating empty Observer object
@@ -428,6 +430,7 @@ public class Observer implements Runnable {
 							//Makes sure the word only contains alphabetical chars before adding to keywords list
 							if(w.getLemma().matches("[a-zA-Z]+")) {
 								keywords.add(w.getLemma());
+								keywords.add(English.plural(w.getLemma()));
 							}
 						}
 					}
