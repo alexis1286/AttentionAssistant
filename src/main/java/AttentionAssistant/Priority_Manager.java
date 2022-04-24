@@ -651,7 +651,7 @@ public class Priority_Manager {
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				} 
         		if(observe.getSelectedObjects() != null) {
         			new_task.setObservable(true);
         		}else {new_task.setObservable(false);}
