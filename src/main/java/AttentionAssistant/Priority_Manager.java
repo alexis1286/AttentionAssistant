@@ -468,7 +468,8 @@ public class Priority_Manager {
 		
 		if(observableTasks().size() == 0) {
 			Task fTask = new Task();
-			taskWindow(userID, fTask, false, db, model, table, frame,pm);
+			boolean isInt = false;
+			taskWindow(userID, fTask, false, db, model, table, frame,pm,isInt);
 		}
 		
 		
@@ -508,7 +509,8 @@ public class Priority_Manager {
 			if(Task_List.get(i).getTaskID() == id) {
 				Task task = Task_List.get(i);
 				boolean isAnEdit = true;
-				taskWindow(userID,task,isAnEdit,db,model,table,frame,pm);
+				boolean isInt = false;
+				taskWindow(userID,task,isAnEdit,db,model,table,frame,pm,isInt);
 			}
 		}
 	}
@@ -519,7 +521,8 @@ public class Priority_Manager {
 	private void addTask(int userID,DataBase db,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
 		Task task = new Task();
 		boolean isAnEdit = false;
-		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm);
+		boolean isInt = false;
+		taskWindow(userID,task,isAnEdit,db,model,table,frame,pm,isInt);
 	}
 	
 	//******************************************************************************************************************
@@ -528,7 +531,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm) {
+	public void taskWindow(int userID,Task task,boolean isAnEdit,DataBase database,DefaultTableModel model,JTable table,JFrame frame,Priority_Manager pm,boolean isInt) {
 		//create task window
 		JFrame task_window = new JFrame("Add Task");
 		//pin to top of screen
@@ -584,7 +587,7 @@ public class Priority_Manager {
 		//creates text area for date input
 		Format f = new SimpleDateFormat("MM/dd/yyyy");
 		String stringDate;
-		if(isAnEdit == true) {
+		if(isAnEdit == true || isInt == true) {
 			stringDate = f.format(task.getDueDate());
 		}else {stringDate = "";}
 		JTextArea date = new JTextArea(stringDate);
@@ -609,7 +612,7 @@ public class Priority_Manager {
 		
 		//create check box for if task is complete
 		JCheckBox status = new JCheckBox("complete");
-		if(isAnEdit == true) {
+		if(isAnEdit == true || isInt == true) {
 			if(task.getStatus() == TaskStatus.CLOSED) {
 				status.setSelected(true);
 			}else {status.setSelected(false);}

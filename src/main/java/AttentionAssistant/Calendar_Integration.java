@@ -77,19 +77,19 @@ public class Calendar_Integration {
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
 		String strLine;
-
+		
+		Task toAdd = new Task();
 		//Read File Line By Line
 		while ((strLine = br.readLine()) != null)   {
-			Task toAdd = new Task();
+			
 			if (strLine.contains("BEGIN:VEVENT")) {
 				toAdd = new Task();
 			}
 			else if (strLine.contains("DTSTART")) {
 				
 				String oldstr = strLine.substring(8, 16);
-				String newstr = oldstr.substring(0, 4) + "-" + oldstr.substring(4,6) + "-" + oldstr.substring(6, 8);
-				
-				Date start = new SimpleDateFormat("yyyy-mm-dd").parse(newstr);
+				String newstr = oldstr.substring(4,6) + "/" + oldstr.substring(6, 8) + "/" + oldstr.substring(0, 4);
+				Date start = new SimpleDateFormat("MM/dd/yyyy").parse(newstr);
 				
 				toAdd.setDueDate(start);
 			}
@@ -100,8 +100,10 @@ public class Calendar_Integration {
 				toAdd.setTaskName(strLine.substring(8));
 			}
 			else if (strLine.contains("END:VEVENT")) {
-				boolean isAnEdit = true; 
-				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame);
+				boolean isAnEdit = false; 
+				boolean isIntegr = true;
+				System.out.println(toAdd.getDueDate());
+				pm.taskWindow(userID, toAdd, isAnEdit, db, model, table, frame, pm, isIntegr);
 			}
 			else {
 				
