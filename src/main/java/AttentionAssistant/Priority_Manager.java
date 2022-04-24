@@ -431,7 +431,7 @@ public class Priority_Manager {
         		//deconstruct old observer******************************************************************
         }});
 		
-		
+		 
 		//puts table in scrollable panel
 		JScrollPane tpane = new JScrollPane(table);
 		tpane.setBackground(Color.black);
