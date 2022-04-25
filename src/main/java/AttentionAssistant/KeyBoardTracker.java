@@ -7,6 +7,7 @@ package AttentionAssistant;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.atteo.evo.inflector.English;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -113,6 +114,7 @@ public class KeyBoardTracker implements NativeKeyListener {
 			keyword = keyword.toUpperCase();
 			//System.out.println("curent keyword " + keyword);
 			keyWordOccurrences += Collections.frequency(allWordsInputed, keyword);
+			keyWordOccurrences += Collections.frequency(allWordsInputed, English.plural(keyword).toUpperCase()); //Check for the plural version
 			//System.out.println("Current keyword occurrences " + keyWordOccurrences);
 		}
 		
