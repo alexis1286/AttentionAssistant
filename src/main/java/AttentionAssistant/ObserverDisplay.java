@@ -620,7 +620,7 @@ public class ObserverDisplay {
 		String[] input = monitorInfo.getWordsTyped().split("\\s+");;
 		for(int i = 0; i < input.length; i++) {
 			wordsTyped = new JLabel("       " + input[i]);
-			wordsTyped.setFont(new Font("Serif", Font.BOLD, 17));
+			wordsTyped.setFont(new Font("Serif", Font.BOLD, 15));
 			wordsTyped.setForeground(Color.white);
 
 			wordsTyped_panel.add(wordsTyped);	

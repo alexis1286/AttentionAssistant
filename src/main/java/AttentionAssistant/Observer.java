@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import org.atteo.evo.inflector.English;
+//import java.util.concurrent.TimeUnit;
 
 import AttentionAssistant.Pomodoro_Timer.Work_Break;
 import edu.mit.jwi.Dictionary;
@@ -34,7 +32,7 @@ public class Observer implements Runnable {
 	private DataBase db; 
 	private Notification_System notification_System;
 	private Pomodoro_Timer pTimer;
-	private int observerDelayInterval = 30; //interval when the observer will check on the user's active (IN SECONDS)
+	//private int observerDelayInterval = 30; //interval when the observer will check on the user's active (IN SECONDS)
 
 	/**
 	 * Instantiating empty Observer object
@@ -229,6 +227,7 @@ public class Observer implements Runnable {
 			this.setDefaultEyeScore(eyeMovementTracker.getEyeMovementScore());
 			
 			//Adding a delay before calculating the score to allow the trackers some time to collect
+			/*
 			try {
 				System.out.println("Observer waiting " + observerDelayInterval + " seconds to pass");
 				TimeUnit.SECONDS.sleep(observerDelayInterval);
@@ -236,6 +235,7 @@ public class Observer implements Runnable {
 				System.out.println("!!!Issue with the TimeUnit in Obsevers!!!");
 				e.printStackTrace();
 			}
+			*/
 			
 			System.out.println("Observer is done waiting!!!");
 			
@@ -254,11 +254,6 @@ public class Observer implements Runnable {
 
 			//write to database
 			db.AddObserver(this, activeTask.getTaskID());
-			
-			
-			//Function call to display the Observer Monitor data GUI
-			displayObserver(activeTask, keyWords, mouseTracker, eyeMovementTracker, 
-					keyBoardTracker, osEventsTracker, internetTracker);
 			
 			/**
 			 * Check if user is focused on task when they should be working or
@@ -303,6 +298,10 @@ public class Observer implements Runnable {
 					notification_System.isNull();
 				}
 			}
+			
+			//Function call to display the Observer Monitor data GUI
+			displayObserver(activeTask, keyWords, mouseTracker, eyeMovementTracker, 
+					keyBoardTracker, osEventsTracker, internetTracker);
 	}
 	
 	/**
@@ -426,7 +425,6 @@ public class Observer implements Runnable {
 							//Makes sure the word only contains alphabetical chars before adding to keywords list
 							if(w.getLemma().matches("[a-zA-Z]+")) {
 								keywords.add(w.getLemma());
-								//keywords.add(English.plural(w.getLemma())); //adds the plural version of the word
 							}
 						}
 					}
