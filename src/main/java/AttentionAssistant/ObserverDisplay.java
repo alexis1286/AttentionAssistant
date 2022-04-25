@@ -889,7 +889,7 @@ public class ObserverDisplay {
 				 * specifications for Facial Recognition Tracking button
 				 */
 				face.setForeground(Color.white);
-				face.setFont(new Font("Serif", Font.BOLD, 16));
+				face.setFont(new Font("Serif", Font.BOLD, 15));
 				face.setContentAreaFilled(true);
 				face.setBorderPainted(false);
 				face.setFocusPainted(false);

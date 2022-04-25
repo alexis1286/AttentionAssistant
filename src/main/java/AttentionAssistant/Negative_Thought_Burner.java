@@ -158,7 +158,7 @@ public class Negative_Thought_Burner {
 		JTextArea firstnametext = new JTextArea();
 		firstnametext.setBounds(100, 200, 500, 250);
 	    firstnametext.setBackground(new Color(195,195,195));
-	    firstnametext.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+	    firstnametext.setFont(new Font("Dosis SemiBold", Font.BOLD, 30));
         firstnametext.setLineWrap(true);
         firstnametext.setCaretColor(Color.red);
         firstnametext.setWrapStyleWord(true);
