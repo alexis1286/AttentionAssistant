@@ -142,6 +142,7 @@ public class ObserverDisplay {
 		JPanel score_panel = new JPanel();
 		score_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		score_panel.setBackground(aa_grey);
+		score_panel.setMaximumSize(new Dimension(425, 25));
 		
 		JLabel score = new JLabel("Observer Score: " + monitorInfo.getObserverScore());
 		score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
@@ -149,6 +150,17 @@ public class ObserverDisplay {
 		
 		score_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		score_panel.add(score);
+		
+		JPanel threshold_panel = new JPanel();
+		threshold_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		threshold_panel.setBackground(aa_grey);
+		
+		JLabel threshold = new JLabel("* A score of 50 or above is considered on task");
+		threshold.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 15));
+		threshold.setForeground(Color.white);
+		
+		threshold_panel.add(Box.createRigidArea(new Dimension(30, 0)));
+		threshold_panel.add(threshold);
 		
 		
 		/*
@@ -161,6 +173,7 @@ public class ObserverDisplay {
 		overview_panel.add(keywords_panel);
 		overview_panel.add(Box.createRigidArea(new Dimension(0, 25)));
 		overview_panel.add(score_panel);
+		overview_panel.add(threshold_panel);
 		
 		//add to general_panel to card_panel
 		card_panel.add("overview", overview_panel);
