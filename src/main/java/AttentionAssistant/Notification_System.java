@@ -260,13 +260,13 @@ public class Notification_System {
 		String text = "";
 		
 		Random randomGenerator=new Random();
-		int randoNum = randomGenerator.nextInt(max) + min;
+		int randoNum = 1; //randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
-	        case 1:  text = " "+userName+", you've \n been working on "+ task.getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
+	        case 1:  text = "You've been working \n on "+ task.getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
 	                 break;
 	        case 2: text = " You are KILLING it! \n You've definitely \n earned a break!";
 	                 break;
-	        case 3:  text = " Hey "+userName+", \n all this work is \n making me hungry... \n How about a snack break?";
+	        case 3:  text = " Hey "+userName+", \n all this work is \n making me hungry... \n How about a snack?";
 	                 break;
 	        case 4: text = " You've been working \n for ages! Why don't \n we stretch out legs?";
 	                 break;
@@ -339,7 +339,7 @@ public class Notification_System {
 		Random randomGenerator=new Random();
 		int randoNum = randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
-	        case 1:  text = " "+userName+", \n you finished "+pm.getActiveTask().getTaskName()+"! \n Ready to pick a new task?";
+	        case 1:  text = " "+userName+", \n you finished "+pm.getActiveTask().getTaskName()+"! \n Let's pick a new task!";
 	                 break;
 	        case 2: text = " You rocked "+task.getTaskName()+"! \n I'm so impressed!";
 	                 break;
@@ -361,7 +361,7 @@ public class Notification_System {
 		Random randomGenerator=new Random();
 		int randoNum = randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
-	        case 1:  text = " It's time to take a \n break, why not work \n on "+pm.getNonObservableTask().getTaskName()+"?";
+	        case 1:  text = " It's time to take a \n break, why not \n"+pm.getNonObservableTask().getTaskName()+"?";
 	                 break;
 	        case 2:  text = " You made it through \n "+settings.getWorkPeriod()+" minutes of work, \n it's time for \n "+settings.getBreakPeriod()+" of play";
 	                 break;
@@ -376,20 +376,20 @@ public class Notification_System {
 	}
 	
 	
-	public void workTime() {
+	public void workTime(Task task) {
 		//work period start
 		String text = "";
 		
 		Random randomGenerator=new Random();
 		int randoNum = randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
-	        case 1:  text = " Break time is over, \n let's get back to \n work on "+pm.getActiveTask().getTaskName()+"!";
+	        case 1:  text = " Break time is over, \n let's get back to \n work on "+task.getTaskName()+"!";
 	                 break;
-	        case 2:  text = " I hope you had a great \n break! Let's get \n back to "+pm.getActiveTask().getTaskName();
+	        case 2:  text = " I hope you had a great \n break! Let's get \n back to "+task.getTaskName();
 	                 break;
 	        case 3:  text = " Hey "+userName+", \n it's work time! \n It's great to have \n you back!";
 	                 break;
-	        case 4:  text = " It's time to get back \n on task! "+pm.getActiveTask().getTaskName()+" \n is your current goal.";
+	        case 4:  text = " It's time to get back \n on task! "+task.getTaskName()+" \n is your current goal.";
 	                 break;
 	        default: text = " Resume pomo - randoNum \n out of range";
     				 break;

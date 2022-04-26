@@ -20,6 +20,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
+import AttentionAssistant.Pomodoro_Timer.Work_Break;
+
 import java.io.File;
 
 
@@ -491,7 +493,7 @@ public class Pomodoro_Timer
 					Notification_System notifs;
 					try {
 						notifs = new Notification_System(setting.getUserID(),db);
-						notifs.workTime();
+						notifs.workTime(pm.activeTask);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -968,8 +970,17 @@ public class Pomodoro_Timer
 		frame.repaint();
 	}
 	
-	public void setbuttonto0() {
-
+	public void setbuttonto0(int userID,DataBase db,Priority_Manager pm) {
+		if(getWorkBreakStatus() == Work_Break.Break) {
+			try {
+				Notification_System notif = new Notification_System(userID, db);
+				notif.workTime(pm.getActiveTask());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 		tobreak.doClick();
 	
 	}

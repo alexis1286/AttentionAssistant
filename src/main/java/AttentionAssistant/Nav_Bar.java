@@ -127,6 +127,7 @@ public class Nav_Bar{
 				mb = new Monitoring_Bar();
 				mb.monitorBar(userID, db, pomo, pm);
 				
+				
 				pomo.monitorbar(mb);
 				
 				pomo.clickStart();

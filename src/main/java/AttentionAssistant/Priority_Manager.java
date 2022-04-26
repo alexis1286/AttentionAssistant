@@ -138,6 +138,7 @@ public class Priority_Manager {
 	}
 	
 	public ArrayList<Task> observableTasks() {
+		populateTaskList(userID, db);
 		ArrayList<Task> list = new ArrayList<Task>();
 		for(int i=0;i<Task_List.size();i++) {
 			if(Task_List.get(i).getObservable()==true) {
@@ -147,10 +148,24 @@ public class Priority_Manager {
 		return list;
 	}
 	
+	public void setInitialActive() {
+		ArrayList<Task> list = observableTasks();
+		for(int i=0;i<list.size();i++) {
+			if(list.get(i).getPriority() == true) {
+				activeTask = list.get(i);
+			}
+		}
+		
+		if(activeTask.getTaskName() == null) {
+			activeTask = list.get(0);
+		}
+	}
+	
 	public void open_pm(int userID,DataBase db,Priority_Manager pm) {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
+				setInitialActive();
 				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);

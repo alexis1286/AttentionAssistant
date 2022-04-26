@@ -227,9 +227,8 @@ public class Monitoring_Bar {
         pomoButton.setMargin(new Insets(0,0,0,0));
         pomoButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		pomo.setbuttonto0();
+        		pomo.setbuttonto0(userID,db, pm);
         		refreshBar();
-        		
         	}});
         panel.add(minimize);
         panel.add(pomoButton);
