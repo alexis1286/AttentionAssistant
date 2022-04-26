@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
 public class ObserverDisplay {
@@ -603,8 +604,12 @@ public class ObserverDisplay {
 		os_panel.add(Box.createRigidArea(new Dimension(0, 25)));
 		os_panel.add(score_panel);
 		
+		JScrollPane scroll_os = new JScrollPane(os_panel); 
+		scroll_os.setBackground(aa_grey); 
+		//scroll_os.setMaximumSize(new Dimension(105, 500)); 
+		
 		//add to os_panel to card_panel
-		card_panel.add("osEvents", os_panel);
+		card_panel.add("osEvents", scroll_os);
 	}
 	
 	/**

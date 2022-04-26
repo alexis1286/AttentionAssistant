@@ -171,8 +171,8 @@ public class AttentionAssistantDriver {
 			guide.setFocusPainted(false);
 			
 			title_panel.add(title);
-			title_panel.add(Box.createRigidArea(new Dimension(400, 0)));
-			//title_panel.add(guide);
+			title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
+			title_panel.add(guide);
 			title_panel.add(close_window);
 			
 			//returns panel
@@ -1596,93 +1596,86 @@ public class AttentionAssistantDriver {
 				}
 			    
 			    JLabel catpic = new JLabel(new ImageIcon(cat1));
-			    catpic.setBounds(500, 50, 138, 150);
+			    catpic.setBounds(500, 80, 138, 150);
 			    panel.add(catpic);
 			    
 			    JLabel duckpic = new JLabel(new ImageIcon(duck));
-			    duckpic.setBounds(60, 50, 132, 150);
+			    duckpic.setBounds(60, 80, 132, 150);
 			    panel.add(duckpic);
 			
 			
-			Label.setBounds(285, 75, 280, 100);
+			Label.setBounds(285, 115, 280, 100);
 			Label.setForeground(new Color(255, 255, 255));
 			Label.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
 			panel.add(Label);
 			
-			Label2.setBounds(225, 110, 280, 100);
+			Label2.setBounds(225, 180, 280, 100);
 			Label2.setForeground(new Color(255, 255, 255));
 			Label2.setFont(new Font("Dosis SemiBold",Font.BOLD,20));
 			panel.add(Label2);
 			
 
-			option.setBounds(200, 200, 280, 100);
+			option.setBounds(200, 280, 280, 100);
 			option.setForeground(new Color(255, 255, 255));
 			option.setFont(new Font("Dosis SemiBold",Font.BOLD,15));
 			panel.add(option);
 
-			
-			parentportal.setBounds(185, 400, 140, 35);
-			parentportal.setHorizontalTextPosition(SwingConstants.CENTER);
-			parentportal.setVerticalTextPosition(SwingConstants.CENTER);
-			parentportal.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
-			parentportal.setBorderPainted(false);
-			parentportal.setBackground(aa_purple);
-			parentportal.setForeground(Color.WHITE);
-			parentportal.addActionListener(new ActionListener() {
-		        	public void actionPerformed(ActionEvent e) {
-		        		DataBase db = new DataBase();	
-		        		String password = new String("1");
-		        		String usr = new String("Test");
-		        		int sq1 = 1;
-		        		String sqanswer1 = new String("1");
-		        		int sq2 = 1;
-		        		String sqanswer2 = new String("2");
-
-		        		String pwd = hash(password);
-		       
-		        		
-		        		db.DatabaseSetUp();
-		        		
-		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
-		        		Parent_Account addParentUser = new Parent_Account();
-		        	
-		        		
-		        		if(ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
-		        			JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Test Parent Account Logging In!");
-	        				
-	        				//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
-	        				int ParentID = ParentAccount.getParentID();
-	        				frame.dispose();
-	        				success.dispose();
-	        				parentPortal(ParentID,db);
-		        		}
-		        		else {
-		        			
-		        			addParentUser.setUsername(usr);
-		        			addParentUser.setPassword(pwd);
-		        			addParentUser.setSQ_Key(sq1);
-		        			addParentUser.setSQ_Answer(sqanswer1);
-		        			addParentUser.setSQ_Key2(sq2);
-		        			addParentUser.setSQ_Answer2(sqanswer2);
-		        			db.AddParent_Account(addParentUser);
-		        			
-		        			//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
-	        				int ParentID = ParentAccount.getParentID();
-	        				
-	        			
-	        				JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Parent Account! Logging in now...");
-	        				
-	        				frame.dispose();
-	        				success.dispose();
-	        				parentPortal(ParentID,db);
-		        		}
-		        		
-		        }});
-			 panel.add(parentportal);
+//			
+//			parentportal.setBounds(185, 400, 140, 35);
+//			parentportal.setHorizontalTextPosition(SwingConstants.CENTER);
+//			parentportal.setVerticalTextPosition(SwingConstants.CENTER);
+//			parentportal.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
+//			parentportal.setBorderPainted(false);
+//			parentportal.setBackground(aa_purple);
+//			parentportal.setForeground(Color.WHITE);
+//			parentportal.addActionListener(new ActionListener() {
+//		        	public void actionPerformed(ActionEvent e) {
+//		        		DataBase db = new DataBase();	
+//		        		String password = new String("1");
+//		        		String usr = new String("Test");
+//		  
+//
+//		        		String pwd = hash(password);
+//		       
+//		        		
+//		        		db.DatabaseSetUp();
+//		        		
+//		        		Parent_Account ParentAccount = db.SearchParent_Account(usr,pwd);
+//		        		Parent_Account addParentUser = new Parent_Account();
+//		        	
+//		        		
+//		        		if(ParentAccount.getPassword().equals(pwd) == true && ParentAccount.getUsername().equals(usr) == true) {
+//		        			JFrame success = new JFrame();
+//	        				JOptionPane.showMessageDialog(success, "Test Parent Account Logging In!");
+//	        				
+//	        				//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+//	        				int ParentID = ParentAccount.getParentID();
+//	        				frame.dispose();
+//	        				success.dispose();
+//	        				parentPortal(ParentID,db);
+//		        		}
+//		        		else {
+//		        			
+//		        			addParentUser.setUsername(usr);
+//		        			addParentUser.setPassword(pwd);
+//		        			db.AddParent_Account(addParentUser);
+//		        			
+//		        			//Parent_Account Parent_Account2 = db.Username_Parent_Account(usr);
+//	        				int ParentID = ParentAccount.getParentID();
+//	        				
+//	        			
+//	        				JFrame success = new JFrame();
+//	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Parent Account! Logging in now...");
+//	        				
+//	        				frame.dispose();
+//	        				success.dispose();
+//	        				parentPortal(ParentID,db);
+//		        		}
+//		        		
+//		        }});
+//			 panel.add(parentportal);
 			 
-			 login.setBounds(225, 300, 97, 35);
+			 login.setBounds(225, 380, 97, 35);
 			 login.setHorizontalTextPosition(SwingConstants.CENTER);
 			 login.setVerticalTextPosition(SwingConstants.CENTER);
 			 login.setFont(new Font("Dosis SemiBold", Font.BOLD, 17));
@@ -1697,98 +1690,91 @@ public class AttentionAssistantDriver {
 			 panel.add(login);
 			 
 			 
-			 ChildPortal.setBounds(350, 400, 125, 35);
-			 ChildPortal.setHorizontalTextPosition(SwingConstants.CENTER);
-			 ChildPortal.setVerticalTextPosition(SwingConstants.CENTER);
-			 ChildPortal.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
-			 ChildPortal.setBorderPainted(false);
-			 ChildPortal.setBackground(Color.white);
-			 ChildPortal.setForeground(aa_purple);
-			 ChildPortal.addActionListener(new ActionListener() {
-		        	public void actionPerformed(ActionEvent e) {
-		        		DataBase db = new DataBase();	
-		        		//open child portal
-		        		String password = new String("1");
-		        		String usr = new String("Test");
-		        		String first = new String("TestChild");
-		        		int sq1 = 1;
-		        		String sqanswer1 = new String("1");
-		        		int sq2 = 1;
-		        		String sqanswer2 = new String("2");
-		        		String pwd = hash(password);
-		        		
-		        		
-		        		
-		        		db.DatabaseSetUp();
-		        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
-		        		User_Account addChildUser = new User_Account();
-		        
-		      		   //keep user name
-		        		//change password to security 1 &2 
-		        		//add one more to display question
-		        		//if questoins are right, do popup for change new passwrod
-		        		//another popup saying 1-2 questions wrong
-		        
-		        		//TODO shouldnt be able to run if string is empty
-		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
-		        			JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
-	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
-	        				int userid = UserAccount2.getUserID();
-	        				
-	        				Settings sett = new Settings(db,userid);
-	        				
-	           				System.out.print("this is theuser id" + userid);
-	        				frame.dispose();
-	        				success.dispose();
-	        				childPortal(userid,sett,db);
-		        		}
-		        		else {
-		        			addChildUser.setUsername(usr);
-	        				addChildUser.setPassword(pwd);
-	        				addChildUser.setName(first);
-	        				addChildUser.setSQ_Key(sq1);
-	        				addChildUser.setSQ_Answer(sqanswer1);
-	        				addChildUser.setSQ_Key2(sq2);
-	        				addChildUser.setSQ_Answer2(sqanswer2);
-	        				db.AddUser_Account(addChildUser);
-	        				
-	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
-	        				int userid = UserAccount2.getUserID();
-	        				
-	        				//File object for directory
-	        				File directoryPath = new File("happyThoughtMedia");
-	        				
-	        				//List of all files in happyThoughtMedia directory
-	        				String files[] = directoryPath.list();
-	        				
-	        				/*
-	        				 * for all the media that exists in the happyThoughtMediaDirectory
-	        				 * add files to database as pre-loaded library
-	        				 */
-	        				for(int i = 0; i < files.length; i++) {
-	        					Media media = new Media("happyThoughtMedia/" + files[i]);
-	        					db.AddMedia(media, userid);
-	        				}
-	        				
-	        				Settings sett = new Settings(userid);
-	        				
-	        				db.AddSettings(sett, userid);
-	        				
-	        				JFrame success = new JFrame();
-	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
-	        				
-	        				System.out.print("this is theuser id" + userid);
-	        				frame.dispose();
-	        				success.dispose();
-	        				childPortal(userid,sett,db);
-	        		
-		        		}
-		        }});
-			 panel.add(ChildPortal);
-			 
-			 
-			 register.setBounds(350, 300, 95, 35);
+//			 ChildPortal.setBounds(350, 400, 125, 35);
+//			 ChildPortal.setHorizontalTextPosition(SwingConstants.CENTER);
+//			 ChildPortal.setVerticalTextPosition(SwingConstants.CENTER);
+//			 ChildPortal.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));
+//			 ChildPortal.setBorderPainted(false);
+//			 ChildPortal.setBackground(Color.white);
+//			 ChildPortal.setForeground(aa_purple);
+//			 ChildPortal.addActionListener(new ActionListener() {
+//		        	public void actionPerformed(ActionEvent e) {
+//		        		DataBase db = new DataBase();	
+//		        		//open child portal
+//		        		String password = new String("1");
+//		        		String usr = new String("Test");
+//		        		String first = new String("TestChild");
+//		        		
+//		        		String pwd = hash(password);
+//		        		
+//		        		
+//		        		
+//		        		db.DatabaseSetUp();
+//		        		User_Account UserAccount = db.SearchUser_Account(usr, pwd);
+//		        		User_Account addChildUser = new User_Account();
+//		        
+//		      		   //keep user name
+//		        		//change password to security 1 &2 
+//		        		//add one more to display question
+//		        		//if questoins are right, do popup for change new passwrod
+//		        		//another popup saying 1-2 questions wrong
+//		        
+//		        		//TODO shouldnt be able to run if string is empty
+//		        		if(UserAccount.getPassword().equals(pwd) == true && UserAccount.getUsername().equals(usr) == true) {
+//		        			JFrame success = new JFrame();
+//	        				JOptionPane.showMessageDialog(success, "Test Child Account Logging In!");
+//	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
+//	        				int userid = UserAccount2.getUserID();
+//	        				
+//	        				Settings sett = new Settings(db,userid);
+//	        				
+//	           				System.out.print("this is theuser id" + userid);
+//	        				frame.dispose();
+//	        				success.dispose();
+//	        				childPortal(userid,sett,db);
+//		        		}
+//		        		else {
+//		        			addChildUser.setUsername(usr);
+//	        				addChildUser.setPassword(pwd);
+//	        				addChildUser.setName(first);
+//	        				db.AddUser_Account(addChildUser);
+//	        				
+//	        				User_Account UserAccount2 = db.UsernameUser_Account(usr);
+//	        				int userid = UserAccount2.getUserID();
+//	        				
+//	        				//File object for directory
+//	        				File directoryPath = new File("happyThoughtMedia");
+//	        				
+//	        				//List of all files in happyThoughtMedia directory
+//	        				String files[] = directoryPath.list();
+//	        				
+//	        				/*
+//	        				 * for all the media that exists in the happyThoughtMediaDirectory
+//	        				 * add files to database as pre-loaded library
+//	        				 */
+//	        				for(int i = 0; i < files.length; i++) {
+//	        					Media media = new Media("happyThoughtMedia/" + files[i]);
+//	        					db.AddMedia(media, userid);
+//	        				}
+//	        				
+//	        				Settings sett = new Settings(userid);
+//	        				
+//	        				db.AddSettings(sett, userid);
+//	        				
+//	        				JFrame success = new JFrame();
+//	        				JOptionPane.showMessageDialog(success, "Successfully Registered Test Child Account! Logging in now...");
+//	        				
+//	        				System.out.print("this is theuser id" + userid);
+//	        				frame.dispose();
+//	        				success.dispose();
+//	        				childPortal(userid,sett,db);
+//	        		
+//		        		}
+//		        }});
+//			 panel.add(ChildPortal);
+//			 
+//			 
+			 register.setBounds(350, 380, 95, 35);
 			 register.setHorizontalTextPosition(SwingConstants.CENTER);
 			 register.setVerticalTextPosition(SwingConstants.CENTER);
 			 register.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));

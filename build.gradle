@@ -11,6 +11,10 @@ apply plugin: 'application'
 sourceCompatibility = 1.9
 targetCompatibility = 1.9
 
+application {
+    mainClass = 'AttentionAssistant.AttentionAssistantDriver'
+}
+
 //repositories
 repositories {
     mavenCentral() 
@@ -52,5 +56,16 @@ test {
 }
 
 jar {
-    archiveBaseName = 'AttentionAssistant-gradle'
+
+    baseName = "AttentionAssistant"
+
+    manifest {
+        attributes(
+            "Main-Class": "AttentionAssistantDriver"
+        )
+    }
 }
+/*
+jar {
+    archiveBaseName = 'AttentionAssistant-gradle'
+}*/
