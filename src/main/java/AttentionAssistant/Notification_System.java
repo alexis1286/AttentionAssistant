@@ -260,7 +260,7 @@ public class Notification_System {
 		String text = "";
 		
 		Random randomGenerator=new Random();
-		int randoNum = 1; //randomGenerator.nextInt(max) + min;
+		int randoNum = randomGenerator.nextInt(max) + min;
 		switch (randoNum) {
 	        case 1:  text = "You've been working \n on "+ task.getTaskName()+" \n for a while, what if \n we "+pm.getNonObservableTask().getTaskName()+"?";
 	                 break;
