@@ -176,7 +176,9 @@ public class InternetTracker {
 			String text = "";
 			for(int i = 0; i < this.latestUrls.size(); i++) {
 				if(parseFromOrigin(this.latestUrls.get(i)) == null) {
-					//Do nothing, go to next URL
+					this.keywordCounts.add(0);
+					this.wordCounts.add(0);
+					this.urlScores.add(0);
 				}
 				else {
 					urlCount += 1;

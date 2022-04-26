@@ -235,9 +235,9 @@ public class Observer implements Runnable {
 				System.out.println("!!!Issue with the TimeUnit in Obsevers!!!");
 				e.printStackTrace();
 			}
-			*/
 			
 			System.out.println("Observer is done waiting!!!");
+			*/
 			
 			//calculation of the observer score
 			this.setObserverScore(calculateObserverScore(

@@ -300,13 +300,17 @@ public class ObserverDisplay {
 		urls_panel.setMaximumSize(new Dimension(425, 425));
 		
 		JLabel url;
+		int nullUrls = 0;
 		ArrayList<String> urls = monitorInfo.getUrls();
 		for(int i = 0; i < urls.size(); i++) {
-			url = new JLabel("       " + (i + 1) + ".)  " + urls.get(i));
-			url.setFont(new Font("Serif", Font.BOLD, 15));
-			url.setForeground(Color.white);
+			if(monitorInfo.getNumTotalWordsURL().get(i) == 0) {nullUrls += 1;}
+			else {
+				url = new JLabel("       " + (i + 1 - nullUrls) + ".)  " + urls.get(i));
+				url.setFont(new Font("Serif", Font.BOLD, 15));
+				url.setForeground(Color.white);
 
-			urls_panel.add(url);	
+				urls_panel.add(url);
+			}
 		}
 		
 		
@@ -348,30 +352,34 @@ public class ObserverDisplay {
 		JLabel keywordsPer;
 		JLabel wordsPer;
 		JLabel scorePer;
+		nullUrls = 0;
 		ArrayList<Integer> keywordsPerURL = monitorInfo.getNumKeywordsPerURL();
 		ArrayList<Integer> wordsPerURL = monitorInfo.getNumTotalWordsURL();
 		ArrayList<Integer> scorePerURL = monitorInfo.getScorePerURL();
 		for(int i = 0; i < urls.size(); i++) {
-			url = new JLabel("         " + (i + 1));
-			url.setFont(new Font("Serif", Font.BOLD, 15));
-			url.setForeground(Color.white);
+			if(wordsPerURL.get(i) == 0) {nullUrls += 1;}
+			else {
+				url = new JLabel("         " + (i + 1 - nullUrls));
+				url.setFont(new Font("Serif", Font.BOLD, 15));
+				url.setForeground(Color.white);
 			
-			keywordsPer = new JLabel("     " + keywordsPerURL.get(i));
-			keywordsPer.setFont(new Font("Serif", Font.BOLD, 15));
-			keywordsPer.setForeground(Color.white);
+				keywordsPer = new JLabel("     " + keywordsPerURL.get(i));
+				keywordsPer.setFont(new Font("Serif", Font.BOLD, 15));
+				keywordsPer.setForeground(Color.white);
 			
-			wordsPer = new JLabel("    " + wordsPerURL.get(i));
-			wordsPer.setFont(new Font("Serif", Font.BOLD, 15));
-			wordsPer.setForeground(Color.white);
+				wordsPer = new JLabel("    " + wordsPerURL.get(i));
+				wordsPer.setFont(new Font("Serif", Font.BOLD, 15));
+				wordsPer.setForeground(Color.white);
 			
-			scorePer = new JLabel("   " + scorePerURL.get(i));
-			scorePer.setFont(new Font("Serif", Font.BOLD, 15));
-			scorePer.setForeground(Color.white);
+				scorePer = new JLabel("   " + scorePerURL.get(i));
+				scorePer.setFont(new Font("Serif", Font.BOLD, 15));
+				scorePer.setForeground(Color.white);
 
-			urlData_panel.add(url);	
-			urlData_panel.add(keywordsPer);
-			urlData_panel.add(wordsPer);
-			urlData_panel.add(scorePer);
+				urlData_panel.add(url);	
+				urlData_panel.add(keywordsPer);
+				urlData_panel.add(wordsPer);
+				urlData_panel.add(scorePer);
+			}
 		}
 		
 		
@@ -384,7 +392,7 @@ public class ObserverDisplay {
 		
 		JLabel score;
 		if(monitorInfo.getInternetScore() == -1) {
-			score = new JLabel("Internet Score: <Not taken into account>");
+			score = new JLabel("Internet Score: <>");
 			score.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 			score.setForeground(Color.white);
 			
