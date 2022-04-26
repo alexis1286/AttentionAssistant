@@ -602,7 +602,7 @@ public class Pomodoro_Timer
 	                jLabel.setText(newtask);
 	                int userid =setting.getUserID();
 	                try {
-						pm.observeTask(userid, thistask, db, true);
+						pm.observeTask(userid, thistask, db, true,pm);
 						lastButtonPressed = null;
 						BreakTimerRunning = false;
 						MainTimerRunning = false;

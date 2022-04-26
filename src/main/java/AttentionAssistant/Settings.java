@@ -3353,7 +3353,8 @@ public class Settings {
 				settings_frame.setAlwaysOnTop(false);
 				settings_frame.setVisible(true);
 				settings_frame.setResizable(true);
-				settings_frame.setLocationRelativeTo(null);
+				settings_frame.setLocation(150,100);
+				//settings_frame.setLocationRelativeTo(null);
 				
 			}
 		});

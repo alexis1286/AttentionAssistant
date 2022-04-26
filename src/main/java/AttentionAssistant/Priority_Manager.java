@@ -79,14 +79,14 @@ public class Priority_Manager {
 		return activeTask;
 	}
 	
-	public void observeTask(int userID,Task task,DataBase db,boolean flag) throws IOException {
+	public void observeTask(int userID,Task task,DataBase db,boolean flag,Priority_Manager pm) throws IOException {
 		if(flag == false) {
 			populateTaskList(userID,db);
 			ArrayList<Task> oTasks = observableTasks();
 			if(oTasks.size() != 0) {
 				task = oTasks.get(0);
 			}else {
-				firstTaskWindow(userID, db);
+				firstTaskWindow(userID, db, pm);
 				populateTaskList(userID,db);
 				oTasks.clear();
 				oTasks = observableTasks();
@@ -165,7 +165,7 @@ public class Priority_Manager {
 		EventQueue.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-				setInitialActive();
+				//setInitialActive();
 				//set up frame
 				JFrame frame = new JFrame();
 				frame.setUndecorated(true);
@@ -192,6 +192,7 @@ public class Priority_Manager {
 				frame.setResizable(true);
 				frame.setLocationRelativeTo(null);
 			}
+			
 		});
 	}
 	
@@ -428,7 +429,7 @@ public class Priority_Manager {
         				Task task = Task_List.get(i);
         				boolean flag = true;
         				try {
-							observeTask(userID, task, db,flag);
+							observeTask(userID, task, db,flag,pm);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -788,7 +789,7 @@ public class Priority_Manager {
 	 * @param Description, Observable, Status
 	 * @return task
 	 */
-	public Task firstTaskWindow(int userID,DataBase database) {
+	public Task firstTaskWindow(int userID,DataBase database,Priority_Manager pm) {
 		Task task = new Task();
 		//create task window
 		JFrame task_window = new JFrame("Add an Observable Task");
@@ -912,6 +913,12 @@ public class Priority_Manager {
         		System.out.println(timestamp);
         		database.AddEvent(userID, timestamp, "add");
         		task_window.dispose();
+        		setInitialActive();
+		        Monitoring_Bar mb = new Monitoring_Bar();
+				mb.monitorBar(userID, db, pomo, pm);
+				pomo.monitorbar(mb);
+				pomo.clickStart();
+				pomo.clickPause();
         }});
 		
 		//make cancel button, closes task window without adding
