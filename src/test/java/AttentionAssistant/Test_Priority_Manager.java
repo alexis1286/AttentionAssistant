@@ -142,7 +142,7 @@ public class Test_Priority_Manager {
          *  Grab Parameter Active Task
          */
         
-        nondefaultPM.setActiveTask(new Task(999, "This is a test description", true, TaskStatus.OPEN, "This is a test Name", new Date(1220227200L * 1000), true));
+        //nondefaultPM.setActiveTask(new Task(999, "This is a test description", true, TaskStatus.OPEN, "This is a test Name", new Date(1220227200L * 1000), true));
         Task testActiveTask2 = nondefaultPM.getActiveTask();
         
         /**
@@ -248,7 +248,7 @@ public class Test_Priority_Manager {
 		
 		defaultPM = new Priority_Manager(testUserID, testDB);
     	
-    	defaultPM.addTask(testUserID, testDB, testModel, testTable);
+    	//defaultPM.addTask(testUserID, testDB, testModel, testTable);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -263,7 +263,7 @@ public class Test_Priority_Manager {
 		
 		defaultPM = new Priority_Manager(testUserID, testDB);
     	
-    	defaultPM.addTask(testUserID, testDB, testModel, testTable);
+    	//defaultPM.addTask(testUserID, testDB, testModel, testTable);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -278,7 +278,7 @@ public class Test_Priority_Manager {
 		
 		defaultPM = new Priority_Manager(testUserID, testDB);
     	
-    	defaultPM.addTask(testUserID, testDB, testModel, testTable);
+    	//defaultPM.addTask(testUserID, testDB, testModel, testTable);
     	  	
     }
 

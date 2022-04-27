@@ -12,9 +12,9 @@ public class Test_Notification_System {
 	/**
 	 * Objects used in test
 	 */
-	Notification_System defaultNotify;
-	Notification_System nonDefaultNotify;
-	Notification_System copyNotify;
+	Notification defaultNotify;
+	Notification nonDefaultNotify;
+	Notification copyNotify;
 	
 	@BeforeEach
 	void setup() {
@@ -23,11 +23,11 @@ public class Test_Notification_System {
 		boolean testIgnored= true;
 		Date testDT_Notification = new Date(1220227200L * 1000);
 
-		defaultNotify= new Notification_System();
+		defaultNotify= new Notification();
 		
-		nonDefaultNotify= new Notification_System(testNotificationID, testType, testIgnored, testDT_Notification);
+		nonDefaultNotify= new Notification(testNotificationID, testType, testIgnored, testDT_Notification);
 		
-		copyNotify= new Notification_System(nonDefaultNotify);
+		copyNotify= new Notification(nonDefaultNotify);
 		
 	}
 		
