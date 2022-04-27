@@ -205,7 +205,7 @@ public class EyeMovementTracker {
     		double facesFound=0;
             
     		//grabs the time 0 minutes 10 seconds in the future
-    		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(30L, TimeUnit.SECONDS);
+    		long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(15L, TimeUnit.SECONDS);
     		
     		//grabs the time 4 minutes 45 seconds in the future
     		//long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(4L, TimeUnit.MINUTES) + TimeUnit.NANOSECONDS.convert(45L, TimeUnit.SECONDS);
@@ -226,17 +226,17 @@ public class EyeMovementTracker {
     				//System.out.println("Looking at screen: " + isFaceDetectedFrame);
     				
     				//Timer to reduce the frames
-    				long waitTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L, TimeUnit.SECONDS);
+//    				long waitTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L, TimeUnit.SECONDS);
     				
     				//if a face is detected in any of the 5 frames set isFaceDetected to true 
     				if (isFaceDetectedFrame == true) {
     					isFaceDetected=true;
     				}
     				//Timer to reduce the frames
-	    				while (System.nanoTime() < waitTime)
-	    				{
+//	    				while (System.nanoTime() < waitTime)
+//	    				{
 	    					
-	    				}
+//	    				}
     			//end of for loop
     			}
     			
