@@ -80,15 +80,15 @@ public class KeyBoardTracker implements NativeKeyListener {
 		 * Based on key presses
 		 */
 		//Calculating a tempt 50 point scale
-		int temptKeyPressedScore = 50 * (currentKeyPressScore - lastKeyPressScore)/lastKeyPressScore;
+		int temptKeyPressedScore = 15 * (currentKeyPressScore - lastKeyPressScore)/lastKeyPressScore;
 		
 		//System.out.println("temptKeyPressedScore = " + temptKeyPressedScore);
 				
 		//Ensuring that the tempt key pressed score is not above 50 or below 1
-		if(temptKeyPressedScore < 50 && temptKeyPressedScore > 0) {
+		if(temptKeyPressedScore < 15 && temptKeyPressedScore > 0) {
 			keysPressedScore = temptKeyPressedScore;
-		} else if (temptKeyPressedScore >= 50) {
-			keysPressedScore = 50;
+		} else if (temptKeyPressedScore >= 15) {
+			keysPressedScore = 15;
 		} else {
 			keysPressedScore = 1;
 		}
@@ -121,16 +121,22 @@ public class KeyBoardTracker implements NativeKeyListener {
 		//System.out.println("How Many Key Words Were Found " + keyWordOccurrences);
 		
 		//Updating the keyBoardScoreKeyWords based on the occurrences
-		for(int i = 0; i < keyWordOccurrences; i++) {
+		/*for(int i = 0; i < keyWordOccurrences; i++) {
 			keyWordsFoundScore += 10;
 			if(keyWordsFoundScore > 50) {
 				break;
 			}
-		}
+		}*/
+		
 		
 		//Making sure that the keyBoardScoreKeyWords is not above 50
-		if(keyWordsFoundScore > 50) {
-			keyWordsFoundScore = 50;
+		//if(keyWordsFoundScore > 50) {
+		if(keyWordOccurrences >= 2) {
+			keyWordsFoundScore = 85;
+		}else if(keyWordOccurrences == 1) {
+			keyWordsFoundScore = 67;
+		}else {
+			keyWordsFoundScore = 0;
 		}
 		
 		//System.out.println("keyBoardScoreKeyWords = " + keyWordsFoundScore);

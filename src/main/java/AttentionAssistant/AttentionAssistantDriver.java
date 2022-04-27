@@ -171,8 +171,8 @@ public class AttentionAssistantDriver {
 			guide.setFocusPainted(false);
 			
 			title_panel.add(title);
-			title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
-			title_panel.add(guide);
+			title_panel.add(Box.createRigidArea(new Dimension(400, 0)));
+			//title_panel.add(guide);
 			title_panel.add(close_window);
 			
 			//returns panel
@@ -1615,7 +1615,7 @@ public class AttentionAssistantDriver {
 			panel.add(Label2);
 			
 
-			option.setBounds(200, 280, 280, 100);
+			option.setBounds(200, 280, 290, 100);
 			option.setForeground(new Color(255, 255, 255));
 			option.setFont(new Font("Dosis SemiBold",Font.BOLD,15));
 			panel.add(option);
@@ -1774,7 +1774,7 @@ public class AttentionAssistantDriver {
 //			 panel.add(ChildPortal);
 //			 
 //			 
-			 register.setBounds(350, 380, 95, 35);
+			 register.setBounds(350, 380, 100, 35);
 			 register.setHorizontalTextPosition(SwingConstants.CENTER);
 			 register.setVerticalTextPosition(SwingConstants.CENTER);
 			 register.setFont(new Font("Dosis SemiBold", Font.BOLD, 15));

@@ -727,7 +727,7 @@ public class ObserverDisplay {
 		/*
 		 * everything within the Last Mouse Score section
 		 */
-		JPanel lastscore_panel = new JPanel();
+		/*JPanel lastscore_panel = new JPanel();
 		lastscore_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		lastscore_panel.setBackground(aa_grey);
 		lastscore_panel.setMaximumSize(new Dimension(425, 50));
@@ -739,7 +739,7 @@ public class ObserverDisplay {
 		lastscore_panel.add(Box.createRigidArea(new Dimension(15, 0)));
 		lastscore_panel.add(lastscore);
 		
-		
+		*/
 		/*
 		 * everything within the Mouse Score section
 		 */
@@ -760,7 +760,7 @@ public class ObserverDisplay {
 		 * add everything to mouse_panel
 		 */
 		mouse_panel.add(currentscore_panel);
-		mouse_panel.add(lastscore_panel);
+		//mouse_panel.add(lastscore_panel);
 		mouse_panel.add(score_panel);
 		
 		//add to mouse_panel to card_panel

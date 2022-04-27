@@ -458,11 +458,11 @@ public class Observer implements Runnable {
 			int keyBoardScore, int osEventsScore, int internetScore){
 		
 		
-		double mouseWeight = 5;
-		double eyeWeight = 25;
-		double keyBoardWeight = 20;
-		double OSWeight = 25;
-		double internetWeight = 25;
+		double mouseWeight = 7;
+		double eyeWeight = 12;
+		double keyBoardWeight = 27;
+		double OSWeight = 27;
+		double internetWeight = 27;
 
 		double totalWeight= (mouseWeight) + 
 				(eyeWeight) + 

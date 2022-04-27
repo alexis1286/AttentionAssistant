@@ -46,7 +46,7 @@ public class MouseTracker implements Runnable, NativeMouseInputListener {
 	public int getMouseScore() {
 		
 		//Calculating a tempt 100 point score
-		int temptScore = 100 * (currentMovementScore - lastMovementScore)/lastMovementScore;
+		int temptScore = ((currentMovementScore/10) - lastMovementScore)/lastMovementScore;
 		
 		//Ensuring that the tempt score is not above 100 or below 0
 		if(temptScore < 100 && temptScore > 0) {

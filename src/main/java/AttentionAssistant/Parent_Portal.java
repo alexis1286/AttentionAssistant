@@ -824,8 +824,9 @@ public class Parent_Portal {
 						mouseY = e.getY();
 					}
 				});
-		
-				JLabel title = new JLabel("Parent Portal");
+				
+				User_Account user = db.SelectUser_Account(userID);
+				JLabel title = new JLabel("Parent Portal for "+user.getName());
 				title.setForeground(Color.white);
 				title.setFont(new Font("Serif", Font.BOLD, 20));
 				
@@ -876,7 +877,7 @@ public class Parent_Portal {
 		        }});
 				
 				title_panel.add(title);
-				title_panel.add(Box.createRigidArea(new Dimension(350, 0)));
+				title_panel.add(Box.createRigidArea(new Dimension(250, 0)));
 				title_panel.add(guide);
 				title_panel.add(close_window);
 				
