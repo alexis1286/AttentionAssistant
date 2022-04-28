@@ -672,9 +672,11 @@ public class Progress_Report {
 		
 		Calendar startCalendar = Calendar.getInstance();
 		startCalendar.setTime(dt_Start);
+		startCalendar.add(Calendar.MONTH, 1);
 		
 		Calendar endCalendar = Calendar.getInstance();
 		endCalendar.setTime(dt_End); 
+		endCalendar.add(Calendar.MONTH, 1);
 		
 		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
 		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 34));
@@ -775,9 +777,11 @@ public class Progress_Report {
 		
 		Calendar startCalendar = Calendar.getInstance();
 		startCalendar.setTime(dt_Start);
+		startCalendar.add(Calendar.MONTH, 1);
 		
 		Calendar endCalendar = Calendar.getInstance();
 		endCalendar.setTime(dt_End); 
+		endCalendar.add(Calendar.MONTH, 1);
 		
 		JLabel dates = new JLabel (startCalendar.get(Calendar.MONTH) + "/" + startCalendar.get(Calendar.DAY_OF_MONTH) + "/" + startCalendar.get(Calendar.YEAR) + " - " + endCalendar.get(Calendar.MONTH) + "/" + endCalendar.get(Calendar.DAY_OF_MONTH) + "/" + endCalendar.get(Calendar.YEAR)); 
 		dates.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 34));
